@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+ <xsd:schema id="root" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+ <xsd:element name="root" msdata:IsDataSet="true">
+ <xsd:complexType>
+ <xsd:choice maxOccurs="unbounded">
+ <xsd:element name="metadata">
+ <xsd:complexType>
+ <xsd:sequence>
+ <xsd:element name="value" type="xsd:string" minOccurs="0" />
+ </xsd:sequence>
+ <xsd:attribute name="name" use="required" type="xsd:string" />
+ <xsd:attribute name="type" type="xsd:string" />
+ <xsd:attribute name="mimetype" type="xsd:string" />
+ </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="assembly">
+ <xsd:complexType>
+ <xsd:attribute name="alias" type="xsd:string" />
+ <xsd:attribute name="name" type="xsd:string" />
+ </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="data">
+ <xsd:complexType>
+ <xsd:sequence>
+ <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+ <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+ </xsd:sequence>
+ <xsd:attribute name="name" type="xsd:string" use="required" />
+ <xsd:attribute name="type" type="xsd:string" />
+ <xsd:attribute name="mimetype" type="xsd:string" />
+ <xsd:attribute ref="xml:space" />
+ </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="resheader">
+ <xsd:complexType>
+ <xsd:sequence>
+ <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+ </xsd:sequence>
+ <xsd:attribute name="name" type="xsd:string" use="required" />
+ </xsd:complexType>
+ </xsd:element>
+ </xsd:choice>
+ </xsd:complexType>
+ </xsd:element>
+ </xsd:schema>
+ <resheader name="resmimetype">
+ <value>text/microsoft-resx</value>
+ </resheader>
+ <resheader name="version">
+ <value>2.0</value>
+ </resheader>
+ <resheader name="reader">
+ <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+ </resheader>
+ <resheader name="writer">
+ <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+ </resheader>
+ <!-- Existing navigation/title keys -->
+ <data name="App_Title" xml:space="preserve"><value>&#x5DE5;&#x4E1A;&#x7CFB;&#x7EDF;</value></data>
+ <data name="Nav_RunDashboard" xml:space="preserve"><value>&#x8FD0;&#x884C;&#x770B;&#x677F;</value></data>
+ <data name="Nav_RunExperiment" xml:space="preserve"><value>&#x8FD0;&#x884C;&#x5B9E;&#x9A8C;</value></data>
+ <data name="Nav_RealtimeData" xml:space="preserve"><value>&#x5B9E;&#x65F6;&#x6570;&#x636E;</value></data>
+ <data name="Nav_ExperimentManagement" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_Templates" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x6A21;&#x677F;</value></data>
+ <data name="Nav_ExperimentConfig" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x914D;&#x7F6E;</value></data>
+ <data name="Nav_ExperimentGroupConfig" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7EC4;&#x914D;&#x7F6E;</value></data>
+ <data name="Nav_ExperimentGroupTemplates" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7EC4;&#x6A21;&#x677F;</value></data>
+ <data name="Nav_MaterialManagement" xml:space="preserve"><value>&#x7269;&#x6599;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_MaterialInfo" xml:space="preserve"><value>&#x7269;&#x6599;&#x4FE1;&#x606F;</value></data>
+ <data name="Nav_ShelfInfo" xml:space="preserve"><value>&#x8D27;&#x67B6;&#x4FE1;&#x606F;</value></data>
+ <data name="Nav_Inventory" xml:space="preserve"><value>&#x5E93;&#x5B58;</value></data>
+ <data name="Nav_DataManagement" xml:space="preserve"><value>&#x6570;&#x636E;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_InventoryRecords" xml:space="preserve"><value>&#x51FA;&#x5165;&#x5E93;&#x8BB0;&#x5F55;</value></data>
+ <data name="Nav_ExperimentHistory" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x5386;&#x53F2;</value></data>
+ <data name="Nav_OperationLogs" xml:space="preserve"><value>&#x64CD;&#x4F5C;&#x8BB0;&#x5F55;</value></data>
+ <data name="Nav_DeviceManagement" xml:space="preserve"><value>&#x8BBE;&#x5907;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_ManualDebug" xml:space="preserve"><value>&#x624B;&#x52A8;&#x8C03;&#x8BD5;</value></data>
+ <data name="Nav_DeviceParams" xml:space="preserve"><value>&#x8BBE;&#x5907;&#x53C2;&#x6570;</value></data>
+ <data name="Nav_PeripheralDebug" xml:space="preserve"><value>&#x5916;&#x8BBE;&#x8C03;&#x8BD5;</value></data>
+ <data name="Nav_SystemManagement" xml:space="preserve"><value>&#x7CFB;&#x7EDF;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_Users" xml:space="preserve"><value>&#x7528;&#x6237;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_Roles" xml:space="preserve"><value>&#x89D2;&#x8272;&#x7BA1;&#x7406;</value></data>
+ <data name="Nav_Permissions" xml:space="preserve"><value>&#x6743;&#x9650;&#x7BA1;&#x7406;</value></data>
+ <data name="User_AdminName" xml:space="preserve"><value>&#x7BA1;&#x7406;&#x5458;</value></data>
+ <data name="User_AdminRole" xml:space="preserve"><value>&#x8D85;&#x7EA7;&#x7BA1;&#x7406;&#x5458;</value></data>
+
+ <!-- Buttons -->
+ <data name="Btn_Save" xml:space="preserve"><value>&#x4FDD;&#x5B58;</value></data>
+ <data name="Btn_Cancel" xml:space="preserve"><value>&#x53D6;&#x6D88;</value></data>
+ <data name="Btn_Add" xml:space="preserve"><value>&#x65B0;&#x589E;</value></data>
+ <data name="Btn_AddUser" xml:space="preserve"><value>&#x65B0;&#x589E;&#x7528;&#x6237;</value></data>
+ <data name="Btn_AddPermission" xml:space="preserve"><value>&#x65B0;&#x589E;&#x6743;&#x9650;</value></data>
+ <data name="Btn_AddTemplate" xml:space="preserve"><value>&#x65B0;&#x589E;&#x6A21;&#x677F;</value></data>
+ <data name="Btn_Delete" xml:space="preserve"><value>&#x5220;&#x9664;</value></data>
+ <data name="Btn_Start" xml:space="preserve"><value>&#x5F00;&#x59CB;</value></data>
+ <data name="Btn_Pause" xml:space="preserve"><value>&#x6682;&#x505C;</value></data>
+ <data name="Btn_Resume" xml:space="preserve"><value>&#x7EE7;&#x7EED;</value></data>
+ <data name="Btn_Stop" xml:space="preserve"><value>&#x505C;&#x6B62;</value></data>
+ <data name="Btn_Edit" xml:space="preserve"><value>&#x7F16;&#x8F91;</value></data>
+ <!-- Missing paging/search buttons -->
+ <data name="Btn_Search" xml:space="preserve"><value>&#x67E5;&#x8BE2;</value></data>
+ <data name="Btn_Prev" xml:space="preserve"><value>&#x4E0A;&#x4E00;&#x9875;</value></data>
+ <data name="Btn_Next" xml:space="preserve"><value>&#x4E0B;&#x4E00;&#x9875;</value></data>
+ <data name="Btn_Go" xml:space="preserve"><value>&#x786E;&#x5B9A;</value></data>
+
+ <!-- Columns / Labels -->
+ <data name="Col_Common_Id" xml:space="preserve"><value>ID</value></data>
+ <data name="Col_Common_Name" xml:space="preserve"><value>&#x540D;&#x79F0;</value></data>
+ <data name="Col_Common_Actions" xml:space="preserve"><value>&#x64CD;&#x4F5C;</value></data>
+ <data name="Col_Common_Description" xml:space="preserve"><value>&#x63CF;&#x8FF0;</value></data>
+ <data name="Col_User_UserName" xml:space="preserve"><value>&#x7528;&#x6237;&#x540D;</value></data>
+ <data name="Col_User_DisplayName" xml:space="preserve"><value>&#x663E;&#x793A;&#x540D;</value></data>
+ <data name="Col_User_IsActive" xml:space="preserve"><value>&#x542F;&#x7528;</value></data>
+ <data name="Col_User_Roles" xml:space="preserve"><value>&#x89D2;&#x8272;</value></data>
+ <data name="Col_Permission_Name" xml:space="preserve"><value>&#x6743;&#x9650;&#x540D;&#x79F0;</value></data>
+ <data name="Col_Permission_DisplayName" xml:space="preserve"><value>&#x6743;&#x9650;&#x663E;&#x793A;&#x540D;</value></data>
+ <data name="Col_Role_Default" xml:space="preserve"><value>&#x9ED8;&#x8BA4;</value></data>
+ <data name="Col_Role_Permissions" xml:space="preserve"><value>&#x6743;&#x9650;</value></data>
+
+ <!-- Hints -->
+ <data name="Hint_Role_Name" xml:space="preserve"><value>&#x89D2;&#x8272;&#x540D;&#x79F0;</value></data>
+
+ <!-- Page titles / labels -->
+ <data name="Page_Inventory_Title" xml:space="preserve"><value>&#x5E93;&#x5B58; (&#x5360;&#x4F4D;)</value></data>
+ <data name="Page_ExperimentHistory_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x5386;&#x53F2; (&#x5360;&#x4F4D;)</value></data>
+ <data name="Page_ExperimentConfig_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x914D;&#x7F6E;: &#x5DE5;&#x4F5C;&#x8FDB;&#x884C;&#x4E2D;...</value></data>
+ <data name="Page_ExperimentGroups_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7EC4;: &#x5DE5;&#x4F5C;&#x8FDB;&#x884C;&#x4E2D;...</value></data>
+
+ <!-- Run Experiment labels -->
+ <data name="Run_Label_CurrentExperiment" xml:space="preserve"><value>&#x5F53;&#x524D;&#x5B9E;&#x9A8C;&#xFF1A;</value></data>
+ <data name="Run_Label_Current" xml:space="preserve"><value>(&#x5F53;&#x524D;&#xFF1A;)</value></data>
+ <data name="Run_Label_Status" xml:space="preserve"><value>&#x72B6;&#x6001;&#xFF1A;</value></data>
+ <data name="Run_Label_Progress" xml:space="preserve"><value>&#x8FDB;&#x5EA6;&#xFF1A;</value></data>
+
+ <!-- Dialog titles -->
+ <data name="Dialog_UserEdit_Title" xml:space="preserve"><value>&#x7528;&#x6237;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_RoleEdit_Title" xml:space="preserve"><value>&#x89D2;&#x8272;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_PermissionEdit_Title" xml:space="preserve"><value>&#x6743;&#x9650;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_ExperimentEdit_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_ExperimentTemplateEdit_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x6A21;&#x677F;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_ExperimentGroupEdit_Title" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7EC4;&#x7F16;&#x8F91;</value></data>
+ <data name="Dialog_MaterialEdit_Title" xml:space="preserve"><value>&#x7269;&#x6599;&#x7F16;&#x8F91;</value></data>
+
+ <!-- Field labels -->
+ <data name="Field_Common_Name" xml:space="preserve"><value>&#x540D;&#x79F0;</value></data>
+ <data name="Field_Common_Description" xml:space="preserve"><value>&#x63CF;&#x8FF0;</value></data>
+ <data name="Field_Common_DisplayName" xml:space="preserve"><value>&#x663E;&#x793A;&#x540D;</value></data>
+ <data name="Field_Common_Active" xml:space="preserve"><value>&#x542F;&#x7528;</value></data>
+ <data name="Field_User_UserName" xml:space="preserve"><value>&#x7528;&#x6237;&#x540D;</value></data>
+ <data name="Field_User_DisplayName" xml:space="preserve"><value>&#x663E;&#x793A;&#x540D;</value></data>
+ <data name="Field_Role_Default" xml:space="preserve"><value>&#x9ED8;&#x8BA4;</value></data>
+ <data name="Field_Experiment_TemplateId" xml:space="preserve"><value>&#x6A21;&#x677F;Id</value></data>
+ <data name="Field_Experiment_GroupId" xml:space="preserve"><value>&#x5B9E;&#x9A8C;&#x7EC4;Id</value></data>
+ <data name="Field_Material_Qty" xml:space="preserve"><value>&#x6570;&#x91CF;</value></data>
+
+ <!-- Paging labels -->
+ <data name="Lbl_PageSize" xml:space="preserve"><value>&#x6BCF;&#x9875;</value></data>
+ <data name="Lbl_JumpTo" xml:space="preserve"><value>&#x8DF3;&#x8F6C;</value></data>
+
+ <!-- Login related keys -->
+ <data name="Page_Login_Title" xml:space="preserve"><value>登录</value></data>
+ <data name="Btn_Login" xml:space="preserve"><value>登录</value></data>
+ <data name="Login_Remember" xml:space="preserve"><value>记住账号</value></data>
+ <data name="Login_Quick" xml:space="preserve"><value>快速登录</value></data>
+ <data name="Field_User_UserName" xml:space="preserve"><value>用户名</value></data>
+ <data name="Field_User_Password" xml:space="preserve"><value>密码</value></data>
+</root>

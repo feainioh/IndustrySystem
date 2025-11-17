@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\IndustrySystem.Domain\IndustrySystem.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.*" />
+    <PackageReference Include="MySqlConnector" Version="2.*" />
+    <PackageReference Include="SqlSugarCore" Version="5.*" />
+    <PackageReference Include="NLog" Version="5.*" />
+    <PackageReference Include="Volo.Abp.Core" Version="8.*" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="8.*" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

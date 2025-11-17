@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\IndustrySystem.Application\IndustrySystem.Application.csproj" />
+    <ProjectReference Include="..\..\Application\IndustrySystem.Application.Contracts\IndustrySystem.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\IndustrySystem.Domain\IndustrySystem.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\IndustrySystem.Infrastructure.SqlSugar\IndustrySystem.Infrastructure.SqlSugar.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\IndustrySystem.Infrastructure.Communication\IndustrySystem.Infrastructure.Communication.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\IndustrySystem.Infrastructure.Logging\IndustrySystem.Infrastructure.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.*" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.*" />
+    <PackageReference Include="NLog" Version="5.*" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.*" />
+    <PackageReference Include="Prism.DryIoc" Version="9.*" />
+    <PackageReference Include="Prism.Wpf" Version="9.*" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="8.*" />
+    <PackageReference Include="Volo.Abp.Core" Version="8.*" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

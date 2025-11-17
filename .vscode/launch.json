@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET WPF 启动 (Presentation.Wpf)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-sln",
+      "program": "${workspaceFolder}\\src\\Presentation\\IndustrySystem.Presentation.Wpf\\bin\\Debug\\net9.0-windows7.0\\IndustrySystem.Presentation.Wpf.exe",
+      "cwd": "${workspaceFolder}\\src\\Presentation\\IndustrySystem.Presentation.Wpf",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:sys="clr-namespace:System;assembly=mscorlib">
+ <sys:String x:Key="App_Title">Industry System</sys:String>
+
+ <!-- Buttons -->
+ <sys:String x:Key="Btn_Save">Save</sys:String>
+ <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
+ <sys:String x:Key="Btn_Add">Add</sys:String>
+ <sys:String x:Key="Btn_AddUser">Add User</sys:String>
+ <sys:String x:Key="Btn_AddPermission">Add Permission</sys:String>
+ <sys:String x:Key="Btn_Delete">Delete</sys:String>
+ <sys:String x:Key="Btn_Search">Search</sys:String>
+ <sys:String x:Key="Btn_Prev">Prev</sys:String>
+ <sys:String x:Key="Btn_Next">Next</sys:String>
+ <sys:String x:Key="Btn_Go">Go</sys:String>
+
+ <!-- Columns / Labels -->
+ <sys:String x:Key="Col_Common_Id">Id</sys:String>
+ <sys:String x:Key="Col_Common_Name">Name</sys:String>
+ <sys:String x:Key="Col_Common_Actions">Actions</sys:String>
+ <sys:String x:Key="Col_Common_Description">Description</sys:String>
+ <sys:String x:Key="Col_User_UserName">User Name</sys:String>
+ <sys:String x:Key="Col_User_DisplayName">Display Name</sys:String>
+ <sys:String x:Key="Col_User_IsActive">Active</sys:String>
+ <sys:String x:Key="Col_User_Roles">Roles</sys:String>
+ <sys:String x:Key="Col_Permission_Name">Permission Name</sys:String>
+ <sys:String x:Key="Col_Permission_DisplayName">Permission Display Name</sys:String>
+ <sys:String x:Key="Col_Role_Default">Default</sys:String>
+ <sys:String x:Key="Col_Role_Permissions">Permissions</sys:String>
+
+ <!-- Field labels -->
+ <sys:String x:Key="Field_Common_Name">Name</sys:String>
+ <sys:String x:Key="Field_Common_Description">Description</sys:String>
+ <sys:String x:Key="Field_Common_DisplayName">Display Name</sys:String>
+ <sys:String x:Key="Field_Common_Active">Active</sys:String>
+ <sys:String x:Key="Field_User_UserName">User Name</sys:String>
+ <sys:String x:Key="Field_User_DisplayName">Display Name</sys:String>
+ <sys:String x:Key="Field_Role_Default">Default</sys:String>
+ <sys:String x:Key="Field_User_Password">Password</sys:String>
+
+ <!-- Dialog titles -->
+ <sys:String x:Key="Dialog_UserEdit_Title">Edit User</sys:String>
+ <sys:String x:Key="Dialog_PermissionEdit_Title">Edit Permission</sys:String>
+ <sys:String x:Key="Dialog_RoleEdit_Title">Edit Role</sys:String>
+
+ <!-- Navigation labels -->
+ <sys:String x:Key="Nav_RunDashboard">Dashboard</sys:String>
+ <sys:String x:Key="Nav_RunExperiment">Run Experiment</sys:String>
+ <sys:String x:Key="Nav_RealtimeData">Realtime Data</sys:String>
+ <sys:String x:Key="Nav_ExperimentManagement">Experiment Management</sys:String>
+ <sys:String x:Key="Nav_Templates">Templates</sys:String>
+ <sys:String x:Key="Nav_ExperimentConfig">Experiment Config</sys:String>
+ <sys:String x:Key="Nav_ExperimentGroupConfig">Experiment Group Config</sys:String>
+ <sys:String x:Key="Nav_ExperimentGroupTemplates">Group Templates</sys:String>
+ <sys:String x:Key="Nav_MaterialManagement">Material Management</sys:String>
+ <sys:String x:Key="Nav_MaterialInfo">Material Info</sys:String>
+ <sys:String x:Key="Nav_ShelfInfo">Shelf Info</sys:String>
+ <sys:String x:Key="Nav_Inventory">Inventory</sys:String>
+ <sys:String x:Key="Nav_DataManagement">Data Management</sys:String>
+ <sys:String x:Key="Nav_InventoryRecords">Inventory Records</sys:String>
+ <sys:String x:Key="Nav_ExperimentHistory">Experiment History</sys:String>
+ <sys:String x:Key="Nav_OperationLogs">Operation Logs</sys:String>
+ <sys:String x:Key="Nav_DeviceManagement">Device Management</sys:String>
+ <sys:String x:Key="Nav_ManualDebug">Manual Debug</sys:String>
+ <sys:String x:Key="Nav_DeviceParams">Device Params</sys:String>
+ <sys:String x:Key="Nav_PeripheralDebug">Peripheral Debug</sys:String>
+ <sys:String x:Key="Nav_SystemManagement">System Management</sys:String>
+ <sys:String x:Key="Nav_Users">Users</sys:String>
+ <sys:String x:Key="Nav_Roles">Roles</sys:String>
+ <sys:String x:Key="Nav_Permissions">Permissions</sys:String>
+
+ <!-- Paging labels -->
+ <sys:String x:Key="Lbl_PageSize">Page size</sys:String>
+ <sys:String x:Key="Lbl_JumpTo">Jump to</sys:String>
+
+ <!-- Footer user info -->
+ <sys:String x:Key="User_AdminName">Admin</sys:String>
+ <sys:String x:Key="User_AdminRole">Super Admin</sys:String>
+
+ <!-- Hints -->
+ <sys:String x:Key="Hint_Role_Name">Role Name</sys:String>
+
+ <!-- Login Page-->
+ <sys:String x:Key="Page_Login_Title">Sign in</sys:String>
+ <sys:String x:Key="Btn_Login">Login</sys:String>
+ <sys:String x:Key="Login_Remember">Remember me</sys:String>
+ <sys:String x:Key="Login_Quick">Quick Login</sys:String>
+</ResourceDictionary>

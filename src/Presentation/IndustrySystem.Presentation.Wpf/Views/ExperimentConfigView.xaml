@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.ExperimentConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources">
+    <UserControl.Resources>
+        <loc:LocalizationProvider x:Key="Loc" />
+    </UserControl.Resources>
+    <Grid Margin="16">
+        <TextBlock Text="{Binding [Page_ExperimentConfig_Title], Source={StaticResource Loc}}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>

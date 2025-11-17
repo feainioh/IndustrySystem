@@ -1,0 +1,18 @@
+<UserControl x:Class="IndustrySystem.Presentation.Wpf.Controls.PagingBar"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources">
+ <UserControl.Resources>
+  <loc:LocalizationProvider x:Key="Loc" />
+ </UserControl.Resources>
+ <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+  <TextBlock Text="{Binding PagingText, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+  <TextBlock Text="{Binding [Lbl_PageSize], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+  <ComboBox Width="72" ItemsSource="{Binding PageSizes, RelativeSource={RelativeSource AncestorType=UserControl}}" SelectedItem="{Binding PageSize, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
+  <TextBlock Text="{Binding [Lbl_JumpTo], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+  <TextBox Width="64" Text="{Binding GoToText, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0"/>
+  <Button Content="{Binding [Btn_Go], Source={StaticResource Loc}}" Command="{Binding GoToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
+  <Button Content="{Binding [Btn_Prev], Source={StaticResource Loc}}" Command="{Binding PrevCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
+  <Button Content="{Binding [Btn_Next], Source={StaticResource Loc}}" Command="{Binding NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+ </StackPanel>
+</UserControl>
