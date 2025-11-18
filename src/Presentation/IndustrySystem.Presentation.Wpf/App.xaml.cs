@@ -30,6 +30,7 @@ using IndustrySystem.Presentation.Wpf.Services;
 using Prism.Dialogs;
 using WpfDialogService = IndustrySystem.Presentation.Wpf.Services.IDialogService;
 using WpfDialogServiceImpl = IndustrySystem.Presentation.Wpf.Services.DialogService;
+using IndustrySystem.Presentation.Wpf.Views; // added for navigation registration
 
 namespace IndustrySystem.Presentation.Wpf;
 
@@ -147,6 +148,7 @@ public partial class App : PrismApplication
         containerRegistry.Register<ICommunicationAppService, CommunicationAppService>();
         containerRegistry.Register<IModbusTcpClient, ModbusTcpClient>();
 
+        // ViewModel location mappings (optional when using manual DataContext wiring)
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.RoleManageView, RoleManageViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.PermissionsView, PermissionsViewModel>();
@@ -157,7 +159,6 @@ public partial class App : PrismApplication
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.AlarmView, AlarmViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.HardwareDebugView, HardwareDebugViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.InventoryView, InventoryViewModel>();
-        // Added registrations for remaining Navigation targets
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.RealtimeDataView, RealtimeDataViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentConfigView, ExperimentConfigViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
@@ -166,6 +167,26 @@ public partial class App : PrismApplication
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ShelfInfoView, ShelfInfoViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.DeviceParamsView, DeviceParamsViewModel>();
         ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.PeripheralDebugView, PeripheralDebugViewModel>();
+
+        // Prism region navigation registrations (name must match ShellViewModel tags)
+        containerRegistry.RegisterForNavigation<UsersView>("Users");
+        containerRegistry.RegisterForNavigation<RoleManageView>("Roles");
+        containerRegistry.RegisterForNavigation<PermissionsView>("Permissions");
+        containerRegistry.RegisterForNavigation<ExperimentTemplateView>("Templates");
+        containerRegistry.RegisterForNavigation<ExperimentConfigView>("ExperimentConfig");
+        containerRegistry.RegisterForNavigation<ExperimentGroupsView>("ExperimentGroupConfig");
+        containerRegistry.RegisterForNavigation<ExperimentGroupsView>("ExperimentGroupTemplates");
+        containerRegistry.RegisterForNavigation<RunExperimentView>("RunExperiment");
+        containerRegistry.RegisterForNavigation<RealtimeDataView>("RealtimeData");
+        containerRegistry.RegisterForNavigation<ExperimentHistoryView>("ExperimentHistory");
+        containerRegistry.RegisterForNavigation<InventoryView>("InventoryRecords");
+        containerRegistry.RegisterForNavigation<InventoryView>("Inventory");
+        containerRegistry.RegisterForNavigation<OperationLogsView>("OperationLogs");
+        containerRegistry.RegisterForNavigation<MaterialInfoView>("MaterialInfo");
+        containerRegistry.RegisterForNavigation<ShelfInfoView>("ShelfInfo");
+        containerRegistry.RegisterForNavigation<HardwareDebugView>("ManualDebug");
+        containerRegistry.RegisterForNavigation<DeviceParamsView>("DeviceParams");
+        containerRegistry.RegisterForNavigation<PeripheralDebugView>("PeripheralDebug");
 
         containerRegistry.RegisterSingleton<IDatabaseInitializer, SqlSugarDatabaseInitializer>();
 

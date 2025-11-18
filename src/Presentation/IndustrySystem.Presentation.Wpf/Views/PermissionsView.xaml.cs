@@ -1,6 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using Prism.Ioc;
+using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
+using MaterialDesignThemes.Wpf;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -13,11 +16,39 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.PermissionsViewModel vm && NameBox != null && DisplayNameBox != null)
+            _ = OpenPermissionDialogAsync(null);
+        }
+
+        private void OnEdit(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is Application.Contracts.Dtos.PermissionDto p)
             {
-                _ = vm.AddAsync(NameBox.Text, DisplayNameBox.Text);
-                NameBox.Text = string.Empty;
-                DisplayNameBox.Text = string.Empty;
+                _ = OpenPermissionDialogAsync(p.Id);
+            }
+        }
+
+        private async System.Threading.Tasks.Task OpenPermissionDialogAsync(Guid? id)
+        {
+            var vm = ContainerLocator.Current.Resolve<PermissionEditDialogViewModel>();
+            await vm.LoadAsync(id);
+            var dialog = new Dialogs.PermissionEditDialog { DataContext = vm };
+
+            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
+                {
+                    DialogHost.Close("RootDialogHost", vm.DialogResult);
+                }
+            };
+            vm.PropertyChanged += handler;
+            try
+            {
+                var result = await DialogHost.Show(dialog, "RootDialogHost");
+                if (DataContext is ViewModels.PermissionsViewModel listVm) await listVm.LoadAsync();
+            }
+            finally
+            {
+                vm.PropertyChanged -= handler;
             }
         }
     }

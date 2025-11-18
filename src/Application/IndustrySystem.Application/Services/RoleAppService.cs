@@ -9,10 +9,11 @@ namespace IndustrySystem.Application.Services;
 public class RoleAppService : IRoleAppService
 {
     private readonly IRepository<Role> _repo;
+    private readonly IRolePermissionRepository _rolePermRepo;
     private readonly IMapper _mapper;
-    public RoleAppService(IRepository<Role> repo, IMapper mapper)
+    public RoleAppService(IRepository<Role> repo, IRolePermissionRepository rolePermRepo, IMapper mapper)
     {
-        _repo = repo; _mapper = mapper;
+        _repo = repo; _rolePermRepo = rolePermRepo; _mapper = mapper;
     }
 
     public async Task<RoleDto?> GetAsync(Guid id)
@@ -43,4 +44,15 @@ public class RoleAppService : IRoleAppService
     }
 
     public Task DeleteAsync(Guid id) => _repo.DeleteAsync(id);
+
+    public async Task<Guid[]> GetPermissionIdsAsync(Guid roleId)
+    {
+        var ids = await _rolePermRepo.GetPermissionIdsByRoleIdAsync(roleId);
+        return ids.ToArray();
+    }
+
+    public async Task SetPermissionsAsync(Guid roleId, Guid[] permissionIds)
+    {
+        await _rolePermRepo.SetRolePermissionsAsync(roleId, permissionIds);
+    }
 }

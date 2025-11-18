@@ -9,4 +9,6 @@ public interface IRoleAppService
     Task<RoleDto> CreateAsync(RoleDto input);
     Task<RoleDto> UpdateAsync(RoleDto input);
     Task DeleteAsync(Guid id);
+    Task<Guid[]> GetPermissionIdsAsync(Guid roleId);
+    Task SetPermissionsAsync(Guid roleId, Guid[] permissionIds);
 }

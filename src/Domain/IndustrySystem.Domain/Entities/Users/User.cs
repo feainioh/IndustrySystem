@@ -7,5 +7,7 @@ public class User
     public string DisplayName { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
-    public DateTime CreationTime { get; set; } = DateTime.UtcNow;
+    // Unified timestamps
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 }

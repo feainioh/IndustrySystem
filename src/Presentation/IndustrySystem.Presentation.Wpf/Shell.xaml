@@ -6,6 +6,7 @@
  xmlns:local="clr-namespace:IndustrySystem.Presentation.Wpf"
  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
  xmlns:res="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+ xmlns:prism="http://prismlibrary.com/"
  ui:WindowHelper.UseModernWindowStyle="True"
  Title="{Binding [App_Title], Source={StaticResource Loc}}"
  Height="700" Width="1100"

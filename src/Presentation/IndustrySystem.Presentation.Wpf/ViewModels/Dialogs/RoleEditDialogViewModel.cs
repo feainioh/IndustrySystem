@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Application.Contracts.Dtos;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -69,12 +70,11 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
  {
  try
  {
- var input = new IndustrySystem.Application.Contracts.Dtos.RoleDto(Id, Name, Description, IsDefault);
- IndustrySystem.Application.Contracts.Dtos.RoleDto saved;
+ var input = new RoleDto(Id, Name, Description, IsDefault);
+ RoleDto saved;
  if (Id == Guid.Empty)
  {
- saved = await _svc.CreateAsync(input);
- Id = saved.Id;
+ saved = await _svc.CreateAsync(input); Id = saved.Id;
  }
  else
  {

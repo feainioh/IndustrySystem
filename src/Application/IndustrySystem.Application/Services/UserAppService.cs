@@ -9,10 +9,12 @@ namespace IndustrySystem.Application.Services;
 public class UserAppService : IUserAppService
 {
     private readonly IRepository<User> _repo;
+    private readonly IUserRoleRepository _userRoleRepo;
+    private readonly IRepository<Domain.Entities.Roles.Role> _roleRepo;
     private readonly IMapper _mapper;
-    public UserAppService(IRepository<User> repo, IMapper mapper)
+    public UserAppService(IRepository<User> repo, IUserRoleRepository userRoleRepo, IRepository<Domain.Entities.Roles.Role> roleRepo, IMapper mapper)
     {
-        _repo = repo; _mapper = mapper;
+        _repo = repo; _userRoleRepo = userRoleRepo; _roleRepo = roleRepo; _mapper = mapper;
     }
 
     public async Task<UserDto?> GetAsync(Guid id)
@@ -43,4 +45,15 @@ public class UserAppService : IUserAppService
     }
 
     public Task DeleteAsync(Guid id) => _repo.DeleteAsync(id);
+
+    public async Task<Guid[]> GetRoleIdsAsync(Guid userId)
+    {
+        var ids = await _userRoleRepo.GetRoleIdsByUserIdAsync(userId);
+        return ids.ToArray();
+    }
+
+    public async Task SetRolesAsync(Guid userId, Guid[] roleIds)
+    {
+        await _userRoleRepo.SetUserRolesAsync(userId, roleIds);
+    }
 }

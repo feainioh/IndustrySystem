@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Application.Contracts.Dtos; // added
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -30,11 +31,9 @@ public class UserEditDialogViewModel : DialogViewModel
 
     public async Task LoadAsync(Guid? id)
     {
-        // load roles list
         AllRoles.Clear();
         var roles = await _roleSvc.GetListAsync();
-        foreach (var r in roles)
-            AllRoles.Add(new CheckItem(r.Id, r.Name));
+        foreach (var r in roles) AllRoles.Add(new CheckItem(r.Id, r.Name));
 
         if (id is { } v)
         {
@@ -62,12 +61,11 @@ public class UserEditDialogViewModel : DialogViewModel
 
     protected override async Task OnSaveAsync()
     {
-        var input = new IndustrySystem.Application.Contracts.Dtos.UserDto(Id, UserName, DisplayName, IsActive);
-        IndustrySystem.Application.Contracts.Dtos.UserDto saved;
+        var input = new UserDto(Id, UserName, DisplayName, IsActive);
+        UserDto saved;
         if (Id == Guid.Empty)
         {
-            saved = await _svc.CreateAsync(input);
-            Id = saved.Id; // ensure Id for assignment
+            saved = await _svc.CreateAsync(input); Id = saved.Id;
         }
         else
         {
