@@ -1,6 +1,4 @@
 using System.Windows.Controls;
-using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.ViewModels;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -9,7 +7,6 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public OperationLogsView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<OperationLogsViewModel>();
         }
     }
 }

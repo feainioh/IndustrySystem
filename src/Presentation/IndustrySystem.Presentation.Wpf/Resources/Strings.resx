@@ -103,6 +103,8 @@
  <data name="Btn_Prev" xml:space="preserve"><value>&#x4E0A;&#x4E00;&#x9875;</value></data>
  <data name="Btn_Next" xml:space="preserve"><value>&#x4E0B;&#x4E00;&#x9875;</value></data>
  <data name="Btn_Go" xml:space="preserve"><value>&#x786E;&#x5B9A;</value></data>
+ <data name="Btn_First" xml:space="preserve"><value>&#x9996;&#x9875;</value></data>
+ <data name="Btn_Last" xml:space="preserve"><value>&#x672B;&#x9875;</value></data>
 
  <!-- Columns / Labels -->
  <data name="Col_Common_Id" xml:space="preserve"><value>ID</value></data>
@@ -157,6 +159,9 @@
  <!-- Paging labels -->
  <data name="Lbl_PageSize" xml:space="preserve"><value>&#x6BCF;&#x9875;</value></data>
  <data name="Lbl_JumpTo" xml:space="preserve"><value>&#x8DF3;&#x8F6C;</value></data>
+ <data name="Lbl_PageInfoFormat" xml:space="preserve"><value>&#x7B2C; {0}/{1} &#x9875; (&#x5171; {2} &#x6761;)</value></data>
+ <data name="Lbl_TotalPages" xml:space="preserve"><value>&#x603B;&#x9875;&#x6570;</value></data>
+ <data name="Lbl_TotalRecords" xml:space="preserve"><value>&#x603B;&#x8BB0;&#x5F55;</value></data>
 
  <!-- Login related keys -->
  <data name="Page_Login_Title" xml:space="preserve"><value>登录</value></data>

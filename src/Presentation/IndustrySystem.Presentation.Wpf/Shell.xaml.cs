@@ -1,76 +1,53 @@
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.Views;
+using IndustrySystem.Presentation.Wpf.ViewModels;
+using IndustrySystem.Presentation.Wpf.Services;
 using ModernWpf;
 using ModernWpf.Controls;
-using MaterialDesignThemes.Wpf;
-using System.Windows.Threading;
+using System;
 
 namespace IndustrySystem.Presentation.Wpf
 {
     public partial class Shell : Window
     {
         private readonly IContainerProvider _container;
-        private bool _loginShown;
+        private readonly ShellViewModel _viewModel;
+        private bool _isLoggingOut = false;
 
         public Shell(IContainerProvider container)
         {
             _container = container;
             InitializeComponent();
-            DataContext = _container.Resolve<ViewModels.ShellViewModel>();
-
-            // Show login only after first render to ensure DialogHost is loaded
-            this.ContentRendered += async (_, __) => await ShowLoginIfNeededAsync();
+            
+            // Create and set ViewModel
+            _viewModel = new ShellViewModel(container);
+            DataContext = _viewModel;
+            
+            // Subscribe to auth state changes
+            var authState = container.Resolve<IAuthState>();
+            UpdateUserInfo(authState);
+            authState.AuthChanged += (s, e) => UpdateUserInfo(authState);
+            
+            // Handle window closing
+            Closed += OnWindowClosed;
         }
 
-        private async Task ShowLoginIfNeededAsync()
+        private void OnWindowClosed(object? sender, EventArgs e)
         {
-            if (_loginShown) return;
-            _loginShown = true;
-            var authState = _container.Resolve<Services.IAuthState>();
-            if (authState.IsAuthenticated) return;
-
-#if DEBUG
-            // Auto-login in debug to speed up dev
-            var auth = _container.Resolve<Services.IAuthService>();
-            if (await auth.SignInAsync("admin", "admin"))
+            // If not logging out, shut down the application
+            if (!_isLoggingOut)
             {
-                authState.SetAuthenticated("admin");
-                return;
+                System.Windows.Application.Current.Shutdown();
             }
-#endif
-            var login = new Views.LoginView();
-            // Ensure this runs after the DialogHost registered as loaded
-            await Dispatcher.InvokeAsync(async () =>
+        }
+
+        private void UpdateUserInfo(IAuthState authState)
+        {
+            // Update user display in the Shell UI if needed
+            if (FindName("UserNameText") is System.Windows.Controls.TextBlock userText)
             {
-                await DialogHost.Show(login, "RootDialogHost");
-            }, DispatcherPriority.ApplicationIdle);
-        }
-
-        private void NavigateToRole(object sender, RoutedEventArgs e)
-        {
-            var view = _container.Resolve<RoleManageView>();
-            if (FindName("MainRegionHost") is ContentControl host) host.Content = view;
-        }
-
-        private void NavigateToTemplate(object sender, RoutedEventArgs e)
-        {
-            var view = _container.Resolve<ExperimentTemplateView>();
-            if (FindName("MainRegionHost") is ContentControl host) host.Content = view;
-        }
-
-        private void NavigateToPermissions(object sender, RoutedEventArgs e)
-        {
-            var view = _container.Resolve<PermissionsView>();
-            if (FindName("MainRegionHost") is ContentControl host) host.Content = view;
-        }
-
-        private void NavigateToUsers(object sender, RoutedEventArgs e)
-        {
-            var view = _container.Resolve<UsersView>();
-            if (FindName("MainRegionHost") is ContentControl host) host.Content = view;
+                userText.Text = authState.IsAuthenticated ? authState.UserName! : "Î´µÇÂ¼";
+            }
         }
 
         private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
@@ -80,12 +57,19 @@ namespace IndustrySystem.Presentation.Wpf
             ThemeManager.Current.ApplicationTheme = isOn ? ApplicationTheme.Dark : ApplicationTheme.Light;
         }
 
-        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private void OnLogoutClick(object sender, RoutedEventArgs e)
         {
-            if (args.InvokedItemContainer?.Tag is string tag && DataContext is ViewModels.ShellViewModel vm)
-            {
-                vm.NavigateTo(tag);
-            }
+            var authState = _container.Resolve<IAuthState>();
+            authState.SignOut();
+            
+            // Mark as logging out to prevent application shutdown
+            _isLoggingOut = true;
+            
+            // Close shell and show login dialog again
+            Close();
+            
+            // Show login dialog
+            ((App)System.Windows.Application.Current).ShowLoginDialog();
         }
     }
 }

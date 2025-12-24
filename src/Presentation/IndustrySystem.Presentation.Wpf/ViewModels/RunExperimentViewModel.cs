@@ -4,13 +4,15 @@ using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Contracts.Dtos;
 using Prism.Mvvm;
+using Prism.Commands;
 using System.Collections.ObjectModel;
-using Prism.Commands; // add for AsyncDelegateCommand
+using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
 public class RunExperimentViewModel : BindableBase
 {
+    private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IRunExperimentAppService _svc;
     private readonly IExperimentAppService _experimentSvc;
     private RunState _state = RunState.Idle;
@@ -38,7 +40,6 @@ public class RunExperimentViewModel : BindableBase
     public string? StatusMessage { get => _statusMessage; private set => SetProperty(ref _statusMessage, value); }
     public int Progress { get => _progress; private set => SetProperty(ref _progress, value); }
 
-    // Command enable flags
     public bool CanStart => (_state is RunState.Idle or RunState.Stopped or RunState.Completed) && SelectedExperiment != null;
     public bool CanPause => _state == RunState.Running;
     public bool CanResume => _state == RunState.Paused;
@@ -58,23 +59,31 @@ public class RunExperimentViewModel : BindableBase
         StopCommand = new AsyncDelegateCommand(StopAsync);
         _ = RefreshLoopAsync();
         _ = LoadExperimentsAsync();
+        _logger.Info(Resources.Strings.Log_RunExperimentViewModel_Initialized);
     }
 
     private async Task StartAsync()
     {
         if (SelectedExperiment == null) return;
+        _logger.Info(string.Format(Resources.Strings.Log_RunExperiment_Start, SelectedExperiment.Name));
         await _svc.StartAsync();
     }
 
     private async Task PauseAsync()
     {
+        _logger.Info(Resources.Strings.Log_RunExperiment_Pause);
         await _svc.PauseAsync();
     }
 
-    private async Task ResumeAsync() => await _svc.ResumeAsync();
+    private async Task ResumeAsync()
+    {
+        _logger.Info(Resources.Strings.Log_RunExperiment_Resume);
+        await _svc.ResumeAsync();
+    }
 
     private async Task StopAsync()
     {
+        _logger.Info(Resources.Strings.Log_RunExperiment_Stop);
         await _svc.StopAsync();
     }
 
@@ -97,10 +106,10 @@ public class RunExperimentViewModel : BindableBase
 
     private async Task LoadExperimentsAsync()
     {
+        _logger.Debug(Resources.Strings.Log_RunExperiment_LoadExperiments);
         Experiments.Clear();
         var list = await _experimentSvc.GetListAsync();
         foreach (var e in list) Experiments.Add(e);
-        // keep previous selection if possible
         if (SelectedExperiment == null && Experiments.Count > 0)
         {
             SelectedExperiment = Experiments[0];

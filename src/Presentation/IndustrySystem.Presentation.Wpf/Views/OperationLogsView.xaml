@@ -1,8 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.OperationLogsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="16">
-        <TextBlock Text="Operation Logs: Feature in progress..." FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:conv="clr-namespace:IndustrySystem.Presentation.Wpf.Converters"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+    
+    <UserControl.Resources>
+        <!-- Converters -->
+        <conv:InitialConverter x:Key="InitialConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        
+        <!-- Tech Gradient -->
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#8764B8" Offset="0"/>
+            <GradientStop Color="#9B7FCC" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- Log Level Colors -->
+        <SolidColorBrush x:Key="InfoBrush" Color="#0078D4"/>
+        <SolidColorBrush x:Key="WarnBrush" Color="#FFB900"/>
+        <SolidColorBrush x:Key="ErrorBrush" Color="#E74856"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#10893E"/>
+    </UserControl.Resources>
+    
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header with gradient icon -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- 渐变图标背景 -->
+                <Border Width="40" Height="40" CornerRadius="8"
+                        Background="{StaticResource HeaderGradient}"
+                        VerticalAlignment="Center" Margin="0,0,16,0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
+                    </Border.Effect>
+                    <ui:FontIcon Glyph="&#xE8BC;" FontSize="20" 
+                                Foreground="White"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                </Border>
+                
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{x:Static loc:Strings.Nav_OperationLogs}" 
+                              FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="{x:Static loc:Strings.Desc_OperationLogs}" 
+                              FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <!-- 导出按钮 -->
+                <Button Command="{Binding ExportCommand}"
+                        ToolTip="{x:Static loc:Strings.Tooltip_ExportLogs}" Margin="0,0,12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Glyph="&#xE896;" Margin="0,0,8,0"/>
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Export}"/>
+                    </StackPanel>
+                </Button>
+                
+                <!-- 刷新按钮 -->
+                <Button Command="{Binding RefreshCommand}"
+                        Style="{DynamicResource AccentButtonStyle}"
+                        Padding="16,8">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon Glyph="&#xE72C;" Margin="0,0,8,0"/>
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Filter Card -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="20"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- 第一行筛选 -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- 时间范围 -->
+                    <TextBlock Grid.Column="0" Text="{x:Static loc:Strings.Lbl_TimeRange}" 
+                              VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="Medium"/>
+                    <DatePicker Grid.Column="1" 
+                               SelectedDate="{Binding StartDate, Mode=TwoWay}"
+                               ui:ControlHelper.PlaceholderText="{x:Static loc:Strings.Hint_StartDate}"/>
+                    
+                    <TextBlock Grid.Column="3" Text="{x:Static loc:Strings.Lbl_To}" 
+                              VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <DatePicker Grid.Column="4" 
+                               SelectedDate="{Binding EndDate, Mode=TwoWay}"
+                               ui:ControlHelper.PlaceholderText="{x:Static loc:Strings.Hint_EndDate}"/>
+                    
+                    <!-- 操作类型 -->
+                    <TextBlock Grid.Column="6" Text="{x:Static loc:Strings.Lbl_OperationType}" 
+                              VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="Medium"/>
+                    <ComboBox Grid.Column="7" 
+                             SelectedItem="{Binding SelectedOperationType, Mode=TwoWay}"
+                             ItemsSource="{Binding OperationTypes}"
+                             ui:ControlHelper.PlaceholderText="{x:Static loc:Strings.Hint_AllTypes}"/>
+                </Grid>
+                
+                <!-- 第二行筛选 -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- 操作人 -->
+                    <TextBlock Grid.Column="0" Text="{x:Static loc:Strings.Lbl_Operator}" 
+                              VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="Medium"/>
+                    <TextBox Grid.Column="1" 
+                            Text="{Binding OperatorFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ui:ControlHelper.PlaceholderText="{x:Static loc:Strings.Hint_EnterUserName}"/>
+                    
+                    <!-- 日志级别 -->
+                    <TextBlock Grid.Column="3" Text="{x:Static loc:Strings.Lbl_LogLevel}" 
+                              VerticalAlignment="Center" Margin="0,0,12,0" FontWeight="Medium"/>
+                    <ComboBox Grid.Column="4" 
+                             SelectedItem="{Binding SelectedLogLevel, Mode=TwoWay}"
+                             ItemsSource="{Binding LogLevels}"
+                             ui:ControlHelper.PlaceholderText="{x:Static loc:Strings.Hint_AllLevels}"/>
+                    
+                    <!-- 搜索按钮 -->
+                    <Button Grid.Column="6" 
+                           Command="{Binding SearchCommand}"
+                           Style="{DynamicResource AccentButtonStyle}"
+                           Padding="20,8" MinWidth="100">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon Glyph="&#xE721;" Margin="0,0,8,0"/>
+                            <TextBlock Text="{x:Static loc:Strings.Btn_Search}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Logs DataGrid Card -->
+        <Border Grid.Row="4" 
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
+            
+            <Grid>
+                <DataGrid ItemsSource="{Binding Logs}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         RowHeight="48"
+                         HeadersVisibility="Column"
+                         GridLinesVisibility="Horizontal"
+                         HorizontalGridLinesBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                         AlternatingRowBackground="{DynamicResource SystemControlAltMediumLowBrush}"
+                         ui:ScrollViewerHelper.AutoHideScrollBars="True">
+                    
+                    <DataGrid.Columns>
+                        <!-- 时间 -->
+                        <DataGridTextColumn Header="时间" Binding="{Binding Timestamp, StringFormat='yyyy-MM-dd HH:mm:ss'}" 
+                                           Width="160" FontFamily="Consolas"/>
+                        
+                        <!-- 级别 -->
+                        <DataGridTemplateColumn Header="级别" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="12" Padding="8,4" HorizontalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Info">
+                                                        <Setter Property="Background" Value="#200078D4"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Warning">
+                                                        <Setter Property="Background" Value="#20FFB900"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Error">
+                                                        <Setter Property="Background" Value="#20E74856"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Level}" Value="Success">
+                                                        <Setter Property="Background" Value="#2010893E"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding Level}" FontSize="12" FontWeight="Medium">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Info">
+                                                            <Setter Property="Foreground" Value="{StaticResource InfoBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Warning">
+                                                            <Setter Property="Foreground" Value="{StaticResource WarnBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Error">
+                                                            <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Success">
+                                                            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <!-- 操作类型 -->
+                        <DataGridTextColumn Header="操作类型" Binding="{Binding OperationType}" Width="120" FontWeight="Medium"/>
+                        
+                        <!-- 操作人 -->
+                        <DataGridTemplateColumn Header="操作人" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="24" Height="24" CornerRadius="12"
+                                               Background="{StaticResource HeaderGradient}"
+                                               Margin="0,0,8,0">
+                                            <TextBlock Text="{Binding Operator, Converter={StaticResource InitialConverter}}" 
+                                                      Foreground="White" FontSize="10"
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Operator}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <!-- 描述 -->
+                        <DataGridTextColumn Header="操作描述" Binding="{Binding Description}" Width="*" />
+                        
+                        <!-- IP地址 -->
+                        <DataGridTextColumn Header="IP地址" Binding="{Binding IPAddress}" Width="130" FontFamily="Consolas"/>
+                        
+                        <!-- 操作 -->
+                        <DataGridTemplateColumn Header="操作" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="详情" 
+                                           Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           CommandParameter="{Binding}"
+                                           Style="{DynamicResource AccentButtonStyle}"
+                                           Padding="12,4" FontSize="12"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+                <!-- Empty state -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Visibility="{Binding HasNoLogs, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ui:FontIcon Glyph="&#xE8BC;" FontSize="64" 
+                                Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                Opacity="0.3"/>
+                    <TextBlock Text="暂无日志记录" 
+                              FontSize="16" Margin="0,16,0,0"
+                              Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Pagination -->
+        <Border Grid.Row="6" 
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="16"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 统计信息 -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="共 " Opacity="0.7"/>
+                    <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" 
+                              Foreground="{StaticResource HeaderGradient}"/>
+                    <TextBlock Text=" 条记录" Opacity="0.7"/>
+                </StackPanel>
+                
+                <!-- 分页控件 -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
+                           Command="{Binding FirstPageCommand}"
+                           ToolTip="首页" Width="36" Height="36" Margin="0,0,8,0"/>
+                    <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
+                           Command="{Binding PreviousPageCommand}"
+                           ToolTip="上一页" Width="36" Height="36" Margin="0,0,8,0"/>
+                    
+                    <Border Background="{DynamicResource SystemControlAltMediumLowBrush}"
+                           CornerRadius="4" Padding="12,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding CurrentPage}" FontWeight="SemiBold"/>
+                            <TextBlock Text=" / " Opacity="0.7" Margin="4,0"/>
+                            <TextBlock Text="{Binding TotalPages}" Opacity="0.7"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+                           Command="{Binding NextPageCommand}"
+                           ToolTip="下一页" Width="36" Height="36" Margin="8,0,0,0"/>
+                    <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
+                           Command="{Binding LastPageCommand}"
+                           ToolTip="末页" Width="36" Height="36" Margin="8,0,0,0"/>
+                    
+                    <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
+                             Width="80" Margin="12,0,0,0">
+                        <ComboBoxItem Content="10"/>
+                        <ComboBoxItem Content="20" IsSelected="True"/>
+                        <ComboBoxItem Content="50"/>
+                        <ComboBoxItem Content="100"/>
+                    </ComboBox>
+                    <TextBlock Text="条/页" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

@@ -1,40 +1,179 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.RunExperimentView"
-       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid Margin="16">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+  <Grid Margin="24">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="24"/>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="24"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="24"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <StackPanel Orientation="Horizontal">
-      <TextBlock Text="当前实验：" VerticalAlignment="Center"/>
-      <ComboBox Width="220" Margin="12,0,0,0" ItemsSource="{Binding Experiments}" SelectedItem="{Binding SelectedExperiment}" DisplayMemberPath="Name"/>
-      <TextBlock Text="(当前：)" VerticalAlignment="Center" Margin="12,0,0,0"/>
-      <TextBlock Text="{Binding CurrentExperiment}" FontWeight="Bold" VerticalAlignment="Center"/>
+    <!-- Header -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+      <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="28" 
+                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}" 
+                 VerticalAlignment="Center" Margin="0,0,12,0"/>
+      <TextBlock Text="{x:Static loc:Strings.Nav_RunExperiment}" 
+                 FontSize="24" FontWeight="SemiBold"
+                 VerticalAlignment="Center"/>
     </StackPanel>
 
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,0">
-      <TextBlock Text="状态：" VerticalAlignment="Center"/>
-      <TextBlock Text="{Binding RunStatus}" FontWeight="Bold" VerticalAlignment="Center" Margin="12,0,0,0"/>
-    </StackPanel>
+    <!-- Experiment Selection Card -->
+    <Border Grid.Row="2" 
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            CornerRadius="8" Padding="20"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+            BorderThickness="1">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+          <Border Width="48" Height="48" CornerRadius="24" 
+                  Background="{DynamicResource SystemControlForegroundAccentBrush}">
+            <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" 
+                       Foreground="White" FontSize="20"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+            <TextBlock Text="{x:Static loc:Strings.Run_Label_CurrentExperiment}" 
+                       FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+            <TextBlock Text="{Binding CurrentExperiment}" FontSize="16" FontWeight="SemiBold"/>
+          </StackPanel>
+        </StackPanel>
+        
+        <ComboBox Grid.Column="2" Width="280" 
+                  ItemsSource="{Binding Experiments}" 
+                  SelectedItem="{Binding SelectedExperiment}" 
+                  DisplayMemberPath="Name"
+                  VerticalAlignment="Center"/>
+      </Grid>
+    </Border>
 
-    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
-      <TextBlock Text="进度：" VerticalAlignment="Center"/>
-      <ProgressBar Width="300" Height="14" Minimum="0" Maximum="100" Value="{Binding Progress}" Margin="12,0,0,0"/>
-      <TextBlock Text="{Binding Progress, StringFormat={}{0}%}" VerticalAlignment="Center" Margin="12,0,0,0"/>
-    </StackPanel>
+    <!-- Status & Progress Card -->
+    <Border Grid.Row="4" 
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            CornerRadius="8" Padding="20"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+            BorderThickness="1">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="16"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Status -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+          <TextBlock Text="{x:Static loc:Strings.Run_Label_Status}" 
+                     FontSize="14" VerticalAlignment="Center"
+                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+          <Border CornerRadius="4" Padding="12,6" Margin="12,0,0,0"
+                  Background="#200078D4">
+            <TextBlock Text="{Binding RunStatus}" FontSize="14" FontWeight="SemiBold"
+                       Foreground="{DynamicResource SystemControlForegroundAccentBrush}"/>
+          </Border>
+        </StackPanel>
+        
+        <!-- Progress -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          
+          <TextBlock Grid.Column="0" Text="{x:Static loc:Strings.Run_Label_Progress}" 
+                     FontSize="14" VerticalAlignment="Center"
+                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+          <ProgressBar Grid.Column="1" Height="8" Margin="16,0"
+                       Minimum="0" Maximum="100" Value="{Binding Progress}"
+                       VerticalAlignment="Center"/>
+          <Border Grid.Column="2" CornerRadius="4" Padding="8,4"
+                  Background="{DynamicResource SystemControlForegroundAccentBrush}">
+            <TextBlock Text="{Binding Progress, StringFormat={}{0}%}" 
+                       FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+          </Border>
+        </Grid>
+      </Grid>
+    </Border>
 
-    <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0,16,0,0">
-      <StackPanel Orientation="Horizontal">
-        <Button Content="开始" Command="{Binding StartCommand}" Width="80" IsEnabled="{Binding CanStart}"/>
-        <Button Content="暂停" Command="{Binding PauseCommand}" Width="80" Margin="12,0,0,0" IsEnabled="{Binding CanPause}"/>
-        <Button Content="继续" Command="{Binding ResumeCommand}" Width="80" Margin="12,0,0,0" IsEnabled="{Binding CanResume}"/>
-        <Button Content="停止" Command="{Binding StopCommand}" Width="80" Margin="12,0,0,0" IsEnabled="{Binding CanStop}"/>
-      </StackPanel>
-      <TextBlock Margin="0,12,0,0" Text="{Binding StatusMessage}" TextWrapping="Wrap" Foreground="DarkSlateGray"/>
-    </StackPanel>
+    <!-- Control Buttons Card -->
+    <Border Grid.Row="6" 
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            CornerRadius="8" Padding="20"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+            BorderThickness="1">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="16"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+          <Button Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}"
+                  Style="{DynamicResource AccentButtonStyle}" Padding="24,12" MinWidth="100">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
+              <TextBlock Text="{x:Static loc:Strings.Btn_Start}" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+          <Button Command="{Binding PauseCommand}" IsEnabled="{Binding CanPause}"
+                  Padding="24,12" MinWidth="100" Margin="16,0,0,0">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="&#xE769;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
+              <TextBlock Text="{x:Static loc:Strings.Btn_Pause}" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+          <Button Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}"
+                  Padding="24,12" MinWidth="100" Margin="16,0,0,0">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
+              <TextBlock Text="{x:Static loc:Strings.Btn_Resume}" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+          <Button Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}"
+                  Padding="24,12" MinWidth="100" Margin="16,0,0,0"
+                  Background="#20DC3545">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" 
+                         VerticalAlignment="Center" Foreground="#FFDC3545"/>
+              <TextBlock Text="{x:Static loc:Strings.Btn_Stop}" VerticalAlignment="Center" Foreground="#FFDC3545"/>
+            </StackPanel>
+          </Button>
+        </StackPanel>
+        
+        <!-- Status Message -->
+        <Border Grid.Row="2" CornerRadius="4" Padding="16,12"
+                Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibilityConverter}}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" 
+                       VerticalAlignment="Center" Margin="0,0,12,0"
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Border>
   </Grid>
 </UserControl>

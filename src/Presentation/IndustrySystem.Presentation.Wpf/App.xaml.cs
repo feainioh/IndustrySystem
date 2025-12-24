@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Dialogs;
 using Volo.Abp;
 using IndustrySystem.Application.AbpModules;
 using Microsoft.Extensions.Configuration;
@@ -26,11 +27,8 @@ using System.Globalization;
 using System;
 using System.Reflection;
 using IndustrySystem.Presentation.Wpf.Resources;
+using IndustrySystem.Presentation.Wpf.Views;
 using IndustrySystem.Presentation.Wpf.Services;
-using Prism.Dialogs;
-using WpfDialogService = IndustrySystem.Presentation.Wpf.Services.IDialogService;
-using WpfDialogServiceImpl = IndustrySystem.Presentation.Wpf.Services.DialogService;
-using IndustrySystem.Presentation.Wpf.Views; // added for navigation registration
 
 namespace IndustrySystem.Presentation.Wpf;
 
@@ -38,10 +36,15 @@ public partial class App : PrismApplication
 {
     private bool _shellInitialized;
 
-    protected override Window CreateShell() => new Shell(Container);
+    protected override Window CreateShell()
+    {
+        // Don't create Shell yet - show login first
+        return null!;
+    }
 
     protected override void InitializeShell(Window shell)
     {
+        // Will be called after login success
         if (_shellInitialized || shell is null) return;
         _shellInitialized = true;
         MainWindow = shell;
@@ -67,71 +70,26 @@ public partial class App : PrismApplication
             {
                 EntityService = (entityProp, column) =>
                 {
-                    // entityProp is PropertyInfo, get declaring type
                     var t = (entityProp as PropertyInfo)?.DeclaringType;
-
-                    // Primary Keys
-                    if (column.PropertyName == "Id")
-                    {
-                        column.IsPrimarykey = true;
-                        column.IsIdentity = false;
-                    }
+                    if (column.PropertyName == "Id") { column.IsPrimarykey = true; column.IsIdentity = false; }
                     if (t == typeof(Domain.Entities.Users.UserRole))
                     {
                         if (column.PropertyName == nameof(Domain.Entities.Users.UserRole.UserId) ||
                             column.PropertyName == nameof(Domain.Entities.Users.UserRole.RoleId))
-                        {
-                            column.IsPrimarykey = true; // composite PK
-                            column.IsIdentity = false;
-                        }
+                        { column.IsPrimarykey = true; column.IsIdentity = false; }
                     }
                     if (t == typeof(Domain.Entities.Roles.RolePermission))
                     {
                         if (column.PropertyName == nameof(Domain.Entities.Roles.RolePermission.RoleId) ||
                             column.PropertyName == nameof(Domain.Entities.Roles.RolePermission.PermissionId))
-                        {
-                            column.IsPrimarykey = true; // composite PK
-                            column.IsIdentity = false;
-                        }
+                        { column.IsPrimarykey = true; column.IsIdentity = false; }
                     }
-
-                    // Timestamps defaults / nullability
-                    if (column.PropertyInfo.PropertyType == typeof(DateTime))
-                    {
-                        if (column.PropertyName == nameof(Domain.Entities.Users.User.CreatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Roles.Role.CreatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Permissions.Permission.CreatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.Experiment.CreatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.ExperimentTemplate.CreatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.ExperimentGroup.CreatedAt) ||
-                            (t == typeof(Domain.Entities.Users.UserRole) && column.PropertyName == nameof(Domain.Entities.Users.UserRole.CreatedAt)) ||
-                            (t == typeof(Domain.Entities.Roles.RolePermission) && column.PropertyName == nameof(Domain.Entities.Roles.RolePermission.CreatedAt)))
-                        {
-                            column.IsNullable = false;
-                            column.DefaultValue = "CURRENT_TIMESTAMP";
-                        }
-                        if (column.PropertyName == nameof(Domain.Entities.Users.User.UpdatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Roles.Role.UpdatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Permissions.Permission.UpdatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.Experiment.UpdatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.ExperimentTemplate.UpdatedAt) ||
-                            column.PropertyName == nameof(Domain.Entities.Experiments.ExperimentGroup.UpdatedAt) ||
-                            (t == typeof(Domain.Entities.Users.UserRole) && column.PropertyName == nameof(Domain.Entities.Users.UserRole.UpdatedAt)) ||
-                            (t == typeof(Domain.Entities.Roles.RolePermission) && column.PropertyName == nameof(Domain.Entities.Roles.RolePermission.UpdatedAt)))
-                        {
-                            column.IsNullable = true;
-                        }
-                    }
-                    if (column.PropertyInfo.PropertyType == typeof(DateTime?))
-                    {
-                        column.IsNullable = true;
-                    }
+                    if (column.PropertyInfo.PropertyType == typeof(DateTime?)) { column.IsNullable = true; }
                 }
             }
         };
         containerRegistry.RegisterInstance<ISqlSugarClient>(new SqlSugarClient(conn));
 
-        // register repositories
         containerRegistry.Register(typeof(IRepository<>), typeof(SqlSugarRepository<>));
         containerRegistry.Register<IUserRoleRepository, UserRoleRepository>();
         containerRegistry.Register<IRolePermissionRepository, RolePermissionRepository>();
@@ -148,56 +106,37 @@ public partial class App : PrismApplication
         containerRegistry.Register<ICommunicationAppService, CommunicationAppService>();
         containerRegistry.Register<IModbusTcpClient, ModbusTcpClient>();
 
-        // ViewModel location mappings (optional when using manual DataContext wiring)
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.RoleManageView, RoleManageViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.PermissionsView, PermissionsViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.UsersView, UsersViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentsView, ExperimentsViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.RunExperimentView, RunExperimentViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.AlarmView, AlarmViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.HardwareDebugView, HardwareDebugViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.InventoryView, InventoryViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.RealtimeDataView, RealtimeDataViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentConfigView, ExperimentConfigViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.OperationLogsView, OperationLogsViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.MaterialInfoView, MaterialInfoViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.ShelfInfoView, ShelfInfoViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.DeviceParamsView, DeviceParamsViewModel>();
-        ViewModelLocationProvider.Register<IndustrySystem.Presentation.Wpf.Views.PeripheralDebugView, PeripheralDebugViewModel>();
-
-        // Prism region navigation registrations (name must match ShellViewModel tags)
-        containerRegistry.RegisterForNavigation<UsersView>("Users");
-        containerRegistry.RegisterForNavigation<RoleManageView>("Roles");
-        containerRegistry.RegisterForNavigation<PermissionsView>("Permissions");
-        containerRegistry.RegisterForNavigation<ExperimentTemplateView>("Templates");
-        containerRegistry.RegisterForNavigation<ExperimentConfigView>("ExperimentConfig");
-        containerRegistry.RegisterForNavigation<ExperimentGroupsView>("ExperimentGroupConfig");
-        containerRegistry.RegisterForNavigation<ExperimentGroupsView>("ExperimentGroupTemplates");
-        containerRegistry.RegisterForNavigation<RunExperimentView>("RunExperiment");
-        containerRegistry.RegisterForNavigation<RealtimeDataView>("RealtimeData");
-        containerRegistry.RegisterForNavigation<ExperimentHistoryView>("ExperimentHistory");
-        containerRegistry.RegisterForNavigation<InventoryView>("InventoryRecords");
-        containerRegistry.RegisterForNavigation<InventoryView>("Inventory");
-        containerRegistry.RegisterForNavigation<OperationLogsView>("OperationLogs");
-        containerRegistry.RegisterForNavigation<MaterialInfoView>("MaterialInfo");
-        containerRegistry.RegisterForNavigation<ShelfInfoView>("ShelfInfo");
-        containerRegistry.RegisterForNavigation<HardwareDebugView>("ManualDebug");
-        containerRegistry.RegisterForNavigation<DeviceParamsView>("DeviceParams");
-        containerRegistry.RegisterForNavigation<PeripheralDebugView>("PeripheralDebug");
-
         containerRegistry.RegisterSingleton<IDatabaseInitializer, SqlSugarDatabaseInitializer>();
 
         var mapperConfig = new MapperConfiguration(cfg => cfg.AddMaps(typeof(MappingProfile).Assembly));
         containerRegistry.RegisterInstance<IMapper>(mapperConfig.CreateMapper());
 
-        containerRegistry.RegisterSingleton<WpfDialogService, WpfDialogServiceImpl>();
-
+        // Register auth services before dialog (LoginViewModel depends on these)
         containerRegistry.RegisterSingleton<IAuthService, AuthService>();
         containerRegistry.RegisterSingleton<IAuthState, AuthState>();
-        ViewModelLocationProvider.Register<Views.LoginView, LoginViewModel>();
+
+        // Register ViewModels
+        ViewModelLocationProvider.Register<Views.RoleManageView, RoleManageViewModel>();
+        ViewModelLocationProvider.Register<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
+        ViewModelLocationProvider.Register<Views.PermissionsView, PermissionsViewModel>();
+        ViewModelLocationProvider.Register<Views.UsersView, UsersViewModel>();
+        ViewModelLocationProvider.Register<Views.AlarmView, AlarmViewModel>();
+        ViewModelLocationProvider.Register<Views.RunExperimentView, RunExperimentViewModel>();
+        ViewModelLocationProvider.Register<Views.ExperimentsView, ExperimentsViewModel>();
+        ViewModelLocationProvider.Register<Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
+        ViewModelLocationProvider.Register<Views.InventoryView, InventoryViewModel>();
+        ViewModelLocationProvider.Register<Views.HardwareDebugView, HardwareDebugViewModel>();
+        ViewModelLocationProvider.Register<Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
+        ViewModelLocationProvider.Register<Views.ExperimentConfigView, ExperimentConfigViewModel>();
+        ViewModelLocationProvider.Register<Views.MaterialInfoView, MaterialInfoViewModel>();
+        ViewModelLocationProvider.Register<Views.ShelfInfoView, ShelfInfoViewModel>();
+        ViewModelLocationProvider.Register<Views.OperationLogsView, OperationLogsViewModel>();
+        ViewModelLocationProvider.Register<Views.RealtimeDataView, RealtimeDataViewModel>();
+        ViewModelLocationProvider.Register<Views.PeripheralDebugView, PeripheralDebugViewModel>();
+        ViewModelLocationProvider.Register<Views.DeviceParamsView, DeviceParamsViewModel>();
+
+        // Register LoginView as dialog
+        containerRegistry.RegisterDialog<LoginView, LoginViewModel>();
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -205,7 +144,6 @@ public partial class App : PrismApplication
         var logger = LogManager.GetCurrentClassLogger();
         ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
 
-        // Force default to Chinese
         var zh = CultureInfo.GetCultureInfo("zh-CN");
         CultureInfo.DefaultThreadCurrentCulture = zh;
         CultureInfo.DefaultThreadCurrentUICulture = zh;
@@ -230,11 +168,7 @@ public partial class App : PrismApplication
 
         Initialize();
 
-        Dispatcher.BeginInvoke(new Action(() =>
-        {
-            MainWindow?.Show();
-        }), DispatcherPriority.ApplicationIdle);
-
+        // Initialize database first, then show login
         Dispatcher.BeginInvoke(new Action(async () =>
         {
             using var abpApp = AbpApplicationFactory.Create<IndustrySystemApplicationModule>();
@@ -248,7 +182,35 @@ public partial class App : PrismApplication
             {
                 logger.Error(ex2, "[DB Init] Failed during application startup.");
             }
+
+            // Show login dialog
+            ShowLoginDialog();
         }), DispatcherPriority.ApplicationIdle);
+    }
+
+    public void ShowLoginDialog()
+    {
+        var dialogService = Container.Resolve<IDialogService>();
+        dialogService.ShowDialog(nameof(LoginView), result =>
+        {
+            if (result.Result == ButtonResult.OK)
+            {
+                // Login successful - show shell
+                ShowShellWindow();
+            }
+            else
+            {
+                // User cancelled login - shutdown application
+                Shutdown();
+            }
+        });
+    }
+
+    private void ShowShellWindow()
+    {
+        var shell = new Shell(Container);
+        InitializeShell(shell);
+        shell.Show();
     }
 }
 

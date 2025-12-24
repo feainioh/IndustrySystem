@@ -2,6 +2,7 @@ namespace IndustrySystem.Domain.Entities.Experiments;
 
 public class Experiment
 {
+    [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid TemplateId { get; set; }
     public Guid GroupId { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace IndustrySystem.Infrastructure.Logging;
+namespace IndustrySystem.Infrastructure.Logging;
 
 public class Class1
 {

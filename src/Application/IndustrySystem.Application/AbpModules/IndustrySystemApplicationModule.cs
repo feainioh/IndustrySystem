@@ -21,6 +21,11 @@ public class IndustrySystemApplicationModule : AbpModule
         context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IRoleAppService, IndustrySystem.Application.Services.RoleAppService>();
         context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IExperimentTemplateAppService, IndustrySystem.Application.Services.ExperimentTemplateAppService>();
         context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IPermissionAppService, IndustrySystem.Application.Services.PermissionAppService>();
-    context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IUserAppService, IndustrySystem.Application.Services.UserAppService>();
+        context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IUserAppService, IndustrySystem.Application.Services.UserAppService>();
+        
+        // Register motion program services
+        context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IMotionProgramAppService, IndustrySystem.Application.Services.MotionProgramAppService>();
+        context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IMotionProgramExecutor, IndustrySystem.Application.Services.MotionProgramExecutor>();
+        context.Services.AddScoped<IndustrySystem.Application.Contracts.Services.IHardwareController, IndustrySystem.Application.Services.SimulatedHardwareController>();
     }
 }

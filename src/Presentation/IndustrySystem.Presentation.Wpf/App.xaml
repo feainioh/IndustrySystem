@@ -4,32 +4,43 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources">
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:conv="clr-namespace:IndustrySystem.Presentation.Wpf.Converters"
+             ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- ModernWpf Fluent resources -->
+                <!-- Material Design themes -->
+                <materialDesign:BundledTheme BaseTheme="Light" 
+                                           PrimaryColor="Blue" 
+                                           SecondaryColor="Cyan" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+                
+                <!-- ModernWpf Fluent resources (for NavigationView) -->
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
 
-                <!-- Material Design theme (keep for existing controls) -->
-                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="LightBlue" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-
+                <!-- Custom Material Theme -->
+                <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/MaterialTheme.xaml" />
+                
                 <!-- App styles -->
                 <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/Controls.xaml" />
+                <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/ViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Fluent blue pane backgrounds for NavigationView (override) -->
-            <!-- Expanded Left pane background: very light blue -->
+            <!-- NavigationView overrides -->
             <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FFEAF4FF"/>
-            <!-- Overlay/Compact pane background: accent blue with low opacity -->
             <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FF0078D4" Opacity="0.72"/>
-            <!-- Top mode background (not used now, for completeness) -->
             <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="#FF0078D4" Opacity="0.75"/>
 
-            <!-- Global localization provider (backed by Strings.resx) -->
+            <!-- Global localization provider -->
             <loc:LocalizationProvider x:Key="Loc" />
+
+            <!-- Converters -->
+            <conv:PermissionToVisibilityConverter x:Key="PermissionToVisibility"/>
+            <conv:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+            <conv:BooleanNegationConverter x:Key="Not"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

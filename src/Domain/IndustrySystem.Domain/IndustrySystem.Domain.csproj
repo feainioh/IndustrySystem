@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Domain" Version="8.*" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.172" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\MotionProgram\Parameters\" />
   </ItemGroup>
 
   <PropertyGroup>

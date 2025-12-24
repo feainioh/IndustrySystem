@@ -1,0 +1,340 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <!-- ==================== Color Palette ==================== -->
+    
+    <!-- Primary Colors -->
+    <Color x:Key="PrimaryColor">#0078D4</Color>
+    <Color x:Key="PrimaryLightColor">#00BCF2</Color>
+    <Color x:Key="PrimaryDarkColor">#005A9E</Color>
+    
+    <!-- Accent Colors -->
+    <Color x:Key="AccentColor">#00BCF2</Color>
+    <Color x:Key="AccentLightColor">#33D4FF</Color>
+    <Color x:Key="AccentDarkColor">#0099CC</Color>
+    
+    <!-- Module Colors -->
+    <Color x:Key="UserModuleColor">#FFB900</Color>
+    <Color x:Key="RoleModuleColor">#10893E</Color>
+    <Color x:Key="PermissionModuleColor">#8764B8</Color>
+    <Color x:Key="ExperimentModuleColor">#0078D4</Color>
+    <Color x:Key="MaterialModuleColor">#FF8C00</Color>
+    <Color x:Key="DeviceModuleColor">#E74856</Color>
+    <Color x:Key="DataModuleColor">#00BCF2</Color>
+    <Color x:Key="AlarmModuleColor">#F7630C</Color>
+    
+    <!-- Status Colors -->
+    <Color x:Key="SuccessColor">#10893E</Color>
+    <Color x:Key="WarningColor">#FFB900</Color>
+    <Color x:Key="ErrorColor">#E74856</Color>
+    <Color x:Key="InfoColor">#0078D4</Color>
+    
+    <!-- Surface Colors -->
+    <Color x:Key="SurfaceColor">#FFFFFF</Color>
+    <Color x:Key="SurfaceDarkColor">#F3F3F3</Color>
+    <Color x:Key="BackgroundColor">#F5F5F5</Color>
+    <Color x:Key="OverlayColor">#000000</Color>
+    
+    <!-- Text Colors -->
+    <Color x:Key="TextPrimaryColor">#212121</Color>
+    <Color x:Key="TextSecondaryColor">#757575</Color>
+    <Color x:Key="TextDisabledColor">#BDBDBD</Color>
+    
+    <!-- ==================== Brushes ==================== -->
+    
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLightColor}"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDarkColor}"/>
+    
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="AccentLightBrush" Color="{StaticResource AccentLightColor}"/>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="{StaticResource AccentDarkColor}"/>
+    
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}"/>
+    
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+    
+    <!-- Gradient Brushes -->
+    <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
+        <GradientStop Color="{StaticResource PrimaryLightColor}" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="AccentGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource AccentColor}" Offset="0"/>
+        <GradientStop Color="{StaticResource AccentLightColor}" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="UserGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#FFB900" Offset="0"/>
+        <GradientStop Color="#FFC83D" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="RoleGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#10893E" Offset="0"/>
+        <GradientStop Color="#16A34A" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="ExperimentGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0078D4" Offset="0"/>
+        <GradientStop Color="#00BCF2" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="MaterialGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#FF8C00" Offset="0"/>
+        <GradientStop Color="#FFA940" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="DeviceGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#E74856" Offset="0"/>
+        <GradientStop Color="#F26873" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- ==================== Effects ==================== -->
+    
+    <DropShadowEffect x:Key="ElevationLight" 
+                      Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.12"/>
+    
+    <DropShadowEffect x:Key="ElevationMedium" 
+                      Color="Black" BlurRadius="12" ShadowDepth="4" Opacity="0.16"/>
+    
+    <DropShadowEffect x:Key="ElevationHigh" 
+                      Color="Black" BlurRadius="16" ShadowDepth="6" Opacity="0.20"/>
+    
+    <DropShadowEffect x:Key="GlowEffect" 
+                      Color="{StaticResource PrimaryColor}" 
+                      BlurRadius="16" ShadowDepth="0" Opacity="0.6"/>
+    
+    <!-- ==================== Card Styles ==================== -->
+    
+    <Style x:Key="MaterialCard" TargetType="materialDesign:Card">
+        <Setter Property="UniformCornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+    </Style>
+    
+    <Style x:Key="MaterialCardLarge" TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialCard}">
+        <Setter Property="Padding" Value="24"/>
+        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp4"/>
+    </Style>
+    
+    <Style x:Key="MaterialCardInteractive" TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialCard}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp4"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- ==================== Button Styles ==================== -->
+    
+    <Style x:Key="MaterialPrimaryButton" TargetType="Button" 
+           BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+    </Style>
+    
+    <Style x:Key="MaterialAccentButton" TargetType="Button" 
+           BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+    
+    <Style x:Key="MaterialIconButton" TargetType="Button" 
+           BasedOn="{StaticResource MaterialDesignIconButton}">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <Style x:Key="MaterialFabButton" TargetType="Button" 
+           BasedOn="{StaticResource MaterialDesignFloatingActionButton}">
+        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}"/>
+        <Setter Property="Effect" Value="{StaticResource ElevationMedium}"/>
+    </Style>
+    
+    <!-- ==================== Text Field Styles ==================== -->
+    
+    <Style x:Key="MaterialTextField" TargetType="TextBox" 
+           BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="materialDesign:HintAssist.FloatingScale" Value="0.75"/>
+    </Style>
+    
+    <Style x:Key="MaterialPasswordField" TargetType="PasswordBox" 
+           BasedOn="{StaticResource MaterialDesignOutlinedPasswordBox}">
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    
+    <Style x:Key="MaterialComboBox" TargetType="ComboBox" 
+           BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    
+    <!-- ==================== Chip Styles ==================== -->
+    
+    <Style x:Key="StatusChip" TargetType="materialDesign:Chip">
+        <Setter Property="Margin" Value="4,2"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+    
+    <Style x:Key="SuccessChip" TargetType="materialDesign:Chip" BasedOn="{StaticResource StatusChip}">
+        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    
+    <Style x:Key="WarningChip" TargetType="materialDesign:Chip" BasedOn="{StaticResource StatusChip}">
+        <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    
+    <Style x:Key="ErrorChip" TargetType="materialDesign:Chip" BasedOn="{StaticResource StatusChip}">
+        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    
+    <!-- ==================== DataGrid Styles ==================== -->
+    
+    <Style x:Key="MaterialDataGrid" TargetType="DataGrid" 
+           BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="RowHeight" Value="52"/>
+        <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="16,8"/>
+        <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="16,8"/>
+    </Style>
+    
+    <!-- ==================== Page Layout Styles ==================== -->
+    
+    <Style x:Key="PageContainer" TargetType="Grid">
+        <Setter Property="Margin" Value="24"/>
+    </Style>
+    
+    <Style x:Key="PageHeader" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="Margin" Value="0,0,0,24"/>
+    </Style>
+    
+    <Style x:Key="PageTitle" TargetType="TextBlock" 
+           BasedOn="{StaticResource MaterialDesignHeadline5TextBlock}">
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <Style x:Key="PageSubtitle" TargetType="TextBlock" 
+           BasedOn="{StaticResource MaterialDesignBody2TextBlock}">
+        <Setter Property="Opacity" Value="0.7"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+    
+    <Style x:Key="SectionTitle" TargetType="TextBlock" 
+           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+        <Setter Property="Margin" Value="0,16,0,8"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+    
+    <!-- ==================== Icon Badge Styles ==================== -->
+    
+    <Style x:Key="ModuleIconBadge" TargetType="Border">
+        <Setter Property="Width" Value="48"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Effect" Value="{StaticResource GlowEffect}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,16,0"/>
+    </Style>
+    
+    <Style x:Key="SmallIconBadge" TargetType="Border">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- ==================== Progress Styles ==================== -->
+    
+    <Style x:Key="MaterialProgressBar" TargetType="ProgressBar" 
+           BasedOn="{StaticResource MaterialDesignLinearProgressBar}">
+        <Setter Property="Height" Value="4"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryGradientBrush}"/>
+    </Style>
+    
+    <Style x:Key="MaterialCircularProgress" TargetType="ProgressBar" 
+           BasedOn="{StaticResource MaterialDesignCircularProgressBar}">
+        <Setter Property="Width" Value="48"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+    </Style>
+    
+    <!-- ==================== Dialog Styles ==================== -->
+    
+    <Style x:Key="DialogContent" TargetType="StackPanel">
+        <Setter Property="Margin" Value="24"/>
+        <Setter Property="MinWidth" Value="400"/>
+    </Style>
+    
+    <Style x:Key="DialogTitle" TargetType="TextBlock" 
+           BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}">
+        <Setter Property="Margin" Value="0,0,0,16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    
+    <!-- ==================== List Styles ==================== -->
+    
+    <Style x:Key="MaterialListBox" TargetType="ListBox" 
+           BasedOn="{StaticResource MaterialDesignListBox}">
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    
+    <Style x:Key="MaterialListBoxItem" TargetType="ListBoxItem" 
+           BasedOn="{StaticResource MaterialDesignListBoxItem}">
+        <Setter Property="Padding" Value="16,12"/>
+        <Setter Property="MinHeight" Value="48"/>
+    </Style>
+    
+    <!-- ==================== Expansion Panel Styles ==================== -->
+    
+    <Style x:Key="MaterialExpander" TargetType="Expander" 
+           BasedOn="{StaticResource MaterialDesignExpander}">
+        <Setter Property="Margin" Value="0,8"/>
+        <Setter Property="materialDesign:ExpanderAssist.HorizontalHeaderPadding" Value="16"/>
+    </Style>
+    
+    <!-- ==================== Spacing ==================== -->
+    
+    <Thickness x:Key="SmallSpacing">8</Thickness>
+    <Thickness x:Key="MediumSpacing">16</Thickness>
+    <Thickness x:Key="LargeSpacing">24</Thickness>
+    <Thickness x:Key="ExtraLargeSpacing">32</Thickness>
+    
+    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="SmallSize">8</System:Double>
+    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="MediumSize">16</System:Double>
+    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="LargeSize">24</System:Double>
+
+</ResourceDictionary>

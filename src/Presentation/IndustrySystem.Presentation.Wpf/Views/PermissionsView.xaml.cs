@@ -1,9 +1,6 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
-using MaterialDesignThemes.Wpf;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -16,39 +13,30 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            _ = OpenPermissionDialogAsync(null);
+            if (DataContext is ViewModels.PermissionsViewModel vm && 
+                NameBox != null && DisplayNameBox != null)
+            {
+                _ = vm.AddAsync(NameBox.Text, DisplayNameBox.Text);
+                NameBox.Clear();
+                DisplayNameBox.Clear();
+            }
         }
 
         private void OnEdit(object sender, RoutedEventArgs e)
         {
-            if ((sender as FrameworkElement)?.DataContext is Application.Contracts.Dtos.PermissionDto p)
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is ViewModels.PermissionsViewModel vm)
             {
-                _ = OpenPermissionDialogAsync(p.Id);
+                vm.EditPermission(id);
             }
         }
 
-        private async System.Threading.Tasks.Task OpenPermissionDialogAsync(Guid? id)
+        private void OnDelete(object sender, RoutedEventArgs e)
         {
-            var vm = ContainerLocator.Current.Resolve<PermissionEditDialogViewModel>();
-            await vm.LoadAsync(id);
-            var dialog = new Dialogs.PermissionEditDialog { DataContext = vm };
-
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is ViewModels.PermissionsViewModel vm)
             {
-                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
-                {
-                    DialogHost.Close("RootDialogHost", vm.DialogResult);
-                }
-            };
-            vm.PropertyChanged += handler;
-            try
-            {
-                var result = await DialogHost.Show(dialog, "RootDialogHost");
-                if (DataContext is ViewModels.PermissionsViewModel listVm) await listVm.LoadAsync();
-            }
-            finally
-            {
-                vm.PropertyChanged -= handler;
+                _ = vm.DeleteAsync(id);
             }
         }
     }

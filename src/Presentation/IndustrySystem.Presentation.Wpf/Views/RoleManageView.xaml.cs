@@ -1,10 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Ioc;
 using IndustrySystem.Presentation.Wpf.ViewModels;
-using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
-using MaterialDesignThemes.Wpf;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -13,44 +10,46 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public RoleManageView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<RoleManageViewModel>();
         }
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            _ = OpenRoleDialogAsync(null);
+            if (DataContext is RoleManageViewModel vm && 
+                RoleNameBox != null)
+            {
+                _ = vm.AddAsync(RoleNameBox.Text);
+                RoleNameBox.Clear();
+                if (DescBox != null) DescBox.Clear();
+            }
+        }
+
+        private void OnPermissions(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is RoleManageViewModel vm)
+            {
+                _ = vm.ManagePermissionsAsync(id);
+            }
         }
 
         private void OnEdit(object sender, RoutedEventArgs e)
         {
-            if ((sender as FrameworkElement)?.DataContext is Application.Contracts.Dtos.RoleDto r)
+            if (sender is Button btn && btn.Tag is Guid id)
             {
-                _ = OpenRoleDialogAsync(r.Id);
+                MessageBox.Show(
+                    $"Edit Role: {id}\n\nThis feature is not yet implemented.", 
+                    "Edit Role", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Information);
             }
         }
 
-        private async System.Threading.Tasks.Task OpenRoleDialogAsync(Guid? id)
+        private void OnDelete(object sender, RoutedEventArgs e)
         {
-            var vm = ContainerLocator.Current.Resolve<RoleEditDialogViewModel>();
-            await vm.LoadAsync(id);
-            var dialog = new Dialogs.RoleEditDialog { DataContext = vm };
-
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is RoleManageViewModel vm)
             {
-                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
-                {
-                    DialogHost.Close("RootDialogHost", vm.DialogResult);
-                }
-            };
-            vm.PropertyChanged += handler;
-            try
-            {
-                var result = await DialogHost.Show(dialog, "RootDialogHost");
-                if (DataContext is ViewModels.RoleManageViewModel listVm) await listVm.LoadAsync();
-            }
-            finally
-            {
-                vm.PropertyChanged -= handler;
+                _ = vm.DeleteAsync(id);
             }
         }
     }

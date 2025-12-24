@@ -1,33 +1,238 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.RoleManageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="False"
-             xmlns:prism="http://prismlibrary.com/">
-  <Grid Margin="12">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
-    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-      <TextBox x:Name="NameBox" Width="240" materialDesign:HintAssist.Hint="角色名称"/>
-      <Button Content="新增" Margin="8,0,0,0" Click="OnAdd" Style="{StaticResource MaterialDesignRaisedButton}"/>
-    </StackPanel>
-    <ListView Grid.Row="1" ItemsSource="{Binding Roles}">
-      <ListView.View>
-        <GridView>
-          <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Name}"/>
-          <GridViewColumn Header="默认" DisplayMemberBinding="{Binding IsDefault}"/>
-          <GridViewColumn Header="操作" Width="90">
-            <GridViewColumn.CellTemplate>
-              <DataTemplate>
-                <Button Content="删除" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding Id}" Style="{StaticResource MaterialDesignFlatButton}"/>
-              </DataTemplate>
-            </GridViewColumn.CellTemplate>
-          </GridViewColumn>
-        </GridView>
-      </ListView.View>
-    </ListView>
-  </Grid>
+             Background="{DynamicResource MaterialDesignPaper}">
+    
+    <UserControl.Resources>
+        <loc:LocalizationProvider x:Key="Loc" />
+    </UserControl.Resources>
+    
+    <Grid Style="{StaticResource PageContainer}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Icon and Title -->
+            <Border Grid.Column="0"
+                    Style="{StaticResource ModuleIconBadge}"
+                    Background="{StaticResource RoleGradientBrush}">
+                <Border.Effect>
+                    <DropShadowEffect Color="#10893E" BlurRadius="16" 
+                                    ShadowDepth="0" Opacity="0.6"/>
+                </Border.Effect>
+                <materialDesign:PackIcon Kind="ShieldAccount" 
+                                        Width="32" Height="32"
+                                        Foreground="White"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+            </Border>
+            
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="{x:Static loc:Strings.Nav_Roles}" 
+                          Style="{StaticResource PageTitle}"/>
+                <TextBlock Text="Manage roles and permissions" 
+                          Style="{StaticResource PageSubtitle}"/>
+            </StackPanel>
+            
+            <!-- Action Buttons -->
+            <Button Grid.Column="2"
+                   Style="{StaticResource MaterialDesignOutlinedButton}"
+                   Command="{Binding RefreshCommand}"
+                   VerticalAlignment="Center"
+                   Height="40">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Refresh" 
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" 
+                              VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Add Role Card -->
+        <materialDesign:Card Grid.Row="2" Style="{StaticResource MaterialCard}">
+            <StackPanel>
+                <TextBlock Text="Add New Role" 
+                          Style="{StaticResource SectionTitle}"/>
+                
+                <Grid Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Role Name -->
+                    <TextBox Grid.Column="0"
+                            x:Name="RoleNameBox"
+                            Style="{StaticResource MaterialTextField}"
+                            materialDesign:HintAssist.Hint="Role Name"
+                            materialDesign:HintAssist.IsFloating="True"/>
+                    
+                    <!-- Description -->
+                    <TextBox Grid.Column="2"
+                            x:Name="DescBox"
+                            Style="{StaticResource MaterialTextField}"
+                            materialDesign:HintAssist.Hint="Description"
+                            materialDesign:HintAssist.IsFloating="True"/>
+                    
+                    <!-- Add Button -->
+                    <Button Grid.Column="4"
+                           Click="OnAdd"
+                           Style="{StaticResource MaterialAccentButton}"
+                           Width="120"
+                           Height="48">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ShieldPlus" 
+                                                    VerticalAlignment="Center"
+                                                    Margin="0,0,8,0"/>
+                            <TextBlock Text="{x:Static loc:Strings.Btn_AddRole}" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- Roles List Card -->
+        <materialDesign:Card Grid.Row="4" Style="{StaticResource MaterialCard}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Section Header with Search -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0"
+                              Text="Role List" 
+                              Style="{StaticResource SectionTitle}"/>
+                    
+                    <TextBox Grid.Column="1"
+                            Width="250"
+                            Style="{StaticResource MaterialDesignFilledTextBox}"
+                            materialDesign:HintAssist.Hint="Search roles..."
+                            materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                            materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                            Height="40"/>
+                </Grid>
+                
+                <!-- DataGrid -->
+                <DataGrid Grid.Row="2"
+                         ItemsSource="{Binding Roles}"
+                         Style="{StaticResource MaterialDataGrid}">
+                    <DataGrid.Columns>
+                        <!-- Role Column with Icon -->
+                        <DataGridTemplateColumn Header="Role" Width="280">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="8,0">
+                                        <Border Width="40" Height="40"
+                                               CornerRadius="20"
+                                               Background="{StaticResource RoleGradientBrush}"
+                                               Margin="0,0,12,0">
+                                            <materialDesign:PackIcon Kind="ShieldAccount" 
+                                                                    Width="24" Height="24"
+                                                                    Foreground="White"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" 
+                                                      FontWeight="SemiBold"
+                                                      FontSize="14"/>
+                                            <TextBlock Text="{Binding Description}" 
+                                                      FontSize="12"
+                                                      Opacity="0.7"
+                                                      TextTrimming="CharacterEllipsis"
+                                                      MaxWidth="180"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <!-- Description Column -->
+                        <DataGridTextColumn Header="Description" 
+                                          Binding="{Binding Description}"
+                                          Width="*"/>
+                        
+                        <!-- Default Role Indicator -->
+                        <DataGridTemplateColumn Header="Type" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <materialDesign:Chip Content="Default"
+                                                        Background="{StaticResource InfoBrush}"
+                                                        Foreground="White"
+                                                        Margin="8,0"
+                                                        FontSize="12"
+                                                        Padding="8,4"
+                                                        Visibility="{Binding IsDefault, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <!-- Actions Column -->
+                        <DataGridTemplateColumn Header="Actions" Width="200">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="8,0">
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                               Click="OnPermissions"
+                                               Tag="{Binding Id}"
+                                               ToolTip="Manage Permissions"
+                                               Margin="0,0,4,0">
+                                            <materialDesign:PackIcon Kind="KeyChainVariant"/>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                               Click="OnEdit"
+                                               Tag="{Binding Id}"
+                                               ToolTip="Edit Role"
+                                               Margin="0,0,4,0">
+                                            <materialDesign:PackIcon Kind="Pencil"/>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                               Click="OnDelete"
+                                               Tag="{Binding Id}"
+                                               ToolTip="Delete Role"
+                                               Foreground="{StaticResource ErrorBrush}"
+                                               IsEnabled="{Binding IsDefault, Converter={StaticResource Not}}">
+                                            <materialDesign:PackIcon Kind="Delete"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
 </UserControl>

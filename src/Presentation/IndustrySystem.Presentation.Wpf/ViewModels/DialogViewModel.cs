@@ -32,7 +32,6 @@ public abstract class DialogViewModel : BindableBase
 
     protected virtual bool CanSave() => true;
 
-    // Default save just closes dialog with true. Derived classes should override to persist first.
     protected virtual Task OnSaveAsync()
     {
         DialogResult = true;

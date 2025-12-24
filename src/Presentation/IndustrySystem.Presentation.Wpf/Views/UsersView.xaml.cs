@@ -1,49 +1,63 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Ioc;
+using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels;
-using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
-using MaterialDesignThemes.Wpf;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
     public partial class UsersView : UserControl
     {
-        public UsersView()
+        public UsersView(UsersViewModel viewModel)
         {
             InitializeComponent();
-            // Manual wiring since AutoWireViewModel is false
-            DataContext = ContainerLocator.Current.Resolve<UsersViewModel>();
+            DataContext = viewModel;
         }
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            _ = OpenUserDialogAsync(null);
+            if (DataContext is UsersViewModel vm && 
+                UserNameBox != null && DisplayNameBox != null)
+            {
+                _ = vm.AddAsync(UserNameBox.Text, DisplayNameBox.Text);
+                UserNameBox.Text = string.Empty;
+                DisplayNameBox.Text = string.Empty;
+            }
         }
 
-        private async System.Threading.Tasks.Task OpenUserDialogAsync(Guid? id)
+        private void OnResetPassword(object sender, RoutedEventArgs e)
         {
-            var vm = ContainerLocator.Current.Resolve<UserEditDialogViewModel>();
-            await vm.LoadAsync(id);
-            var dialog = new Dialogs.UserEditDialog { DataContext = vm };
-
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is UsersViewModel vm)
             {
-                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
-                {
-                    DialogHost.Close("RootDialogHost", vm.DialogResult);
-                }
-            };
-            vm.PropertyChanged += handler;
-            try
-            {
-                var result = await DialogHost.Show(dialog, "RootDialogHost");
-                if (DataContext is ViewModels.UsersViewModel listVm) await listVm.LoadAsync();
+                _ = vm.ResetPasswordAsync(id);
             }
-            finally
+        }
+
+        private void OnEdit(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement edit dialog
+            if (sender is Button btn && btn.Tag is Guid id)
             {
-                vm.PropertyChanged -= handler;
+                MessageBox.Show($"{Strings.Btn_Edit} {id}", Strings.Tooltip_EditUser, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void OnDelete(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is Guid id && 
+                DataContext is UsersViewModel vm)
+            {
+                var result = MessageBox.Show(
+                    Strings.Msg_ConfirmDeleteUser,
+                    Strings.Msg_ConfirmDelete,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _ = vm.DeleteAsync(id);
+                }
             }
         }
     }

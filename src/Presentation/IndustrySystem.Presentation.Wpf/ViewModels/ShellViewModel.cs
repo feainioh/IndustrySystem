@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ModernWpf.Controls;
 using IndustrySystem.Presentation.Wpf.Views;
 using IndustrySystem.Presentation.Wpf.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
@@ -13,7 +14,7 @@ public class ShellViewModel : BindableBase
     private readonly IContainerProvider _container;
     private readonly IAuthState _authState;
     private object? _currentContent;
-    private string _currentUserName = "未登录";
+    private string _currentUserName = Strings.Lbl_NotLoggedIn;
     private string _currentUserRole = string.Empty;
 
     public object? CurrentContent
@@ -29,22 +30,33 @@ public class ShellViewModel : BindableBase
         private set => SetProperty(ref _currentUserName, value);
     }
 
-    /// <summary>当前登录用户角色（可选）</summary>
+    /// <summary>当前登录用户角色（示例）</summary>
     public string CurrentUserRole
     {
         get => _currentUserRole;
         private set => SetProperty(ref _currentUserRole, value);
     }
 
+    /// <summary>
+    /// 全局认证状态，供 XAML 绑定权限可见性使用
+    /// </summary>
+    public IAuthState AuthState => _authState;
+
     public ICommand OnLoadedCommand { get; }
     public ICommand NavSelectionChangedCommand { get; }
+
+    public DialogCloseListener RequestClose => throw new NotImplementedException();
 
     public ShellViewModel(IContainerProvider container)
     {
         _container = container;
         _authState = container.Resolve<IAuthState>();
-        CurrentUserName = _authState.UserName ?? "未登录";
-        _authState.AuthChanged += (s, e) => { CurrentUserName = _authState.UserName ?? "未登录"; };
+        CurrentUserName = _authState.UserName ?? Strings.Lbl_NotLoggedIn;
+        _authState.AuthChanged += (s, e) =>
+        {
+            CurrentUserName = _authState.UserName ?? Strings.Lbl_NotLoggedIn;
+            RaisePropertyChanged(nameof(AuthState));
+        };
 
         OnLoadedCommand = new DelegateCommand<object?>(OnLoaded);
         NavSelectionChangedCommand = new DelegateCommand<object?>(OnSelectionChanged);
@@ -82,6 +94,7 @@ public class ShellViewModel : BindableBase
             "ExperimentGroupTemplates" => _container.Resolve<ExperimentGroupsView>(),
             "RunExperiment" => _container.Resolve<RunExperimentView>(),
             "RealtimeData" => _container.Resolve<RealtimeDataView>(),
+            "Alarm" => _container.Resolve<AlarmView>(),
             "ExperimentHistory" => _container.Resolve<ExperimentHistoryView>(),
             "InventoryRecords" => _container.Resolve<InventoryView>(),
             "OperationLogs" => _container.Resolve<OperationLogsView>(),
@@ -91,11 +104,12 @@ public class ShellViewModel : BindableBase
             "ManualDebug" => _container.Resolve<HardwareDebugView>(),
             "DeviceParams" => _container.Resolve<DeviceParamsView>(),
             "PeripheralDebug" => _container.Resolve<PeripheralDebugView>(),
+            "MotionProgram" => _container.Resolve<MotionProgramRunView>(),
             _ => null
         };
         if (next != null)
         {
             CurrentContent = next;
         }
-    }
+    } 
 }

@@ -1,16 +1,14 @@
 using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using Prism.Commands;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class ExperimentEditDialogViewModel : DialogViewModel
 {
- // NOTE: IExperimentAppService currently has no create/update methods in Contracts.
- // This VM is scaffolded and awaits service expansion.
  private Guid _id;
  private Guid _templateId;
  private Guid _groupId;
@@ -21,39 +19,23 @@ public class ExperimentEditDialogViewModel : DialogViewModel
  public Guid GroupId { get => _groupId; set => SetProperty(ref _groupId, value); }
  public string Name { get => _name; set => SetProperty(ref _name, value); }
 
- public ICommand SaveCommand { get; }
- public ICommand CancelCommand { get; }
-
- public ExperimentEditDialogViewModel()
- {
- Title = "编辑实验";
- SaveCommand = new AsyncDelegateCommand(SaveAsync, CanSave);
- CancelCommand = new DelegateCommand(Cancel);
- }
+ public ExperimentEditDialogViewModel() { Title = "编辑实验"; }
 
  public Task LoadAsync(Guid? id)
  {
- // Placeholder load, depends on future service methods
  if (id is null)
  {
- Id = Guid.Empty;
- Name = string.Empty;
- TemplateId = Guid.Empty;
- GroupId = Guid.Empty;
+ Id = Guid.Empty; Name = string.Empty; TemplateId = Guid.Empty; GroupId = Guid.Empty;
  }
- else
- {
- Id = id.Value; // would fetch real data once services are available
- }
+ else { Id = id.Value; }
  return Task.CompletedTask;
  }
 
- private bool CanSave() => !string.IsNullOrWhiteSpace(Name);
- private Task SaveAsync()
+ protected override bool CanSave() => !string.IsNullOrWhiteSpace(Name);
+ protected override Task OnSaveAsync()
  {
- // awaiting service expansion: create/update experiment
  DialogResult = true;
  return Task.CompletedTask;
  }
- private void Cancel() => DialogResult = false;
+ protected override void OnCancel() => DialogResult = false;
 }

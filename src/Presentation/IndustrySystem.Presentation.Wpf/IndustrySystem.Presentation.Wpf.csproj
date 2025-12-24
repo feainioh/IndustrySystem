@@ -15,7 +15,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.*" />
     <PackageReference Include="NLog" Version="5.*" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.*" />
-    <PackageReference Include="Prism.Core" Version="9.*" />
     <PackageReference Include="Prism.DryIoc" Version="9.*" />
     <PackageReference Include="Prism.Wpf" Version="9.*" />
     <PackageReference Include="Volo.Abp.Autofac" Version="8.*" />
@@ -37,6 +36,26 @@
     <None Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\MotionDesigner\" />
+    <Folder Include="Views\MotionDesigner\" />
   </ItemGroup>
 
 </Project>
