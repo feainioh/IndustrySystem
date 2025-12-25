@@ -127,7 +127,7 @@ public class ActionNodeViewModel : BindableBase
             ActionType = actionType,
             Name = GetDefaultName(actionType),
             Description = GetDefaultDescription(actionType),
-            X = x, Y = y, Width = 180, Height = 60, IsEnabled = true
+            X = x, Y = y, Width = 180, Height = 100, IsEnabled = true
         };
     }
 

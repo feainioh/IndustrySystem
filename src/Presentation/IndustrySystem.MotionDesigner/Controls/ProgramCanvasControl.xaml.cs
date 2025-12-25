@@ -15,6 +15,11 @@ public partial class ProgramCanvasControl : UserControl
 {
     private Point _selectionStart;
     private bool _isSelecting;
+    // Panning
+    private bool _isPanning;
+    private Point _panStart;
+    private double _panStartHOffset;
+    private double _panStartVOffset;
     
     // Node dragging
     private ActionNodeViewModel? _draggingNode;
@@ -306,6 +311,19 @@ public partial class ProgramCanvasControl : UserControl
 
     private void OnCanvasMouseMove(object sender, MouseEventArgs e)
     {
+        // Handle panning first
+        if (_isPanning)
+        {
+            var pos = e.GetPosition(this);
+            var dx = pos.X - _panStart.X;
+            var dy = pos.Y - _panStart.Y;
+
+            // Inverse movement: dragging left moves viewport right
+            MainScrollViewer?.ScrollToHorizontalOffset(Math.Max(0, _panStartHOffset - dx));
+            MainScrollViewer?.ScrollToVerticalOffset(Math.Max(0, _panStartVOffset - dy));
+            return;
+        }
+        
         if (_isDrawingConnection && _temporaryConnection != null)
         {
             var position = e.GetPosition(DesignerCanvas);
@@ -339,6 +357,12 @@ public partial class ProgramCanvasControl : UserControl
         if (_isSelecting)
         {
             _isSelecting = false;
+        }
+        
+        if (_isPanning)
+        {
+            _isPanning = false;
+            DesignerCanvas.ReleaseMouseCapture();
         }
     }
 
@@ -435,19 +459,102 @@ public partial class ProgramCanvasControl : UserControl
             (e.OriginalSource is Rectangle rect && rect.IsHitTestVisible == false))
         {
             SelectionCleared?.Invoke(this, EventArgs.Empty);
-            ClearConnectionSelection(); // Clear connection selection
-            _selectionStart = e.GetPosition(DesignerCanvas);
-            _isSelecting = true;
+            ClearConnectionSelection(); // Clear connection selection (includes VM highlights)
+
+            // If no node is selected in the DataContext, start panning the canvas
+            if (DataContext is DesignerViewModel vm && vm.SelectedNode == null)
+            {
+                _isPanning = true;
+                _panStart = e.GetPosition(this);
+                _panStartHOffset = MainScrollViewer?.HorizontalOffset ?? 0;
+                _panStartVOffset = MainScrollViewer?.VerticalOffset ?? 0;
+                DesignerCanvas.CaptureMouse();
+            }
+            else
+            {
+                _selectionStart = e.GetPosition(DesignerCanvas);
+                _isSelecting = true;
+            }
         }
     }
 
-    private void OnCanvasMouseWheel(object sender, MouseWheelEventArgs e)
+    private void OnConnectionPathMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (Keyboard.Modifiers == ModifierKeys.Control && DataContext is DesignerViewModel vm)
+        // Find the ConnectionViewModel bound to this Path
+        if (sender is DependencyObject dep)
         {
-            var zoomDelta = e.Delta > 0 ? 0.1 : -0.1;
-            vm.ZoomLevel += zoomDelta;
-            e.Handled = true;
+            var container = FindParent<ContentPresenter>(dep);
+            if (container?.DataContext is ConnectionViewModel vm)
+            {
+                System.Diagnostics.Debug.WriteLine($"[UI] Connection path clicked: {vm.Id}");
+                if (DataContext is DesignerViewModel dvm)
+                {
+                    // Clear previous highlights in VM
+                    foreach (var c in dvm.Connections)
+                        c.IsHighlighted = false;
+
+                    // Highlight this one
+                    vm.IsHighlighted = true;
+                }
+
+                // Also clear any registered ConnectionLineControl selections
+                foreach (var conn in _connectionControls)
+                    conn.Deselect();
+
+                // Ensure keyboard focus so Delete key works
+                Keyboard.Focus(this);
+                e.Handled = true;
+            }
+        }
+    }
+
+    private void OnConnectionPathMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is DependencyObject dep)
+        {
+            var container = FindParent<ContentPresenter>(dep);
+            if (container?.DataContext is ConnectionViewModel vm)
+            {
+                System.Diagnostics.Debug.WriteLine($"[UI] Connection path right-click: {vm.Id}");
+                var menu = new ContextMenu();
+                var item = new MenuItem { Header = "Delete Connection" };
+                item.Click += (s, args) =>
+                {
+                    // Raise delete event to be handled by parent (DesignerView)
+                    ConnectionDeleted?.Invoke(this, vm.Id);
+                };
+                menu.Items.Add(item);
+                menu.IsOpen = true;
+                e.Handled = true;
+            }
+        }
+    }
+
+    private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e == null) return;
+        if (e.Key == Key.Delete)
+        {
+            // If we have a registered UI connection selected, delete it
+            if (_selectedConnection != null)
+            {
+                System.Diagnostics.Debug.WriteLine($"[KEY] Delete pressed - deleting selected connection (UI): {_selectedConnection.ConnectionId}");
+                DeleteSelectedConnection();
+                e.Handled = true;
+                return;
+            }
+            
+            // Otherwise delete highlighted connection in ViewModel (VM-driven mode)
+            if (DataContext is DesignerViewModel dvm)
+            {
+                var highlighted = dvm.Connections.FirstOrDefault(c => c.IsHighlighted);
+                if (highlighted != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[KEY] Delete pressed - deleting highlighted VM connection: {highlighted.Id}");
+                    ConnectionDeleted?.Invoke(this, highlighted.Id);
+                    e.Handled = true;
+                }
+            }
         }
     }
 
@@ -703,6 +810,12 @@ public partial class ProgramCanvasControl : UserControl
             conn.Deselect();
         }
         _selectedConnection = null;
+        // Clear VM highlights as well
+        if (DataContext is DesignerViewModel dvm)
+        {
+            foreach (var c in dvm.Connections)
+                c.IsHighlighted = false;
+        }
     }
 
     /// <summary>
@@ -717,4 +830,9 @@ public partial class ProgramCanvasControl : UserControl
     }
 
     #endregion
+
+    private void OnCanvasMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+
+    }
 }

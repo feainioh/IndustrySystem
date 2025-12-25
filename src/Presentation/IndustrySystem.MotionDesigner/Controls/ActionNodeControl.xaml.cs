@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using IndustrySystem.MotionDesigner.ViewModels;
 
 namespace IndustrySystem.MotionDesigner.Controls;
 
@@ -109,7 +110,8 @@ public partial class ActionNodeControl : UserControl
     }
 
     /// <summary>
-    /// Get the center position of a specific port
+    /// Get the center position of a specific port in canvas coordinates.
+    /// Robust: finds ancestor Canvas and uses TransformToVisual; falls back to node position if needed.
     /// </summary>
     public Point GetPortCenter(PortDirection direction)
     {
@@ -122,11 +124,53 @@ public partial class ActionNodeControl : UserControl
             _ => RightPort
         };
 
-        var transform = port.TransformToAncestor(this.Parent as Visual);
-        return transform.Transform(new Point(port.Width / 2, port.Height / 2));
+        try
+        {
+            // Find the nearest Canvas ancestor (the drawing surface)
+            var canvas = FindAncestor<Canvas>(this);
+            if (canvas != null)
+            {
+                // Ensure layout has measured sizes
+                port.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Loaded);
+
+                var w = (port.ActualWidth > 0) ? port.ActualWidth : port.RenderSize.Width;
+                var h = (port.ActualHeight > 0) ? port.ActualHeight : port.RenderSize.Height;
+                var center = new Point(w / 2.0, h / 2.0);
+
+                var transform = port.TransformToVisual(canvas);
+                var result = transform.Transform(center);
+                System.Diagnostics.Debug.WriteLine($"[GetPortCenter] Direction: {direction}, CanvasPos: ({result.X:F1},{result.Y:F1})");
+                return result;
+            }
+
+            // Fallback: use DataContext node coordinates if available
+            if (DataContext is ActionNodeViewModel vm)
+            {
+                var nodeCenter = new Point(vm.X + vm.Width / 2.0, vm.Y + vm.Height / 2.0);
+                System.Diagnostics.Debug.WriteLine($"[GetPortCenter] Fallback to node center: ({nodeCenter.X:F1},{nodeCenter.Y:F1})");
+                return nodeCenter;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[GetPortCenter] EXCEPTION: {ex.Message}");
+        }
+
+        return new Point(0, 0);
     }
 
     // Keep backward compatibility
     public Point GetInputPortCenter() => GetPortCenter(PortDirection.Left);
     public Point GetOutputPortCenter() => GetPortCenter(PortDirection.Right);
+
+    private static T? FindAncestor<T>(DependencyObject start) where T : DependencyObject
+    {
+        var current = start;
+        while (current != null)
+        {
+            if (current is T t) return t;
+            current = VisualTreeHelper.GetParent(current);
+        }
+        return null;
+    }
 }
