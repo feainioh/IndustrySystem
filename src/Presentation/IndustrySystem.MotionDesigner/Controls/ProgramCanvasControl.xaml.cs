@@ -40,6 +40,17 @@ public partial class ProgramCanvasControl : UserControl
     private bool _isMinimapVisible = true;
     private const double MinimapScale = 0.05; // 5% of actual size
 
+    // Minimap throttling and smooth scroll animation
+    private readonly System.Diagnostics.Stopwatch _minimapStopwatch = System.Diagnostics.Stopwatch.StartNew();
+    private long _lastMinimapUpdateMs = 0;
+    private System.Windows.Threading.DispatcherTimer? _scrollAnimationTimer;
+    private double _animStartH;
+    private double _animStartV;
+    private double _animTargetH;
+    private double _animTargetV;
+    private double _animDurationMs;
+    private System.DateTime _animStartTime;
+
     public ProgramCanvasControl()
     {
         InitializeComponent();
@@ -621,22 +632,101 @@ public partial class ProgramCanvasControl : UserControl
         OnMinimapMouseMove(sender, e);
     }
 
+    private void OnMinimapMouseUp(object sender, MouseButtonEventArgs e)
+    {
+        _isMinimapDragging = false;
+        MinimapCanvas.ReleaseMouseCapture();
+    }
+
     private void OnMinimapMouseMove(object sender, MouseEventArgs e)
     {
         if (!_isMinimapDragging && e.LeftButton != MouseButtonState.Pressed) return;
 
-        var pos = e.GetPosition(MinimapCanvas);
-        var scrollX = (pos.X / MinimapScale) * ZoomLevel - MainScrollViewer.ViewportWidth / 2;
-        var scrollY = (pos.Y / MinimapScale) * ZoomLevel - MainScrollViewer.ViewportHeight / 2;
+        // Throttle updates to ~60fps (16ms)
+        var nowMs = _minimapStopwatch.ElapsedMilliseconds;
+        if (nowMs - _lastMinimapUpdateMs < 16)
+            return;
+        _lastMinimapUpdateMs = nowMs;
 
-        MainScrollViewer.ScrollToHorizontalOffset(Math.Max(0, scrollX));
-        MainScrollViewer.ScrollToVerticalOffset(Math.Max(0, scrollY));
+        var pos = e.GetPosition(MinimapCanvas);
+        var targetX = (pos.X / MinimapScale) * ZoomLevel - (MainScrollViewer?.ViewportWidth ?? 0) / 2.0;
+        var targetY = (pos.Y / MinimapScale) * ZoomLevel - (MainScrollViewer?.ViewportHeight ?? 0) / 2.0;
+
+        var h = Math.Max(0, targetX);
+        var v = Math.Max(0, targetY);
+
+        if (MainScrollViewer == null) return;
+
+        var currentH = MainScrollViewer.HorizontalOffset;
+        var currentV = MainScrollViewer.VerticalOffset;
+
+        // Decide whether to animate: large move, high zoom, or very large canvas
+        var dx = Math.Abs(currentH - h);
+        var dy = Math.Abs(currentV - v);
+        var distance = Math.Sqrt(dx * dx + dy * dy);
+        var largeJump = distance > 200 || ZoomLevel > 2.0 || (DesignerCanvas.ActualWidth > 3000 || DesignerCanvas.ActualHeight > 2000);
+
+        if (largeJump)
+        {
+            // If animation already targets roughly same place, skip restarting
+            if (_scrollAnimationTimer != null && Math.Abs(_animTargetH - h) < 5 && Math.Abs(_animTargetV - v) < 5)
+            {
+                return;
+            }
+
+            // Start smooth animation
+            StartScrollAnimation(currentH, currentV, h, v, 200);
+        }
+        else
+        {
+            // Immediate update for small moves
+            if (Math.Abs(currentH - h) > 1)
+                MainScrollViewer.ScrollToHorizontalOffset(h);
+            if (Math.Abs(currentV - v) > 1)
+                MainScrollViewer.ScrollToVerticalOffset(v);
+        }
+    }
+
+    private void StartScrollAnimation(double fromH, double fromV, double toH, double toV, double durationMs)
+    {
+        // Stop existing
+        _scrollAnimationTimer?.Stop();
+
+        _animStartH = fromH;
+        _animStartV = fromV;
+        _animTargetH = toH;
+        _animTargetV = toV;
+        _animDurationMs = Math.Max(50, durationMs);
+        _animStartTime = System.DateTime.UtcNow;
+
+        _scrollAnimationTimer = new System.Windows.Threading.DispatcherTimer(System.TimeSpan.FromMilliseconds(16), System.Windows.Threading.DispatcherPriority.Normal, (s, e) =>
+        {
+            var elapsed = (System.DateTime.UtcNow - _animStartTime).TotalMilliseconds;
+            var t = Math.Min(1.0, elapsed / _animDurationMs);
+            var tt = 1 - Math.Pow(1 - t, 3); // ease-out cubic
+
+            var nextH = _animStartH + (_animTargetH - _animStartH) * tt;
+            var nextV = _animStartV + (_animTargetV - _animStartV) * tt;
+
+            if (MainScrollViewer != null)
+            {
+                MainScrollViewer.ScrollToHorizontalOffset(nextH);
+                MainScrollViewer.ScrollToVerticalOffset(nextV);
+            }
+
+            if (t >= 1.0)
+            {
+                _scrollAnimationTimer?.Stop();
+            }
+        }, System.Windows.Threading.Dispatcher.CurrentDispatcher);
+
+        _scrollAnimationTimer.Start();
     }
 
     private void OnToggleMinimapClick(object sender, RoutedEventArgs e)
     {
         _isMinimapVisible = !_isMinimapVisible;
-        MinimapBorder.Visibility = _isMinimapVisible ? Visibility.Visible : Visibility.Collapsed;
+        MinimapCanvas.Visibility = _isMinimapVisible ? Visibility.Visible : Visibility.Collapsed;
         
         if (ToggleMinimapButton.Content is MaterialDesignThemes.Wpf.PackIcon icon)
         {

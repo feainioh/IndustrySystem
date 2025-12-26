@@ -167,14 +167,15 @@
             </Border.Effect>
             <Grid>
                 <!-- Minimap Canvas -->
-                <Canvas x:Name="MinimapCanvas" ClipToBounds="True">
+                <Canvas x:Name="MinimapCanvas" ClipToBounds="True"
+                               MouseLeftButtonDown="OnMinimapMouseDown"
+                               MouseMove="OnMinimapMouseMove"
+                        MouseUp="OnMinimapMouseUp">
                     <!-- Minimap content will be rendered here -->
                     <Rectangle x:Name="ViewportRect" 
                                Stroke="{DynamicResource PrimaryHueMidBrush}" 
                                StrokeThickness="2"
                                Fill="Transparent"
-                               MouseLeftButtonDown="OnMinimapMouseDown"
-                               MouseMove="OnMinimapMouseMove"
                                Cursor="Hand"/>
                 </Canvas>
                 
