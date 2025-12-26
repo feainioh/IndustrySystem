@@ -31,7 +31,8 @@ public class ConnectionLineControl : Canvas
             Fill = Brushes.Transparent,
             Stroke = Brushes.Transparent,
             StrokeThickness = 10, // Wider for easier selection
-            Cursor = Cursors.Hand
+            Cursor = Cursors.Hand,
+            IsHitTestVisible = true
         };
 
         // Add paths (hit test path first for proper layering)
@@ -165,16 +166,18 @@ public class ConnectionLineControl : Canvas
 
     private void OnMouseEnter(object? sender, MouseEventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseEnter");
         if (!IsTemporary && !IsSelected && _connectionPath != null)
         {
             // Highlight on hover
-            _connectionPath.StrokeThickness = StrokeThickness + 1;
+            _connectionPath.StrokeThickness = StrokeThickness + 3;
             _connectionPath.Opacity = 0.8;
         }
     }
 
     private void OnMouseLeave(object? sender, MouseEventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseLeave");
         if (!IsSelected && _connectionPath != null)
         {
             // Remove highlight
@@ -185,41 +188,43 @@ public class ConnectionLineControl : Canvas
 
     private void OnMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseLeftButtonDown");
         if (!IsTemporary)
         {
             IsSelected = true;
             Selected?.Invoke(this, EventArgs.Empty);
-            e.Handled = true;
+            //e.Handled = true;
         }
     }
 
     private void OnMouseRightButtonDown(object? sender, MouseButtonEventArgs e)
     {
+        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseRightButtonDown");
         if (!IsTemporary)
         {
             // Show context menu or delete
             var contextMenu = new ContextMenu();
-            
+
             var deleteItem = new MenuItem
             {
                 Header = "Delete Connection",
                 Icon = new System.Windows.Controls.Image
                 {
                     Source = new System.Windows.Media.Imaging.BitmapImage(
-                        new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"))
+                        new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml"))
                 }
             };
             deleteItem.Click += (s, args) =>
             {
                 DeleteRequested?.Invoke(this, EventArgs.Empty);
             };
-            
+
             contextMenu.Items.Add(deleteItem);
             contextMenu.IsOpen = true;
             contextMenu.PlacementTarget = this;
             contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-            
-            e.Handled = true;
+
+            //e.Handled = true;
         }
     }
 
@@ -292,7 +297,7 @@ public class ConnectionLineControl : Canvas
             {
                 _connectionPath.Stroke = Brushes.Orange;
                 _connectionPath.StrokeThickness = StrokeThickness + 3;
-                
+
                 if (_arrowPath != null)
                 {
                     _arrowPath.Fill = Brushes.Orange;
@@ -302,7 +307,7 @@ public class ConnectionLineControl : Canvas
             {
                 _connectionPath.Stroke = Stroke;
                 _connectionPath.StrokeThickness = StrokeThickness;
-                
+
                 if (_arrowPath != null)
                 {
                     _arrowPath.Fill = Stroke;

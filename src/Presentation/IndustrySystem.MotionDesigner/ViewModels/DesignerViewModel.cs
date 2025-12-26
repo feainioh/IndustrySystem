@@ -210,7 +210,7 @@ public class DesignerViewModel : BindableBase
     public void AddNode(ActionToolItem? item)
     {
         if (item == null) return;
-        var node = ActionNodeViewModel.CreateDefault(item.ActionType, 100 + Nodes.Count * 30, 100 + Nodes.Count * 30);
+        var node = ActionNodeViewModel.CreateDefault(item.ActionType, 100 + Nodes.Count * 30, 100 + Nodes.Count * 130);
         Nodes.Add(node);
         SelectedNode = node;
     }
