@@ -13,7 +13,7 @@ public class ConnectionLineControl : Canvas
 {
     private Path? _connectionPath;
     private Path? _arrowPath;
-    private Path? _hitTestPath; // ������꽻����͸��·��
+    private Path? _hitTestPath; // ������꽻����͸��·��
 
     public ConnectionLineControl()
     {
@@ -30,10 +30,15 @@ public class ConnectionLineControl : Canvas
         {
             Fill = Brushes.Transparent,
             Stroke = Brushes.Transparent,
-            StrokeThickness = 10, // Wider for easier selection
+            StrokeThickness = 15, // Wider for easier selection
             Cursor = Cursors.Hand,
-            IsHitTestVisible = true
+            IsHitTestVisible = true,
+            SnapsToDevicePixels = true
         };
+        
+        // 确保 Canvas 本身也可以接收鼠标事件
+        IsHitTestVisible = true;
+        Background = Brushes.Transparent;
 
         // Add paths (hit test path first for proper layering)
         Children.Add(_hitTestPath);
@@ -191,9 +196,10 @@ public class ConnectionLineControl : Canvas
         System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseLeftButtonDown");
         if (!IsTemporary)
         {
+            e.Handled = true; // 标记事件已处理，防止被父控件拦截
             IsSelected = true;
             Selected?.Invoke(this, EventArgs.Empty);
-            //e.Handled = true;
+            Focus(); // 获取焦点以确保选择状态
         }
     }
 
@@ -202,12 +208,14 @@ public class ConnectionLineControl : Canvas
         System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseRightButtonDown");
         if (!IsTemporary)
         {
+            e.Handled = true; // 标记事件已处理，防止被父控件拦截
+            
             // Show context menu or delete
             var contextMenu = new ContextMenu();
 
             var deleteItem = new MenuItem
             {
-                Header = "Delete Connection",
+                Header = "删除连接",
                 Icon = new System.Windows.Controls.Image
                 {
                     Source = new System.Windows.Media.Imaging.BitmapImage(
@@ -223,8 +231,6 @@ public class ConnectionLineControl : Canvas
             contextMenu.IsOpen = true;
             contextMenu.PlacementTarget = this;
             contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-
-            //e.Handled = true;
         }
     }
 

@@ -466,6 +466,16 @@ public partial class ProgramCanvasControl : UserControl
 
     private void OnCanvasMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        // 检查是否点击了 ConnectionLineControl 或其子元素
+        var source = e.OriginalSource as DependencyObject;
+        var connectionControl = FindParent<ConnectionLineControl>(source);
+        
+        // 如果点击的是连接线，不处理（让连接线自己处理）
+        if (connectionControl != null && !connectionControl.IsTemporary)
+        {
+            return; // 让 ConnectionLineControl 处理这个事件
+        }
+        
         if (e.OriginalSource == DesignerCanvas || 
             (e.OriginalSource is Rectangle rect && rect.IsHitTestVisible == false))
         {

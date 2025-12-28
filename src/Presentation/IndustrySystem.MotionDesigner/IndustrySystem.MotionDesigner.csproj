@@ -15,6 +15,7 @@
     <PackageReference Include="MaterialDesignColors" Version="5.3.0" />
     <PackageReference Include="Prism.DryIoc" Version="9.0.537" />
     <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="Prism.Wpf" Version="9.0.537" />
   </ItemGroup>
 
   <ItemGroup>

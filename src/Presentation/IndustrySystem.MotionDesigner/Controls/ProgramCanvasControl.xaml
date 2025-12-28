@@ -81,10 +81,16 @@
                             <Canvas IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type viewModels:ConnectionViewModel}">
-                            <Canvas>
-                                <!-- Connection Path -->
+                            <!--<Canvas>
+                                --><!-- Connection Path --><!--
                                 <Path Stroke="{DynamicResource PrimaryHueMidBrush}" 
                                       StrokeThickness="2"
                                       Fill="Transparent">
@@ -100,7 +106,7 @@
                                         </Style>
                                     </Path.Style>
                                 </Path>
-                                <!-- Arrow Head -->
+                                --><!-- Arrow Head --><!--
                                 <Path Fill="{DynamicResource PrimaryHueMidBrush}">
                                     <Path.Style>
                                         <Style TargetType="Path">
@@ -113,7 +119,7 @@
                                         </Style>
                                     </Path.Style>
                                 </Path>
-                                <!-- Execution Order Label -->
+                                --><!-- Execution Order Label --><!--
                                 <Border Canvas.Left="{Binding ArrowX}" 
                                         Canvas.Top="{Binding ArrowY}"
                                         Background="White" 
@@ -126,7 +132,9 @@
                                                FontWeight="Bold"
                                                Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                                 </Border>
-                            </Canvas>
+                            </Canvas>-->
+                            <controls:ConnectionLineControl
+                                StartPoint="{Binding StartPoint}" EndPoint="{Binding EndPoint}" IsHitTestVisible="{Binding IsHitTestVisible}" ConnectionId="{Binding ConnectionId}" IsTemporary="{Binding IsTemporary}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

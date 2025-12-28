@@ -1,0 +1,2056 @@
+{
+    "deviceInfo": {
+      "name": "实验室综合设备管理系统",
+      "model": "LabSystem-v2.0",
+      "serialNumber": "LAB202500002",
+      "firmwareVersion": "2.0.0",
+      "manufactureDate": "2025-01-04T10:00:00.0000000+08:00",
+      "description": "包含淬灭、萃取、震荡、开关盖、干燥加粉、过滤等模块的综合实验室系统"
+    },
+    "canDevices": [
+      {
+        "deviceId": "can_device_main",
+        "name": "主CAN控制设备",
+        "deviceType": 21,
+        "deviceIndex": 0,
+        "channels": [
+          {
+            "channelIndex": 0,
+            "baudRate": "100000",
+            "canType": 21,
+            "mode": 0,
+            "enabled": true,
+            "description": "CAN电机控制通道0"
+          },
+          {
+            "channelIndex": 1,
+            "baudRate": "100000",
+            "canType": 21,
+            "mode": 0,
+            "enabled": true,
+            "description": "CAN电机控制通道1"
+          }
+        ],
+        "autoReconnect": true,
+        "description": "控制所有CAN轴的主控设备"
+      }
+  
+    ],
+    "etherCATDevices": [
+      {
+        "deviceId": "ethercat_main_controller",
+        "name": "主EtherCAT控制器",
+        "cardId": 0,
+        "eniFilePath": "C:\\Program Files (x86)\\LCT\\PCIe-M60\\Eni\\eni.xml",
+        "axisParamFilePath": "C:\\Program Files (x86)\\LCT\\PCIe-M60\\Motion_Assistant\\AxisParam\\ParamCard0.ini",
+        "autoReconnect": true,
+        "description": "控制EtherCAT轴的主控制器"
+      }
+    ],
+    "motors": [
+      {
+        "deviceId": "sampling_puncture_z_motor",
+        "name": "取样穿刺Z轴",
+        "type": "VSMD",
+        "axisId": 1,
+        "communicationId": 1,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 10,
+            "speed": 100
+          },
+          {
+            "name": "穿刺位置",
+            "position": 550,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "sampling_press_z_motor",
+        "name": "取样下压Z轴",
+        "type": "VSMD",
+        "axisId": 2,
+        "communicationId": 2,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "穿刺位置",
+            "position": 0,
+            "speed": 100
+          },
+          {
+            "name": "清洗位置",
+            "position": 50,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_puncture_z_motor",
+        "name": "萃取取液穿刺Z轴",
+        "type": "VSMD",
+        "axisId": 3,
+        "communicationId": 3,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 20,
+            "speed": 500
+          },
+          {
+            "name": "穿刺位置",
+            "position": 1100,
+            "speed": 500
+          },
+          {
+            "name": "清洗位置",
+            "position": 796,
+            "speed": 500
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_translate_x_motor",
+        "name": "萃取取液平移X轴",
+        "type": "VSMD",
+        "axisId": 4,
+        "communicationId": 4,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 15,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 10,
+            "speed": 500
+          },
+          {
+            "name": "取液位置",
+            "position": 370,
+            "speed": 500
+          },
+          {
+            "name": "清洗位置",
+            "position": 27,
+            "speed": 500
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_upper_translate_x_motor",
+        "name": "萃取上横移X轴",
+        "type": "VSMD",
+        "axisId": 5,
+        "communicationId": 5,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 15,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 10,
+            "speed": 500
+          },
+          {
+            "name": "取液位置",
+            "position": 526,
+            "speed": 500
+          },
+          {
+            "name": "萃取加液位置",
+            "position": 526,
+            "speed": 500
+          },
+          {
+            "name": "开盖位置",
+            "position": 526,
+            "speed": 500
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_upper_puncture_z_motor",
+        "name": "萃取上穿刺Z轴",
+        "type": "VSMD",
+        "axisId": 6,
+        "communicationId": 6,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 50,
+            "speed": 100
+          },
+          {
+            "name": "萃取加液位置",
+            "position": 645,
+            "speed": 100
+          },
+          {
+            "name": "测量位置",
+            "position": 120,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_stirring_u_motor",
+        "name": "萃取搅拌U轴",
+        "type": "VSMD",
+        "axisId": 7,
+        "communicationId": 7,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 19200,
+          "gearRatio": 1,
+          "displacementPerRevolution": 360,
+          "jogSpeed": 60,
+          "unit": "rpm"
+        },
+        "workPositions": [
+          {
+            "name": "低速搅拌",
+            "position": 60,
+            "speed": 100
+          },
+          {
+            "name": "高速搅拌",
+            "position": 120,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "extraction_lower_translate_x_motor",
+        "name": "萃取下横移X轴",
+        "type": "VSMD",
+        "axisId": 8,
+        "communicationId": 8,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 15,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 80,
+            "speed": 500
+          },
+          {
+            "name": "萃取加液位置",
+            "position": 508,
+            "speed": 500
+          },
+          {
+            "name": "倾倒位置",
+            "position": 441,
+            "speed": 500
+          },
+          {
+            "name": "萃取收集位置",
+            "position": 508,
+            "speed": 100
+          },
+          {
+            "name": "废液收集位置",
+            "position": 80,
+            "speed": 500
+          },
+          {
+            "name": "排液位置",
+            "position": 80,
+            "speed": 500
+          },
+          {
+            "name": "拍照位置",
+            "position": 608,
+            "speed": 500
+          }
+  
+        ]
+      },
+      {
+        "deviceId": "extraction_lower_puncture_z_motor",
+        "name": "萃取下穿刺Z轴",
+        "type": "VSMD",
+        "axisId": 9,
+        "communicationId": 9,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 30,
+            "speed": 100
+          },
+          {
+            "name": "萃取加液位置",
+            "position": 80,
+            "speed": 100
+          },
+          {
+            "name": "测量位置",
+            "position": 120,
+            "speed": 100
+          },
+          {
+            "name": "排液位置",
+            "position": 180,
+            "speed": 100
+          },
+          {
+            "name": "拍照位置",
+            "position": 25,
+            "speed": 200
+          }
+        ]
+      },
+      {
+        "deviceId": "quenching_stirring_u_motor",
+        "name": "萃灭搅拌U轴",
+        "type": "VSMD",
+        "axisId": 10,
+        "communicationId": 10,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 19200,
+          "gearRatio": 1,
+          "displacementPerRevolution": 360,
+          "jogSpeed": 80,
+          "unit": "rpm"
+        },
+        "workPositions": [
+          {
+            "name": "低速搅拌",
+            "position": 80,
+            "speed": 100
+          },
+          {
+            "name": "高速搅拌",
+            "position": 150,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "quenching_liquid_puncture_z_motor",
+        "name": "萃灭取液穿刺Z轴",
+        "type": "VSMD",
+        "axisId": 11,
+        "communicationId": 11,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 10,
+            "speed": 300
+          },
+          {
+            "name": "原液穿刺位置",
+            "position": 1117,
+            "speed": 100
+          },
+          {
+            "name": "淬灭剂穿刺位置",
+            "position": 1080,
+            "speed": 100
+  
+          },
+          {
+            "name": "排液位置",
+            "position": 800,
+            "speed": 100
+  
+          },
+          {
+            "name": "大针头清洗位置",
+            "position": 766,
+            "speed": 100
+          },
+          {
+            "name": "小针头清洗位置",
+            "position": 795,
+            "speed": 100
+  
+          }
+        ]
+      },
+      {
+        "deviceId": "quenching_liquid_translate_x_motor",
+        "name": "萃灭取液平移X轴",
+        "type": "VSMD",
+        "axisId": 12,
+        "communicationId": 12,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 15,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 3.5,
+            "speed": 300
+          },
+          {
+            "name": "取液位置",
+            "position": 100,
+            "speed": 300
+          },
+          {
+            "name": "清洗位置",
+            "position": 200,
+            "speed": 300
+          },
+          {
+            "name": "机械手放置位置",
+            "position": 3.5,
+            "speed": 300
+          },
+          {
+            "name": "取原液位置",
+            "position": 400,
+            "speed": 300
+          },
+          {
+            "name": "取反应液位置",
+            "position": 500,
+            "speed": 300
+          },
+          {
+            "name": "大针头取液位置",
+            "position": 109,
+            "speed": 300
+          },
+          {
+            "name": "小针头取液位置",
+            "position": 365,
+            "speed": 300
+          },
+          {
+            "name": "大针头清洗位置",
+            "position": 430,
+            "speed": 300
+          },
+          {
+            "name": "小针头清洗位置",
+            "position": 45,
+            "speed": 300
+          }
+        ]
+      },
+      {
+        "deviceId": "drying_powder_z_motor",
+        "name": "干燥取粉Z轴",
+        "type": "VSMD",
+        "axisId": 13,
+        "communicationId": 13,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位置",
+            "position": 10,
+            "speed": 100
+          },
+          {
+            "name": "加粉位置上",
+            "position": 208,
+            "speed": 50
+          },
+          {
+            "name": "加粉位置下",
+            "position": 2000,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "powder_distribution_u_motor",
+        "name": "分粉U轴",
+        "type": "VSMD",
+        "axisId": 14,
+        "communicationId": 14,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 30,
+          "unit": "度"
+        },
+        "workPositions": [
+          {
+            "name": "出粉位置1",
+            "position": 30,
+            "speed": 100
+          },
+          {
+            "name": "出粉位置2",
+            "position": 60,
+            "speed": 100
+          },
+          {
+            "name": "出粉位置3",
+            "position": 90,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "filter_x_motor",
+        "name": "抽滤X轴",
+        "type": "VSMD",
+        "axisId": 15,
+        "communicationId": 15,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 15,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位",
+            "position": 10,
+            "speed": 100
+          },
+          {
+            "name": "抽滤位",
+            "position": 28,
+            "speed": 100
+          },
+          {
+            "name": "倾倒位",
+            "position": 728,
+            "speed": 100
+          },
+          {
+            "name": "排废位",
+            "position": 627,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "filter_z_motor",
+        "name": "抽滤Z轴",
+        "type": "VSMD",
+        "axisId": 16,
+        "communicationId": 16,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位",
+            "position": 10,
+            "speed": 100
+          },
+          {
+            "name": "抽滤位",
+            "position": 255,
+            "speed": 100
+          },
+          {
+            "name": "排废位",
+            "position": 200,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "filter_liquid_pressure_z_motor",
+        "name": "抽滤移液正压Z轴",
+        "type": "VSMD",
+        "axisId": 17,
+        "communicationId": 17,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "安全位",
+            "position": 10,
+            "speed": 100
+          },
+          {
+            "name": "正压位",
+            "position": 190,
+            "speed": 100
+          }
+        ]
+      },
+      {
+        "deviceId": "material_load_z_motor",
+        "name": "入料舱门Z轴",
+        "type": "VSMD",
+        "axisId": 25,
+        "communicationId": 25,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "开门位置",
+            "position": 20,
+            "speed": 300
+          },
+          {
+            "name": "关门位置",
+            "position": 735,
+            "speed": 300
+          }
+        ]
+      },
+      {
+        "deviceId": "quenching_unload_u_motor",
+        "name": "淬灭卸料U轴",
+        "type": "VSMD",
+        "axisId": 28,
+        "communicationId": 28,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "堵塞位置",
+            "position": 0,
+            "speed": 300
+          },
+          {
+            "name": "松开位置",
+            "position": 600,
+            "speed": 300
+          },
+          {
+            "name": "卸料位置",
+            "position": 600,
+            "speed": 300
+          }
+        ]
+      }
+    ],
+    "etherCATMotors": [
+      {
+        "deviceId": "lid_rotation_u_motor",
+        "name": "开关盖U轴",
+        "type": "L6N",
+        "axisNo": 1,
+        "etherCATDeviceId": "ethercat_main_controller",
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 30,
+          "unit": "度"
+        },
+        "workPositions": [
+          {
+            "name": "松开位置",
+            "position": -800,
+            "speed": 100
+          },
+          {
+            "name": "拧紧反转位置",
+            "position": -130,
+            "speed": 50
+          }
+        ]
+      },
+      {
+        "deviceId": "lid_clamp_x1_ecat_motor",
+        "name": "开关盖X1轴",
+        "type": "4DM3C-EC432",
+        "axisNo": 2,
+        "etherCATDeviceId": "ethercat_main_controller",
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "松开位置",
+            "position": 50,
+            "speed": 2000
+          },
+          {
+            "name": "夹紧位置",
+            "position": 200,
+            "speed": 2000
+          }
+        ]
+      },
+      {
+        "deviceId": "lid_clamp_x2_ecat_motor",
+        "name": "开关盖X2轴",
+        "type": "4DM3C-EC432",
+        "axisNo": 3,
+        "etherCATDeviceId": "ethercat_main_controller",
+        "parameters": {
+          "pulsesPerRevolution": 10000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 10,
+          "jogSpeed": 10,
+          "unit": "mm"
+        },
+        "workPositions": [
+          {
+            "name": "松开位置",
+            "position": 50,
+            "speed": 5000
+          },
+          {
+            "name": "夹紧位置",
+            "position": 215,
+            "speed": 5000
+          }
+        ]
+      },
+      {
+        "deviceId": "vibration_u_motor",
+        "name": "震荡U轴",
+        "type": "4DM3C-EC432",
+        "axisNo": 4,
+        "etherCATDeviceId": "ethercat_main_controller",
+        "parameters": {
+          "pulsesPerRevolution": 36000,
+          "gearRatio": 1,
+          "displacementPerRevolution": 360,
+          "jogSpeed": 100,
+          "unit": "rpm"
+        },
+        "workPositions": [
+          {
+            "name": "原点位置",
+            "position": 0,
+            "speed": 50
+          },
+          {
+            "name": "震荡位置",
+            "position": 0,
+            "speed": 100
+          }
+        ]
+      }
+    ],
+    "syringePumps": [
+      {
+        "deviceId": "extraction_pump_1",
+        "name": "萃取注射泵1",
+        "type": "RunZe",
+        "communicationId": 2,
+        "deviceIndex": 0,
+        "channelIndex": 1,
+        "canFrameId": 265,
+        "syringeVolume": 25,
+        "liquidOffset": 7
+      },
+      {
+        "deviceId": "quenching_pump_1",
+        "name": "淬灭注射泵1",
+        "type": "RunZe",
+        "communicationId": 1,
+        "deviceIndex": 0,
+        "channelIndex": 1,
+        "canFrameId": 281,
+        "syringeVolume": 25,
+        "liquidOffset": 7
+      }
+    ],
+    "peristalticPumps": [
+      {
+        "deviceId": "peristaltic_pump_18",
+        "name": "萃取釜体排废",
+        "type": "VSMD",
+        "communicationId": 18,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 297,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135.0,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_18",
+          "communicationId": "18",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 135.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "萃取套体排废蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_19",
+        "name": "萃取取样排废",
+        "type": "VSMD",
+        "communicationId": 19,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 305,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_19",
+          "communicationId": "19",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 270.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "萃取取样排废蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_20",
+        "name": "萃取取分层液",
+        "type": "VSMD",
+        "communicationId": 20,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 313,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135.0,
+        "liquidOffset": 7,
+        "pumpAccuracy": 0.995,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_20",
+          "communicationId": "20",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 270.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "萃取取分层液蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_21",
+        "name": "配平取水",
+        "type": "VSMD",
+        "communicationId": 21,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 321,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135.0,
+        "liquidOffset": 7,
+        "pumpAccuracy": 0.79,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_21",
+          "communicationId": "21",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 270.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "配平取水蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_22",
+        "name": "淬灭釜体清洗、加淬灭剂",
+        "type": "VSMD",
+        "communicationId": 22,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 329,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "17#",
+        "rotorCount": 3,
+        "maxRPM": 50.0,
+        "maxFlowRate": 150,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_22",
+          "communicationId": "22",
+          "defaultRPM": 50.0,
+          "defaultFlowRate": 150,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "淬灭釜体清洗、加淬灭剂蠕动泵，BJ30-SN15-3泵头，17#管径，300rpm时997mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_23",
+        "name": "淬灭穿刺排废",
+        "type": "VSMD",
+        "communicationId": 23,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 337,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "17#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 498.5,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_23",
+          "communicationId": "23",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 498.5,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "淬灭等制排废蠕动泵，BJ30-SN15-3泵头，17#管径，300rpm时997mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_24",
+        "name": "淬灭取反应液、排废",
+        "type": "VSMD",
+        "communicationId": 24,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 345,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "17#",
+        "rotorCount": 3,
+        "maxRPM": 150,
+        "maxFlowRate": 498.5,
+        "liquidOffset": 7,
+        "pumpAccuracy": 0.92,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_24",
+          "communicationId": "24",
+          "defaultRPM": 150,
+          "defaultFlowRate": 498.5,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "淬灭取反应液、排废蠕动泵，BJ30-SN15-3泵头，17#管径，300rpm时997mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_26",
+        "name": "过滤排废",
+        "type": "VSMD",
+        "communicationId": 26,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 353,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135.0,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_26",
+          "communicationId": "26",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 270.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "过滤排废蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "peristaltic_pump_27",
+        "name": "过滤清洗",
+        "type": "VSMD",
+        "communicationId": 27,
+        "deviceIndex": 0,
+        "channelIndex": 0,
+        "canFrameId": 361,
+        "productModel": "BJ30",
+        "pumpHeadModel": "SN15-3",
+        "tubeSpec": "16#",
+        "rotorCount": 3,
+        "maxRPM": 150.0,
+        "maxFlowRate": 135.0,
+        "liquidOffset": 7,
+        "pumpAccuracy": 1,
+        "parameters": {
+          "pulsesPerRevolution": 12800,
+          "gearRatio": 1.0,
+          "displacementPerRevolution": 10.0,
+          "deviceID": "peristaltic_pump_27",
+          "communicationId": "27",
+          "defaultRPM": 150.0,
+          "defaultFlowRate": 270.0,
+          "pulseConversionFactor": 100.0,
+          "accelerationTime": 2.0,
+          "decelerationTime": 2.0,
+          "timeoutSeconds": 30,
+          "commandDelayMs": 500
+        },
+        "isEnabled": true,
+        "description": "过滤清洗蠕动泵，BJ30-SN15-3泵头，16#管径，300rpm时270mL/min",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      }
+    ],
+    "diyPumps": [
+      {
+        "deviceId": "quenching_diy_pump",
+        "name": "淬灭自定义阀",
+        "pulsePerRevolution": 12800,
+        "gearRatio": 27,
+        "displacementPerRevolution": 360,
+        "offsetPostion": 0,
+        "communicationId": 30,
+        "maxRPM": 300.0,
+        "isEnabled": true,
+        "description": "淬灭自定义阀，用于实验室自动化控制",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "extraction_diy_pump",
+        "name": "萃取自定义阀",
+        "pulsePerRevolution": 12800,
+        "gearRatio": 27,
+        "displacementPerRevolution": 360,
+        "offsetPostion": 0,
+        "communicationId": 29,
+        "maxRPM": 300.0,
+        "isEnabled": true,
+        "description": "萃取自定义泵，用于实验室自动化控制",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "other_diy_pump",
+        "name": "其他自定义泵",
+        "pulsePerRevolution": 12800,
+        "gearRatio": 27,
+        "displacementPerRevolution": 360,
+        "offsetPostion": 15,
+        "communicationId": 31,
+        "maxRPM": 300.0,
+        "isEnabled": true,
+        "description": "自定义泵设备，用于实验室自动化控制",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "jakaRobots": [
+      {
+        "deviceId": "jaka_robot_main",
+        "name": "主Jaka机器人",
+        "ipAddress": "192.168.1.100",
+        "port": 502,
+        "robotType": "Jaka",
+        "robotModel": "Zu7",
+        "isEnabled": true,
+        "autoReconnect": true,
+        "connectionTimeout": 5000,
+        "receiveTimeout": 5000,
+        "sendTimeout": 5000,
+        "reconnectInterval": 5000,
+        "robotParameters": {
+          "slaveId": 1,
+          "deviceStatusStartAddress": 0,
+          "taskFeedbackStartAddress": 100,
+          "controlCommandStartAddress": 200,
+          "taskSendStartAddress": 300,
+          "taskStartAddress": 400,
+          "continueExecutionSignalAddress": 500
+        },
+        "description": "主要的Jaka机器人控制设备",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "tcuDevices": [
+      {
+        "deviceId": "tcu_queenching",
+        "name": "主TCU温控设备",
+        "portName": "COM7",
+        "baudRate": 9600,
+        "parity": "None",
+        "stopBits": "One",
+        "dataBits": 8,
+        "slaveId": 1,
+        "isEnabled": true,
+        "description": "主要的TCU温控设备",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "centrifugalDevices": [
+      {
+        "deviceId": "centrifugal_main",
+        "name": "主离心机",
+        "type": "CentrifugalMachine",
+        "portName": "COM10",
+        "baudRate": 19200,
+        "parity": "None",
+        "stopBits": "One",
+        "dataBits": 8,
+        "slaveId": 1,
+        "isEnabled": true,
+        "parameters": {
+          "maxSpeed": 15000,
+          "minSpeed": 100,
+          "maxTime": 3600,
+          "minTime": 1,
+          "accelerationTime": 30,
+          "decelerationTime": 30,
+          "capacityPositions": 2,
+          "maxCapacity": 50.0,
+          "unit": "mL"
+        },
+        "workPositions": [
+          {
+            "name": "位置1",
+            "position": 1,
+            "speed": 100
+          },
+          {
+            "name": "位置2",
+            "position": 2,
+            "speed": 100
+          },
+          {
+            "name": "安全位置",
+            "position": 0,
+            "speed": 50
+          }
+        ],
+        "defaultParameters": {
+          "defaultSpeed": 3000,
+          "defaultTime": 10,
+          "defaultPosition1": 1,
+          "defaultPosition2": 2,
+          "safetyTimeout": 7200
+        },
+        "description": "主要的高速离心机设备，用于样品分离",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "scanners": [
+      {
+        "deviceId": "scanner_001",
+        "name": "主扫码枪",
+        "ipAddress": "192.168.0.10",
+        "port": 2002,
+        "triggerCommand": "T",
+        "connectionTimeout": 5000,
+        "readTimeout": 3000,
+        "isEnabled": true,
+        "description": "主要的条码扫描设备",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "scanner_002",
+        "name": "备用扫码枪",
+        "ipAddress": "192.168.1.202",
+        "port": 23,
+        "triggerCommand": "T",
+        "connectionTimeout": 5000,
+        "readTimeout": 3000,
+        "isEnabled": false,
+        "description": "备用条码扫描设备",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "weighingSensors": [
+      {
+        "deviceId": "weight_sensor_001",
+        "name": "加粉传感器",
+        "portName": "COM8",
+        "slaveAddress": 1,
+        "baudRate": 9600,
+        "parity": "None",
+        "stopBits": "One",
+        "dataBits": 8,
+        "decimalPlaces": 3,
+        "maxWeight": 5000.0,
+        "precision": 0.001,
+        "isEnabled": true,
+        "description": "主要的精密称重传感器，用于加粉工艺",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "weight_sensor_002",
+        "name": "配平传感器",
+        "portName": "COM26",
+        "slaveAddress": 1,
+        "baudRate": 9600,
+        "parity": "None",
+        "stopBits": "One",
+        "dataBits": 8,
+        "decimalPlaces": 2,
+        "maxWeight": 5000.0,
+        "precision": 0.001,
+        "isEnabled": true,
+        "description": "主要的精密称重传感器，用于配平工艺",
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ],
+    "twoChannelValves": [
+      {
+        "deviceId": "two_valve_17",
+        "name": "过滤清洗二通阀",
+        "ioChannel": 17,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "过滤清洗二通阀，控制清洗液流路",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "two_valve_21",
+        "name": "配平取水二通阀",
+        "ioChannel": 21,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "配平取水二通阀，控制配平水流路",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "two_valve_25",
+        "name": "萃取清洗二通阀",
+        "ioChannel": 25,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "萃取清洗二通阀，控制萃取清洗液流路",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      }
+    ],
+    "threeChannelValves": [
+      {
+        "deviceId": "three_valve_18",
+        "name": "过滤液体控制三通阀",
+        "ioChannel": 18,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "过滤液体控制三通阀，控制过滤液体流向",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "three_valve_22",
+        "name": "配平液体控制三通阀",
+        "ioChannel": 22,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "配平液体控制三通阀，控制配平液体流向",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      },
+      {
+        "deviceId": "three_valve_26",
+        "name": "萃取液体控制三通阀",
+        "ioChannel": 26,
+        "defaultState": 0,
+        "isEnabled": true,
+        "description": "萃取液体控制三通阀，控制萃取液体流向",
+        "createdTime": "2025-01-15T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-15T10:00:00.0000000+08:00"
+      }
+    ],
+    "ecatIODevices": [
+      {
+        "deviceId": "ecat_io_main",
+        "name": "主EtherCAT IO模块",
+        "etherCATDeviceId": "ethercat_main_controller",
+        "isEnabled": true,
+        "description": "主要的EtherCAT IO模块，控制系统安全信号和状态指示",
+        "ioChannels": [
+          {
+            "channelNumber": 1,
+            "channelName": "急停",
+            "ioType": "DI",
+            "defaultValue": 1.0,
+            "isEnabled": true,
+            "description": "急停按钮输入信号"
+          },
+          {
+            "channelNumber": 2,
+            "channelName": "复位",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "复位按钮输入信号"
+          },
+          {
+            "channelNumber": 3,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-3预留通道"
+          },
+          {
+            "channelNumber": 4,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-4预留通道"
+          },
+          {
+            "channelNumber": 5,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-5预留通道"
+          },
+          {
+            "channelNumber": 6,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-6预留通道"
+          },
+          {
+            "channelNumber": 7,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-7预留通道"
+          },
+          {
+            "channelNumber": 8,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-8预留通道"
+          },
+          {
+            "channelNumber": 9,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-9预留通道"
+          },
+          {
+            "channelNumber": 10,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-10预留通道"
+          },
+          {
+            "channelNumber": 11,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-11预留通道"
+          },
+          {
+            "channelNumber": 12,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-12预留通道"
+          },
+          {
+            "channelNumber": 13,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-13预留通道"
+          },
+          {
+            "channelNumber": 14,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-14预留通道"
+          },
+          {
+            "channelNumber": 15,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-15预留通道"
+          },
+          {
+            "channelNumber": 16,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-16预留通道"
+          },
+          {
+            "channelNumber": 17,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-17预留通道"
+          },
+          {
+            "channelNumber": 18,
+            "channelName": "门磁开关1",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关1输入信号"
+          },
+          {
+            "channelNumber": 19,
+            "channelName": "门磁开关2",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关2输入信号"
+          },
+          {
+            "channelNumber": 20,
+            "channelName": "门磁开关3",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关3输入信号"
+          },
+          {
+            "channelNumber": 21,
+            "channelName": "门磁开关4",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关4输入信号"
+          },
+          {
+            "channelNumber": 22,
+            "channelName": "门磁开关5",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关5输入信号"
+          },
+          {
+            "channelNumber": 23,
+            "channelName": "门磁开关6",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关6输入信号"
+          },
+          {
+            "channelNumber": 24,
+            "channelName": "门磁开关7",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关7输入信号"
+          },
+          {
+            "channelNumber": 25,
+            "channelName": "门磁开关8",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关8输入信号"
+          },
+          {
+            "channelNumber": 26,
+            "channelName": "门磁开关9",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关9输入信号"
+          },
+          {
+            "channelNumber": 27,
+            "channelName": "门磁开关10",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "门磁开关10输入信号"
+          },
+          {
+            "channelNumber": 28,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-28预留通道"
+          },
+          {
+            "channelNumber": 29,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-29预留通道"
+          },
+          {
+            "channelNumber": 30,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-30预留通道"
+          },
+          {
+            "channelNumber": 31,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-31预留通道"
+          },
+          {
+            "channelNumber": 32,
+            "channelName": "预留",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DI-32预留通道"
+          },
+          {
+            "channelNumber": 33,
+            "channelName": "液位传感器1",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "液位传感器1输入信号"
+          },
+          {
+            "channelNumber": 34,
+            "channelName": "液位传感器2",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "液位传感器2输入信号"
+          },
+          {
+            "channelNumber": 35,
+            "channelName": "液位传感器3",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "液位传感器3输入信号"
+          },
+          {
+            "channelNumber": 36,
+            "channelName": "液位传感器4",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "液位传感器4输入信号"
+          },
+          {
+            "channelNumber": 37,
+            "channelName": "液位传感器5",
+            "ioType": "DI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "液位传感器5输入信号"
+          },
+          {
+            "channelNumber": 1,
+            "channelName": "三色灯-绿色",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "三色灯绿色指示灯"
+          },
+          {
+            "channelNumber": 2,
+            "channelName": "三色灯-橙色",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "三色灯橙色指示灯"
+          },
+          {
+            "channelNumber": 3,
+            "channelName": "三色灯-红色",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "三色灯红色指示灯"
+          },
+          {
+            "channelNumber": 4,
+            "channelName": "三色灯-蜂鸣",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "三色灯蜂鸣器"
+          },
+          {
+            "channelNumber": 5,
+            "channelName": "复位按钮灯",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "复位按钮指示灯"
+          },
+          {
+            "channelNumber": 6,
+            "channelName": "日光灯",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "日光灯照明控制"
+          },
+          {
+            "channelNumber": 7,
+            "channelName": "散热风扇",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "散热风扇控制"
+          },
+          {
+            "channelNumber": 8,
+            "channelName": "离子风棒控制",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "离子风棒控制"
+          },
+          {
+            "channelNumber": 9,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-9预留通道"
+          },
+          {
+            "channelNumber": 10,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-10预留通道"
+          },
+          {
+            "channelNumber": 11,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-11预留通道"
+          },
+          {
+            "channelNumber": 12,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-12预留通道"
+          },
+          {
+            "channelNumber": 13,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-13预留通道"
+          },
+          {
+            "channelNumber": 14,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-14预留通道"
+          },
+          {
+            "channelNumber": 15,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-15预留通道"
+          },
+          {
+            "channelNumber": 16,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-16预留通道"
+          },
+          {
+            "channelNumber": 17,
+            "channelName": "过滤氮气吹扫",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "过滤氮气吹扫"
+          },
+          {
+            "channelNumber": 18,
+            "channelName": "萃取穿刺/取样排废",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "萃取穿刺/取样排废切换"
+          },
+          {
+            "channelNumber": 19,
+            "channelName": "萃取穿刺/液桶",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "萃取穿刺/液桶切换"
+          },
+          {
+            "channelNumber": 20,
+            "channelName": "淬取样内外针",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "取样内外针切换"
+          },
+          {
+            "channelNumber": 21,
+            "channelName": "萃取氮气吹扫",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "萃取氮气吹扫"
+          },
+          {
+            "channelNumber": 22,
+            "channelName": "萃取/取样液路",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "萃取/取样液路切换"
+          },
+          {
+            "channelNumber": 23,
+            "channelName": "淬灭针头清洗",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "淬灭针头清洗切换"
+          },
+          {
+            "channelNumber": 24,
+            "channelName": "淬灭釜体清洗",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "淬灭釜体清洗切换"
+          },
+          {
+            "channelNumber": 25,
+            "channelName": "淬灭氮气吹扫",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "淬灭氮气吹扫"
+          },
+          {
+            "channelNumber": 26,
+            "channelName": "取样/配平液路",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "取样/配平液路切换"
+          },
+          {
+            "channelNumber": 27,
+            "channelName": "氮气总开关",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "氮气总开关"
+          },
+          {
+            "channelNumber": 28,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-28预留通道"
+          },
+          {
+            "channelNumber": 29,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-29预留通道"
+          },
+          {
+            "channelNumber": 30,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-30预留通道"
+          },
+          {
+            "channelNumber": 31,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-31预留通道"
+          },
+          {
+            "channelNumber": 32,
+            "channelName": "预留",
+            "ioType": "DO",
+            "defaultValue": 0.0,
+            "isEnabled": false,
+            "description": "DO-32预留通道"
+          },
+          {
+            "channelNumber": 100,
+            "channelName": "环境温度传感器",
+            "ioType": "AI",
+            "defaultValue": 25.0,
+            "isEnabled": true,
+            "description": "环境温度传感器，监控设备工作环境"
+          },
+          {
+            "channelNumber": 101,
+            "channelName": "冷凝器压力传感器",
+            "ioType": "AI",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "冷凝器压力传感器"
+          },
+          {
+            "channelNumber": 100,
+            "channelName": "气压输出控制",
+            "ioType": "AO",
+            "defaultValue": 0.0,
+            "isEnabled": true,
+            "description": "气压输出控制信号"
+          },
+          {
+            "channelNumber": 2,
+            "channelName": "液面检测",
+            "ioType": "AI",
+            "defaultValue": 18300,
+            "isEnabled": true,
+            "description": "抽滤液面高度传感器"
+          }
+        ],
+        "createdTime": "2025-01-04T10:00:00.0000000+08:00",
+        "modifiedTime": "2025-01-04T10:00:00.0000000+08:00"
+      }
+    ]
+  }
+  
