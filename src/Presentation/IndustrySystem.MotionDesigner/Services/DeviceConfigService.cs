@@ -11,6 +11,7 @@ public class DeviceConfigService : IDeviceConfigService
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private DeviceConfigDto? _currentConfig;
+    private string? _currentFilePath;
 
     public async Task<DeviceConfigDto> ImportFromFileAsync(string filePath)
     {
@@ -29,7 +30,9 @@ public class DeviceConfigService : IDeviceConfigService
         try
         {
             var json = await File.ReadAllTextAsync(filePath);
-            return await ImportFromJsonAsync(json);
+            var config = await ImportFromJsonAsync(json);
+            _currentFilePath = filePath;
+            return config;
         }
         catch (Exception ex)
         {
@@ -87,5 +90,66 @@ public class DeviceConfigService : IDeviceConfigService
     public DeviceConfigDto? GetCurrentConfig()
     {
         return _currentConfig;
+    }
+
+    public async Task SaveConfigAsync(DeviceConfigDto config)
+    {
+        if (config == null)
+        {
+            throw new ArgumentNullException(nameof(config));
+        }
+
+        if (string.IsNullOrWhiteSpace(_currentFilePath))
+        {
+            throw new InvalidOperationException("没有可保存的配置文件路径，请先导入配置或使用导出功能");
+        }
+
+        _logger.Info("正在保存设备配置到: {FilePath}", _currentFilePath);
+
+        try
+        {
+            await ExportToFileAsync(config, _currentFilePath);
+            _currentConfig = config;
+            _logger.Info("设备配置保存成功");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "保存设备配置失败");
+            throw new InvalidOperationException($"保存设备配置失败: {ex.Message}", ex);
+        }
+    }
+
+    public async Task ExportToFileAsync(DeviceConfigDto config, string filePath)
+    {
+        if (config == null)
+        {
+            throw new ArgumentNullException(nameof(config));
+        }
+
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            throw new ArgumentException("文件路径不能为空", nameof(filePath));
+        }
+
+        _logger.Info("正在导出设备配置到: {FilePath}", filePath);
+
+        try
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var json = JsonSerializer.Serialize(config, options);
+            await File.WriteAllTextAsync(filePath, json);
+            
+            _logger.Info("设备配置导出成功");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "导出设备配置失败");
+            throw new InvalidOperationException($"导出设备配置失败: {ex.Message}", ex);
+        }
     }
 }

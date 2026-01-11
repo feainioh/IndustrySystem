@@ -33,6 +33,7 @@ public class MainWindowViewModel : BindableBase
     public DelegateCommand CloseCommand { get; }
     public DelegateCommand NavigateToDesignerCommand { get; }
     public DelegateCommand NavigateToDeviceDebugCommand { get; }
+    public DelegateCommand NavigateToPositionSettingsCommand { get; }
     
     public MainWindowViewModel(IRegionManager regionManager)
     {
@@ -54,8 +55,6 @@ public class MainWindowViewModel : BindableBase
         {
             if (_regionManager != null)
             {
-            //    var requestNavigateMethod = _regionManager.GetType().GetMethod("RequestNavigate", new[] { typeof(string), typeof(string), typeof(object) });
-            //    requestNavigateMethod?.Invoke(_regionManager, new object?[] { "MainRegion", "DesignerView", null });
                 _regionManager.RequestNavigate("MainRegion" , "DesignerView");
             }
         });
@@ -64,9 +63,15 @@ public class MainWindowViewModel : BindableBase
         {
             if (_regionManager != null)
             {
-                //var requestNavigateMethod = _regionManager.GetType().GetMethod("RequestNavigate", new[] { typeof(string), typeof(string), typeof(object) });
-                //requestNavigateMethod?.Invoke(_regionManager, new object?[] { "MainRegion", "DeviceDebugView", null });
                 _regionManager.RequestNavigate("MainRegion", "DeviceDebugView");
+            }
+        });
+        
+        NavigateToPositionSettingsCommand = new DelegateCommand(() =>
+        {
+            if (_regionManager != null)
+            {
+                _regionManager.RequestNavigate("MainRegion", "PositionSettingsView");
             }
         });
     }

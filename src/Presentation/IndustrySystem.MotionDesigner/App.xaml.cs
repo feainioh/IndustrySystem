@@ -46,10 +46,12 @@ public partial class App : PrismApplication
         // Register ViewModels
         containerRegistry.Register<ViewModels.DesignerViewModel>();
         containerRegistry.Register<ViewModels.DeviceDebugViewModel>();
+        containerRegistry.Register<ViewModels.PositionSettingsViewModel>();
         
         // Register views
         containerRegistry.RegisterForNavigation<Views.DesignerView>("DesignerView");
         containerRegistry.RegisterForNavigation<Views.DeviceDebugView>("DeviceDebugView");
+        containerRegistry.RegisterForNavigation<Views.PositionSettingsView>("PositionSettingsView");
 
         containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
     }
