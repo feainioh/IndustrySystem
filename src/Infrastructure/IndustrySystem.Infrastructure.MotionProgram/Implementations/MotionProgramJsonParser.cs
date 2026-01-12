@@ -1,5 +1,6 @@
 using System.Text.Json;
 using IndustrySystem.Application.Contracts.Dtos.MotionProgram;
+using IndustrySystem.Infrastructure.MotionProgram.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace IndustrySystem.Infrastructure.MotionProgram.Implementations;

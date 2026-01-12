@@ -1,9 +1,10 @@
+using IndustrySystem.MotionDesigner.ViewModels;
+using Modbus.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using IndustrySystem.MotionDesigner.ViewModels;
 using static IndustrySystem.MotionDesigner.Controls.ActionNodeControl;
 
 namespace IndustrySystem.MotionDesigner.Controls;
@@ -20,11 +21,11 @@ public partial class ProgramCanvasControl : UserControl
     private Point _panStart;
     private double _panStartHOffset;
     private double _panStartVOffset;
-    
+
     // Node dragging
     private ActionNodeViewModel? _draggingNode;
     private Point _dragOffset;
-    
+
     // Connection drawing
     private bool _isDrawingConnection;
     private ActionNodeViewModel? _connectionSourceNode;
@@ -34,6 +35,9 @@ public partial class ProgramCanvasControl : UserControl
     // Connection selection
     private ConnectionLineControl? _selectedConnection;
     private readonly List<ConnectionLineControl> _connectionControls = new();
+
+    // Track VM property changed handlers for connections
+    private readonly Dictionary<ConnectionViewModel, System.ComponentModel.PropertyChangedEventHandler> _vmConnectionHandlers = [];
 
     // Minimap
     private bool _isMinimapDragging;
@@ -61,8 +65,8 @@ public partial class ProgramCanvasControl : UserControl
 
     public static readonly DependencyProperty ZoomLevelProperty =
         DependencyProperty.Register(
-            nameof(ZoomLevel), 
-            typeof(double), 
+            nameof(ZoomLevel),
+            typeof(double),
             typeof(ProgramCanvasControl),
             new PropertyMetadata(1.0, OnZoomLevelChanged));
 
@@ -101,11 +105,17 @@ public partial class ProgramCanvasControl : UserControl
         {
             System.Diagnostics.Debug.WriteLine($"=== ProgramCanvasControl OnLoaded ===");
             System.Diagnostics.Debug.WriteLine($"DataContext type: {DataContext?.GetType().Name ?? "null"}");
-            
+
             if (DataContext is DesignerViewModel vm)
             {
                 System.Diagnostics.Debug.WriteLine($"ProgramCanvasControl loaded. Nodes: {vm.Nodes.Count}, Connections: {vm.Connections.Count}");
-                
+
+                // Register existing connection VM property handlers
+                foreach (var conn in vm.Connections)
+                {
+                    RegisterConnectionViewModel(conn);
+                }
+
                 // Subscribe to Nodes collection changes
                 vm.Nodes.CollectionChanged += (s, args) =>
                 {
@@ -115,7 +125,7 @@ public partial class ProgramCanvasControl : UserControl
                         {
                             System.Diagnostics.Debug.WriteLine($"[Nodes] Collection changed. New items: {args.NewItems.Count}, Total nodes: {vm.Nodes.Count}");
                             Dispatcher.BeginInvoke(
-                                new Action(BindNodeControlEvents), 
+                                new Action(BindNodeControlEvents),
                                 System.Windows.Threading.DispatcherPriority.Loaded);
                             Dispatcher.BeginInvoke(
                                 new Action(UpdateMinimap),
@@ -127,13 +137,15 @@ public partial class ProgramCanvasControl : UserControl
                         System.Diagnostics.Debug.WriteLine($"[Nodes] Error in collection changed: {ex.Message}");
                     }
                 };
-                
+
                 // Subscribe to Connections collection changes
                 vm.Connections.CollectionChanged += (s, args) =>
                 {
                     try
                     {
                         System.Diagnostics.Debug.WriteLine($"[Connections] Collection changed event fired!");
+
+                        // Handle added items
                         if (args.NewItems != null)
                         {
                             System.Diagnostics.Debug.WriteLine($"[Connections] New items: {args.NewItems.Count}, Total: {vm.Connections.Count}");
@@ -144,35 +156,40 @@ public partial class ProgramCanvasControl : UserControl
                                     System.Diagnostics.Debug.WriteLine($"  Connection: {conn.SourceNodeId} -> {conn.TargetNodeId}");
                                     System.Diagnostics.Debug.WriteLine($"    SourcePort: {conn.SourcePortDirection}, TargetPort: {conn.TargetPortDirection}");
                                     System.Diagnostics.Debug.WriteLine($"    PathData: {(string.IsNullOrEmpty(conn.PathData) ? "EMPTY!" : conn.PathData.Substring(0, Math.Min(50, conn.PathData.Length)))}");
+
+                                    // Register property changed handler for new connection VM
+                                    RegisterConnectionViewModel(conn);
                                 }
                             }
                         }
-                        
-                        // Force UI update
-                        Dispatcher.BeginInvoke(
-                            System.Windows.Threading.DispatcherPriority.Render,
-                            new Action(() =>
+
+                        // Handle removed items
+                        if (args.OldItems != null)
+                        {
+                            foreach (var item in args.OldItems)
                             {
-                                System.Diagnostics.Debug.WriteLine($"[Connections] Forcing ConnectionsLayer update. ItemsSource count: {vm.Connections.Count}");
-                                if (ConnectionsLayer != null)
+                                if (item is ConnectionViewModel conn)
                                 {
-                                    ConnectionsLayer.Items.Refresh();
+                                    UnregisterConnectionViewModel(conn);
                                 }
-                            }));
+                            }
+                        }
+
+                        // Rely on per-item binding updates; avoid full Items.Refresh which causes layout churn
                     }
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine($"[Connections] Error in collection changed: {ex.Message}\n{ex.StackTrace}");
                     }
                 };
-                
+
                 Dispatcher.BeginInvoke(
-                    new Action(BindNodeControlEvents), 
+                    new Action(BindNodeControlEvents),
                     System.Windows.Threading.DispatcherPriority.Loaded);
                 Dispatcher.BeginInvoke(
                     new Action(UpdateMinimap),
                     System.Windows.Threading.DispatcherPriority.Loaded);
-                    
+
                 System.Diagnostics.Debug.WriteLine("=== ProgramCanvasControl subscriptions complete ===");
             }
             else
@@ -195,7 +212,7 @@ public partial class ProgramCanvasControl : UserControl
             control.DragMoved -= OnNodeDragMoved;
             control.DragEnded -= OnNodeDragEnded;
             control.PortClicked -= OnPortClicked;
-            
+
             control.DragStarted += OnNodeDragStarted;
             control.DragMoved += OnNodeDragMoved;
             control.DragEnded += OnNodeDragEnded;
@@ -213,6 +230,11 @@ public partial class ProgramCanvasControl : UserControl
         {
             _draggingNode = node;
             _dragOffset = new Point(position.X - node.X, position.Y - node.Y);
+
+            // Clear any connection UI selection/highlights when selecting a node
+            ClearConnectionSelection();
+
+            // Notify parent/view to update SelectedNode in VM
             NodeSelected?.Invoke(this, node);
         }
     }
@@ -223,7 +245,7 @@ public partial class ProgramCanvasControl : UserControl
         {
             _draggingNode.X = Math.Max(0, Math.Min(2820, position.X - _dragOffset.X));
             _draggingNode.Y = Math.Max(0, Math.Min(2940, position.Y - _dragOffset.Y));
-            
+
             ConnectionPathsUpdateRequested?.Invoke(this, EventArgs.Empty);
             UpdateMinimap();
         }
@@ -243,7 +265,7 @@ public partial class ProgramCanvasControl : UserControl
         try
         {
             System.Diagnostics.Debug.WriteLine($"[PORT CLICKED] Port direction: {args.Direction}");
-            
+
             if (sender is not ActionNodeControl control || control.DataContext is not ActionNodeViewModel node)
             {
                 System.Diagnostics.Debug.WriteLine($"[PORT CLICKED] ERROR: Invalid sender or DataContext");
@@ -264,7 +286,7 @@ public partial class ProgramCanvasControl : UserControl
                 // Complete connection to this port (only if different node)
                 System.Diagnostics.Debug.WriteLine($"[PORT CLICKED] Trying to complete connection");
                 System.Diagnostics.Debug.WriteLine($"[PORT CLICKED] Source node: {_connectionSourceNode?.Name}, Target node: {node.Name}");
-                
+
                 if (_connectionSourceNode != null && _connectionSourceNode.Id != node.Id)
                 {
                     System.Diagnostics.Debug.WriteLine($"[PORT CLICKED] ? Completing connection!");
@@ -288,14 +310,14 @@ public partial class ProgramCanvasControl : UserControl
         try
         {
             System.Diagnostics.Debug.WriteLine($"[START CONNECTION] Source: {sourceNode.Name}, Direction: {direction}");
-            
+
             _isDrawingConnection = true;
             _connectionSourceNode = sourceNode;
             _connectionSourceDirection = direction;
-            
+
             var startPoint = sourceControl.GetPortCenter(direction);
             System.Diagnostics.Debug.WriteLine($"[START CONNECTION] Start point: ({startPoint.X}, {startPoint.Y})");
-            
+
             // Create temporary connection line control
             _temporaryConnection = new ConnectionLineControl
             {
@@ -306,11 +328,12 @@ public partial class ProgramCanvasControl : UserControl
                 IsTemporary = true,
                 IsHitTestVisible = false
             };
-            
+
             // Add to canvas
-            DesignerCanvas.Children.Add(_temporaryConnection);
+            DesignerCanvas.Children.Add(_temporaryConnection); 
+            RegisterConnection(_temporaryConnection);
             System.Diagnostics.Debug.WriteLine($"[START CONNECTION] Temporary connection created and added to canvas");
-            
+
             // Capture mouse for tracking
             DesignerCanvas.CaptureMouse();
         }
@@ -334,7 +357,7 @@ public partial class ProgramCanvasControl : UserControl
             MainScrollViewer?.ScrollToVerticalOffset(Math.Max(0, _panStartVOffset - dy));
             return;
         }
-        
+
         if (_isDrawingConnection && _temporaryConnection != null)
         {
             var position = e.GetPosition(DesignerCanvas);
@@ -348,12 +371,12 @@ public partial class ProgramCanvasControl : UserControl
         {
             var position = e.GetPosition(DesignerCanvas);
             var hitElement = DesignerCanvas.InputHitTest(position) as DependencyObject;
-            
+
             if (hitElement != null)
             {
                 var nodeControl = FindParent<ActionNodeControl>(hitElement);
-                if (nodeControl?.DataContext is ActionNodeViewModel targetNode && 
-                    _connectionSourceNode != null && 
+                if (nodeControl?.DataContext is ActionNodeViewModel targetNode &&
+                    _connectionSourceNode != null &&
                     targetNode.Id != _connectionSourceNode.Id)
                 {
                     // Determine which port was clicked based on position
@@ -361,15 +384,15 @@ public partial class ProgramCanvasControl : UserControl
                     CompleteConnection(targetNode, targetDirection);
                 }
             }
-            
+
             CancelDrawingConnection();
         }
-        
+
         if (_isSelecting)
         {
             _isSelecting = false;
         }
-        
+
         if (_isPanning)
         {
             _isPanning = false;
@@ -387,7 +410,7 @@ public partial class ProgramCanvasControl : UserControl
             (PortDirection.Bottom, GetDistance(control.GetPortCenter(PortDirection.Bottom), clickPosition)),
             (PortDirection.Left, GetDistance(control.GetPortCenter(PortDirection.Left), clickPosition))
         };
-        
+
         return distances.OrderBy(d => d.Item2).First().Item1;
     }
 
@@ -402,12 +425,12 @@ public partial class ProgramCanvasControl : UserControl
         {
             System.Diagnostics.Debug.WriteLine($"[COMPLETE CONNECTION] Source: {_connectionSourceNode?.Name}, Target: {targetNode.Name}");
             System.Diagnostics.Debug.WriteLine($"[COMPLETE CONNECTION] Source Port: {_connectionSourceDirection}, Target Port: {targetDirection}");
-            
+
             if (_connectionSourceNode != null)
             {
                 System.Diagnostics.Debug.WriteLine($"[COMPLETE CONNECTION] Invoking ConnectionCreated event...");
                 ConnectionCreated?.Invoke(this, (
-                    _connectionSourceNode.Id, 
+                    _connectionSourceNode.Id,
                     targetNode.Id,
                     _connectionSourceDirection,
                     targetDirection
@@ -428,14 +451,14 @@ public partial class ProgramCanvasControl : UserControl
     private void CancelDrawingConnection()
     {
         System.Diagnostics.Debug.WriteLine($"[CANCEL CONNECTION] Cancelling connection drawing");
-        
+
         // Remove temporary connection from canvas
         if (_temporaryConnection != null)
         {
             DesignerCanvas.Children.Remove(_temporaryConnection);
             _temporaryConnection = null;
         }
-        
+
         _isDrawingConnection = false;
         _connectionSourceNode = null;
         DesignerCanvas.ReleaseMouseCapture();
@@ -449,9 +472,9 @@ public partial class ProgramCanvasControl : UserControl
     {
         var position = e.GetPosition(DesignerCanvas);
         ItemDropped?.Invoke(this, (e.Data, position));
-        
+
         Dispatcher.BeginInvoke(
-            new Action(BindNodeControlEvents), 
+            new Action(BindNodeControlEvents),
             System.Windows.Threading.DispatcherPriority.Loaded);
         Dispatcher.BeginInvoke(
             new Action(UpdateMinimap),
@@ -469,14 +492,14 @@ public partial class ProgramCanvasControl : UserControl
         // 检查是否点击了 ConnectionLineControl 或其子元素
         var source = e.OriginalSource as DependencyObject;
         var connectionControl = FindParent<ConnectionLineControl>(source);
-        
+
         // 如果点击的是连接线，不处理（让连接线自己处理）
         if (connectionControl != null && !connectionControl.IsTemporary)
         {
             return; // 让 ConnectionLineControl 处理这个事件
         }
-        
-        if (e.OriginalSource == DesignerCanvas || 
+
+        if (e.OriginalSource == DesignerCanvas ||
             (e.OriginalSource is Rectangle rect && rect.IsHitTestVisible == false))
         {
             SelectionCleared?.Invoke(this, EventArgs.Empty);
@@ -564,7 +587,7 @@ public partial class ProgramCanvasControl : UserControl
                 e.Handled = true;
                 return;
             }
-            
+
             // Otherwise delete highlighted connection in ViewModel (VM-driven mode)
             if (DataContext is DesignerViewModel dvm)
             {
@@ -588,7 +611,7 @@ public partial class ProgramCanvasControl : UserControl
         if (DataContext is not DesignerViewModel vm || !_isMinimapVisible) return;
 
         MinimapCanvas.Children.Clear();
-        
+
         // Draw nodes on minimap
         foreach (var node in vm.Nodes)
         {
@@ -604,7 +627,7 @@ public partial class ProgramCanvasControl : UserControl
             Canvas.SetTop(rect, node.Y * MinimapScale);
             MinimapCanvas.Children.Add(rect);
         }
-        
+
         // Update viewport rectangle
         UpdateViewportRect();
     }
@@ -623,7 +646,7 @@ public partial class ProgramCanvasControl : UserControl
         ViewportRect.Height = viewportHeight;
         Canvas.SetLeft(ViewportRect, offsetX);
         Canvas.SetTop(ViewportRect, offsetY);
-        
+
         if (!MinimapCanvas.Children.Contains(ViewportRect))
         {
             MinimapCanvas.Children.Add(ViewportRect);
@@ -737,7 +760,7 @@ public partial class ProgramCanvasControl : UserControl
     {
         _isMinimapVisible = !_isMinimapVisible;
         MinimapCanvas.Visibility = _isMinimapVisible ? Visibility.Visible : Visibility.Collapsed;
-        
+
         if (ToggleMinimapButton.Content is MaterialDesignThemes.Wpf.PackIcon icon)
         {
             icon.Kind = _isMinimapVisible ? MaterialDesignThemes.Wpf.PackIconKind.EyeOff : MaterialDesignThemes.Wpf.PackIconKind.Eye;
@@ -780,17 +803,17 @@ public partial class ProgramCanvasControl : UserControl
             var minY = vm.Nodes.Min(n => n.Y);
             var maxX = vm.Nodes.Max(n => n.X + n.Width);
             var maxY = vm.Nodes.Max(n => n.Y + n.Height);
-            
+
             var viewWidth = MainScrollViewer.ViewportWidth;
             var viewHeight = MainScrollViewer.ViewportHeight;
             var padding = 50.0;
-            
+
             var contentWidth = maxX - minX + padding * 2;
             var contentHeight = maxY - minY + padding * 2;
-            
+
             var scaleX = viewWidth / contentWidth;
             var scaleY = viewHeight / contentHeight;
-            
+
             vm.ZoomLevel = Math.Min(scaleX, scaleY);
         }
     }
@@ -802,13 +825,13 @@ public partial class ProgramCanvasControl : UserControl
     private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent) where T : DependencyObject
     {
         if (parent == null) yield break;
-        
+
         for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
             var child = VisualTreeHelper.GetChild(parent, i);
             if (child is T t)
                 yield return t;
-            
+
             foreach (var childOfChild in FindVisualChildren<T>(child))
                 yield return childOfChild;
         }
@@ -838,7 +861,7 @@ public partial class ProgramCanvasControl : UserControl
         {
             _connectionControls.Add(connection);
             connection.Selected += OnConnectionSelected;
-            connection.DeleteRequested += OnConnectionDeleteRequested;
+            //connection.DeleteRequested += OnConnectionDeleteRequested;
         }
     }
 
@@ -850,7 +873,7 @@ public partial class ProgramCanvasControl : UserControl
         if (_connectionControls.Contains(connection))
         {
             connection.Selected -= OnConnectionSelected;
-            connection.DeleteRequested -= OnConnectionDeleteRequested;
+            //connection.DeleteRequested -= OnConnectionDeleteRequested;
             _connectionControls.Remove(connection);
         }
     }
@@ -863,7 +886,9 @@ public partial class ProgramCanvasControl : UserControl
         if (sender is not ConnectionLineControl selected)
             return;
 
-        // Deselect all other connections
+        System.Diagnostics.Debug.WriteLine($"[CONNECTION SELECTED] ID: {selected.ConnectionId}");
+
+        // Deselect all other connections in UI
         foreach (var conn in _connectionControls)
         {
             if (conn != selected)
@@ -873,31 +898,71 @@ public partial class ProgramCanvasControl : UserControl
         }
 
         _selectedConnection = selected;
-        System.Diagnostics.Debug.WriteLine($"[CONNECTION SELECTED] ID: {selected.ConnectionId}");
+
+        // Update ViewModel: set SelectedLine which will automatically clear SelectedNode
+        if (DataContext is DesignerViewModel vm)
+        {
+            // Find corresponding VM by Id and set as SelectedLine
+            var match = vm.Connections.FirstOrDefault(c => c.Id == selected.ConnectionId);
+            if (match != null)
+            {
+                // This will clear SelectedNode and highlight only this connection
+                vm.SelectedLine = match;
+            }
+        }
     }
 
-    /// <summary>
-    /// Handle connection delete request
-    /// </summary>
-    private void OnConnectionDeleteRequested(object? sender, EventArgs e)
+    private void RegisterConnectionViewModel(ConnectionViewModel conn)
     {
-        if (sender is not ConnectionLineControl connection)
-            return;
+        if (conn == null) return;
+        if (_vmConnectionHandlers.ContainsKey(conn)) return;
 
-        System.Diagnostics.Debug.WriteLine($"[CONNECTION DELETE] Requesting delete for: {connection.ConnectionId}");
-        
-        // Remove from canvas
-        DesignerCanvas.Children.Remove(connection);
-        UnregisterConnection(connection);
-
-        // Clear selection if this was selected
-        if (_selectedConnection == connection)
+        System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
         {
-            _selectedConnection = null;
-        }
+            if (e.PropertyName == nameof(ConnectionViewModel.IsHighlighted))
+            {
+                // Find matching connection control and update selection
+                var cvm = s as ConnectionViewModel;
+                if (cvm == null) return;
+                var control = _connectionControls.FirstOrDefault(c => c.ConnectionId == cvm.Id);
+                if (control != null)
+                {
+                    control.IsSelected = cvm.IsHighlighted; 
+                    if (cvm.IsHighlighted)
+                    {
+                        // Ensure only one UI control is selected
+                        foreach (var other in _connectionControls)
+                        {
+                            if (other != control)
+                                other.Deselect();
+                        }
+                        _selectedConnection = control;
+                    }
+                    else
+                    {
+                        if (_selectedConnection == control)
+                            _selectedConnection = null;
+                    }
+                }
+            }
+        };
 
-        // Notify parent
-        ConnectionDeleted?.Invoke(this, connection.ConnectionId);
+        if (conn is System.ComponentModel.INotifyPropertyChanged inpc)
+        {
+            inpc.PropertyChanged += handler;
+            _vmConnectionHandlers[conn] = handler;
+        }
+    }
+
+    private void UnregisterConnectionViewModel(ConnectionViewModel conn)
+    {
+        if (conn == null) return;
+        if (!_vmConnectionHandlers.TryGetValue(conn, out var handler)) return;
+        if (conn is System.ComponentModel.INotifyPropertyChanged inpc)
+        {
+            inpc.PropertyChanged -= handler;
+        }
+        _vmConnectionHandlers.Remove(conn);
     }
 
     /// <summary>
@@ -905,16 +970,17 @@ public partial class ProgramCanvasControl : UserControl
     /// </summary>
     public void ClearConnectionSelection()
     {
+        // Clear UI selection
         foreach (var conn in _connectionControls)
         {
             conn.Deselect();
         }
         _selectedConnection = null;
-        // Clear VM highlights as well
+
+        // Clear VM selection
         if (DataContext is DesignerViewModel dvm)
         {
-            foreach (var c in dvm.Connections)
-                c.IsHighlighted = false;
+            dvm.SelectedLine = null;
         }
     }
 
@@ -925,7 +991,7 @@ public partial class ProgramCanvasControl : UserControl
     {
         if (_selectedConnection != null)
         {
-            OnConnectionDeleteRequested(_selectedConnection, EventArgs.Empty);
+            //OnConnectionDeleteRequested(_selectedConnection, EventArgs.Empty);
         }
     }
 
@@ -934,5 +1000,29 @@ public partial class ProgramCanvasControl : UserControl
     private void OnCanvasMouseWheel(object sender, MouseWheelEventArgs e)
     {
 
+    }
+
+    private void OnNodeClicked(object? sender, EventArgs e)
+    {
+        if (sender is ActionNodeControl control && control.DataContext is ActionNodeViewModel node)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ProgramCanvasControl] Node clicked: {node.Name} ({node.Id})");
+
+            // Deselect all connections in UI
+            foreach (var conn in _connectionControls)
+            {
+                conn.Deselect();
+            }
+            _selectedConnection = null;
+
+            // Update ViewModel selected node (this will clear SelectedLine automatically)
+            if (DataContext is DesignerViewModel vm)
+            {
+                vm.SelectedNode = node;
+            }
+
+            // Raise NodeSelected event for external handlers
+            NodeSelected?.Invoke(this, node);
+        }
     }
 }

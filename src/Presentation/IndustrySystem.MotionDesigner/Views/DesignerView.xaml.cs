@@ -79,4 +79,16 @@ public partial class DesignerView : UserControl
             vm.UpdateConnectionPaths();
         }
     }
+
+    /// <summary>
+    /// 处理连接删除事件
+    /// </summary>
+    private void OnConnectionDeleted(object? sender, Guid connectionId)
+    {
+        System.Diagnostics.Debug.WriteLine($"[DesignerView] OnConnectionDeleted: {connectionId}");
+        if (DataContext is DesignerViewModel vm)
+        {
+            vm.RemoveConnection(connectionId);
+        }
+    }
 }

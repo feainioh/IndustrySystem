@@ -13,7 +13,7 @@ public class ConnectionLineControl : Canvas
 {
     private Path? _connectionPath;
     private Path? _arrowPath;
-    private Path? _hitTestPath; // ������꽻����͸��·��
+    private Path? _hitTestPath; // 宽线用于捕获点击
 
     public ConnectionLineControl()
     {
@@ -35,7 +35,7 @@ public class ConnectionLineControl : Canvas
             IsHitTestVisible = true,
             SnapsToDevicePixels = true
         };
-        
+
         // 确保 Canvas 本身也可以接收鼠标事件
         IsHitTestVisible = true;
         Background = Brushes.Transparent;
@@ -151,7 +151,10 @@ public class ConnectionLineControl : Canvas
     public bool IsSelected
     {
         get => (bool)GetValue(IsSelectedProperty);
-        set => SetValue(IsSelectedProperty, value);
+        set
+        {
+            SetValue(IsSelectedProperty, value);
+        }
     }
 
     public Guid ConnectionId
@@ -171,18 +174,18 @@ public class ConnectionLineControl : Canvas
 
     private void OnMouseEnter(object? sender, MouseEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseEnter");
+        System.Diagnostics.Debug.WriteLine($"[ConnectionLineControl] {ConnectionId}MouseEnter");
         if (!IsTemporary && !IsSelected && _connectionPath != null)
         {
             // Highlight on hover
-            _connectionPath.StrokeThickness = StrokeThickness + 3;
+            _connectionPath.StrokeThickness = StrokeThickness + 6;
             _connectionPath.Opacity = 0.8;
         }
     }
 
     private void OnMouseLeave(object? sender, MouseEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseLeave");
+        System.Diagnostics.Debug.WriteLine($"[ConnectionLineControl] {ConnectionId}MouseLeave");
         if (!IsSelected && _connectionPath != null)
         {
             // Remove highlight
@@ -193,23 +196,23 @@ public class ConnectionLineControl : Canvas
 
     private void OnMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseLeftButtonDown");
+        System.Diagnostics.Debug.WriteLine($"[ConnectionLineControl] {ConnectionId}MouseLeftButtonDown");
         if (!IsTemporary)
         {
             e.Handled = true; // 标记事件已处理，防止被父控件拦截
             IsSelected = true;
             Selected?.Invoke(this, EventArgs.Empty);
-            Focus(); // 获取焦点以确保选择状态
+            //Focus(); // 获取焦点以确保选择状态
         }
     }
 
     private void OnMouseRightButtonDown(object? sender, MouseButtonEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[ConnectionLineControl] MouseRightButtonDown");
+        System.Diagnostics.Debug.WriteLine($"[ConnectionLineControl] {ConnectionId}MouseRightButtonDown");
         if (!IsTemporary)
         {
             e.Handled = true; // 标记事件已处理，防止被父控件拦截
-            
+
             // Show context menu or delete
             var contextMenu = new ContextMenu();
 
@@ -405,6 +408,10 @@ public class ConnectionLineControl : Canvas
     public void Deselect()
     {
         IsSelected = false;
+        if (_arrowPath == null) return;
+        {
+            _arrowPath.Fill = IsSelected ? Brushes.Orange : Stroke;
+        }
     }
 
     #endregion

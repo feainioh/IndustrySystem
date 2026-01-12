@@ -180,6 +180,7 @@
                         NodeSelected="OnNodeSelected"
                         SelectionCleared="OnSelectionCleared"
                         ConnectionCreated="OnConnectionCreated"
+                        ConnectionDeleted="OnConnectionDeleted"
                         ItemDropped="OnItemDropped"
                         ConnectionPathsUpdateRequested="OnConnectionPathsUpdateRequested" Grid.ColumnSpan="2"/>
 

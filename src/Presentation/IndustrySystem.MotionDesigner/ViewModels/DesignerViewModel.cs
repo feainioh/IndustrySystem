@@ -19,49 +19,22 @@ public class ActionToolItem
     public string IconKind { get; set; } = string.Empty;
 }
 
-public class ConnectionViewModel : BindableBase
-{
-    private Guid _id;
-    private Guid _sourceNodeId;
-    private Guid _targetNodeId;
-    private string _pathData = string.Empty;
-    private string _arrowData = string.Empty;
-    private double _arrowX;
-    private double _arrowY;
-    private double _arrowAngle;
-    private int _executionOrder;
-    private bool _isHighlighted;
-    private int _sourcePortDirection;  // 0=Top, 1=Right, 2=Bottom, 3=Left
-    private int _targetPortDirection;
-
-    public Guid Id { get => _id; set => SetProperty(ref _id, value); }
-    public Guid SourceNodeId { get => _sourceNodeId; set => SetProperty(ref _sourceNodeId, value); }
-    public Guid TargetNodeId { get => _targetNodeId; set => SetProperty(ref _targetNodeId, value); }
-    public string PathData { get => _pathData; set => SetProperty(ref _pathData, value); }
-    public string ArrowData { get => _arrowData; set => SetProperty(ref _arrowData, value); }
-    public double ArrowX { get => _arrowX; set => SetProperty(ref _arrowX, value); }
-    public double ArrowY { get => _arrowY; set => SetProperty(ref _arrowY, value); }
-    public double ArrowAngle { get => _arrowAngle; set => SetProperty(ref _arrowAngle, value); }
-    public int ExecutionOrder { get => _executionOrder; set => SetProperty(ref _executionOrder, value); }
-    public bool IsHighlighted { get => _isHighlighted; set => SetProperty(ref _isHighlighted, value); }
-    public int SourcePortDirection { get => _sourcePortDirection; set => SetProperty(ref _sourcePortDirection, value); }
-    public int TargetPortDirection { get => _targetPortDirection; set => SetProperty(ref _targetPortDirection, value); }
-}
 
 public class DesignerViewModel : BindableBase
 {
     private static readonly NLog.ILogger _logger = LogManager.GetCurrentClassLogger();
-    
+
     private readonly IMotionProgramAppService _programService;
     private readonly IMotionProgramExecutor _executor;
-    
+
     private MotionProgramDto? _currentProgram;
     private ActionNodeViewModel? _selectedNode;
+    private ConnectionViewModel? _selectedConnection;
     private string _executionState = "Idle";
     private double _executionProgress;
     private bool _isRunning;
     private bool _hasSelectedNode;
-    
+
     // 缩放相关
     private double _zoomLevel = 1.0;
     private const double MinZoom = 0.25;
@@ -70,13 +43,13 @@ public class DesignerViewModel : BindableBase
 
     public ObservableCollection<ActionNodeViewModel> Nodes { get; } = new();
     public ObservableCollection<ConnectionViewModel> Connections { get; } = new();
-    
+
     public ObservableCollection<ActionToolItem> MotorActions { get; } = new();
     public ObservableCollection<ActionToolItem> IoActions { get; } = new();
     public ObservableCollection<ActionToolItem> RobotActions { get; } = new();
     public ObservableCollection<ActionToolItem> FlowActions { get; } = new();
     public ObservableCollection<ActionToolItem> LogicActions { get; } = new();
-    
+
     public Array ErrorHandlingOptions => Enum.GetValues(typeof(ErrorHandling));
 
     public ActionNodeViewModel? SelectedNode
@@ -87,21 +60,66 @@ public class DesignerViewModel : BindableBase
             if (_selectedNode != null) _selectedNode.IsSelected = false;
             if (SetProperty(ref _selectedNode, value))
             {
-                if (_selectedNode != null) _selectedNode.IsSelected = true;
+                if (_selectedNode != null)
+                {
+                    _selectedNode.IsSelected = true;
+                    // When a node is selected, clear any selected connection
+                    if (_selectedConnection != null)
+                    {
+                        _selectedConnection.IsHighlighted = false;
+                        _selectedConnection = null;
+                        RaisePropertyChanged(nameof(SelectedLine));
+                    }
+                }
                 HasSelectedNode = _selectedNode != null;
             }
         }
     }
 
+    public ConnectionViewModel? SelectedLine
+    {
+        get => _selectedConnection;
+        set
+        {
+            if (_selectedConnection != null)
+            {
+                _selectedConnection.IsHighlighted = false;
+            }
+
+            if (SetProperty(ref _selectedConnection, value))
+            {
+                if (_selectedConnection != null)
+                {
+                    // Ensure only one connection is highlighted
+                    foreach (var c in Connections)
+                    {
+                        if (c != _selectedConnection)
+                            c.IsHighlighted = false;
+                    }
+
+                    _selectedConnection.IsHighlighted = true;
+
+                    // When a connection is selected, clear node selection
+                    if (_selectedNode != null)
+                    {
+                        _selectedNode.IsSelected = false;
+                        _selectedNode = null;
+                        HasSelectedNode = false;
+                        RaisePropertyChanged(nameof(SelectedNode));
+                    }
+                }
+            }
+        }
+    }
     public bool HasSelectedNode { get => _hasSelectedNode; set => SetProperty(ref _hasSelectedNode, value); }
     public string ExecutionState { get => _executionState; set => SetProperty(ref _executionState, value); }
     public double ExecutionProgress { get => _executionProgress; set => SetProperty(ref _executionProgress, value); }
     public bool IsRunning { get => _isRunning; set => SetProperty(ref _isRunning, value); }
-    
+
     // 缩放属性
-    public double ZoomLevel 
-    { 
-        get => _zoomLevel; 
+    public double ZoomLevel
+    {
+        get => _zoomLevel;
         set
         {
             if (SetProperty(ref _zoomLevel, Math.Clamp(value, MinZoom, MaxZoom)))
@@ -110,7 +128,7 @@ public class DesignerViewModel : BindableBase
             }
         }
     }
-    
+
     public string ZoomPercentage => $"{ZoomLevel * 100:F0}%";
 
     public ICommand NewProgramCommand { get; }
@@ -124,7 +142,7 @@ public class DesignerViewModel : BindableBase
     public ICommand PauseCommand { get; }
     public ICommand StopCommand { get; }
     public ICommand StepCommand { get; }
-    
+
     // 缩放命令
     public ICommand ZoomInCommand { get; }
     public ICommand ZoomOutCommand { get; }
@@ -135,7 +153,7 @@ public class DesignerViewModel : BindableBase
     {
         _programService = programService;
         _executor = executor;
-        
+
         NewProgramCommand = new DelegateCommand(NewProgram);
         OpenProgramCommand = new DelegateCommand(async () => await OpenProgramAsync());
         SaveProgramCommand = new DelegateCommand(async () => await SaveProgramAsync());
@@ -147,20 +165,20 @@ public class DesignerViewModel : BindableBase
         PauseCommand = new DelegateCommand(async () => await _executor.PauseAsync());
         StopCommand = new DelegateCommand(async () => await _executor.StopAsync());
         StepCommand = new DelegateCommand(async () => await _executor.StepAsync());
-        
+
         // 初始化缩放命令
         ZoomInCommand = new DelegateCommand(() => ZoomLevel += ZoomStep);
         ZoomOutCommand = new DelegateCommand(() => ZoomLevel -= ZoomStep);
         ZoomResetCommand = new DelegateCommand(() => ZoomLevel = 1.0);
         ZoomFitCommand = new DelegateCommand(FitToPage);
-        
+
         InitializeToolbox();
-        
+
         _executor.ProgressChanged += OnProgressChanged;
         _executor.NodeExecuted += OnNodeExecuted;
         _executor.ProgramCompleted += OnProgramCompleted;
     }
-    
+
     private void InitializeToolbox()
     {
         MotorActions.Add(new ActionToolItem { ActionType = ActionType.MotorMoveAbsolute, DisplayName = "Motor Absolute", IconKind = "AxisArrow" });
@@ -168,38 +186,38 @@ public class DesignerViewModel : BindableBase
         MotorActions.Add(new ActionToolItem { ActionType = ActionType.MotorHome, DisplayName = "Motor Home", IconKind = "Home" });
         MotorActions.Add(new ActionToolItem { ActionType = ActionType.MotorStop, DisplayName = "Motor Stop", IconKind = "Stop" });
         MotorActions.Add(new ActionToolItem { ActionType = ActionType.WaitMotorDone, DisplayName = "Wait Done", IconKind = "TimerSand" });
-        
+
         IoActions.Add(new ActionToolItem { ActionType = ActionType.IoOutput, DisplayName = "IO Output", IconKind = "ExportVariant" });
         IoActions.Add(new ActionToolItem { ActionType = ActionType.WaitIoInput, DisplayName = "Wait IO Input", IconKind = "ImportVariant" });
-        
+
         RobotActions.Add(new ActionToolItem { ActionType = ActionType.RobotMoveTo, DisplayName = "Robot Move", IconKind = "Robot" });
         RobotActions.Add(new ActionToolItem { ActionType = ActionType.RobotRunProgram, DisplayName = "Run Program", IconKind = "RobotIndustrial" });
-        
+
         // Basic Flow Control
         FlowActions.Add(new ActionToolItem { ActionType = ActionType.Delay, DisplayName = "Delay", IconKind = "ClockOutline" });
         FlowActions.Add(new ActionToolItem { ActionType = ActionType.SetVariable, DisplayName = "Set Variable", IconKind = "Variable" });
         FlowActions.Add(new ActionToolItem { ActionType = ActionType.Log, DisplayName = "Log", IconKind = "TextBoxOutline" });
         FlowActions.Add(new ActionToolItem { ActionType = ActionType.Alarm, DisplayName = "Alarm", IconKind = "AlertCircle" });
         FlowActions.Add(new ActionToolItem { ActionType = ActionType.CallSubProgram, DisplayName = "Call SubProgram", IconKind = "FunctionVariant" });
-        
+
         // Logic Control - If/Else
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.IfStart, DisplayName = "If", IconKind = "CodeBraces" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.ElseIf, DisplayName = "Else If", IconKind = "CodeBrackets" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Else, DisplayName = "Else", IconKind = "CodeBrackets" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.IfEnd, DisplayName = "End If", IconKind = "CodeBraces" });
-        
+
         // Logic Control - Loops
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.WhileStart, DisplayName = "While", IconKind = "Sync" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.WhileEnd, DisplayName = "End While", IconKind = "SyncOff" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.LoopStart, DisplayName = "Loop Start", IconKind = "Repeat" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.LoopEnd, DisplayName = "Loop End", IconKind = "RepeatOff" });
-        
+
         // Logic Control - Flow
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Break, DisplayName = "Break", IconKind = "ExitRun" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Continue, DisplayName = "Continue", IconKind = "SkipNext" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Return, DisplayName = "Return", IconKind = "KeyboardReturn" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Condition, DisplayName = "Condition", IconKind = "HelpRhombus" });
-        
+
         // Logic Control - Switch
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Switch, DisplayName = "Switch", IconKind = "FormatListBulleted" });
         LogicActions.Add(new ActionToolItem { ActionType = ActionType.Case, DisplayName = "Case", IconKind = "CheckboxMarked" });
@@ -233,21 +251,21 @@ public class DesignerViewModel : BindableBase
     public void AddConnection(Guid sourceNodeId, Guid targetNodeId, int sourcePortDir = 1, int targetPortDir = 3)
     {
         _logger.Info($"AddConnection called: {sourceNodeId} -> {targetNodeId}, SourcePort={sourcePortDir}, TargetPort={targetPortDir}");
-        
+
         // Check if connection already exists
         if (Connections.Any(c => c.SourceNodeId == sourceNodeId && c.TargetNodeId == targetNodeId))
         {
             _logger.Warn("Connection already exists, skipping");
             return;
         }
-        
+
         // Check for cycles
         if (WouldCreateCycle(sourceNodeId, targetNodeId))
         {
             _logger.Warn("Cannot create connection: would create a cycle");
             return;
         }
-        
+
         var connection = new ConnectionViewModel
         {
             Id = Guid.NewGuid(),
@@ -256,10 +274,11 @@ public class DesignerViewModel : BindableBase
             SourcePortDirection = sourcePortDir,  // 0=Top, 1=Right, 2=Bottom, 3=Left
             TargetPortDirection = targetPortDir
         };
-        
+
         Connections.Add(connection);
+        SelectedLine = connection;
         _logger.Info($"Connection added to collection. Total connections: {Connections.Count}");
-        
+
         UpdateConnectionPath(connection);
         _logger.Info($"Connection path updated. PathData: {connection.PathData?.Substring(0, Math.Min(50, connection.PathData?.Length ?? 0))}...");
     }
@@ -272,24 +291,24 @@ public class DesignerViewModel : BindableBase
         var visited = new HashSet<Guid>();
         var queue = new Queue<Guid>();
         queue.Enqueue(targetNodeId);
-        
+
         while (queue.Count > 0)
         {
             var current = queue.Dequeue();
             if (current == sourceNodeId)
                 return true;
-            
+
             if (visited.Contains(current))
                 continue;
-            
+
             visited.Add(current);
-            
+
             foreach (var conn in Connections.Where(c => c.SourceNodeId == current))
             {
                 queue.Enqueue(conn.TargetNodeId);
             }
         }
-        
+
         return false;
     }
 
@@ -300,7 +319,7 @@ public class DesignerViewModel : BindableBase
     {
         // 更新执行顺序
         UpdateExecutionOrders();
-        
+
         foreach (var connection in Connections)
         {
             UpdateConnectionPath(connection);
@@ -314,10 +333,10 @@ public class DesignerViewModel : BindableBase
     {
         int order = 1;
         var processed = new HashSet<Guid>();
-        
+
         // 找到起始节点（没有入边的节点）
         var startNodes = Nodes.Where(n => !Connections.Any(c => c.TargetNodeId == n.Id)).ToList();
-        
+
         foreach (var startNode in startNodes)
         {
             AssignOrderDFS(startNode.Id, ref order, processed);
@@ -328,9 +347,9 @@ public class DesignerViewModel : BindableBase
     {
         if (processed.Contains(nodeId))
             return;
-        
+
         processed.Add(nodeId);
-        
+
         // 为从该节点出发的所有连接分配顺序
         foreach (var conn in Connections.Where(c => c.SourceNodeId == nodeId))
         {
@@ -347,29 +366,29 @@ public class DesignerViewModel : BindableBase
     {
         var sourceNode = Nodes.FirstOrDefault(n => n.Id == connection.SourceNodeId);
         var targetNode = Nodes.FirstOrDefault(n => n.Id == connection.TargetNodeId);
-        
+
         if (sourceNode == null || targetNode == null)
         {
             _logger.Warn($"UpdateConnectionPath: Node not found. SourceNode={sourceNode != null}, TargetNode={targetNode != null}");
             return;
         }
-        
+
         _logger.Debug($"UpdateConnectionPath: Source({sourceNode.X}, {sourceNode.Y}), Target({targetNode.X}, {targetNode.Y})");
-        
+
         var culture = CultureInfo.InvariantCulture;
-        
+
         // Calculate port positions based on direction
         // 0=Top, 1=Right, 2=Bottom, 3=Left
         var (startX, startY) = GetPortPosition(sourceNode, connection.SourcePortDirection);
         var (endX, endY) = GetPortPosition(targetNode, connection.TargetPortDirection);
-        
+
         _logger.Debug($"Port positions: Start({startX:F1}, {startY:F1}), End({endX:F1}, {endY:F1})");
-        
+
         // Calculate control points for Bezier curve based on port directions
         var controlPointOffset = 80.0;
         string pathData;
         double arrowAngle;
-        
+
         // Determine arrow angle based on target port direction
         arrowAngle = connection.TargetPortDirection switch
         {
@@ -379,25 +398,28 @@ public class DesignerViewModel : BindableBase
             3 => 180,  // Left
             _ => 0
         };
-        
+
         // Create smooth Bezier curve based on port directions
         var (cp1X, cp1Y) = GetControlPoint(startX, startY, connection.SourcePortDirection, controlPointOffset);
         var (cp2X, cp2Y) = GetControlPoint(endX, endY, connection.TargetPortDirection, controlPointOffset);
-        
+
         pathData = string.Format(culture,
             "M {0:F1},{1:F1} C {2:F1},{3:F1} {4:F1},{5:F1} {6:F1},{7:F1}",
             startX, startY,
             cp1X, cp1Y,
             cp2X, cp2Y,
             endX, endY);
-        
+
         connection.PathData = pathData;
+        // write absolute points for UI bindings
+        connection.StartPoint = new System.Windows.Point(startX, startY);
+        connection.EndPoint = new System.Windows.Point(endX, endY);
         connection.ArrowX = endX;
         connection.ArrowY = endY;
         connection.ArrowAngle = arrowAngle;
-        
+
         _logger.Debug($"PathData generated: {pathData}");
-        
+
         // Generate arrow path
         var arrowSize = 8.0;
         var rad = arrowAngle * Math.PI / 180;
@@ -405,11 +427,11 @@ public class DesignerViewModel : BindableBase
         var ay1 = endY - arrowSize * Math.Sin(rad - Math.PI / 6);
         var ax2 = endX - arrowSize * Math.Cos(rad + Math.PI / 6);
         var ay2 = endY - arrowSize * Math.Sin(rad + Math.PI / 6);
-        
+
         connection.ArrowData = string.Format(culture,
             "M {0:F1},{1:F1} L {2:F1},{3:F1} L {4:F1},{5:F1} Z",
             endX, endY, ax1, ay1, ax2, ay2);
-        
+
         _logger.Debug($"ArrowData generated: {connection.ArrowData}");
     }
 
@@ -465,36 +487,49 @@ public class DesignerViewModel : BindableBase
             ZoomLevel = 1.0;
             return;
         }
-        
+
         // 计算所有节点的边界
         var minX = Nodes.Min(n => n.X);
         var minY = Nodes.Min(n => n.Y);
         var maxX = Nodes.Max(n => n.X + n.Width);
         var maxY = Nodes.Max(n => n.Y + n.Height);
-        
+
         // 假设可视区域为 800x600（实际应该从 View 获取）
         var viewWidth = 800.0;
         var viewHeight = 600.0;
         var padding = 50.0;
-        
+
         var contentWidth = maxX - minX + padding * 2;
         var contentHeight = maxY - minY + padding * 2;
-        
+
         var scaleX = viewWidth / contentWidth;
         var scaleY = viewHeight / contentHeight;
-        
+
         ZoomLevel = Math.Min(scaleX, scaleY);
     }
 
     private void DeleteSelected()
     {
-        if (SelectedNode == null) return;
-        
-        var toRemove = Connections.Where(c => c.SourceNodeId == SelectedNode.Id || c.TargetNodeId == SelectedNode.Id).ToList();
-        foreach (var conn in toRemove) Connections.Remove(conn);
-        
-        Nodes.Remove(SelectedNode);
-        SelectedNode = null;
+        // If a node is selected, delete the node and all its connections
+        if (SelectedNode != null)
+        {
+            var toRemove = Connections.Where(c => c.SourceNodeId == SelectedNode.Id || c.TargetNodeId == SelectedNode.Id).ToList();
+            foreach (var conn in toRemove)
+            {
+                Connections.Remove(conn);
+            }
+
+            Nodes.Remove(SelectedNode);
+            SelectedNode = null;
+            return;
+        }
+
+        // Otherwise, if a connection line is selected, delete only that connection
+        if (SelectedLine != null)
+        {
+            Connections.Remove(SelectedLine);
+            SelectedLine = null;
+        }
     }
 
     private void ClearAll()
@@ -521,7 +556,7 @@ public class DesignerViewModel : BindableBase
     {
         var dialog = new OpenFileDialog { Filter = "Motion Program (*.json)|*.json", Title = "Open Program" };
         if (dialog.ShowDialog() != true) return;
-        
+
         try
         {
             var json = await File.ReadAllTextAsync(dialog.FileName);
@@ -539,7 +574,7 @@ public class DesignerViewModel : BindableBase
     {
         var dialog = new SaveFileDialog { Filter = "Motion Program (*.json)|*.json", FileName = _currentProgram?.Name ?? "Program" };
         if (dialog.ShowDialog() != true) return;
-        
+
         try
         {
             var request = CreateSaveRequest(Path.GetFileNameWithoutExtension(dialog.FileName));
@@ -559,7 +594,7 @@ public class DesignerViewModel : BindableBase
     {
         var dialog = new SaveFileDialog { Filter = "JSON (*.json)|*.json", FileName = _currentProgram?.Name ?? "Program" };
         if (dialog.ShowDialog() != true) return;
-        
+
         try
         {
             var request = CreateSaveRequest(Path.GetFileNameWithoutExtension(dialog.FileName));
@@ -579,7 +614,7 @@ public class DesignerViewModel : BindableBase
     {
         return new SaveMotionProgramRequest(
             _currentProgram?.Id, name, "", "Default", false,
-            Nodes.Select(n => new ActionNodeDto(n.Id, n.Name, n.ActionType, n.Parameters, n.X, n.Y, n.Width, n.Height, 
+            Nodes.Select(n => new ActionNodeDto(n.Id, n.Name, n.ActionType, n.Parameters, n.X, n.Y, n.Width, n.Height,
                 n.Description, n.IsEnabled, n.TimeoutMs, n.RetryCount, n.ErrorHandling)).ToList(),
             Connections.Select(c => new NodeConnectionDto(c.Id, c.SourceNodeId, c.TargetNodeId, 0, 0, "", "")).ToList(),
             new Dictionary<string, object>()
@@ -590,18 +625,27 @@ public class DesignerViewModel : BindableBase
     {
         Nodes.Clear();
         Connections.Clear();
-        
+
         foreach (var node in program.Nodes)
         {
             Nodes.Add(new ActionNodeViewModel
             {
-                Id = node.Id, Name = node.Name, ActionType = node.ActionType, Parameters = node.Parameters,
-                X = node.X, Y = node.Y, Width = node.Width, Height = node.Height,
-                Description = node.Description, IsEnabled = node.IsEnabled,
-                TimeoutMs = node.TimeoutMs, RetryCount = node.RetryCount, ErrorHandling = node.ErrorHandling
+                Id = node.Id,
+                Name = node.Name,
+                ActionType = node.ActionType,
+                Parameters = node.Parameters,
+                X = node.X,
+                Y = node.Y,
+                Width = node.Width,
+                Height = node.Height,
+                Description = node.Description,
+                IsEnabled = node.IsEnabled,
+                TimeoutMs = node.TimeoutMs,
+                RetryCount = node.RetryCount,
+                ErrorHandling = node.ErrorHandling
             });
         }
-        
+
         foreach (var conn in program.Connections)
         {
             var source = Nodes.FirstOrDefault(n => n.Id == conn.SourceNodeId);
@@ -629,7 +673,7 @@ public class DesignerViewModel : BindableBase
     private async Task RunProgramAsync()
     {
         if (Nodes.Count == 0) { MessageBox.Show("Add nodes first", "Info"); return; }
-        
+
         try
         {
             var request = CreateSaveRequest(_currentProgram?.Name ?? "Temp");

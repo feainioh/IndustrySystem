@@ -5,10 +5,10 @@
              xmlns:viewModels="clr-namespace:IndustrySystem.MotionDesigner.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="Transparent">
-    
+
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        
+
         <!-- Grid Pattern Background -->
         <DrawingBrush x:Key="GridBrush" TileMode="Tile" 
                       Viewport="0,0,20,20" ViewportUnits="Absolute">
@@ -37,7 +37,7 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </UserControl.Resources>
-    
+
     <Grid x:Name="RootGrid">
         <ScrollViewer x:Name="MainScrollViewer" 
                       HorizontalScrollBarVisibility="Auto" 
@@ -53,29 +53,30 @@
                     MouseMove="OnCanvasMouseMove"
                     MouseLeftButtonUp="OnCanvasMouseLeftButtonUp"
                     MouseWheel="OnCanvasMouseWheel">
-                
+
                 <Canvas.LayoutTransform>
                     <ScaleTransform ScaleX="{Binding ZoomLevel, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                     ScaleY="{Binding ZoomLevel, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </Canvas.LayoutTransform>
-                
+
                 <!-- Background Grid Pattern -->
                 <Rectangle Width="3000" Height="3000" 
                            Fill="{StaticResource GridBrush}" 
                            IsHitTestVisible="False"/>
-                
-                <!-- TEST: Static connection line for debugging --><!--
+
+                <!-- TEST: Static connection line for debugging -->
+                <!--
                 <Line X1="200" Y1="200" X2="500" Y2="200" 
                       Stroke="Red" StrokeThickness="5"
                       StrokeDashArray="4,2"/>-->
                 <!--<Ellipse Canvas.Left="195" Canvas.Top="195" Width="10" Height="10" Fill="Red"/>
                 <Ellipse Canvas.Left="495" Canvas.Top="195" Width="10" Height="10" Fill="Red"/>
                 <TextBlock Canvas.Left="300" Canvas.Top="210" Text="TEST LINE" Foreground="Red" FontWeight="Bold"/>-->
-                
+
                 <!-- Connection Lines Layer (behind nodes) -->
                 <ItemsControl x:Name="ConnectionsLayer"
                               ItemsSource="{Binding DataContext.Connections, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                              IsHitTestVisible="False">
+                              IsHitTestVisible="true">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas IsItemsHost="True"/>
@@ -89,56 +90,19 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type viewModels:ConnectionViewModel}">
-                            <!--<Canvas>
-                                --><!-- Connection Path --><!--
-                                <Path Stroke="{DynamicResource PrimaryHueMidBrush}" 
-                                      StrokeThickness="2"
-                                      Fill="Transparent">
-                                    <Path.Style>
-                                        <Style TargetType="Path">
-                                            <Setter Property="Data" Value="{Binding PathData}"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                    <Setter Property="Stroke" Value="#4CAF50"/>
-                                                    <Setter Property="StrokeThickness" Value="3"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Path.Style>
-                                </Path>
-                                --><!-- Arrow Head --><!--
-                                <Path Fill="{DynamicResource PrimaryHueMidBrush}">
-                                    <Path.Style>
-                                        <Style TargetType="Path">
-                                            <Setter Property="Data" Value="{Binding ArrowData}"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                    <Setter Property="Fill" Value="#4CAF50"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Path.Style>
-                                </Path>
-                                --><!-- Execution Order Label --><!--
-                                <Border Canvas.Left="{Binding ArrowX}" 
-                                        Canvas.Top="{Binding ArrowY}"
-                                        Background="White" 
-                                        CornerRadius="8" 
-                                        Padding="4,2"
-                                        Margin="-20,-20,0,0"
-                                        Visibility="{Binding IsHighlighted, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <TextBlock Text="{Binding ExecutionOrder}" 
-                                               FontSize="10" 
-                                               FontWeight="Bold"
-                                               Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                                </Border>
-                            </Canvas>-->
+
                             <controls:ConnectionLineControl
-                                StartPoint="{Binding StartPoint}" EndPoint="{Binding EndPoint}" IsHitTestVisible="{Binding IsHitTestVisible}" ConnectionId="{Binding ConnectionId}" IsTemporary="{Binding IsTemporary}"/>
+                                StartPoint="{Binding StartPoint}"
+                                EndPoint="{Binding EndPoint}"
+                                IsHitTestVisible="{Binding IsHitTestVisible}" 
+                                ConnectionId="{Binding Id}" 
+                                IsTemporary="{Binding IsTemporary}"
+                                IsSelected="{Binding IsHighlighted, Mode=TwoWay}" 
+                                />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <!-- Nodes Layer -->
                 <ItemsControl x:Name="NodesLayer"
                               ItemsSource="{Binding DataContext.Nodes, RelativeSource={RelativeSource AncestorType=UserControl}}">
@@ -159,11 +123,11 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <!-- Temporary connections will be added programmatically here -->
             </Canvas>
         </ScrollViewer>
-        
+
         <!-- Minimap / Thumbnail Navigator -->
         <Border x:Name="MinimapBorder" Opacity=".5"
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
@@ -186,7 +150,7 @@
                                Fill="Transparent"
                                Cursor="Hand"/>
                 </Canvas>
-                
+
                 <!-- Toggle Minimap Button -->
                 <Button x:Name="ToggleMinimapButton"
                         Style="{StaticResource MaterialDesignIconButton}"
@@ -198,7 +162,7 @@
                 </Button>
             </Grid>
         </Border>
-        
+
         <!-- Floating Zoom Controls -->
         <materialDesign:Card x:Name="ZoomControls"
                              HorizontalAlignment="Left" VerticalAlignment="Top"

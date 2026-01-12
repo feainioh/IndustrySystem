@@ -80,7 +80,7 @@ public partial class ActionNodeControl : UserControl
         }
         
         System.Diagnostics.Debug.WriteLine($"[ActionNodeControl] Starting node drag");
-        
+
         // Start dragging
         _isDragging = true;
         _dragStart = e.GetPosition(this.Parent as IInputElement);
