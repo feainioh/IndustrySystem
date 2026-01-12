@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:IndustrySystem.MotionDesigner.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,7 +13,16 @@
             
             <!-- Define fallback brushes for compatibility -->
             <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#3F51B5"/>
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#7986CB"/>
+            <SolidColorBrush x:Key="SecondaryHueLightBrush" Color="#80CBC4"/>
+            
+            <!-- Value Converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
+            <converters:IsNotZeroConverter x:Key="IsNotZeroConverter"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

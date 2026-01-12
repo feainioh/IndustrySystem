@@ -1,0 +1,248 @@
+<UserControl x:Class="IndustrySystem.MotionDesigner.Views.PositionSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource MaterialDesignPaper}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:ColorZone Mode="PrimaryMid" Padding="12,8" materialDesign:ElevationAssist.Elevation="Dp2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding ImportConfigCommand}" 
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileImport" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock Text="Import" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveConfigCommand}" 
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock Text="Save" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ExportConfigCommand}" 
+                           Style="{StaticResource MaterialDesignOutlinedButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExport" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock Text="Export" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <TextBlock Grid.Column="1" 
+                          Text="{Binding StatusMessage}" 
+                          VerticalAlignment="Center" 
+                          HorizontalAlignment="Center"
+                          FontSize="14"
+                          Opacity="0.9"/>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Command="{Binding AddPositionCommand}" 
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="0,0,4,0" ToolTip="Add Position">
+                        <materialDesign:PackIcon Kind="Plus"/>
+                    </Button>
+                    <Button Command="{Binding DeletePositionCommand}" 
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           ToolTip="Delete Position">
+                        <materialDesign:PackIcon Kind="Delete"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <materialDesign:Card Grid.Row="1" Margin="8,8,8,0" Padding="12,8" materialDesign:ElevationAssist.Elevation="Dp1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                
+                <Border Grid.Column="0" Background="{DynamicResource PrimaryHueLightBrush}" CornerRadius="4" Padding="12,4" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FormatListBulleted" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding TotalPositionCount, StringFormat='Total: {0}'}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                
+                <Border Grid.Column="1" Background="{DynamicResource SecondaryHueLightBrush}" CornerRadius="4" Padding="12,4" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Engine" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding MotorPositionCount, StringFormat='Motors: {0}'}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                
+                <Border Grid.Column="2" Background="{DynamicResource SecondaryHueLightBrush}" CornerRadius="4" Padding="12,4" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Robot" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding RobotPositionCount, StringFormat='Robots: {0}'}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                
+                <Border Grid.Column="3" CornerRadius="4" Padding="12,4" Margin="0,0,8,0" Background="#1AFFC107">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding ModifiedCount, StringFormat='Modified: {0}'}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                
+                <TextBlock Grid.Column="5" Text="Filter:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Grid.Column="6" 
+                         ItemsSource="{Binding DeviceFilters}" 
+                         SelectedItem="{Binding SelectedDeviceFilter}"
+                         materialDesign:HintAssist.Hint="Select Device"/>
+            </Grid>
+        </materialDesign:Card>
+
+        <Grid Grid.Row="2" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="320"/>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}" Padding="12,8">
+                        <TextBlock Text="Position List" FontWeight="SemiBold"/>
+                    </Border>
+
+                    <TextBox Grid.Row="1" 
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                            materialDesign:HintAssist.Hint="Search positions..."
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            Margin="8"/>
+
+                    <DataGrid Grid.Row="2" 
+                             ItemsSource="{Binding FilteredPositions}"
+                             SelectedItem="{Binding SelectedPosition}"
+                             AutoGenerateColumns="False"
+                             CanUserAddRows="False"
+                             CanUserDeleteRows="False"
+                             SelectionMode="Single"
+                             SelectionUnit="FullRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Device Name" Binding="{Binding DeviceName}" Width="150" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Device Type" Binding="{Binding DeviceType}" Width="100" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Position Name" Binding="{Binding PositionName}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Position" Binding="{Binding Position}" Width="100"/>
+                            <DataGridTextColumn Header="Speed" Binding="{Binding Speed}" Width="80"/>
+                            <DataGridCheckBoxColumn Header="Modified" Binding="{Binding IsModified, Mode=OneWay}" Width="60" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Column="1" materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}" Padding="12,8">
+                        <TextBlock Text="Position Editor" FontWeight="SemiBold"/>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16">
+                            <TextBlock Text="Please select a position from the list" 
+                                      FontSize="14" 
+                                      Opacity="0.5"
+                                      HorizontalAlignment="Center"
+                                      Margin="0,50,0,0"
+                                      Visibility="{Binding SelectedPosition, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                            <StackPanel DataContext="{Binding SelectedPosition}"
+                                       Visibility="{Binding DataContext.SelectedPosition, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
+                                
+                                <TextBlock Text="{Binding DeviceName}" FontSize="18" FontWeight="Bold" Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding DeviceType}" FontSize="12" Opacity="0.6" Margin="0,0,0,16"/>
+                                
+                                <Separator Margin="0,0,0,16"/>
+                                
+                                <TextBlock Text="Position Name" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding PositionName}" 
+                                        IsReadOnly="True"
+                                        Margin="0,0,0,16"/>
+                                
+                                <TextBlock Text="Position Value" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" 
+                                        Margin="0,0,0,16"/>
+                                
+                                <TextBlock Text="Speed" FontWeight="Medium" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" 
+                                        Margin="0,0,0,16"/>
+                                
+                                <Separator Margin="0,0,0,16"/>
+                                
+                                <Button Command="{Binding DataContext.MoveToPositionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                       Style="{StaticResource MaterialDesignRaisedButton}"
+                                       Margin="0,0,0,8">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ArrowRight" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Move To Position" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Command="{Binding DataContext.TeachPositionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                       Style="{StaticResource MaterialDesignOutlinedButton}"
+                                       Margin="0,0,0,8">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="School" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Teach Current Position" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Command="{Binding DataContext.ResetPositionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                       Style="{StaticResource MaterialDesignOutlinedButton}"
+                                       Foreground="Orange">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Restore" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Reset To Original" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <Border Grid.Row="3" Background="{DynamicResource MaterialDesignBackground}" 
+               BorderBrush="{DynamicResource MaterialDesignDivider}" 
+               BorderThickness="0,1,0,0"
+               Padding="12,4">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="12" Opacity="0.7"/>
+        </Border>
+    </Grid>
+</UserControl>

@@ -19,4 +19,14 @@ public interface IDeviceConfigService
     /// 获取所有设备列表
     /// </summary>
     DeviceConfigDto? GetCurrentConfig();
+
+    /// <summary>
+    /// 保存设备配置
+    /// </summary>
+    Task SaveConfigAsync(DeviceConfigDto config);
+
+    /// <summary>
+    /// 导出设备配置到文件
+    /// </summary>
+    Task ExportToFileAsync(DeviceConfigDto config, string filePath);
 }
