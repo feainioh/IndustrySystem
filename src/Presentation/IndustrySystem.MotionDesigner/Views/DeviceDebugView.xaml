@@ -329,53 +329,53 @@
 
                             <!-- 电机调试 -->
                             <deviceDebug:MotorDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsAnyMotorSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding MotorDebugVM}"
+                                Visibility="{Binding DataContext.IsAnyMotorSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- IO 模块 -->
                             <deviceDebug:IODeviceControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsIODeviceSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding IODeviceDebugVM}"
+                                Visibility="{Binding DataContext.IsIODeviceSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 注射泵调试 -->
                             <deviceDebug:SyringePumpDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsSyringePumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding SyringePumpDebugVM}"
+                                Visibility="{Binding DataContext.IsSyringePumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 蠕动泵调试 -->
                             <deviceDebug:PeristalticPumpDebugConntrol 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsPeristalticPumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding PeristalticPumpDebugVM}"
+                                Visibility="{Binding DataContext.IsPeristalticPumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 自定义泵调试 -->
                             <deviceDebug:DiyPumpDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsDiyPumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding DiyPumpDebugVM}"
+                                Visibility="{Binding DataContext.IsDiyPumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- TCU温控调试 -->
                             <deviceDebug:TCUDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsTcuSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding TCUDebugVM}"
+                                Visibility="{Binding DataContext.IsTcuSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 离心机调试 -->
                             <deviceDebug:CentrifugalDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsCentrifugalSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding CentrifugalDebugVM}"
+                                Visibility="{Binding DataContext.IsCentrifugalSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 称重传感器调试 -->
                             <deviceDebug:WeightSensorDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsWeighingSensorSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding WeightSensorDebugVM}"
+                                Visibility="{Binding DataContext.IsWeighingSensorSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 扫码枪调试 -->
                             <deviceDebug:ScannerDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsScannerSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding ScannerDebugVM}"
+                                Visibility="{Binding DataContext.IsScannerSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
 
                             <!-- 机器人调试 -->
                             <deviceDebug:RobotDebugControl 
-                                DataContext="{Binding}"
-                                Visibility="{Binding IsRobotSelected, Converter={StaticResource BoolToVisConverter}}"/>
+                                DataContext="{Binding RobotDebugVM}"
+                                Visibility="{Binding DataContext.IsRobotSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

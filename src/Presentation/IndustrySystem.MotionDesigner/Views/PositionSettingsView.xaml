@@ -56,15 +56,33 @@
                           Opacity="0.9"/>
                 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Command="{Binding AddDeviceCommand}" 
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Margin="0,0,8,0" 
+                           ToolTip="添加新设备"
+                           Background="#4CAF50">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Add" Margin="0,0,4,0"/>
+                            <TextBlock Text="添加设备"/>
+                        </StackPanel>
+                    </Button>
                     <Button Command="{Binding AddPositionCommand}" 
-                           Style="{StaticResource MaterialDesignOutlinedButton}"
-                           Margin="0,0,4,0" ToolTip="Add Position">
-                        <materialDesign:PackIcon Kind="Plus"/>
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Margin="0,0,4,0"
+                           ToolTip="添加新位置"
+                           Background="#4CAF50">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Margin="0,0,4,0"/>
+                            <TextBlock Text="添加位置"/>
+                        </StackPanel>
                     </Button>
                     <Button Command="{Binding DeletePositionCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                           ToolTip="Delete Position">
-                        <materialDesign:PackIcon Kind="Delete"/>
+                           ToolTip="删除选中位置">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Delete" Margin="0,0,4,0"/>
+                            <TextBlock Text="删除"/>
+                        </StackPanel>
                     </Button>
                 </StackPanel>
             </Grid>

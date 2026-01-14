@@ -5,11 +5,15 @@ using System.IO.Ports;
 using System.Linq;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.MotionDesigner.Events;
 using IndustrySystem.MotionDesigner.Services;
+using IndustrySystem.MotionDesigner.ViewModels.DeviceDebug;
 using Microsoft.Win32;
 using NLog;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
+using PositionPointViewModel = IndustrySystem.MotionDesigner.Services.PositionPointViewModel;
 
 namespace IndustrySystem.MotionDesigner.ViewModels;
 
@@ -19,6 +23,7 @@ public class DeviceDebugViewModel : BindableBase
     
     private readonly IDeviceConfigService _configService;
     private readonly IHardwareController _hardwareController;
+    private readonly IEventAggregator _eventAggregator;
     
     private DeviceConfigDto? _currentConfig;
     private string _selectedDeviceType = "Motor";
@@ -158,6 +163,19 @@ public class DeviceDebugViewModel : BindableBase
     public bool IsScannerSelected => SelectedDevice?.OriginalDevice is ScannerDto;
     public bool IsCentrifugalSelected => SelectedDevice?.OriginalDevice is CentrifugalDeviceDto;
     public bool IsDiyPumpSelected => SelectedDevice?.OriginalDevice is DiyPumpDto;
+    
+    // 子 ViewModel
+    public MotorDebugViewModel MotorDebugVM { get; }
+    public SyringePumpDebugViewModel SyringePumpDebugVM { get; }
+    public PeristalticPumpDebugViewModel PeristalticPumpDebugVM { get; }
+    public DiyPumpDebugViewModel DiyPumpDebugVM { get; }
+    public IODeviceDebugViewModel IODeviceDebugVM { get; }
+    public TCUDebugViewModel TCUDebugVM { get; }
+    public RobotDebugViewModel RobotDebugVM { get; }
+    public ScannerDebugViewModel ScannerDebugVM { get; }
+    public CentrifugalDebugViewModel CentrifugalDebugVM { get; }
+    public WeightSensorDebugViewModel WeightSensorDebugVM { get; }
+    public ChillerDebugViewModel ChillerDebugVM { get; }
     
     // 选中设备的具体类型
     public MotorDto? SelectedMotor => SelectedDevice?.OriginalDevice as MotorDto;
@@ -772,10 +790,29 @@ public class DeviceDebugViewModel : BindableBase
     public ICommand DiyPumpJogNegativeCommand { get; }
     public ICommand DiyPumpQuickMoveCommand { get; }
 
-    public DeviceDebugViewModel(IDeviceConfigService configService, IHardwareController hardwareController)
+    public DeviceDebugViewModel(IDeviceConfigService configService, IHardwareController hardwareController, IEventAggregator eventAggregator)
     {
         _configService = configService;
         _hardwareController = hardwareController;
+        _eventAggregator = eventAggregator;
+        
+        // 创建子 ViewModel
+        MotorDebugVM = new MotorDebugViewModel(hardwareController);
+        SyringePumpDebugVM = new SyringePumpDebugViewModel(hardwareController);
+        PeristalticPumpDebugVM = new PeristalticPumpDebugViewModel(hardwareController);
+        DiyPumpDebugVM = new DiyPumpDebugViewModel(hardwareController);
+        IODeviceDebugVM = new IODeviceDebugViewModel(hardwareController);
+        TCUDebugVM = new TCUDebugViewModel(hardwareController);
+        RobotDebugVM = new RobotDebugViewModel(hardwareController);
+        ScannerDebugVM = new ScannerDebugViewModel(hardwareController);
+        CentrifugalDebugVM = new CentrifugalDebugViewModel(hardwareController);
+        WeightSensorDebugVM = new WeightSensorDebugViewModel(hardwareController);
+        ChillerDebugVM = new ChillerDebugViewModel(hardwareController);
+        
+        // 订阅位置更新事件（从 PositionSettingsView 同步到这里）
+        _eventAggregator.GetEvent<PositionUpdatedEvent>().Subscribe(OnPositionUpdated, ThreadOption.UIThread);
+        _eventAggregator.GetEvent<PositionAddedEvent>().Subscribe(OnPositionAdded, ThreadOption.UIThread);
+        _eventAggregator.GetEvent<PositionDeletedEvent>().Subscribe(OnPositionDeleted, ThreadOption.UIThread);
         
         ImportConfigCommand = new DelegateCommand(async () => await ImportConfigAsync());
         RefreshDeviceStatusCommand = new DelegateCommand(async () => await RefreshDeviceStatusAsync());
@@ -939,85 +976,58 @@ public class DeviceDebugViewModel : BindableBase
     private void UpdateDeviceDetails()
     {
         if (SelectedDevice == null) return;
-        MotorUnit = string.Empty;
-        IoChannels.Clear();
-        RaisePropertyChanged(nameof(IoDiChannels));
-        RaisePropertyChanged(nameof(IoDoChannels));
-        RaisePropertyChanged(nameof(IoAiChannels));
-        RaisePropertyChanged(nameof(IoAoChannels));
-        SyringeStatus = string.Empty;
-        PeristalticStatus = string.Empty;
-        CentrifugalStatus = string.Empty;
-        DiyPumpStatus = string.Empty;
+        
+        // 根据设备类型更新对应的子 ViewModel
         switch (SelectedDevice.OriginalDevice)
         {
             case MotorDto motor:
-                if (motor.Parameters != null)
-                {
-                    _motorSpeed = motor.Parameters.JogSpeed;
-                    MotorUnit = motor.Parameters.Unit;
-                    RaisePropertyChanged(nameof(MotorSpeed));
-                }
-                SelectedWorkPosition = motor.WorkPositions.FirstOrDefault();
+                MotorDebugVM.SelectedMotor = motor;
+                MotorDebugVM.SelectedEtherCATMotor = null;
                 break;
+                
             case EtherCATMotorDto ecatMotor:
-                if (ecatMotor.Parameters != null)
-                {
-                    _motorSpeed = ecatMotor.Parameters.JogSpeed;
-                    MotorUnit = ecatMotor.Parameters.Unit;
-                    RaisePropertyChanged(nameof(MotorSpeed));
-                }
-                SelectedWorkPosition = ecatMotor.WorkPositions.FirstOrDefault();
+                MotorDebugVM.SelectedMotor = null;
+                MotorDebugVM.SelectedEtherCATMotor = ecatMotor;
                 break;
-            case SyringePumpDto pump:
-                SyringeChannelIndex = pump.ChannelIndex;
+                
+            case SyringePumpDto syringePump:
+                SyringePumpDebugVM.SelectedPump = syringePump;
                 break;
-            case PeristalticPumpDto peristaltic:
-                PeristalticFlowRate = peristaltic.Parameters?.DefaultFlowRate ?? peristaltic.MaxFlowRate;
+                
+            case PeristalticPumpDto peristalticPump:
+                PeristalticPumpDebugVM.SelectedPump = peristalticPump;
                 break;
-            case EcatIODeviceDto io:
-                RebuildIoChannels(io);
-                break;
-            case WeighingSensorDto weighing:
-                SelectedWeighingPort = weighing.PortName ?? SelectedWeighingPort;
-                break;
-            case ScannerDto scanner:
-                ScannerIp = scanner.IpAddress;
-                ScannerPort = scanner.Port;
-                ScannerConnected = false;
-                ScannerResult = string.Empty;
-                ScannerStatus = string.Empty;
-                break;
-            case TcuDeviceDto tcu:
-                SelectedTcuPort = tcu.PortName ?? SelectedTcuPort;
-                TcuCurrentTemperature = 0;
-                TcuTargetTemperature = 25;
-                TcuConnected = false;
-                TcuCirculationEnabled = false;
-                break;
-            case CentrifugalDeviceDto centrifugal:
-                CentrifugalSpeed = centrifugal.DefaultParameters?.DefaultSpeed ?? centrifugal.Parameters?.MaxSpeed ?? 1000;
-                CentrifugalTime = centrifugal.DefaultParameters?.DefaultTime ?? 60;
-                CentrifugalRotorPosition = 1;
-                CentrifugalConnected = false;
-                CentrifugalRunning = false;
-                CentrifugalStatus = string.Empty;
-                break;
+                
             case DiyPumpDto diyPump:
-                DiyPumpChannel = 1;
-                DiyPumpConnected = false;
-                DiyPumpServoEnabled = false;
-                DiyPumpStatus = string.Empty;
+                DiyPumpDebugVM.SelectedPump = diyPump;
                 break;
+                
+            case EcatIODeviceDto ioDevice:
+                IODeviceDebugVM.SelectedDevice = ioDevice;
+                break;
+                
+            case TcuDeviceDto tcu:
+                TCUDebugVM.SelectedTcu = tcu;
+                break;
+                
             case JakaRobotDto robot:
-                RobotIp = robot.IpAddress;
-                RobotPort = robot.Port;
-                RobotConnected = false;
-                RobotEnabled = false;
-                RobotMoving = false;
-                RobotHasAlarm = false;
-                RobotCurrentTask = "空闲";
-                RobotStatus = string.Empty;
+                RobotDebugVM.SelectedRobot = robot;
+                break;
+                
+            case ScannerDto scanner:
+                ScannerDebugVM.SelectedScanner = scanner;
+                break;
+                
+            case CentrifugalDeviceDto centrifugal:
+                CentrifugalDebugVM.SelectedDevice = centrifugal;
+                break;
+                
+            case WeighingSensorDto weightSensor:
+                WeightSensorDebugVM.SelectedSensor = weightSensor;
+                break;
+                
+            case ChillerDeviceDto chiller:
+                ChillerDebugVM.SelectedChiller = chiller;
                 break;
         }
     }
@@ -1048,6 +1058,9 @@ public class DeviceDebugViewModel : BindableBase
             BuildUnifiedDeviceList(config);
             
             FilterDevices();
+            
+            // 发布配置导入事件，通知 PositionSettingsView 同步
+            _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Publish(config);
             
             StatusMessage = $"成功导入配置，共 {AllDevices.Count} 个设备";
         }
@@ -2835,6 +2848,159 @@ public class DeviceDebugViewModel : BindableBase
         await Task.Delay(50);
         RobotStatus = $"机器人 {SelectedJakaRobot.Name} 已恢复";
         StatusMessage = RobotStatus;
+    }
+    
+    // 位置同步事件处理 - 从 PositionSettingsView 同步到这里
+    private void OnPositionUpdated(PositionUpdatedEventArgs args)
+    {
+        if (CurrentConfig == null) return;
+        
+        try
+        {
+            // 更新 CAN 电机位置
+            var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == args.DeviceId);
+            if (motor != null)
+            {
+                var pos = motor.WorkPositions.FirstOrDefault(p => p.Name == args.PositionName);
+                if (pos != null)
+                {
+                    pos.Position = args.Position;
+                    pos.Speed = args.Speed;
+                    StatusMessage = $"位置已更新: {motor.Name} - {args.PositionName}";
+                }
+                return;
+            }
+            
+            // 更新 EtherCAT 电机位置
+            var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == args.DeviceId);
+            if (ecatMotor != null)
+            {
+                var pos = ecatMotor.WorkPositions.FirstOrDefault(p => p.Name == args.PositionName);
+                if (pos != null)
+                {
+                    pos.Position = args.Position;
+                    pos.Speed = args.Speed;
+                    StatusMessage = $"位置已更新: {ecatMotor.Name} - {args.PositionName}";
+                }
+                return;
+            }
+            
+            // 更新离心机位置
+            var centrifugal = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == args.DeviceId);
+            if (centrifugal != null)
+            {
+                var pos = centrifugal.WorkPositions.FirstOrDefault(p => p.Name == args.PositionName);
+                if (pos != null)
+                {
+                    pos.Position = args.Position;
+                    pos.Speed = args.Speed;
+                    StatusMessage = $"位置已更新: {centrifugal.Name} - {args.PositionName}";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "同步位置更新失败");
+        }
+    }
+    
+    private void OnPositionAdded(PositionPointViewModel position)
+    {
+        if (CurrentConfig == null) return;
+        
+        try
+        {
+            // 添加到对应设备
+            var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                motor.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+                StatusMessage = $"新位置已添加: {motor.Name} - {position.PositionName}";
+                return;
+            }
+            
+            var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (ecatMotor != null)
+            {
+                ecatMotor.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+                StatusMessage = $"新位置已添加: {ecatMotor.Name} - {position.PositionName}";
+                return;
+            }
+            
+            var centrifugal = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
+            if (centrifugal != null)
+            {
+                centrifugal.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+                StatusMessage = $"新位置已添加: {centrifugal.Name} - {position.PositionName}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "同步添加位置失败");
+        }
+    }
+    
+    private void OnPositionDeleted(PositionPointViewModel position)
+    {
+        if (CurrentConfig == null) return;
+        
+        try
+        {
+            // 从对应设备删除
+            var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                var pos = motor.WorkPositions.FirstOrDefault(p => p.Name == position.PositionName);
+                if (pos != null)
+                {
+                    motor.WorkPositions.Remove(pos);
+                    StatusMessage = $"位置已删除: {motor.Name} - {position.PositionName}";
+                }
+                return;
+            }
+            
+            var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (ecatMotor != null)
+            {
+                var pos = ecatMotor.WorkPositions.FirstOrDefault(p => p.Name == position.PositionName);
+                if (pos != null)
+                {
+                    ecatMotor.WorkPositions.Remove(pos);
+                    StatusMessage = $"位置已删除: {ecatMotor.Name} - {position.PositionName}";
+                }
+                return;
+            }
+            
+            var centrifugal = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
+            if (centrifugal != null)
+            {
+                var pos = centrifugal.WorkPositions.FirstOrDefault(p => p.Name == position.PositionName);
+                if (pos != null)
+                {
+                    centrifugal.WorkPositions.Remove(pos);
+                    StatusMessage = $"位置已删除: {centrifugal.Name} - {position.PositionName}";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "同步删除位置失败");
+        }
     }
 }
 public class IoChannelControlItem : BindableBase

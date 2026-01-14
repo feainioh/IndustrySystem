@@ -47,13 +47,3 @@ public class PositionDeletedEvent : PubSubEvent<PositionPointViewModel>
 {
 }
 
-public class PositionPointViewModel
-{
-    public string DeviceId { get; set; } = string.Empty;
-    public string DeviceName { get; set; } = string.Empty;
-    public string DeviceType { get; set; } = string.Empty;
-    public string PositionName { get; set; } = string.Empty;
-    public double Position { get; set; }
-    public double Speed { get; set; }
-    public bool IsModified { get; set; }
-}
