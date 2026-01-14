@@ -3,15 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:deviceDebug="clr-namespace:IndustrySystem.MotionDesigner.Controls.DeviceDebug"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource MaterialDesignPaper}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         
+        <!-- Inverse Boolean to Visibility Converter -->
+        <Style x:Key="InverseBooleanToVisibilityStyle" TargetType="FrameworkElement">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsDeviceSelected}" Value="False">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
         <!-- 设备项模板 -->
         <DataTemplate x:Key="DeviceItemTemplate">
-            <Grid Margin="4,2">
+            <Grid Margin="8,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -20,21 +31,23 @@
                 <materialDesign:PackIcon Grid.Column="0" 
                                         Kind="{Binding IconKind, FallbackValue=Cog}" 
                                         VerticalAlignment="Center" 
-                                        Margin="0,0,8,0"
-                                        Opacity="0.6"/>
+                                        Margin="0,0,12,0"
+                                        Width="20"
+                                        Height="20"
+                                        Opacity="0.7"/>
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Name}" FontWeight="Medium"/>
-                    <TextBlock Text="{Binding DeviceType}" FontSize="11" Opacity="0.6"/>
+                    <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"/>
+                    <TextBlock Text="{Binding DeviceType}" FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
                 </StackPanel>
                 <Ellipse Grid.Column="2" 
-                        Width="8" Height="8" 
+                        Width="10" Height="10" 
                         VerticalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="Green"/>
+                            <Setter Property="Fill" Value="#4CAF50"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsEnabled}" Value="False">
-                                    <Setter Property="Fill" Value="Gray"/>
+                                    <Setter Property="Fill" Value="#9E9E9E"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -47,7 +60,7 @@
         <HierarchicalDataTemplate x:Key="CategoryTemplate" 
                                   ItemsSource="{Binding Devices}"
                                   ItemTemplate="{StaticResource DeviceItemTemplate}">
-            <Grid Margin="2">
+            <Grid Margin="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -56,19 +69,23 @@
                 <materialDesign:PackIcon Grid.Column="0" 
                                         Kind="{Binding IconKind}" 
                                         VerticalAlignment="Center" 
-                                        Margin="0,0,8,0"
+                                        Margin="0,0,12,0"
+                                        Width="22"
+                                        Height="22"
                                         Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                 <TextBlock Grid.Column="1" 
                           Text="{Binding CategoryName}" 
                           FontWeight="SemiBold" 
+                          FontSize="15"
                           VerticalAlignment="Center"/>
                 <Border Grid.Column="2" 
                        Background="{DynamicResource PrimaryHueLightBrush}" 
-                       CornerRadius="8"
-                       Padding="6,2"
-                       Margin="4,0,0,0">
+                       CornerRadius="10"
+                       Padding="8,4"
+                       Margin="8,0,0,0">
                     <TextBlock Text="{Binding DeviceCount}" 
-                              FontSize="11" 
+                              FontSize="12" 
+                              FontWeight="Medium"
                               Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"/>
                 </Border>
             </Grid>
@@ -83,7 +100,7 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部工具栏 -->
-        <materialDesign:ColorZone Mode="PrimaryMid" Padding="12,8" materialDesign:ElevationAssist.Elevation="Dp2">
+        <materialDesign:ColorZone Mode="PrimaryMid" Padding="16,12" materialDesign:ElevationAssist.Elevation="Dp4">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -91,47 +108,57 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Command="{Binding ImportConfigCommand}" 
                            Style="{StaticResource MaterialDesignRaisedButton}"
-                           Margin="0,0,8,0">
+                           Height="36"
+                           Margin="0,0,12,0">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileImport" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <materialDesign:PackIcon Kind="FileImport" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="导入配置" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding RefreshDeviceStatusCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Height="36"
                            IsEnabled="{Binding IsDeviceSelected}">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="刷新状态" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
                 
-                <TextBlock Grid.Column="1" 
-                          Text="{Binding StatusMessage}" 
-                          VerticalAlignment="Center" 
-                          HorizontalAlignment="Center"
-                          FontSize="14"
-                          Opacity="0.9"/>
+                <StackPanel Grid.Column="1" 
+                           Orientation="Horizontal"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Information" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                              FontSize="14"
+                              FontWeight="Medium"
+                              Opacity="0.95"/>
+                </StackPanel>
                 
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Command="{Binding ConnectDeviceCommand}" 
-                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Height="36"
                            IsEnabled="{Binding IsDeviceSelected}"
-                           Margin="0,0,4,0">
+                           Background="#4CAF50"
+                           BorderBrush="#4CAF50"
+                           Margin="0,0,8,0">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Link" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <materialDesign:PackIcon Kind="Link" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="连接" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding DisconnectDeviceCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Height="36"
                            IsEnabled="{Binding IsDeviceSelected}">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="LinkOff" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <materialDesign:PackIcon Kind="LinkOff" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="断开" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
@@ -140,14 +167,14 @@
         </materialDesign:ColorZone>
 
         <!-- 主内容区域 -->
-        <Grid Grid.Row="1" Margin="8">
+        <Grid Grid.Row="1" Margin="16">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="380"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- 左侧设备列表 -->
-            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" materialDesign:ElevationAssist.Elevation="Dp2">
+            <materialDesign:Card Grid.Column="0" Margin="0,0,16,0" materialDesign:ElevationAssist.Elevation="Dp4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -155,472 +182,235 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}" Padding="12,8">
+                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}" Padding="16,12">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="设备列表" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" 
-                                      Text="{Binding AllDevices.Count, StringFormat='共 {0} 个设备'}" 
-                                      Opacity="0.7"
-                                      VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Devices" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="设备列表" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border Grid.Column="1"
+                                   Background="{DynamicResource PrimaryHueMidBrush}"
+                                   CornerRadius="12"
+                                   Padding="10,4">
+                                <TextBlock Text="{Binding AllDevices.Count, StringFormat='共 {0} 个设备'}" 
+                                          FontSize="12"
+                                          FontWeight="Medium"
+                                          Foreground="White"/>
+                            </Border>
                         </Grid>
                     </Border>
-
                     <TextBox Grid.Row="1" 
                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="搜索设备..."
                             materialDesign:TextFieldAssist.HasClearButton="True"
-                            Margin="8"/>
+                            Margin="12,12,12,8"
+                            FontSize="14"/>
 
                     <!-- 使用 TreeView 显示分组设备 -->
-                    <TreeView Grid.Row="2" 
-                             x:Name="DeviceTreeView"
-                             ItemsSource="{Binding DeviceCategories}"
-                             ItemTemplate="{StaticResource CategoryTemplate}"
-                             VirtualizingStackPanel.IsVirtualizing="True"
-                             VirtualizingStackPanel.VirtualizationMode="Recycling"
-                             SelectedItemChanged="DeviceTreeView_SelectedItemChanged">
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                                <Setter Property="Padding" Value="4,2"/>
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                    </TreeView>
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <TreeView x:Name="DeviceTreeView"
+                                 ItemsSource="{Binding DeviceCategories}"
+                                 ItemTemplate="{StaticResource CategoryTemplate}"
+                                 VirtualizingStackPanel.IsVirtualizing="True"
+                                 VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                 SelectedItemChanged="DeviceTreeView_SelectedItemChanged"
+                                 Margin="8,0,8,8">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                    <Setter Property="Padding" Value="8,6"/>
+                                    <Setter Property="Margin" Value="0,2"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                        </TreeView>
+                    </ScrollViewer>
                 </Grid>
             </materialDesign:Card>
 
             <!-- 右侧设备详情 -->
-            <materialDesign:Card Grid.Column="1" materialDesign:ElevationAssist.Elevation="Dp2">
+            <materialDesign:Card Grid.Column="1" materialDesign:ElevationAssist.Elevation="Dp4">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel Margin="16">
-                        <TextBlock Text="请从左侧列表选择设备" 
-                                  FontSize="16" 
-                                  Opacity="0.5"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,100,0,0"
-                                  Visibility="{Binding IsDeviceSelected, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                        
-                        <!-- 设备基本信息 -->
-                        <StackPanel Visibility="{Binding IsDeviceSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock Text="{Binding SelectedDevice.Name}" FontSize="20" FontWeight="Bold" Margin="0,0,0,4"/>
-                            <TextBlock Text="{Binding SelectedDevice.DeviceType}" FontSize="14" Opacity="0.7" Margin="0,0,0,8"/>
-                            <TextBlock Text="{Binding SelectedDevice.DeviceId, StringFormat='设备ID: {0}'}" FontSize="12" Opacity="0.5" Margin="0,0,0,16"/>
-                            <Separator Margin="0,0,0,16"/>
-                        </StackPanel>
+                    <StackPanel Margin="20">
+                        <!-- 未选择设备提示 -->
+                        <Border Background="{DynamicResource MaterialDesignDivider}" 
+                               CornerRadius="12" 
+                               Padding="40,60"
+                               Style="{StaticResource InverseBooleanToVisibilityStyle}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Devices" 
+                                                        Width="64" 
+                                                        Height="64" 
+                                                        HorizontalAlignment="Center"
+                                                        Opacity="0.3"
+                                                        Margin="0,0,0,16"/>
+                                <TextBlock Text="请从左侧列表选择设备" 
+                                          FontSize="18" 
+                                          FontWeight="Medium"
+                                          Opacity="0.6" 
+                                          HorizontalAlignment="Center"/>
+                                <TextBlock Text="选择设备后可进行调试和配置操作" 
+                                          FontSize="14" 
+                                          Opacity="0.5" 
+                                          HorizontalAlignment="Center"
+                                          Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
 
-                        <!-- CAN电机/EtherCAT电机 详情面板 -->
-                        <StackPanel Visibility="{Binding IsMotorSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="设备参数" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <Grid Margin="8">
+                        <!-- 已选择设备信息 -->
+                        <StackPanel Visibility="{Binding IsDeviceSelected, Converter={StaticResource BoolToVisConverter}}">
+                            <!-- 设备头部信息 -->
+                            <Border Background="{DynamicResource PrimaryHueLightBrush}" 
+                                   CornerRadius="12" 
+                                   Padding="20,16"
+                                   Margin="0,0,0,20">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
                                     
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="类型:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedMotor.Type}" VerticalAlignment="Center" Margin="0,4"/>
+                                    <materialDesign:PackIcon Kind="Cog" 
+                                                            Width="48" 
+                                                            Height="48"
+                                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                            VerticalAlignment="Center"
+                                                            Margin="0,0,16,0"/>
                                     
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="轴号:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedMotor.AxisId}" VerticalAlignment="Center" Margin="0,4"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding SelectedDevice.Name}" 
+                                                  FontSize="22" 
+                                                  FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding SelectedDevice.DeviceType}" 
+                                                  FontSize="14" 
+                                                  Opacity="0.7"
+                                                  Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding SelectedDevice.DeviceId, StringFormat='设备ID: {0}'}" 
+                                                  FontSize="13" 
+                                                  Opacity="0.6"
+                                                  Margin="0,4,0,0"/>
+                                    </StackPanel>
                                     
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="通信ID:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedMotor.CommunicationId}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="脉冲/转:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedMotor.Parameters.PulsesPerRevolution}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="减速比:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedMotor.Parameters.GearRatio}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="行程/转:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedMotor.Parameters.DisplacementPerRevolution}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="单位:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding SelectedMotor.Parameters.Unit}" VerticalAlignment="Center" Margin="0,4"/>
+                                    <StackPanel Grid.Column="2" 
+                                               Orientation="Horizontal"
+                                               VerticalAlignment="Center">
+                                        <Button Command="{Binding ConnectDeviceCommand}" 
+                                               Style="{StaticResource MaterialDesignRaisedButton}"
+                                               Background="#4CAF50"
+                                               BorderBrush="#4CAF50"
+                                               Height="36"
+                                               Margin="0,0,8,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Plug" Margin="0,0,8,0"/>
+                                                <TextBlock Text="连接"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Command="{Binding DisconnectDeviceCommand}" 
+                                               Style="{StaticResource MaterialDesignOutlinedButton}"
+                                               Height="36">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="PowerPlugOffOutline" Margin="0,0,8,0"/>
+                                                <TextBlock Text="断开"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
-                            </Expander>
+                            </Border>
 
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="运动控制" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <StackPanel Margin="8">
-                                    <Grid Margin="0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="60"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="目标位置:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding MotorTargetPosition}" Margin="8,0"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding SelectedMotor.Parameters.Unit}" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    
-                                    <Grid Margin="0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="60"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="速度:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding MotorSpeed}" Margin="8,0"/>
-                                        <TextBlock Grid.Column="2" Text="/s" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    
-                                    <CheckBox Content="相对运动" IsChecked="{Binding MotorRelative}" Margin="0,4"/>
-                                    
-                                    <Grid Margin="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="当前位置:" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding MotorPosition}" FontWeight="Bold" FontSize="16"/>
-                                    </Grid>
-                                    
-                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                        <Button Command="{Binding MotorMoveCommand}" 
-                                               Style="{StaticResource MaterialDesignRaisedButton}"
-                                               Margin="0,0,8,0" Content="移动"/>
-                                        <Button Command="{Binding MotorHomeCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}"
-                                               Margin="0,0,8,0" Content="回原点"/>
-                                        <Button Command="{Binding MotorStopCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}"
-                                               Margin="0,0,8,0" Content="停止"
-                                               Foreground="Red"/>
-                                        <Button Command="{Binding MotorGetPositionCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}" Content="读取位置"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Expander>
+                            <!-- 设备调试控件 -->
+                            <!-- 通信类设备 -->
+                            <deviceDebug:CommunicationDeviceControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsCommunicationDeviceSelected, Converter={StaticResource BoolToVisConverter}}"/>
 
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="工作位置" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <DataGrid ItemsSource="{Binding SelectedMotor.WorkPositions}"
-                                         AutoGenerateColumns="False"
-                                         CanUserAddRows="False"
-                                         CanUserDeleteRows="False"
-                                         IsReadOnly="True"
-                                         Margin="8">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="名称" Binding="{Binding Name}" Width="*"/>
-                                        <DataGridTextColumn Header="位置" Binding="{Binding Position}" Width="100"/>
-                                        <DataGridTextColumn Header="速度" Binding="{Binding Speed}" Width="100"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </Expander>
+                            <!-- 电机调试 -->
+                            <deviceDebug:MotorDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsAnyMotorSelected, Converter={StaticResource BoolToVisConverter}}"/>
 
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="状态" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <Border BorderBrush="{DynamicResource MaterialDesignDivider}" 
-                                       BorderThickness="1" 
-                                       Margin="8" 
-                                       Padding="12"
-                                       Background="{DynamicResource MaterialDesignBackground}"
-                                       CornerRadius="4">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        
-                                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,4">
-                                            <Ellipse Width="10" Height="10" Margin="0,0,8,0">
-                                                <Ellipse.Style>
-                                                    <Style TargetType="Ellipse">
-                                                        <Setter Property="Fill" Value="Gray"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding MotorStatus.IsOnline}" Value="True">
-                                                                <Setter Property="Fill" Value="Green"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Ellipse.Style>
-                                            </Ellipse>
-                                            <TextBlock Text="在线"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,4">
-                                            <Ellipse Width="10" Height="10" Margin="0,0,8,0">
-                                                <Ellipse.Style>
-                                                    <Style TargetType="Ellipse">
-                                                        <Setter Property="Fill" Value="Gray"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding MotorStatus.IsMoving}" Value="True">
-                                                                <Setter Property="Fill" Value="Orange"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Ellipse.Style>
-                                            </Ellipse>
-                                            <TextBlock Text="运动中"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,4">
-                                            <Ellipse Width="10" Height="10" Margin="0,0,8,0">
-                                                <Ellipse.Style>
-                                                    <Style TargetType="Ellipse">
-                                                        <Setter Property="Fill" Value="Gray"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding MotorStatus.IsHomed}" Value="True">
-                                                                <Setter Property="Fill" Value="Green"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Ellipse.Style>
-                                            </Ellipse>
-                                            <TextBlock Text="已回原"/>
-                                        </StackPanel>
-                                        
-                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,4">
-                                            <Ellipse Width="10" Height="10" Margin="0,0,8,0">
-                                                <Ellipse.Style>
-                                                    <Style TargetType="Ellipse">
-                                                        <Setter Property="Fill" Value="Gray"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding MotorStatus.HasError}" Value="True">
-                                                                <Setter Property="Fill" Value="Red"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Ellipse.Style>
-                                            </Ellipse>
-                                            <TextBlock Text="故障"/>
-                                        </StackPanel>
-                                        
-                                        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" 
-                                                  Text="{Binding MotorStatus.ErrorMessage}" 
-                                                  Foreground="Red"
-                                                  TextWrapping="Wrap"
-                                                  Margin="0,8,0,0"
-                                                  Visibility="{Binding MotorStatus.HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </Grid>
-                                </Border>
-                            </Expander>
+                            <!-- IO 模块 -->
+                            <deviceDebug:IODeviceControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsIODeviceSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 注射泵调试 -->
+                            <deviceDebug:SyringePumpDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsSyringePumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 蠕动泵调试 -->
+                            <deviceDebug:PeristalticPumpDebugConntrol 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsPeristalticPumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 自定义泵调试 -->
+                            <deviceDebug:DiyPumpDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsDiyPumpSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- TCU温控调试 -->
+                            <deviceDebug:TCUDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsTcuSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 离心机调试 -->
+                            <deviceDebug:CentrifugalDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsCentrifugalSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 称重传感器调试 -->
+                            <deviceDebug:WeightSensorDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsWeighingSensorSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 扫码枪调试 -->
+                            <deviceDebug:ScannerDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsScannerSelected, Converter={StaticResource BoolToVisConverter}}"/>
+
+                            <!-- 机器人调试 -->
+                            <deviceDebug:RobotDebugControl 
+                                DataContext="{Binding}"
+                                Visibility="{Binding IsRobotSelected, Converter={StaticResource BoolToVisConverter}}"/>
                         </StackPanel>
-
-                        <!-- TCU 温控面板 -->
-                        <StackPanel Visibility="{Binding IsTcuSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="通信参数" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <Grid Margin="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="端口:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTcuDevice.PortName}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="波特率:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTcuDevice.BaudRate}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="数据位:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTcuDevice.DataBits}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="校验位:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedTcuDevice.Parity}" VerticalAlignment="Center" Margin="0,4"/>
-                                    
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="从站ID:" VerticalAlignment="Center" Margin="0,4"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedTcuDevice.SlaveId}" VerticalAlignment="Center" Margin="0,4"/>
-                                </Grid>
-                            </Expander>
-
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="温度控制" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <StackPanel Margin="8">
-                                    <Grid Margin="0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="40"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="目标温度:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding TcuTargetTemperature}" Margin="8,0"/>
-                                        <TextBlock Grid.Column="2" Text="℃" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    
-                                    <Grid Margin="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="当前温度:" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding TcuCurrentTemperature, StringFormat='{}{0:F1} ℃'}" FontWeight="Bold" FontSize="16"/>
-                                    </Grid>
-                                    
-                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                        <Button Command="{Binding TcuSetTemperatureCommand}" 
-                                               Style="{StaticResource MaterialDesignRaisedButton}"
-                                               Margin="0,0,8,0" Content="设置温度"/>
-                                        <Button Command="{Binding TcuStartCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}"
-                                               Margin="0,0,8,0" Content="启动"/>
-                                        <Button Command="{Binding TcuStopCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}"
-                                               Foreground="Red" Content="停止"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Expander>
-                        </StackPanel>
-
-                        <!-- IO设备面板 - 统一显示所有IO通道 -->
-                        <StackPanel Visibility="{Binding IsIODeviceSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <TextBlock Text="IO调试" FontWeight="SemiBold" FontSize="16"/>
-                                </Expander.Header>
-                                <StackPanel Margin="8">
-                                    <Grid Margin="0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="通道号:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Column="1" Text="{Binding IoChannelIndex}" Margin="8,0"/>
-                                    </Grid>
-                                    
-                                    <Grid Margin="0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="输出值:" VerticalAlignment="Center"/>
-                                        <ToggleButton Grid.Column="1" 
-                                                     IsChecked="{Binding IoOutputValue}" 
-                                                     Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                                     HorizontalAlignment="Left"/>
-                                    </Grid>
-                                    
-                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                        <Button Command="{Binding IoSetOutputCommand}" 
-                                               Style="{StaticResource MaterialDesignRaisedButton}"
-                                               Margin="0,0,8,0" Content="设置输出"/>
-                                        <Button Command="{Binding IoGetInputCommand}" 
-                                               Style="{StaticResource MaterialDesignOutlinedButton}" Content="读取输入"/>
-                                    </StackPanel>
-                                    
-                                    <Grid Margin="0,16,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="输入值:" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" FontWeight="Bold" FontSize="16">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="OFF"/>
-                                                    <Setter Property="Foreground" Value="Gray"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IoInputValue}" Value="True">
-                                                            <Setter Property="Text" Value="ON"/>
-                                                            <Setter Property="Foreground" Value="Green"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Grid>
-                                </StackPanel>
-                            </Expander>
-
-                            <Expander IsExpanded="True" Margin="0,0,0,8">
-                                <Expander.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="IO通道列表" FontWeight="SemiBold" FontSize="16"/>
-                                        <TextBlock Text="{Binding SelectedEcatIODevice.IoChannels.Count, StringFormat=' ({0}个通道)'}" 
-                                                  FontSize="14" Opacity="0.7" VerticalAlignment="Bottom" Margin="4,0,0,0"/>
-                                    </StackPanel>
-                                </Expander.Header>
-                                <DataGrid ItemsSource="{Binding SelectedEcatIODevice.IoChannels}"
-                                         AutoGenerateColumns="False"
-                                         CanUserAddRows="False"
-                                         CanUserDeleteRows="False"
-                                         IsReadOnly="True"
-                                         MaxHeight="400"
-                                         Margin="8">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="60"/>
-                                        <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*"/>
-                                        <DataGridTextColumn Header="类型" Binding="{Binding IoType}" Width="50"/>
-                                        <DataGridTextColumn Header="默认值" Binding="{Binding DefaultValue}" Width="60"/>
-                                        <DataGridCheckBoxColumn Header="启用" Binding="{Binding IsEnabled}" Width="50"/>
-                                    </DataGrid.Columns>
-                                    <DataGrid.GroupStyle>
-                                        <GroupStyle>
-                                            <GroupStyle.HeaderTemplate>
-                                                <DataTemplate>
-                                                    <Border Background="{DynamicResource PrimaryHueLightBrush}" Padding="8,4">
-                                                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </GroupStyle.HeaderTemplate>
-                                        </GroupStyle>
-                                    </DataGrid.GroupStyle>
-                                </DataGrid>
-                            </Expander>
-                        </StackPanel>
-
                     </StackPanel>
                 </ScrollViewer>
             </materialDesign:Card>
         </Grid>
 
         <!-- 底部状态栏 -->
-        <Border Grid.Row="2" Background="{DynamicResource MaterialDesignBackground}" 
+        <Border Grid.Row="2" 
+               Background="{DynamicResource MaterialDesignBackground}" 
                BorderBrush="{DynamicResource MaterialDesignDivider}" 
                BorderThickness="0,1,0,0"
-               Padding="12,4">
+               Padding="16,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusMessage}" FontSize="12" Opacity="0.7"/>
-                <TextBlock Grid.Column="1" FontSize="12" Opacity="0.5">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="已选择: {0}">
-                            <Binding Path="SelectedDevice.Name" FallbackValue="无"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="InformationOutline" 
+                                            Width="16" 
+                                            Height="16" 
+                                            Margin="0,0,8,0" 
+                                            VerticalAlignment="Center"
+                                            Opacity="0.6"/>
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="13" Opacity="0.7"/>
+                </StackPanel>
+                <Border Grid.Column="1"
+                       Background="{DynamicResource PrimaryHueLightBrush}"
+                       CornerRadius="8"
+                       Padding="12,4">
+                    <TextBlock FontSize="13" FontWeight="Medium">
+                        <Run Text="已选择:"/>
+                        <Run Text="{Binding SelectedDevice.Name, FallbackValue='无'}" FontWeight="Bold"/>
+                    </TextBlock>
+                </Border>
             </Grid>
         </Border>
     </Grid>

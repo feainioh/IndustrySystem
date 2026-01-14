@@ -1,0 +1,207 @@
+<UserControl x:Class="IndustrySystem.MotionDesigner.Controls.DeviceDebug.CommunicationDeviceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <materialDesign:Card Padding="24" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                <materialDesign:PackIcon Kind="Lan" Width="24" Height="24"/>
+                <TextBlock Text="通信设备配置" FontWeight="SemiBold" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                <Border Background="{DynamicResource PrimaryHueLightBrush}" 
+                       CornerRadius="12" Padding="12,4" Margin="16,0,0,0">
+                    <TextBlock Text="可编辑" FontSize="12" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- CAN 设备配置 -->
+            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                   BorderThickness="1" 
+                   CornerRadius="8" 
+                   Padding="20"
+                   Margin="0,0,0,16"
+                   Visibility="{Binding IsCanDeviceSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="CAN 设备配置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,16"/>
+                    
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="设备名称" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" 
+                                Text="{Binding SelectedCanDevice.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,0,12"
+                                materialDesign:HintAssist.Hint="输入设备名称"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="设备索引" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" 
+                                Text="{Binding SelectedCanDevice.DeviceIndex, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,0,0"
+                                materialDesign:HintAssist.Hint="输入设备索引"/>
+                    </Grid>
+
+                    <TextBlock Text="CAN 通道配置" FontWeight="SemiBold" Margin="0,16,0,12"/>
+                    <DataGrid ItemsSource="{Binding SelectedCanDevice.Channels}" 
+                             AutoGenerateColumns="False" 
+                             CanUserAddRows="False" 
+                             CanUserDeleteRows="False" 
+                             MaxHeight="300">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="通道" Binding="{Binding ChannelIndex}" Width="80" IsReadOnly="True"/>
+                            <DataGridComboBoxColumn Header="波特率" 
+                                                   SelectedItemBinding="{Binding BaudRate, UpdateSourceTrigger=PropertyChanged}" 
+                                                   Width="120">
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemsSource">
+                                            <Setter.Value>
+                                                <x:Array Type="sys:String">
+                                                    <sys:String>5000</sys:String>
+                                                    <sys:String>10000</sys:String>
+                                                    <sys:String>20000</sys:String>
+                                                    <sys:String>50000</sys:String>
+                                                    <sys:String>100000</sys:String>
+                                                    <sys:String>125000</sys:String>
+                                                    <sys:String>250000</sys:String>
+                                                    <sys:String>500000</sys:String>
+                                                    <sys:String>800000</sys:String>
+                                                    <sys:String>1000000</sys:String>
+                                                </x:Array>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ItemsSource">
+                                            <Setter.Value>
+                                                <x:Array Type="sys:String">
+                                                    <sys:String>5000</sys:String>
+                                                    <sys:String>10000</sys:String>
+                                                    <sys:String>20000</sys:String>
+                                                    <sys:String>50000</sys:String>
+                                                    <sys:String>100000</sys:String>
+                                                    <sys:String>125000</sys:String>
+                                                    <sys:String>250000</sys:String>
+                                                    <sys:String>500000</sys:String>
+                                                    <sys:String>800000</sys:String>
+                                                    <sys:String>1000000</sys:String>
+                                                </x:Array>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridTextColumn Header="类型" Binding="{Binding CanType, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                            <DataGridTextColumn Header="模式" Binding="{Binding Mode, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                            <DataGridCheckBoxColumn Header="启用" Binding="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                            <DataGridTextColumn Header="描述" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- EtherCAT 设备配置 -->
+            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                   BorderThickness="1" 
+                   CornerRadius="8" 
+                   Padding="20"
+                   Margin="0,0,0,16"
+                   Visibility="{Binding IsEthercatDeviceSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="EtherCAT 设备配置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,16"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="设备名称" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                                Text="{Binding SelectedEtherCATDevice.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,0,12"
+                                materialDesign:HintAssist.Hint="输入设备名称"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="卡号" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                Text="{Binding SelectedEtherCATDevice.CardId, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,0,12"
+                                materialDesign:HintAssist.Hint="输入卡号"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Eni 文件" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" 
+                                Text="{Binding SelectedEtherCATDevice.EniFilePath, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,12,12"
+                                TextWrapping="NoWrap"
+                                materialDesign:HintAssist.Hint="选择 ENI 配置文件"/>
+                        <Button Grid.Row="2" Grid.Column="2" 
+                               Style="{StaticResource MaterialDesignIconButton}" 
+                               ToolTip="浏览文件"
+                               Margin="0,0,0,12">
+                            <materialDesign:PackIcon Kind="FolderOpen"/>
+                        </Button>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="轴参数文件" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" 
+                                Text="{Binding SelectedEtherCATDevice.AxisParamFilePath, UpdateSourceTrigger=PropertyChanged}" 
+                                Margin="16,0,12,0"
+                                TextWrapping="NoWrap"
+                                materialDesign:HintAssist.Hint="选择轴参数文件"/>
+                        <Button Grid.Row="3" Grid.Column="2" 
+                               Style="{StaticResource MaterialDesignIconButton}" 
+                               ToolTip="浏览文件">
+                            <materialDesign:PackIcon Kind="FolderOpen"/>
+                        </Button>
+                    </Grid>
+
+                    <CheckBox Content="自动重连" 
+                             IsChecked="{Binding SelectedEtherCATDevice.AutoReconnect, UpdateSourceTrigger=PropertyChanged}" 
+                             Margin="0,16,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 操作按钮 -->
+            <Separator Margin="0,16"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                <Button Command="{Binding RefreshSerialPortsCommand}" 
+                       Style="{StaticResource MaterialDesignOutlinedButton}" 
+                       Margin="0,0,12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" Margin="0,0,8,0"/>
+                        <TextBlock Text="刷新"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ConnectDeviceCommand}" 
+                       Style="{StaticResource MaterialDesignRaisedButton}"
+                       Margin="0,0,12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" Margin="0,0,8,0"/>
+                        <TextBlock Text="保存并应用"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="修改后请保存配置" 
+                          VerticalAlignment="Center" 
+                          Opacity="0.6" 
+                          FontSize="12"
+                          Margin="12,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+    </materialDesign:Card>
+</UserControl>

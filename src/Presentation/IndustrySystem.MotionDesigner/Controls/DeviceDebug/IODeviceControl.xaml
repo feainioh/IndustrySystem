@@ -1,0 +1,228 @@
+<UserControl x:Class="IndustrySystem.MotionDesigner.Controls.DeviceDebug.IODeviceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <materialDesign:Card Padding="24" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 左侧输入信号 -->
+            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                <!-- 标题和状态 -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <materialDesign:PackIcon Kind="Chip" Width="28" Height="28" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                    <TextBlock Text="IO模块调试" FontWeight="SemiBold" FontSize="20" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- 状态指示器 -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <Border Background="{DynamicResource PrimaryHueLightBrush}" 
+                           CornerRadius="12" Padding="12,4" Margin="0,0,8,0"
+                           Visibility="{Binding IoConnected, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
+                        <TextBlock Text="已连接" FontSize="12" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"/>
+                    </Border>
+                    <Border Background="#4CAF50" 
+                           CornerRadius="12" Padding="12,4" Margin="0,0,8,0">
+                        <TextBlock FontSize="12" Foreground="White">
+                            <Run Text="DI: "/>
+                            <Run Text="{Binding IoDiChannels.Count, Mode=OneWay, FallbackValue='0'}"/>
+                        </TextBlock>
+                    </Border>
+                    <Border Background="Orange" 
+                           CornerRadius="12" Padding="12,4">
+                        <TextBlock FontSize="12" Foreground="White">
+                            <Run Text="AI: "/>
+                            <Run Text="{Binding IoAiChannels.Count, Mode=OneWay, FallbackValue='0'}"/>
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+
+                <!-- 设备参数 -->
+                <Expander Header="设备信息" IsExpanded="True">
+                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,8,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,4">
+                                <TextBlock Text="设备ID" FontSize="11" Opacity="0.6"/>
+                                <TextBlock Text="{Binding SelectedEcatIODevice.DeviceId, FallbackValue='-'}" FontWeight="Medium" FontSize="12"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,4">
+                                <TextBlock Text="设备名称" FontSize="11" Opacity="0.6"/>
+                                <TextBlock Text="{Binding SelectedEcatIODevice.Name, FallbackValue='-'}" FontWeight="Medium" FontSize="12"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,4">
+                                <TextBlock Text="EtherCAT设备" FontSize="11" Opacity="0.6"/>
+                                <TextBlock Text="{Binding SelectedEcatIODevice.EtherCATDeviceId, FallbackValue='-'}" FontWeight="Medium" FontSize="12"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,4">
+                                <TextBlock Text="启用状态" FontSize="11" Opacity="0.6"/>
+                                <TextBlock Text="{Binding SelectedEcatIODevice.IsEnabled, FallbackValue='-'}" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Expander>
+
+                <!-- 数字输入 DI -->
+                <Expander Header="数字输入 (DI)" IsExpanded="True" Margin="0,8,0,0">
+                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,8,0,0">
+                        <DataGrid ItemsSource="{Binding IoDiChannels}" 
+                                 AutoGenerateColumns="False" 
+                                 CanUserAddRows="False" 
+                                 CanUserDeleteRows="False" 
+                                 IsReadOnly="True"
+                                 MaxHeight="250"
+                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50"/>
+                                <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*"/>
+                                <DataGridTemplateColumn Header="状态" Width="60">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Ellipse Width="16" Height="16" 
+                                                    Fill="{Binding BoolValue, Converter={StaticResource BooleanToBrushConverter}, FallbackValue=Gray}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Expander>
+
+                <!-- 模拟输入 AI -->
+                <Expander Header="模拟输入 (AI)" IsExpanded="False" Margin="0,8,0,0">
+                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,8,0,0">
+                        <DataGrid ItemsSource="{Binding IoAiChannels}" 
+                                 AutoGenerateColumns="False" 
+                                 CanUserAddRows="False" 
+                                 CanUserDeleteRows="False" 
+                                 IsReadOnly="True"
+                                 MaxHeight="200"
+                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50"/>
+                                <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*"/>
+                                <DataGridTextColumn Header="值" Binding="{Binding Value, StringFormat='{}{0:F2}'}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </Expander>
+            </StackPanel>
+
+            <!-- 右侧输出控制 -->
+            <StackPanel Grid.Column="1">
+                <!-- 输出状态指示 -->
+                <StackPanel Orientation="Horizontal" Margin="0,44,0,16">
+                    <Border Background="#2196F3" 
+                           CornerRadius="12" Padding="12,4" Margin="0,0,8,0">
+                        <TextBlock FontSize="12" Foreground="White">
+                            <Run Text="DO: "/>
+                            <Run Text="{Binding IoDoChannels.Count, Mode=OneWay, FallbackValue='0'}"/>
+                        </TextBlock>
+                    </Border>
+                    <Border Background="#9C27B0" 
+                           CornerRadius="12" Padding="12,4">
+                        <TextBlock FontSize="12" Foreground="White">
+                            <Run Text="AO: "/>
+                            <Run Text="{Binding IoAoChannels.Count, Mode=OneWay, FallbackValue='0'}"/>
+                        </TextBlock>
+                    </Border>
+                </StackPanel>
+
+                <!-- 数字输出 DO -->
+                <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="数字输出 (DO)" FontWeight="SemiBold" Margin="0,0,0,12"/>
+                        <DataGrid ItemsSource="{Binding IoDoChannels}" 
+                                 AutoGenerateColumns="False" 
+                                 CanUserAddRows="False" 
+                                 CanUserDeleteRows="False"
+                                 MaxHeight="280"
+                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="控制" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ToggleButton IsChecked="{Binding BoolValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                        Command="{Binding DataContext.IoToggleOutputCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                        ToolTip="点击切换输出状态"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 模拟输出 AO -->
+                <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="模拟输出 (AO)" FontWeight="SemiBold" Margin="0,0,0,12"/>
+                        <DataGrid ItemsSource="{Binding IoAoChannels}" 
+                                 AutoGenerateColumns="False" 
+                                 CanUserAddRows="False" 
+                                 CanUserDeleteRows="False"
+                                 MaxHeight="200"
+                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="输出值" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox Grid.Column="0" 
+                                                        Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                        Margin="0,0,4,0"
+                                                        materialDesign:HintAssist.Hint="值"/>
+                                                <Button Grid.Column="1" 
+                                                       Content="设置" 
+                                                       Command="{Binding DataContext.IoSetOutputCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                       CommandParameter="{Binding}"
+                                                       Style="{StaticResource MaterialDesignFlatButton}"
+                                                       Padding="8,4"
+                                                       Height="28"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 状态显示 -->
+                <Border Background="{DynamicResource MaterialDesignDivider}" CornerRadius="8" Padding="16">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20" Margin="0,0,8,0" Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                            <TextBlock Text="状态信息" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding IoStatus, FallbackValue='等待操作...'}" 
+                                  Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                  TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

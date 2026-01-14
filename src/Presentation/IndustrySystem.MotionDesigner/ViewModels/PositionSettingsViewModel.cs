@@ -429,17 +429,183 @@ public class PositionSettingsViewModel : BindableBase
     
     private void AddPosition()
     {
-        // TODO: 打开添加位置对话框
-        StatusMessage = "添加位置功能待实现";
+        if (CurrentConfig == null)
+        {
+            StatusMessage = "请先导入配置文件";
+            return;
+        }
+        
+        // 简化版：直接添加一个新位置点
+        try
+        {
+            // 获取可用的设备列表
+            var availableDevices = new List<(string Id, string Name, string Type)>();
+            availableDevices.AddRange(CurrentConfig.Motors.Select(m => (m.DeviceId, m.Name, "CAN电机")));
+            availableDevices.AddRange(CurrentConfig.EtherCATMotors.Select(m => (m.DeviceId, m.Name, "EtherCAT电机")));
+            availableDevices.AddRange(CurrentConfig.CentrifugalDevices.Select(c => (c.DeviceId, c.Name, "离心机")));
+            
+            if (availableDevices.Count == 0)
+            {
+                StatusMessage = "没有可用的设备";
+                return;
+            }
+            
+            // 使用第一个设备作为默认
+            var defaultDevice = availableDevices[0];
+            var positionCount = AllPositions.Count(p => p.DeviceId == defaultDevice.Id) + 1;
+            
+            var newPosition = new PositionPointViewModel
+            {
+                DeviceId = defaultDevice.Id,
+                DeviceName = defaultDevice.Name,
+                DeviceType = defaultDevice.Type,
+                PositionName = $"Position_{positionCount}",
+                Position = 0,
+                Speed = 100,
+                IsModified = true
+            };
+            
+            AllPositions.Add(newPosition);
+            FilterPositions();
+            UpdateStatistics();
+            SelectedPosition = newPosition;
+            
+            // 同时添加到配置中
+            AddPositionToConfig(newPosition);
+            
+            StatusMessage = $"已添加位置点: {newPosition.PositionName}，请修改参数后保存";
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "添加位置点失败");
+            StatusMessage = $"添加失败: {ex.Message}";
+        }
+    }
+    
+    private void AddPositionToConfig(PositionPointViewModel position)
+    {
+        if (CurrentConfig == null) return;
+        
+        // 根据设备类型添加到对应的配置中
+        if (position.DeviceType.Contains("CAN"))
+        {
+            var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                motor.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+            }
+        }
+        else if (position.DeviceType.Contains("EtherCAT"))
+        {
+            var motor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                motor.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+            }
+        }
+        else if (position.DeviceType.Contains("离心机"))
+        {
+            var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
+            if (cent != null)
+            {
+                cent.WorkPositions.Add(new WorkPositionDto
+                {
+                    Name = position.PositionName,
+                    Position = position.Position,
+                    Speed = position.Speed
+                });
+            }
+        }
     }
     
     private void DeletePosition()
     {
-        if (SelectedPosition == null) return;
+        if (SelectedPosition == null)
+        {
+            StatusMessage = "请先选择要删除的位置点";
+            return;
+        }
         
-        AllPositions.Remove(SelectedPosition);
-        FilteredPositions.Remove(SelectedPosition);
-        UpdateStatistics();
-        StatusMessage = $"已删除位置点";
+        // 确认删除
+        var result = System.Windows.MessageBox.Show(
+            $"确定要删除位置点 '{SelectedPosition.PositionName}' 吗？",
+            "确认删除",
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Question);
+        
+        if (result != System.Windows.MessageBoxResult.Yes) return;
+        
+        try
+        {
+            // 从配置中删除
+            RemovePositionFromConfig(SelectedPosition);
+            
+            // 从列表中删除
+            var posToDelete = SelectedPosition;
+            SelectedPosition = null;
+            AllPositions.Remove(posToDelete);
+            FilterPositions();
+            UpdateStatistics();
+            
+            StatusMessage = $"已删除位置点: {posToDelete.PositionName}";
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "删除位置点失败");
+            StatusMessage = $"删除失败: {ex.Message}";
+        }
+    }
+    
+    private void RemovePositionFromConfig(PositionPointViewModel position)
+    {
+        if (CurrentConfig == null) return;
+        
+        // 根据设备类型从对应的配置中删除
+        if (position.DeviceType.Contains("CAN"))
+        {
+            var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                var workPos = motor.WorkPositions.FirstOrDefault(w => w.Name == position.PositionName);
+                if (workPos != null)
+                {
+                    motor.WorkPositions.Remove(workPos);
+                }
+            }
+        }
+        else if (position.DeviceType.Contains("EtherCAT"))
+        {
+            var motor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
+            if (motor != null)
+            {
+                var workPos = motor.WorkPositions.FirstOrDefault(w => w.Name == position.PositionName);
+                if (workPos != null)
+                {
+                    motor.WorkPositions.Remove(workPos);
+                }
+            }
+        }
+        else if (position.DeviceType.Contains("离心机"))
+        {
+            var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
+            if (cent != null)
+            {
+                var workPos = cent.WorkPositions.FirstOrDefault(w => w.Name == position.PositionName);
+                if (workPos != null)
+                {
+                    cent.WorkPositions.Remove(workPos);
+                }
+            }
+        }
     }
 }
