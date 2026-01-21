@@ -19,29 +19,29 @@ namespace IndustrySystem.MotionDesigner.ViewModels;
 public class PositionSettingsViewModel : BindableBase
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-    
+
     private readonly IDeviceConfigService _configService;
     private readonly IHardwareController _hardwareController;
     private readonly IEventAggregator _eventAggregator;
-    
+
     private DeviceConfigDto? _currentConfig;
     private string _statusMessage = "就绪";
     private string _searchText = string.Empty;
     private PositionPointViewModel? _selectedPosition;
     private string _selectedDeviceFilter = "全部";
-    
+
     public DeviceConfigDto? CurrentConfig
     {
         get => _currentConfig;
         set => SetProperty(ref _currentConfig, value);
     }
-    
+
     public string StatusMessage
     {
         get => _statusMessage;
         set => SetProperty(ref _statusMessage, value);
     }
-    
+
     public string SearchText
     {
         get => _searchText;
@@ -53,13 +53,13 @@ public class PositionSettingsViewModel : BindableBase
             }
         }
     }
-    
+
     public PositionPointViewModel? SelectedPosition
     {
         get => _selectedPosition;
         set => SetProperty(ref _selectedPosition, value);
     }
-    
+
     public string SelectedDeviceFilter
     {
         get => _selectedDeviceFilter;
@@ -71,44 +71,44 @@ public class PositionSettingsViewModel : BindableBase
             }
         }
     }
-    
+
     // 位置点列表
     public ObservableCollection<PositionPointViewModel> AllPositions { get; } = new();
     public ObservableCollection<PositionPointViewModel> FilteredPositions { get; } = new();
-    
+
     // 设备筛选列表
     public ObservableCollection<string> DeviceFilters { get; } = new() { "全部" };
-    
+
     // 统计信息
     private int _totalPositionCount;
     private int _motorPositionCount;
     private int _robotPositionCount;
     private int _modifiedCount;
-    
+
     public int TotalPositionCount
     {
         get => _totalPositionCount;
         set => SetProperty(ref _totalPositionCount, value);
     }
-    
+
     public int MotorPositionCount
     {
         get => _motorPositionCount;
         set => SetProperty(ref _motorPositionCount, value);
     }
-    
+
     public int RobotPositionCount
     {
         get => _robotPositionCount;
         set => SetProperty(ref _robotPositionCount, value);
     }
-    
+
     public int ModifiedCount
     {
         get => _modifiedCount;
         set => SetProperty(ref _modifiedCount, value);
     }
-    
+
     // 命令
     public ICommand ImportConfigCommand { get; }
     public ICommand SaveConfigCommand { get; }
@@ -119,16 +119,18 @@ public class PositionSettingsViewModel : BindableBase
     public ICommand AddPositionCommand { get; }
     public ICommand DeletePositionCommand { get; }
     public ICommand AddDeviceCommand { get; }
-    
+
     public PositionSettingsViewModel(IDeviceConfigService configService, IHardwareController hardwareController, IEventAggregator eventAggregator)
     {
         _configService = configService;
         _hardwareController = hardwareController;
         _eventAggregator = eventAggregator;
-        
+
         // 订阅配置导入事件（从 DeviceDebugView 同步到这里）
         _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Subscribe(OnConfigImported, ThreadOption.UIThread);
-        
+        _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Subscribe(OnConfigLoaded, ThreadOption.UIThread);
+        _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Subscribe(OnConfigCreated, ThreadOption.UIThread);
+
         ImportConfigCommand = new DelegateCommand(async () => await ImportConfigAsync());
         SaveConfigCommand = new DelegateCommand(async () => await SaveConfigAsync());
         ExportConfigCommand = new DelegateCommand(async () => await ExportConfigAsync());
@@ -139,30 +141,37 @@ public class PositionSettingsViewModel : BindableBase
         DeletePositionCommand = new DelegateCommand(DeletePosition);
         AddDeviceCommand = new DelegateCommand(AddDevice);
     }
-    
+
+    private void OnConfigCreated(DeviceConfigDto dto)
+    {
+        _currentConfig = dto;
+        _logger.Info($"Received config created event");
+        // Initialize designer with new configuration
+    }
+
     private void FilterPositions()
     {
         FilteredPositions.Clear();
         var search = SearchText?.ToLower() ?? string.Empty;
-        
+
         foreach (var pos in AllPositions)
         {
             var matchesSearch = string.IsNullOrEmpty(search) ||
                 pos.DeviceName.ToLower().Contains(search) ||
                 pos.PositionName.ToLower().Contains(search) ||
                 pos.DeviceId.ToLower().Contains(search);
-            
+
             var matchesFilter = SelectedDeviceFilter == "全部" ||
                 pos.DeviceName == SelectedDeviceFilter ||
                 pos.DeviceType == SelectedDeviceFilter;
-            
+
             if (matchesSearch && matchesFilter)
             {
                 FilteredPositions.Add(pos);
             }
         }
     }
-    
+
     private void UpdateStatistics()
     {
         TotalPositionCount = AllPositions.Count;
@@ -170,7 +179,7 @@ public class PositionSettingsViewModel : BindableBase
         RobotPositionCount = AllPositions.Count(p => p.DeviceType.Contains("机器人"));
         ModifiedCount = AllPositions.Count(p => p.IsModified);
     }
-    
+
     private async Task ImportConfigAsync()
     {
         var dialog = new OpenFileDialog
@@ -178,21 +187,21 @@ public class PositionSettingsViewModel : BindableBase
             Filter = "JSON 文件 (*.json)|*.json|所有文件 (*.*)|*.*",
             Title = "导入设备配置文件"
         };
-        
+
         if (dialog.ShowDialog() != true) return;
-        
+
         try
         {
             StatusMessage = "正在导入配置...";
             var config = await _configService.ImportFromFileAsync(dialog.FileName);
             CurrentConfig = config;
-            
+
             // 清空列表
             AllPositions.Clear();
             FilteredPositions.Clear();
             DeviceFilters.Clear();
             DeviceFilters.Add("全部");
-            
+
             // 导入 CAN 电机位置
             foreach (var motor in config.Motors)
             {
@@ -211,7 +220,7 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 导入 EtherCAT 电机位置
             foreach (var motor in config.EtherCATMotors)
             {
@@ -230,7 +239,7 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 导入离心机位置
             foreach (var cent in config.CentrifugalDevices)
             {
@@ -249,11 +258,11 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 更新筛选和统计
             FilterPositions();
             UpdateStatistics();
-            
+
             StatusMessage = $"成功导入配置，共 {AllPositions.Count} 个位置点";
         }
         catch (Exception ex)
@@ -262,7 +271,7 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"导入失败: {ex.Message}";
         }
     }
-    
+
     private async Task SaveConfigAsync()
     {
         if (CurrentConfig == null)
@@ -270,11 +279,11 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = "没有可保存的配置";
             return;
         }
-        
+
         try
         {
             StatusMessage = "正在保存配置...";
-            
+
             // 更新配置中的位置点
             foreach (var pos in AllPositions.Where(p => p.IsModified))
             {
@@ -287,7 +296,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
-                        
+
                         // 发布位置更新事件，通知 DeviceDebugView
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
@@ -298,7 +307,7 @@ public class PositionSettingsViewModel : BindableBase
                         });
                     }
                 }
-                
+
                 // 更新 EtherCAT 电机
                 var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == pos.DeviceId);
                 if (ecatMotor != null)
@@ -308,7 +317,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
-                        
+
                         // 发布位置更新事件
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
@@ -319,7 +328,7 @@ public class PositionSettingsViewModel : BindableBase
                         });
                     }
                 }
-                
+
                 // 更新离心机
                 var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == pos.DeviceId);
                 if (cent != null)
@@ -329,7 +338,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
-                        
+
                         // 发布位置更新事件
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
@@ -340,12 +349,12 @@ public class PositionSettingsViewModel : BindableBase
                         });
                     }
                 }
-                
+
                 pos.IsModified = false;
             }
-            
+
             await _configService.SaveConfigAsync(CurrentConfig);
-            
+
             UpdateStatistics();
             StatusMessage = "配置保存成功";
         }
@@ -355,7 +364,7 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"保存失败: {ex.Message}";
         }
     }
-    
+
     private async Task ExportConfigAsync()
     {
         if (CurrentConfig == null)
@@ -363,16 +372,16 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = "没有可导出的配置";
             return;
         }
-        
+
         var dialog = new SaveFileDialog
         {
             Filter = "JSON 文件 (*.json)|*.json|所有文件 (*.*)|*.*",
             Title = "导出设备配置文件",
             FileName = "deviceconfig_export.json"
         };
-        
+
         if (dialog.ShowDialog() != true) return;
-        
+
         try
         {
             StatusMessage = "正在导出配置...";
@@ -385,11 +394,11 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"导出失败: {ex.Message}";
         }
     }
-    
+
     private async Task MoveToPositionAsync()
     {
         if (SelectedPosition == null) return;
-        
+
         try
         {
             StatusMessage = $"正在移动到 {SelectedPosition.PositionName}...";
@@ -407,11 +416,11 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"移动失败: {ex.Message}";
         }
     }
-    
+
     private async Task TeachPositionAsync()
     {
         if (SelectedPosition == null) return;
-        
+
         try
         {
             StatusMessage = $"正在示教 {SelectedPosition.PositionName}...";
@@ -427,14 +436,14 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"示教失败: {ex.Message}";
         }
     }
-    
+
     private void ResetPosition()
     {
         if (SelectedPosition == null) return;
-        
+
         // 从原始配置恢复位置
         if (CurrentConfig == null) return;
-        
+
         var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == SelectedPosition.DeviceId);
         if (motor != null)
         {
@@ -449,7 +458,7 @@ public class PositionSettingsViewModel : BindableBase
                 return;
             }
         }
-        
+
         var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == SelectedPosition.DeviceId);
         if (ecatMotor != null)
         {
@@ -464,7 +473,7 @@ public class PositionSettingsViewModel : BindableBase
             }
         }
     }
-    
+
     private void AddPosition()
     {
         if (CurrentConfig == null)
@@ -472,7 +481,7 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = "请先导入配置文件";
             return;
         }
-        
+
         try
         {
             // 打开添加位置对话框
@@ -480,7 +489,7 @@ public class PositionSettingsViewModel : BindableBase
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
-            
+
             // 循环添加（支持连续添加）
             while (dialog.ShowDialog() == true)
             {
@@ -494,20 +503,20 @@ public class PositionSettingsViewModel : BindableBase
                     Speed = dialog.Speed,
                     IsModified = true
                 };
-                
+
                 AllPositions.Add(newPosition);
                 FilterPositions();
                 UpdateStatistics();
                 SelectedPosition = newPosition;
-                
+
                 // 同时添加到配置中
                 AddPositionToConfig(newPosition);
-                
+
                 // 发布位置添加事件，通知 DeviceDebugView
                 _eventAggregator.GetEvent<PositionAddedEvent>().Publish(newPosition);
-                
+
                 StatusMessage = $"已添加位置点: {newPosition.PositionName} 到 {newPosition.DeviceName}";
-                
+
                 // 如果不继续添加，退出循环
                 if (!dialog.ContinueAdding)
                 {
@@ -521,11 +530,11 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"添加失败: {ex.Message}";
         }
     }
-    
+
     private void AddPositionToConfig(PositionPointViewModel position)
     {
         if (CurrentConfig == null) return;
-        
+
         // 根据设备类型添加到对应的配置中
         if (position.DeviceType.Contains("CAN"))
         {
@@ -567,7 +576,7 @@ public class PositionSettingsViewModel : BindableBase
             }
         }
     }
-    
+
     private void DeletePosition()
     {
         if (SelectedPosition == null)
@@ -575,31 +584,31 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = "请先选择要删除的位置点";
             return;
         }
-        
+
         // 确认删除
         var result = System.Windows.MessageBox.Show(
             $"确定要删除位置点 '{SelectedPosition.PositionName}' 吗？",
             "确认删除",
             System.Windows.MessageBoxButton.YesNo,
             System.Windows.MessageBoxImage.Question);
-        
+
         if (result != System.Windows.MessageBoxResult.Yes) return;
-        
+
         try
         {
             // 从配置中删除
             RemovePositionFromConfig(SelectedPosition);
-            
+
             // 从列表中删除
             var posToDelete = SelectedPosition;
             SelectedPosition = null;
             AllPositions.Remove(posToDelete);
             FilterPositions();
             UpdateStatistics();
-            
+
             // 发布位置删除事件，通知 DeviceDebugView
             _eventAggregator.GetEvent<PositionDeletedEvent>().Publish(posToDelete);
-            
+
             StatusMessage = $"已删除位置点: {posToDelete.PositionName}";
         }
         catch (Exception ex)
@@ -608,11 +617,11 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"删除失败: {ex.Message}";
         }
     }
-    
+
     private void RemovePositionFromConfig(PositionPointViewModel position)
     {
         if (CurrentConfig == null) return;
-        
+
         // 根据设备类型从对应的配置中删除
         if (position.DeviceType.Contains("CAN"))
         {
@@ -651,20 +660,20 @@ public class PositionSettingsViewModel : BindableBase
             }
         }
     }
-    
+
     // 事件处理 - 从 DeviceDebugView 同步配置
     private void OnConfigImported(DeviceConfigDto config)
     {
         try
         {
             CurrentConfig = config;
-            
+
             // 清空列表
             AllPositions.Clear();
             FilteredPositions.Clear();
             DeviceFilters.Clear();
             DeviceFilters.Add("全部");
-            
+
             // 加载 CAN 电机位置
             foreach (var motor in config.Motors)
             {
@@ -683,7 +692,7 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 加载 EtherCAT 电机位置
             foreach (var motor in config.EtherCATMotors)
             {
@@ -702,7 +711,7 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 加载离心机位置
             foreach (var cent in config.CentrifugalDevices)
             {
@@ -721,11 +730,11 @@ public class PositionSettingsViewModel : BindableBase
                     });
                 }
             }
-            
+
             // 更新筛选和统计
             FilterPositions();
             UpdateStatistics();
-            
+
             StatusMessage = $"已从调试界面同步配置，共 {AllPositions.Count} 个位置点";
         }
         catch (Exception ex)
@@ -734,7 +743,93 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"同步失败: {ex.Message}";
         }
     }
-    
+
+    /// <summary>
+    /// Handle configuration loaded event (from DesignerView or DeviceDebugView)
+    /// </summary>
+    private void OnConfigLoaded(ConfigLoadedEventArgs args)
+    {
+        try
+        {
+            CurrentConfig = args.Config;
+
+            // Clear lists
+            AllPositions.Clear();
+            FilteredPositions.Clear();
+            DeviceFilters.Clear();
+            DeviceFilters.Add("全部");
+
+            // Load positions from CAN motors
+            foreach (var motor in args.Config.Motors)
+            {
+                DeviceFilters.Add(motor.Name);
+                foreach (var pos in motor.WorkPositions)
+                {
+                    AllPositions.Add(new PositionPointViewModel
+                    {
+                        DeviceId = motor.DeviceId,
+                        DeviceName = motor.Name,
+                        DeviceType = "CAN电机",
+                        PositionName = pos.Name,
+                        Position = pos.Position,
+                        Speed = pos.Speed,
+                        IsModified = false
+                    });
+                }
+            }
+
+            // Load positions from EtherCAT motors
+            foreach (var motor in args.Config.EtherCATMotors)
+            {
+                DeviceFilters.Add(motor.Name);
+                foreach (var pos in motor.WorkPositions)
+                {
+                    AllPositions.Add(new PositionPointViewModel
+                    {
+                        DeviceId = motor.DeviceId,
+                        DeviceName = motor.Name,
+                        DeviceType = "EtherCAT电机",
+                        PositionName = pos.Name,
+                        Position = pos.Position,
+                        Speed = pos.Speed,
+                        IsModified = false
+                    });
+                }
+            }
+
+            // Load positions from centrifugal devices
+            foreach (var cent in args.Config.CentrifugalDevices)
+            {
+                DeviceFilters.Add(cent.Name);
+                foreach (var pos in cent.WorkPositions)
+                {
+                    AllPositions.Add(new PositionPointViewModel
+                    {
+                        DeviceId = cent.DeviceId,
+                        DeviceName = cent.Name,
+                        DeviceType = "离心机",
+                        PositionName = pos.Name,
+                        Position = pos.Position,
+                        Speed = pos.Speed,
+                        IsModified = false
+                    });
+                }
+            }
+
+            // Update filter and statistics
+            FilterPositions();
+            UpdateStatistics();
+
+            StatusMessage = $"配置已加载 (来源: {args.Source})，共 {AllPositions.Count} 个位置点";
+            _logger.Info($"Configuration loaded from {args.Source}: {AllPositions.Count} positions");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Failed to load configuration");
+            StatusMessage = $"加载配置失败: {ex.Message}";
+        }
+    }
+
     // 添加新设备
     private void AddDevice()
     {
@@ -743,21 +838,21 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = "请先导入配置文件";
             return;
         }
-        
+
         try
         {
             var dialog = new AddDeviceDialog
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
-            
+
             if (dialog.ShowDialog() == true)
             {
                 var deviceType = dialog.DeviceType;
                 var deviceId = dialog.DeviceId;
                 var deviceName = dialog.DeviceName;
                 var description = dialog.Description;
-                
+
                 // 检查设备 ID 是否已存在
                 if (IsDeviceIdExists(deviceId))
                 {
@@ -769,7 +864,7 @@ public class PositionSettingsViewModel : BindableBase
                         System.Windows.MessageBoxImage.Warning);
                     return;
                 }
-                
+
                 // 根据设备类型创建设备
                 switch (deviceType)
                 {
@@ -810,16 +905,16 @@ public class PositionSettingsViewModel : BindableBase
                         AddEcatIODevice(deviceId, deviceName, description, dialog.SlaveId ?? 1);
                         break;
                 }
-                
+
                 // 刷新设备筛选列表
                 if (!DeviceFilters.Contains(deviceName))
                 {
                     DeviceFilters.Add(deviceName);
                 }
-                
+
                 UpdateStatistics();
                 StatusMessage = $"已添加设备: {deviceName} ({deviceType})";
-                
+
                 // 发布设备添加事件（如果需要）
                 // _eventAggregator.GetEvent<DeviceAddedEvent>().Publish(newDevice);
             }
@@ -830,12 +925,12 @@ public class PositionSettingsViewModel : BindableBase
             StatusMessage = $"添加设备失败: {ex.Message}";
         }
     }
-    
+
     // 检查设备 ID 是否已存在
     private bool IsDeviceIdExists(string deviceId)
     {
         if (CurrentConfig == null) return false;
-        
+
         return CurrentConfig.Motors.Any(m => m.DeviceId == deviceId) ||
                CurrentConfig.EtherCATMotors.Any(m => m.DeviceId == deviceId) ||
                CurrentConfig.SyringePumps.Any(p => p.DeviceId == deviceId) ||
@@ -849,7 +944,7 @@ public class PositionSettingsViewModel : BindableBase
                CurrentConfig.JakaRobots.Any(r => r.DeviceId == deviceId) ||
                CurrentConfig.EcatIODevices.Any(io => io.DeviceId == deviceId);
     }
-    
+
     // 添加 CAN 电机
     private void AddCanMotor(string deviceId, string deviceName, string description, int nodeId)
     {
@@ -869,10 +964,10 @@ public class PositionSettingsViewModel : BindableBase
                 JogSpeed = 100
             }
         };
-        
+
         CurrentConfig.Motors.Add(motor);
     }
-    
+
     // 添加 EtherCAT 电机
     private void AddEtherCATMotor(string deviceId, string deviceName, string description, int slaveId)
     {
@@ -890,10 +985,10 @@ public class PositionSettingsViewModel : BindableBase
                 JogSpeed = 100
             }
         };
-        
+
         CurrentConfig.EtherCATMotors.Add(motor);
     }
-    
+
     // 添加注射泵
     private void AddSyringePump(string deviceId, string deviceName, string description, string? portName)
     {
@@ -909,10 +1004,10 @@ public class PositionSettingsViewModel : BindableBase
             SyringeVolume = 50,
             LiquidOffset = 0
         };
-        
+
         CurrentConfig.SyringePumps.Add(pump);
     }
-    
+
     // 添加蠕动泵
     private void AddPeristalticPump(string deviceId, string deviceName, string description, string? portName)
     {
@@ -936,10 +1031,10 @@ public class PositionSettingsViewModel : BindableBase
             IsEnabled = true,
             Description = description
         };
-        
+
         CurrentConfig.PeristalticPumps.Add(pump);
     }
-    
+
     // 添加自定义泵
     private void AddDiyPump(string deviceId, string deviceName, string description, string? portName)
     {
@@ -955,10 +1050,10 @@ public class PositionSettingsViewModel : BindableBase
             MaxRPM = 600,
             IsEnabled = true
         };
-        
+
         CurrentConfig.DiyPumps.Add(pump);
     }
-    
+
     // 添加离心机
     private void AddCentrifugalDevice(string deviceId, string deviceName, string description, string? portName)
     {
@@ -971,23 +1066,24 @@ public class PositionSettingsViewModel : BindableBase
             BaudRate = 9600,
             WorkPositions = new List<WorkPositionDto>()
         };
-        
+
         CurrentConfig.CentrifugalDevices.Add(centrifugal);
     }
-    
+
     // 添加 TCU 设备
     private void AddTcuDevice(string deviceId, string deviceName, string description, string? portName)
-    {        var tcu = new TcuDeviceDto
+    {
+        var tcu = new TcuDeviceDto
         {
             DeviceId = deviceId,
             Name = deviceName,
             PortName = portName ?? "COM1",
             BaudRate = 9600
         };
-        
+
         CurrentConfig.TcuDevices.Add(tcu);
     }
-    
+
     // 添加冷水机
     private void AddChillerDevice(string deviceId, string deviceName, string description, string? portName)
     {
@@ -998,10 +1094,10 @@ public class PositionSettingsViewModel : BindableBase
             PortName = portName ?? "COM1",
             BaudRate = 9600
         };
-        
+
         CurrentConfig.ChillerDevices.Add(chiller);
     }
-    
+
     // 添加称重传感器
     private void AddWeighingSensor(string deviceId, string deviceName, string description, string? portName)
     {
@@ -1014,10 +1110,10 @@ public class PositionSettingsViewModel : BindableBase
             MaxWeight = 1000,
             DecimalPlaces = 2
         };
-        
+
         CurrentConfig.WeighingSensors.Add(sensor);
     }
-    
+
     // 添加扫码枪
     private void AddScanner(string deviceId, string deviceName, string description, string? ipAddress, int port)
     {
@@ -1028,10 +1124,10 @@ public class PositionSettingsViewModel : BindableBase
             IpAddress = ipAddress ?? "192.168.1.100",
             Port = port
         };
-        
+
         CurrentConfig.Scanners.Add(scanner);
     }
-    
+
     // 添加 Jaka 机器人
     private void AddJakaRobot(string deviceId, string deviceName, string description, string? ipAddress, int port)
     {
@@ -1042,10 +1138,10 @@ public class PositionSettingsViewModel : BindableBase
             IpAddress = ipAddress ?? "192.168.1.100",
             Port = port
         };
-        
+
         CurrentConfig.JakaRobots.Add(robot);
     }
-    
+
     // 添加 IO 设备
     private void AddEcatIODevice(string deviceId, string deviceName, string description, int slaveId)
     {
@@ -1056,7 +1152,7 @@ public class PositionSettingsViewModel : BindableBase
             EtherCATDeviceId = $"EtherCAT_{slaveId}",
             IoChannels = new List<IoChannelDto>()
         };
-        
+
         CurrentConfig.EcatIODevices.Add(ioDevice);
     }
 }

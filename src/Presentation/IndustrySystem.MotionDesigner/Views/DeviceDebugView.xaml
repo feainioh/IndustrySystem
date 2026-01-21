@@ -109,10 +109,23 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding CreateConfigCommand}" 
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Height="36"
+                           Margin="0,0,8,0"
+                           Background="#4CAF50"
+                           BorderBrush="#4CAF50"
+                           ToolTip="Create new configuration">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="新建配置" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                     <Button Command="{Binding ImportConfigCommand}" 
                            Style="{StaticResource MaterialDesignRaisedButton}"
                            Height="36"
-                           Margin="0,0,12,0">
+                           Margin="0,0,12,0"
+                           ToolTip="Import hardware configuration">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FileImport" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="导入配置" VerticalAlignment="Center"/>
@@ -121,7 +134,8 @@
                     <Button Command="{Binding RefreshDeviceStatusCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
                            Height="36"
-                           IsEnabled="{Binding IsDeviceSelected}">
+                           IsEnabled="{Binding IsDeviceSelected}"
+                           ToolTip="Refresh device status">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="刷新状态" VerticalAlignment="Center"/>

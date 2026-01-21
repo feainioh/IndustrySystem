@@ -123,8 +123,24 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+
             <Border Grid.Row="0" Background="{DynamicResource MaterialDesignToolBarBackground}" Padding="8">
                 <StackPanel Orientation="Horizontal">
+                    <!-- Hardware Config -->
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                           Command="{Binding ImportConfigCommand}" 
+                           ToolTip="Import Hardware Configuration"
+                           Margin="0,0,8,0"
+                           Padding="8,4">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Cog" Margin="0,0,4,0"/>
+                            <TextBlock Text="Import Config"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Separator Margin="0,0,8,0"/>
+                    
+                    <!-- Program Management -->
                     <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding NewProgramCommand}" ToolTip="New">
                         <materialDesign:PackIcon Kind="FileOutline"/>
                     </Button>
@@ -143,6 +159,7 @@
                     <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding DeleteSelectedCommand}" ToolTip="Delete">
                         <materialDesign:PackIcon Kind="Delete"/>
                     </Button>
+
                     <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding ClearAllCommand}" ToolTip="Clear">
                         <materialDesign:PackIcon Kind="DeleteSweep"/>
                     </Button>

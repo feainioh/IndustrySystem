@@ -702,6 +702,7 @@ public class DeviceDebugViewModel : BindableBase
     }
 
     // 命令
+    public ICommand CreateConfigCommand { get; }
     public ICommand ImportConfigCommand { get; }
     public ICommand RefreshDeviceStatusCommand { get; }
     public ICommand MotorMoveCommand { get; }
@@ -812,8 +813,11 @@ public class DeviceDebugViewModel : BindableBase
         // 订阅位置更新事件（从 PositionSettingsView 同步到这里）
         _eventAggregator.GetEvent<PositionUpdatedEvent>().Subscribe(OnPositionUpdated, ThreadOption.UIThread);
         _eventAggregator.GetEvent<PositionAddedEvent>().Subscribe(OnPositionAdded, ThreadOption.UIThread);
+        _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Subscribe(OnConfigCreated, ThreadOption.UIThread);
+        _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Subscribe(OnConfigLoaded, ThreadOption.UIThread);
         _eventAggregator.GetEvent<PositionDeletedEvent>().Subscribe(OnPositionDeleted, ThreadOption.UIThread);
-        
+
+        CreateConfigCommand = new DelegateCommand(CreateConfig);
         ImportConfigCommand = new DelegateCommand(async () => await ImportConfigAsync());
         RefreshDeviceStatusCommand = new DelegateCommand(async () => await RefreshDeviceStatusAsync());
         MotorMoveCommand = new DelegateCommand(async () => await MotorMoveAsync());
@@ -935,7 +939,45 @@ public class DeviceDebugViewModel : BindableBase
 
         RefreshSerialPorts();
     }
-    
+
+    private void OnConfigLoaded(ConfigLoadedEventArgs args)
+    {
+        if(args != null)
+        {
+            CurrentConfig = args.Config;
+           
+            _logger.Info($"Received config loaded event");
+            try
+            {
+                StatusMessage = "正在导入配置...";
+
+                // 清空所有列表
+                ClearAllDeviceLists();
+
+                // 更新设备列表
+                PopulateDeviceLists(CurrentConfig);
+
+                // 更新统一设备列表
+                BuildUnifiedDeviceList(CurrentConfig);
+
+                FilterDevices();
+
+                StatusMessage = $"成功导入配置，共 {AllDevices.Count} 个设备";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "导入设备配置失败");
+                StatusMessage = $"导入失败: {ex.Message}";
+            }
+        }
+    }
+
+    private void OnConfigCreated(DeviceConfigDto dto)
+    {
+        CurrentConfig = dto;
+        _logger.Info($"Received config created event");
+    }
+
     private void FilterDevices()
     {
         FilteredDevices.Clear();
@@ -2954,6 +2996,59 @@ public class DeviceDebugViewModel : BindableBase
             _logger.Error(ex, "同步添加位置失败");
         }
     }
+    
+    /// <summary>
+    /// Create new hardware configuration
+    /// </summary>
+    private void CreateConfig()
+    {
+        try
+        {
+            var config = new DeviceConfigDto
+            {
+                Motors = new List<MotorDto>(),
+                EtherCATMotors = new List<EtherCATMotorDto>(),
+                SyringePumps = new List<SyringePumpDto>(),
+                PeristalticPumps = new List<PeristalticPumpDto>(),
+                DiyPumps = new List<DiyPumpDto>(),
+                CentrifugalDevices = new List<CentrifugalDeviceDto>(),
+                JakaRobots = new List<JakaRobotDto>(),
+                TcuDevices = new List<TcuDeviceDto>(),
+                ChillerDevices = new List<ChillerDeviceDto>(),
+                WeighingSensors = new List<WeighingSensorDto>(),
+                TwoChannelValves = new List<TwoChannelValveDto>(),
+                ThreeChannelValves = new List<ThreeChannelValveDto>(),
+                EcatIODevices = new List<EcatIODeviceDto>(),
+                CustomModbusDevices = new List<CustomModbusDeviceDto>(),
+                Scanners = new List<ScannerDto>()
+            };
+            
+            CurrentConfig = config;
+            
+            // Clear device lists
+            AllDevices.Clear();
+            DeviceCategories.Clear();
+            FilteredDevices.Clear();
+            
+            // Publish events
+            _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Publish(config);
+            _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Publish(new ConfigLoadedEventArgs
+            {
+                Config = config,
+                FilePath = string.Empty,
+                Source = "DeviceDebugView-Create"
+            });
+            
+            StatusMessage = "新配置已创建，可以开始添加设备";
+            _logger.Info("New configuration created successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Failed to create configuration");
+            StatusMessage = $"创建配置失败: {ex.Message}";
+        }
+    }
+
     
     private void OnPositionDeleted(PositionPointViewModel position)
     {

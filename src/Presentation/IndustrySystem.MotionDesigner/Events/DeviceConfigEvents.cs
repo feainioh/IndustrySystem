@@ -47,3 +47,46 @@ public class PositionDeletedEvent : PubSubEvent<PositionPointViewModel>
 {
 }
 
+/// <summary>
+/// 配置文件已创建事件（新建配置）
+/// </summary>
+public class DeviceConfigCreatedEvent : PubSubEvent<DeviceConfigDto>
+{
+}
+
+/// <summary>
+/// 配置文件已加载事件（从文件加载）
+/// </summary>
+public class DeviceConfigLoadedEvent : PubSubEvent<ConfigLoadedEventArgs>
+{
+}
+
+public class ConfigLoadedEventArgs
+{
+    public DeviceConfigDto Config { get; set; } = null!;
+    public string FilePath { get; set; } = string.Empty;
+    public string Source { get; set; } = string.Empty; // "Import", "Create", "Load"
+}
+
+/// <summary>
+/// 请求同步配置事件（用于主动请求最新配置）
+/// </summary>
+public class ConfigSyncRequestEvent : PubSubEvent<string>
+{
+}
+
+/// <summary>
+/// 设备已添加事件
+/// </summary>
+public class DeviceAddedEvent : PubSubEvent<DeviceAddedEventArgs>
+{
+}
+
+public class DeviceAddedEventArgs
+{
+    public string DeviceId { get; set; } = string.Empty;
+    public string DeviceName { get; set; } = string.Empty;
+    public string DeviceType { get; set; } = string.Empty;
+}
+
+

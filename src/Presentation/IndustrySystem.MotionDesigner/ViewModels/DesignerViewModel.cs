@@ -5,9 +5,12 @@ using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos.MotionProgram;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.MotionDesigner.Events;
+using IndustrySystem.MotionDesigner.Services;
 using Microsoft.Win32;
 using NLog;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace IndustrySystem.MotionDesigner.ViewModels;
@@ -26,8 +29,11 @@ public class DesignerViewModel : BindableBase
 
     private readonly IMotionProgramAppService _programService;
     private readonly IMotionProgramExecutor _executor;
+    private readonly IEventAggregator _eventAggregator;
+    private readonly IDeviceConfigService _configService;
 
     private MotionProgramDto? _currentProgram;
+    private DeviceConfigDto? _currentConfig;
     private ActionNodeViewModel? _selectedNode;
     private ConnectionViewModel? _selectedConnection;
     private string _executionState = "Idle";
@@ -142,6 +148,7 @@ public class DesignerViewModel : BindableBase
     public ICommand PauseCommand { get; }
     public ICommand StopCommand { get; }
     public ICommand StepCommand { get; }
+    public ICommand ImportConfigCommand { get; } // 新增
 
     // 缩放命令
     public ICommand ZoomInCommand { get; }
@@ -149,10 +156,16 @@ public class DesignerViewModel : BindableBase
     public ICommand ZoomResetCommand { get; }
     public ICommand ZoomFitCommand { get; }
 
-    public DesignerViewModel(IMotionProgramAppService programService, IMotionProgramExecutor executor)
+    public DesignerViewModel(
+        IMotionProgramAppService programService, 
+        IMotionProgramExecutor executor,
+        IEventAggregator eventAggregator,
+        IDeviceConfigService configService)
     {
         _programService = programService;
         _executor = executor;
+        _eventAggregator = eventAggregator;
+        _configService = configService;
 
         NewProgramCommand = new DelegateCommand(NewProgram);
         OpenProgramCommand = new DelegateCommand(async () => await OpenProgramAsync());
@@ -165,6 +178,7 @@ public class DesignerViewModel : BindableBase
         PauseCommand = new DelegateCommand(async () => await _executor.PauseAsync());
         StopCommand = new DelegateCommand(async () => await _executor.StopAsync());
         StepCommand = new DelegateCommand(async () => await _executor.StepAsync());
+        ImportConfigCommand = new DelegateCommand(ImportConfig); // 新增
 
         // 初始化缩放命令
         ZoomInCommand = new DelegateCommand(() => ZoomLevel += ZoomStep);
@@ -177,6 +191,15 @@ public class DesignerViewModel : BindableBase
         _executor.ProgressChanged += OnProgressChanged;
         _executor.NodeExecuted += OnNodeExecuted;
         _executor.ProgramCompleted += OnProgramCompleted;
+        
+        // 订阅事件
+        _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Subscribe(OnConfigImported);
+        _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Subscribe(OnConfigCreated);
+        _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Subscribe(OnConfigLoaded);
+        _eventAggregator.GetEvent<PositionUpdatedEvent>().Subscribe(OnPositionUpdated);
+        _eventAggregator.GetEvent<PositionAddedEvent>().Subscribe(OnPositionAdded);
+        _eventAggregator.GetEvent<PositionDeletedEvent>().Subscribe(OnPositionDeleted);
+        _eventAggregator.GetEvent<DeviceAddedEvent>().Subscribe(OnDeviceAdded);
     }
 
     private void InitializeToolbox()
@@ -721,4 +744,154 @@ public class DesignerViewModel : BindableBase
             if (success) MessageBox.Show("Program completed!", "Info");
         });
     }
+    
+    #region Configuration Sync Event Handlers
+    
+    /// <summary>
+    /// Import hardware configuration
+    /// </summary>
+    private async void ImportConfig()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+            Title = "Import Hardware Configuration"
+        };
+        
+        if (dialog.ShowDialog() == true)
+        {
+            try
+            {
+                var config = await _configService.ImportFromFileAsync(dialog.FileName);
+                _currentConfig = config;
+                
+                // Publish events
+                _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Publish(config);
+                _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Publish(new ConfigLoadedEventArgs
+                {
+                    Config = config,
+                    FilePath = dialog.FileName,
+                    Source = "DesignerView-Import"
+                });
+                
+                _logger.Info($"Configuration imported successfully from {dialog.FileName}");
+                MessageBox.Show("Configuration imported successfully!", "Success", 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to import configuration");
+                MessageBox.Show($"Failed to import configuration: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Handle configuration imported event
+    /// </summary>
+    private void OnConfigImported(DeviceConfigDto config)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _currentConfig = config;
+            _logger.Info($"Received config imported event");
+            // Update designer with new configuration
+            // TODO: Refresh device list in action node parameters
+        });
+    }
+    
+    /// <summary>
+    /// Handle configuration created event
+    /// </summary>
+    private void OnConfigCreated(DeviceConfigDto config)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _currentConfig = config;
+            _logger.Info($"Received config created event");
+            // Initialize designer with new configuration
+        });
+    }
+    
+    /// <summary>
+    /// Handle configuration loaded event
+    /// </summary>
+    private void OnConfigLoaded(ConfigLoadedEventArgs args)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _currentConfig = args.Config;
+            _logger.Info($"Received config loaded event from {args.Source}");
+            // Process configuration loading
+        });
+    }
+    
+    /// <summary>
+    /// Handle position updated event
+    /// </summary>
+    private void OnPositionUpdated(PositionUpdatedEventArgs args)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _logger.Info($"Received position updated: {args.DeviceId}/{args.PositionName}");
+            // Update nodes that use this position
+            UpdateNodePositions(args.DeviceId, args.PositionName, args.Position);
+        });
+    }
+    
+    /// <summary>
+    /// Handle position added event
+    /// </summary>
+    private void OnPositionAdded(PositionPointViewModel position)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _logger.Info($"Received position added: {position.DeviceName}/{position.PositionName}");
+            // Refresh position options for the device
+        });
+    }
+    
+    /// <summary>
+    /// Handle position deleted event
+    /// </summary>
+    private void OnPositionDeleted(PositionPointViewModel position)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _logger.Info($"Received position deleted: {position.DeviceName}/{position.PositionName}");
+            // Remove position from options and mark nodes using it
+        });
+    }
+    
+    /// <summary>
+    /// Handle device added event
+    /// </summary>
+    private void OnDeviceAdded(DeviceAddedEventArgs args)
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        {
+            _logger.Info($"Received device added: {args.DeviceType} - {args.DeviceName}");
+            // Refresh device list in action node parameters
+        });
+    }
+    
+    /// <summary>
+    /// Update node positions when a position is updated
+    /// </summary>
+    private void UpdateNodePositions(string deviceId, string positionName, double newPosition)
+    {
+        foreach (var node in Nodes)
+        {
+            // Update nodes that use this device and position
+            if (node.ActionType == ActionType.MotorMoveAbsolute)
+            {
+                // Check if this node uses the updated position
+                // TODO: Implement position parameter update logic
+            }
+        }
+    }
+    
+    #endregion
 }
+
