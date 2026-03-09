@@ -3,6 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels;
+using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
+using MaterialDesignThemes.Wpf;
+using Prism.Ioc;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -36,10 +39,38 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
         private void OnEdit(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement edit dialog
             if (sender is Button btn && btn.Tag is Guid id)
             {
-                MessageBox.Show($"{Strings.Btn_Edit} {id}", Strings.Tooltip_EditUser, MessageBoxButton.OK, MessageBoxImage.Information);
+                _ = OpenUserDialogAsync(id);
+            }
+        }
+
+        private async System.Threading.Tasks.Task OpenUserDialogAsync(Guid? id)
+        {
+            var dialogVm = ContainerLocator.Current.Resolve<UserEditDialogViewModel>();
+            await dialogVm.LoadAsync(id);
+            var dialog = new Dialogs.UserEditDialog { DataContext = dialogVm };
+
+            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
+                {
+                    DialogHost.Close("RootDialogHost", dialogVm.DialogResult);
+                }
+            };
+
+            dialogVm.PropertyChanged += handler;
+            try
+            {
+                var result = await DialogHost.Show(dialog, "RootDialogHost");
+                if (result is bool saved && saved && DataContext is UsersViewModel vm)
+                {
+                    await vm.LoadAsync();
+                }
+            }
+            finally
+            {
+                dialogVm.PropertyChanged -= handler;
             }
         }
 
@@ -48,16 +79,7 @@ namespace IndustrySystem.Presentation.Wpf.Views
             if (sender is Button btn && btn.Tag is Guid id && 
                 DataContext is UsersViewModel vm)
             {
-                var result = MessageBox.Show(
-                    Strings.Msg_ConfirmDeleteUser,
-                    Strings.Msg_ConfirmDelete,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    _ = vm.DeleteAsync(id);
-                }
+                _ = vm.DeleteAsync(id);
             }
         }
     }

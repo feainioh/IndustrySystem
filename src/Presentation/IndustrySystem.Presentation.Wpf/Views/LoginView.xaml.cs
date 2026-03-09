@@ -7,6 +7,8 @@ namespace IndustrySystem.Presentation.Wpf.Views
 {
     public partial class LoginView : UserControl
     {
+        private bool _passwordHooked;
+
         public LoginView()
         {
             InitializeComponent();
@@ -16,14 +18,28 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // Wire PasswordBox to ViewModel.Password since Password is not a DependencyProperty
-            if (DataContext is LoginViewModel vm)
+            if (DataContext is not LoginViewModel vm)
             {
-                if (this.FindName("Pwd") is PasswordBox pb)
-                {
-                    pb.PasswordChanged += (s, _) => vm.Password = pb.Password;
-                }
+                return;
             }
+
+            if (this.FindName("Pwd") is not PasswordBox pb)
+            {
+                return;
+            }
+
+            if (pb.Password != vm.Password)
+            {
+                pb.Password = vm.Password ?? string.Empty;
+            }
+
+            if (_passwordHooked)
+            {
+                return;
+            }
+
+            pb.PasswordChanged += (s, _) => vm.Password = pb.Password;
+            _passwordHooked = true;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Mvvm;
 using NLog;
@@ -67,7 +68,7 @@ public class UsersViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, "Failed to load users");
-            MessageBox.Show($"Failed to load users: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_LoadFailed}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -76,7 +77,7 @@ public class UsersViewModel : BindableBase
     {
         if (string.IsNullOrWhiteSpace(userName))
         {
-            MessageBox.Show("Please enter user name", "Validation", 
+            MessageBox.Show(Strings.Msg_ValidationUserName, Strings.Msg_ValidationTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -96,7 +97,7 @@ public class UsersViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to add user: {userName}");
-            MessageBox.Show($"Failed to add user: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -114,7 +115,7 @@ public class UsersViewModel : BindableBase
         var user = Users.FirstOrDefault(u => u.Id == id);
         var name = user?.UserName ?? id.ToString();
         
-        var result = MessageBox.Show($"Delete user '{name}'?", "Confirm Delete",
+        var result = MessageBox.Show($"{Strings.Msg_ConfirmDeleteUser}", Strings.Msg_ConfirmDelete,
             MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result != MessageBoxResult.Yes) return;
         
@@ -133,7 +134,7 @@ public class UsersViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to delete user: {id}");
-            MessageBox.Show($"Failed to delete user: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

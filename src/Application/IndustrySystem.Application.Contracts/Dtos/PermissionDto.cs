@@ -1,3 +1,3 @@
 namespace IndustrySystem.Application.Contracts.Dtos;
 
-public record PermissionDto(Guid Id, string Name, string DisplayName);
+public record PermissionDto(Guid Id, string Name, string DisplayName, string GroupName);

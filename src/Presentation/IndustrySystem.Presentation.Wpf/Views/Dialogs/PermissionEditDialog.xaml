@@ -26,6 +26,10 @@
  <TextBox Width="300"
  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"/>
  </StackPanel>
+ <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+ <TextBlock Text="{Binding [Col_Group], Source={StaticResource Loc}}" Width="120" VerticalAlignment="Center"/>
+ <TextBox Width="300" Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}"/>
+ </StackPanel>
  </StackPanel>
  <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
  <Button Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}" Margin="0,0,8,0" Command="{Binding CancelCommand}"/>

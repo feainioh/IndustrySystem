@@ -71,5 +71,50 @@ namespace IndustrySystem.Presentation.Wpf
             // Show login dialog
             ((App)System.Windows.Application.Current).ShowLoginDialog();
         }
+
+        // Window control button handlers
+        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                MaximizeRestoreWindow_Click(sender, e);
+            }
+            else if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        private void MinimizeWindow_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeRestoreWindow_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                if (FindName("MaximizeRestoreButton") is System.Windows.Controls.Button btn)
+                {
+                    btn.Content = "\uE922"; // Maximize icon
+                    btn.ToolTip = "最大化";
+                }
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+                if (FindName("MaximizeRestoreButton") is System.Windows.Controls.Button btn)
+                {
+                    btn.Content = "\uE923"; // Restore icon
+                    btn.ToolTip = "还原";
+                }
+            }
+        }
+
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

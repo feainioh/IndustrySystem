@@ -1,0 +1,109 @@
+<UserControl x:Class="IndustrySystem.MotionDesigner.Controls.SubProgramTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:models="clr-namespace:IndustrySystem.MotionDesigner.Models"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <!-- 标签页头部 -->
+        <Border Background="{DynamicResource MaterialDesignToolBarBackground}" 
+                BorderBrush="{DynamicResource MaterialDesignDivider}" 
+                BorderThickness="0,0,0,1">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                         VerticalScrollBarVisibility="Disabled"
+                         Padding="4,0">
+                <ItemsControl x:Name="TabHeaders" ItemsSource="{Binding OpenSubPrograms}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:SubProgram}">
+                            <Border x:Name="TabBorder" 
+                                   BorderThickness="1,1,1,0" 
+                                   CornerRadius="4,4,0,0"
+                                   Margin="2,4,0,0"
+                                   Cursor="Hand"
+                                   MouseLeftButtonDown="OnTabClick">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+                                            </DataTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel Orientation="Horizontal" Margin="8,4">
+                                    <!-- 程序类型图标 -->
+                                    <materialDesign:PackIcon Width="14" Height="14" 
+                                                            VerticalAlignment="Center" Margin="0,0,4,0">
+                                        <materialDesign:PackIcon.Style>
+                                            <Style TargetType="materialDesign:PackIcon">
+                                                <Setter Property="Kind" Value="FileDocumentOutline"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ProgramType}" Value="Main">
+                                                        <Setter Property="Kind" Value="Play"/>
+                                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ProgramType}" Value="Initialize">
+                                                        <Setter Property="Kind" Value="Cog"/>
+                                                        <Setter Property="Foreground" Value="#2196F3"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ProgramType}" Value="ErrorHandler">
+                                                        <Setter Property="Kind" Value="AlertCircle"/>
+                                                        <Setter Property="Foreground" Value="#F44336"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ProgramType}" Value="Cleanup">
+                                                        <Setter Property="Kind" Value="Broom"/>
+                                                        <Setter Property="Foreground" Value="#FF9800"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </materialDesign:PackIcon.Style>
+                                    </materialDesign:PackIcon>
+
+                                    <!-- 程序名称 -->
+                                    <TextBlock VerticalAlignment="Center" FontSize="12">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="{Binding Name}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                                        <Setter Property="Text" Value="{Binding Name, StringFormat={}{0} *}"/>
+                                                        <Setter Property="FontStyle" Value="Italic"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!-- 关闭按钮 -->
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                           Width="18" Height="18" Margin="4,0,0,0"
+                                           Click="OnCloseTabClick"
+                                           ToolTip="关闭">
+                                        <materialDesign:PackIcon Kind="Close" Width="12" Height="12"/>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

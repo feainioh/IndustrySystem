@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using IndustrySystem.Presentation.Wpf.Resources;
 
 namespace IndustrySystem.Presentation.Wpf.Converters;
 
@@ -13,7 +14,7 @@ public class BoolToStatusConverter : IValueConverter
     {
         if (value is bool isActive)
         {
-            return isActive ? "Active" : "Inactive";
+            return isActive ? Strings.Status_Active : Strings.Status_Inactive;
         }
         return "Unknown";
     }

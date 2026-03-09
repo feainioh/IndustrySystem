@@ -3,84 +3,228 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:views="clr-namespace:IndustrySystem.MotionDesigner.Views"
+        xmlns:local="clr-namespace:IndustrySystem.MotionDesigner"
         prism:ViewModelLocator.AutoWireViewModel="True" 
         WindowStyle="None"
         Title="Motion Designer" 
-        Height="800" Width="1400"
+        Height="900" Width="1600"
+        MinHeight="700" MinWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="#FAFAFA"
+        TextElement.Foreground="#212121"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        FontFamily="{DynamicResource MaterialDesignFont}">
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         
-        <materialDesign:ColorZone Mode="PrimaryMid" Padding="16,8" materialDesign:ElevationAssist.Elevation="Dp4">
-            <Grid>
+        <!-- 明亮主题导航按钮样式 -->
+        <Style x:Key="NavButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Height" Value="40"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- 明亮主题切换按钮样式 -->
+        <Style x:Key="NavToggleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignFlatPrimaryToggleButton}">
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+    </Window.Resources>
+    
+    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- 顶部标题栏 - 唯一的 ColorZone -->
+            <materialDesign:ColorZone Mode="PrimaryMid" Padding="12,6" 
+                                      materialDesign:ElevationAssist.Elevation="Dp2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Logo 和标题 -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="RobotIndustrial" Width="24" Height="24" 
+                                                Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="Motion Designer" FontSize="16" FontWeight="Medium" 
+                                  Foreground="White" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    
+                    <!-- 右侧窗口控制按钮 -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Style="{StaticResource MaterialDesignIconButton}" 
+                               Foreground="White" Width="36" Height="36"
+                               Command="{Binding MinimizeCommand}" ToolTip="最小化">
+                            <materialDesign:PackIcon Kind="WindowMinimize" Width="18" Height="18"/>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignIconButton}" 
+                               Foreground="White" Width="36" Height="36"
+                               Command="{Binding MaximizeCommand}" ToolTip="最大化">
+                            <materialDesign:PackIcon Kind="WindowMaximize" Width="18" Height="18"/>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignIconButton}" 
+                               Foreground="White" Width="36" Height="36"
+                               Command="{Binding CloseCommand}" ToolTip="关闭">
+                            <materialDesign:PackIcon Kind="Close" Width="18" Height="18"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:ColorZone>
+            
+            <!-- 导航工具栏 - 使用明亮背景 -->
+            <Border Grid.Row="1" Background="#FFFFFF" 
+                    BorderBrush="#E0E0E0" BorderThickness="0,0,0,1"
+                    Padding="8,4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- 主导航按钮 -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Command="{Binding NavigateToDesignerCommand}" 
+                               Style="{StaticResource NavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ViewDashboard" Width="20" Height="20"
+                                                        VerticalAlignment="Center" Margin="0,0,8,0"
+                                                        Foreground="#1976D2"/>
+                                <TextBlock Text="设计器" VerticalAlignment="Center" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Rectangle Width="1" Fill="#E0E0E0" Margin="8,8"/>
+                        
+                        <Button Command="{Binding NavigateToDeviceDebugCommand}" 
+                               Style="{StaticResource NavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Cog" Width="20" Height="20"
+                                                        VerticalAlignment="Center" Margin="0,0,8,0"
+                                                        Foreground="#43A047"/>
+                                <TextBlock Text="设备调试" VerticalAlignment="Center" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Rectangle Width="1" Fill="#E0E0E0" Margin="8,8"/>
+                        
+                        <Button Command="{Binding NavigateToPositionSettingsCommand}" 
+                               Style="{StaticResource NavButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="MapMarker" Width="20" Height="20"
+                                                        VerticalAlignment="Center" Margin="0,0,8,0"
+                                                        Foreground="#FB8C00"/>
+                                <TextBlock Text="位置设置" VerticalAlignment="Center" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    
+                    <!-- 项目面板切换 -->
+                    <ToggleButton Grid.Column="1" 
+                                 Style="{StaticResource NavToggleStyle}"
+                                 IsChecked="{Binding IsProjectExplorerVisible}"
+                                 ToolTip="项目资源管理器">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FolderOutline" Width="20" Height="20"
+                                                    VerticalAlignment="Center" Margin="0,0,8,0"
+                                                    Foreground="#7B1FA2"/>
+                            <TextBlock Text="项目" VerticalAlignment="Center" FontWeight="Medium"/>
+                        </StackPanel>
+                    </ToggleButton>
+                </Grid>
+            </Border>
+            
+            <!-- 主内容区域 -->
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="ProjectExplorerColumn" Width="Auto" MinWidth="0"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="RobotIndustrial" Width="32" Height="32" VerticalAlignment="Center"/>
-                    <TextBlock Text="Motion Designer" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0"/>
-                </StackPanel>
+                <!-- 项目资源管理器面板 -->
+                <Border Grid.Column="0" 
+                       Width="280" MinWidth="200" MaxWidth="400"
+                       Visibility="{Binding IsProjectExplorerVisible, Converter={StaticResource BoolToVis}}"
+                       Background="#FFFFFF"
+                       BorderBrush="#E0E0E0"
+                       BorderThickness="0,0,1,0">
+                    <views:ProjectExplorerView/>
+                </Border>
                 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Command="{Binding NavigateToDesignerCommand}" 
-                           Style="{StaticResource MaterialDesignFlatButton}"
-                           Foreground="White"
-                           Margin="0,0,8,0">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBlock Text="Designer" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToDeviceDebugCommand}" 
-                           Style="{StaticResource MaterialDesignFlatButton}"
-                           Foreground="White"
-                           Margin="0,0,8,0">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Cog" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBlock Text="Device Debug" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding NavigateToPositionSettingsCommand}" 
-                           Style="{StaticResource MaterialDesignFlatButton}"
-                           Foreground="White">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="MapMarker" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                            <TextBlock Text="Positions" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                <!-- 可调整大小的分隔条 -->
+                <GridSplitter Grid.Column="1" Width="5" 
+                             HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                             Background="Transparent"
+                             Visibility="{Binding IsProjectExplorerVisible, Converter={StaticResource BoolToVis}}"
+                             Cursor="SizeWE">
+                    <GridSplitter.Template>
+                        <ControlTemplate>
+                            <Border Background="Transparent" Width="5">
+                                <Rectangle Width="1" Fill="#BDBDBD" 
+                                          HorizontalAlignment="Center" Margin="0,12"/>
+                            </Border>
+                        </ControlTemplate>
+                    </GridSplitter.Template>
+                </GridSplitter>
                 
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <Button Style="{StaticResource MaterialDesignIconButton}" Foreground="White"
-                           Command="{Binding MinimizeCommand}" ToolTip="Minimize">
-                        <materialDesign:PackIcon Kind="WindowMinimize"/>
-                    </Button>
-                    <Button Style="{StaticResource MaterialDesignIconButton}" Foreground="White"
-                           Command="{Binding MaximizeCommand}" ToolTip="Maximize">
-                        <materialDesign:PackIcon Kind="WindowMaximize"/>
-                    </Button>
-                    <Button Style="{StaticResource MaterialDesignIconButton}" Foreground="White"
-                           Command="{Binding CloseCommand}" ToolTip="Close">
-                        <materialDesign:PackIcon Kind="Close"/>
-                    </Button>
-                </StackPanel>
+                <!-- 主内容区域 -->
+                <Border Grid.Column="2" Background="#F5F5F5">
+                    <ContentControl prism:RegionManager.RegionName="MainRegion"/>
+                </Border>
             </Grid>
-        </materialDesign:ColorZone>
-        
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="MainRegion"/>
-    </Grid>
+            
+            <!-- 底部状态栏 - 简洁明亮风格 -->
+            <Border Grid.Row="3" Background="#FFFFFF" 
+                    Padding="16,8" BorderThickness="0,1,0,0"
+                    BorderBrush="#E0E0E0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- 左侧状态指示 -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Fill="#4CAF50" Margin="0,0,8,0"/>
+                        <TextBlock Text="就绪" FontSize="12" Foreground="#757575" 
+                                  VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 中间状态信息 -->
+                    <TextBlock Grid.Column="1" 
+                              Text="{Binding StatusMessage, FallbackValue='欢迎使用 Motion Designer'}" 
+                              FontSize="12" Foreground="#9E9E9E" 
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    
+                    <!-- 右侧版本信息 -->
+                    <TextBlock Grid.Column="2" Text="v2.0.0" 
+                              FontSize="11" Foreground="#BDBDBD" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+
 </Window>

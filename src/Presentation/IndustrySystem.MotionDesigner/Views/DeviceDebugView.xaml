@@ -10,7 +10,6 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         
-        <!-- Inverse Boolean to Visibility Converter -->
         <Style x:Key="InverseBooleanToVisibilityStyle" TargetType="FrameworkElement">
             <Setter Property="Visibility" Value="Collapsed"/>
             <Style.Triggers>
@@ -20,7 +19,6 @@
             </Style.Triggers>
         </Style>
         
-        <!-- 设备项模板 -->
         <DataTemplate x:Key="DeviceItemTemplate">
             <Grid Margin="8,4">
                 <Grid.ColumnDefinitions>
@@ -28,20 +26,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <materialDesign:PackIcon Grid.Column="0" 
-                                        Kind="{Binding IconKind, FallbackValue=Cog}" 
-                                        VerticalAlignment="Center" 
-                                        Margin="0,0,12,0"
-                                        Width="20"
-                                        Height="20"
-                                        Opacity="0.7"/>
+                <materialDesign:PackIcon Grid.Column="0" Kind="{Binding IconKind, FallbackValue=Cog}" 
+                                        VerticalAlignment="Center" Margin="0,0,12,0"
+                                        Width="20" Height="20" Opacity="0.7"/>
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"/>
                     <TextBlock Text="{Binding DeviceType}" FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
                 </StackPanel>
-                <Ellipse Grid.Column="2" 
-                        Width="10" Height="10" 
-                        VerticalAlignment="Center">
+                <Ellipse Grid.Column="2" Width="10" Height="10" VerticalAlignment="Center">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
                             <Setter Property="Fill" Value="#4CAF50"/>
@@ -56,7 +48,6 @@
             </Grid>
         </DataTemplate>
         
-        <!-- 分类模板 -->
         <HierarchicalDataTemplate x:Key="CategoryTemplate" 
                                   ItemsSource="{Binding Devices}"
                                   ItemTemplate="{StaticResource DeviceItemTemplate}">
@@ -66,26 +57,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <materialDesign:PackIcon Grid.Column="0" 
-                                        Kind="{Binding IconKind}" 
-                                        VerticalAlignment="Center" 
-                                        Margin="0,0,12,0"
-                                        Width="22"
-                                        Height="22"
+                <materialDesign:PackIcon Grid.Column="0" Kind="{Binding IconKind}" 
+                                        VerticalAlignment="Center" Margin="0,0,12,0"
+                                        Width="22" Height="22"
                                         Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                <TextBlock Grid.Column="1" 
-                          Text="{Binding CategoryName}" 
-                          FontWeight="SemiBold" 
-                          FontSize="15"
-                          VerticalAlignment="Center"/>
-                <Border Grid.Column="2" 
-                       Background="{DynamicResource PrimaryHueLightBrush}" 
-                       CornerRadius="10"
-                       Padding="8,4"
-                       Margin="8,0,0,0">
-                    <TextBlock Text="{Binding DeviceCount}" 
-                              FontSize="12" 
-                              FontWeight="Medium"
+                <TextBlock Grid.Column="1" Text="{Binding CategoryName}" 
+                          FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/>
+                <Border Grid.Column="2" Background="{DynamicResource PrimaryHueLightBrush}" 
+                       CornerRadius="10" Padding="8,4" Margin="8,0,0,0">
+                    <TextBlock Text="{Binding DeviceCount}" FontSize="12" FontWeight="Medium"
                               Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"/>
                 </Border>
             </Grid>
@@ -111,11 +91,9 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Command="{Binding CreateConfigCommand}" 
                            Style="{StaticResource MaterialDesignRaisedButton}"
-                           Height="36"
-                           Margin="0,0,8,0"
-                           Background="#4CAF50"
-                           BorderBrush="#4CAF50"
-                           ToolTip="Create new configuration">
+                           Height="36" Margin="0,0,8,0"
+                           Background="#4CAF50" BorderBrush="#4CAF50"
+                           ToolTip="新建配置">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="新建配置" VerticalAlignment="Center"/>
@@ -123,9 +101,8 @@
                     </Button>
                     <Button Command="{Binding ImportConfigCommand}" 
                            Style="{StaticResource MaterialDesignRaisedButton}"
-                           Height="36"
-                           Margin="0,0,12,0"
-                           ToolTip="Import hardware configuration">
+                           Height="36" Margin="0,0,12,0"
+                           ToolTip="导入硬件配置">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FileImport" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="导入配置" VerticalAlignment="Center"/>
@@ -133,9 +110,10 @@
                     </Button>
                     <Button Command="{Binding RefreshDeviceStatusCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Foreground="White" BorderBrush="White"
                            Height="36"
                            IsEnabled="{Binding IsDeviceSelected}"
-                           ToolTip="Refresh device status">
+                           ToolTip="刷新设备状态">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="刷新状态" VerticalAlignment="Center"/>
@@ -143,25 +121,16 @@
                     </Button>
                 </StackPanel>
                 
-                <StackPanel Grid.Column="1" 
-                           Orientation="Horizontal"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Information" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding StatusMessage}" 
-                              FontSize="14"
-                              FontWeight="Medium"
-                              Opacity="0.95"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Information" Margin="0,0,8,0" VerticalAlignment="Center" Foreground="White"/>
+                    <TextBlock Text="{Binding StatusMessage}" FontSize="14" FontWeight="Medium" Foreground="White" Opacity="0.95"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Command="{Binding ConnectDeviceCommand}" 
                            Style="{StaticResource MaterialDesignRaisedButton}"
-                           Height="36"
-                           IsEnabled="{Binding IsDeviceSelected}"
-                           Background="#4CAF50"
-                           BorderBrush="#4CAF50"
-                           Margin="0,0,8,0">
+                           Height="36" IsEnabled="{Binding IsDeviceSelected}"
+                           Background="#4CAF50" BorderBrush="#4CAF50" Margin="0,0,8,0">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Link" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="连接" VerticalAlignment="Center"/>
@@ -169,8 +138,8 @@
                     </Button>
                     <Button Command="{Binding DisconnectDeviceCommand}" 
                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                           Height="36"
-                           IsEnabled="{Binding IsDeviceSelected}">
+                           Foreground="White" BorderBrush="White"
+                           Height="36" IsEnabled="{Binding IsDeviceSelected}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="LinkOff" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock Text="断开" VerticalAlignment="Center"/>
@@ -196,35 +165,32 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightBrush}" Padding="16,12">
+                    <Border Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}" Padding="16,12">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Devices" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="设备列表" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Devices" Width="20" Height="20" Margin="0,0,8,0" 
+                                                        VerticalAlignment="Center" Foreground="White"/>
+                                <TextBlock Text="设备列表" FontWeight="SemiBold" FontSize="16" 
+                                          VerticalAlignment="Center" Foreground="White"/>
                             </StackPanel>
-                            <Border Grid.Column="1"
-                                   Background="{DynamicResource PrimaryHueMidBrush}"
-                                   CornerRadius="12"
-                                   Padding="10,4">
-                                <TextBlock Text="{Binding AllDevices.Count, StringFormat='共 {0} 个设备'}" 
-                                          FontSize="12"
-                                          FontWeight="Medium"
-                                          Foreground="White"/>
+                            <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="10,4">
+                                <TextBlock Text="{Binding AllDevices.Count, StringFormat='共 {0} 个'}" 
+                                          FontSize="12" FontWeight="Medium"
+                                          Foreground="{DynamicResource PrimaryHueMidBrush}"/>
                             </Border>
                         </Grid>
                     </Border>
+                    
                     <TextBox Grid.Row="1" 
                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="搜索设备..."
                             materialDesign:TextFieldAssist.HasClearButton="True"
-                            Margin="12,12,12,8"
-                            FontSize="14"/>
+                            Margin="12,12,12,8" FontSize="14"/>
 
-                    <!-- 使用 TreeView 显示分组设备 -->
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                         <TreeView x:Name="DeviceTreeView"
                                  ItemsSource="{Binding DeviceCategories}"
@@ -251,26 +217,15 @@
                     <StackPanel Margin="20">
                         <!-- 未选择设备提示 -->
                         <Border Background="{DynamicResource MaterialDesignDivider}" 
-                               CornerRadius="12" 
-                               Padding="40,60"
+                               CornerRadius="12" Padding="40,60"
                                Style="{StaticResource InverseBooleanToVisibilityStyle}">
                             <StackPanel HorizontalAlignment="Center">
-                                <materialDesign:PackIcon Kind="Devices" 
-                                                        Width="64" 
-                                                        Height="64" 
-                                                        HorizontalAlignment="Center"
-                                                        Opacity="0.3"
-                                                        Margin="0,0,0,16"/>
-                                <TextBlock Text="请从左侧列表选择设备" 
-                                          FontSize="18" 
-                                          FontWeight="Medium"
-                                          Opacity="0.6" 
-                                          HorizontalAlignment="Center"/>
-                                <TextBlock Text="选择设备后可进行调试和配置操作" 
-                                          FontSize="14" 
-                                          Opacity="0.5" 
-                                          HorizontalAlignment="Center"
-                                          Margin="0,8,0,0"/>
+                                <materialDesign:PackIcon Kind="Devices" Width="64" Height="64" 
+                                                        HorizontalAlignment="Center" Opacity="0.3" Margin="0,0,0,16"/>
+                                <TextBlock Text="请从左侧列表选择设备" FontSize="18" FontWeight="Medium"
+                                          Opacity="0.6" HorizontalAlignment="Center"/>
+                                <TextBlock Text="选择设备后可进行调试和配置操作" FontSize="14" 
+                                          Opacity="0.5" HorizontalAlignment="Center" Margin="0,8,0,0"/>
                             </StackPanel>
                         </Border>
 
@@ -278,9 +233,7 @@
                         <StackPanel Visibility="{Binding IsDeviceSelected, Converter={StaticResource BoolToVisConverter}}">
                             <!-- 设备头部信息 -->
                             <Border Background="{DynamicResource PrimaryHueLightBrush}" 
-                                   CornerRadius="12" 
-                                   Padding="20,16"
-                                   Margin="0,0,0,20">
+                                   CornerRadius="12" Padding="20,16" Margin="0,0,0,20">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -288,36 +241,22 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     
-                                    <materialDesign:PackIcon Kind="Cog" 
-                                                            Width="48" 
-                                                            Height="48"
+                                    <materialDesign:PackIcon Kind="Cog" Width="48" Height="48"
                                                             Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                            VerticalAlignment="Center"
-                                                            Margin="0,0,16,0"/>
+                                                            VerticalAlignment="Center" Margin="0,0,16,0"/>
                                     
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding SelectedDevice.Name}" 
-                                                  FontSize="22" 
-                                                  FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding SelectedDevice.DeviceType}" 
-                                                  FontSize="14" 
-                                                  Opacity="0.7"
-                                                  Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding SelectedDevice.Name}" FontSize="22" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding SelectedDevice.DeviceType}" FontSize="14" Opacity="0.7" Margin="0,4,0,0"/>
                                         <TextBlock Text="{Binding SelectedDevice.DeviceId, StringFormat='设备ID: {0}'}" 
-                                                  FontSize="13" 
-                                                  Opacity="0.6"
-                                                  Margin="0,4,0,0"/>
+                                                  FontSize="13" Opacity="0.6" Margin="0,4,0,0"/>
                                     </StackPanel>
                                     
-                                    <StackPanel Grid.Column="2" 
-                                               Orientation="Horizontal"
-                                               VerticalAlignment="Center">
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Button Command="{Binding ConnectDeviceCommand}" 
                                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                               Background="#4CAF50"
-                                               BorderBrush="#4CAF50"
-                                               Height="36"
-                                               Margin="0,0,8,0">
+                                               Background="#4CAF50" BorderBrush="#4CAF50"
+                                               Height="36" Margin="0,0,8,0">
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="Plug" Margin="0,0,8,0"/>
                                                 <TextBlock Text="连接"/>
@@ -336,59 +275,27 @@
                             </Border>
 
                             <!-- 设备调试控件 -->
-                            <!-- 通信类设备 -->
-                            <deviceDebug:CommunicationDeviceControl 
-                                DataContext="{Binding}"
+                            <deviceDebug:CommunicationDeviceControl DataContext="{Binding}"
                                 Visibility="{Binding IsCommunicationDeviceSelected, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 电机调试 -->
-                            <deviceDebug:MotorDebugControl 
-                                DataContext="{Binding MotorDebugVM}"
+                            <deviceDebug:MotorDebugControl DataContext="{Binding MotorDebugVM}"
                                 Visibility="{Binding DataContext.IsAnyMotorSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- IO 模块 -->
-                            <deviceDebug:IODeviceControl 
-                                DataContext="{Binding IODeviceDebugVM}"
+                            <deviceDebug:IODeviceControl DataContext="{Binding IODeviceDebugVM}"
                                 Visibility="{Binding DataContext.IsIODeviceSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 注射泵调试 -->
-                            <deviceDebug:SyringePumpDebugControl 
-                                DataContext="{Binding SyringePumpDebugVM}"
+                            <deviceDebug:SyringePumpDebugControl DataContext="{Binding SyringePumpDebugVM}"
                                 Visibility="{Binding DataContext.IsSyringePumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 蠕动泵调试 -->
-                            <deviceDebug:PeristalticPumpDebugConntrol 
-                                DataContext="{Binding PeristalticPumpDebugVM}"
+                            <deviceDebug:PeristalticPumpDebugConntrol DataContext="{Binding PeristalticPumpDebugVM}"
                                 Visibility="{Binding DataContext.IsPeristalticPumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 自定义泵调试 -->
-                            <deviceDebug:DiyPumpDebugControl 
-                                DataContext="{Binding DiyPumpDebugVM}"
+                            <deviceDebug:DiyPumpDebugControl DataContext="{Binding DiyPumpDebugVM}"
                                 Visibility="{Binding DataContext.IsDiyPumpSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- TCU温控调试 -->
-                            <deviceDebug:TCUDebugControl 
-                                DataContext="{Binding TCUDebugVM}"
+                            <deviceDebug:TCUDebugControl DataContext="{Binding TCUDebugVM}"
                                 Visibility="{Binding DataContext.IsTcuSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 离心机调试 -->
-                            <deviceDebug:CentrifugalDebugControl 
-                                DataContext="{Binding CentrifugalDebugVM}"
+                            <deviceDebug:CentrifugalDebugControl DataContext="{Binding CentrifugalDebugVM}"
                                 Visibility="{Binding DataContext.IsCentrifugalSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 称重传感器调试 -->
-                            <deviceDebug:WeightSensorDebugControl 
-                                DataContext="{Binding WeightSensorDebugVM}"
+                            <deviceDebug:WeightSensorDebugControl DataContext="{Binding WeightSensorDebugVM}"
                                 Visibility="{Binding DataContext.IsWeighingSensorSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 扫码枪调试 -->
-                            <deviceDebug:ScannerDebugControl 
-                                DataContext="{Binding ScannerDebugVM}"
+                            <deviceDebug:ScannerDebugControl DataContext="{Binding ScannerDebugVM}"
                                 Visibility="{Binding DataContext.IsScannerSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
-
-                            <!-- 机器人调试 -->
-                            <deviceDebug:RobotDebugControl 
-                                DataContext="{Binding RobotDebugVM}"
+                            <deviceDebug:RobotDebugControl DataContext="{Binding RobotDebugVM}"
                                 Visibility="{Binding DataContext.IsRobotSelected, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolToVisConverter}}"/>
                         </StackPanel>
                     </StackPanel>
@@ -397,29 +304,21 @@
         </Grid>
 
         <!-- 底部状态栏 -->
-        <Border Grid.Row="2" 
-               Background="{DynamicResource MaterialDesignBackground}" 
+        <Border Grid.Row="2" Background="{DynamicResource MaterialDesignBackground}" 
                BorderBrush="{DynamicResource MaterialDesignDivider}" 
-               BorderThickness="0,1,0,0"
-               Padding="16,8">
+               BorderThickness="0,1,0,0" Padding="16,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="InformationOutline" 
-                                            Width="16" 
-                                            Height="16" 
-                                            Margin="0,0,8,0" 
-                                            VerticalAlignment="Center"
-                                            Opacity="0.6"/>
+                    <materialDesign:PackIcon Kind="InformationOutline" Width="16" Height="16" 
+                                            Margin="0,0,8,0" VerticalAlignment="Center" Opacity="0.6"/>
                     <TextBlock Text="{Binding StatusMessage}" FontSize="13" Opacity="0.7"/>
                 </StackPanel>
-                <Border Grid.Column="1"
-                       Background="{DynamicResource PrimaryHueLightBrush}"
-                       CornerRadius="8"
-                       Padding="12,4">
+                <Border Grid.Column="1" Background="{DynamicResource PrimaryHueLightBrush}"
+                       CornerRadius="8" Padding="12,4">
                     <TextBlock FontSize="13" FontWeight="Medium">
                         <Run Text="已选择:"/>
                         <Run Text="{Binding SelectedDevice.Name, FallbackValue='无'}" FontWeight="Bold"/>

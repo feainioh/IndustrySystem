@@ -46,7 +46,7 @@
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock Text="{x:Static loc:Strings.Nav_Roles}" 
                           Style="{StaticResource PageTitle}"/>
-                <TextBlock Text="Manage roles and permissions" 
+                <TextBlock Text="{x:Static loc:Strings.View_Roles_Subtitle}" 
                           Style="{StaticResource PageSubtitle}"/>
             </StackPanel>
             
@@ -69,7 +69,7 @@
         <!-- Add Role Card -->
         <materialDesign:Card Grid.Row="2" Style="{StaticResource MaterialCard}">
             <StackPanel>
-                <TextBlock Text="Add New Role" 
+                <TextBlock Text="{x:Static loc:Strings.Section_AddNewRole}" 
                           Style="{StaticResource SectionTitle}"/>
                 
                 <Grid Margin="0,16,0,0">
@@ -85,14 +85,15 @@
                     <TextBox Grid.Column="0"
                             x:Name="RoleNameBox"
                             Style="{StaticResource MaterialTextField}"
-                            materialDesign:HintAssist.Hint="Role Name"
+                            materialDesign:HintAssist.Hint="{x:Static loc:Strings.Hint_Role_Name}"
                             materialDesign:HintAssist.IsFloating="True"/>
+                    
                     
                     <!-- Description -->
                     <TextBox Grid.Column="2"
                             x:Name="DescBox"
                             Style="{StaticResource MaterialTextField}"
-                            materialDesign:HintAssist.Hint="Description"
+                            materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Common_Description}"
                             materialDesign:HintAssist.IsFloating="True"/>
                     
                     <!-- Add Button -->
@@ -130,108 +131,129 @@
                     </Grid.ColumnDefinitions>
                     
                     <TextBlock Grid.Column="0"
-                              Text="Role List" 
+                              Text="{x:Static loc:Strings.Section_RoleList}" 
                               Style="{StaticResource SectionTitle}"/>
                     
                     <TextBox Grid.Column="1"
                             Width="250"
                             Style="{StaticResource MaterialDesignFilledTextBox}"
-                            materialDesign:HintAssist.Hint="Search roles..."
+                            materialDesign:HintAssist.Hint="{x:Static loc:Strings.Search_Roles}"
                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"
                             Height="40"/>
                 </Grid>
                 
-                <!-- DataGrid -->
-                <DataGrid Grid.Row="2"
+                <!-- ListView -->
+                <ListView Grid.Row="2"
                          ItemsSource="{Binding Roles}"
-                         Style="{StaticResource MaterialDataGrid}">
-                    <DataGrid.Columns>
-                        <!-- Role Column with Icon -->
-                        <DataGridTemplateColumn Header="Role" Width="280">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="8,0">
-                                        <Border Width="40" Height="40"
-                                               CornerRadius="20"
-                                               Background="{StaticResource RoleGradientBrush}"
-                                               Margin="0,0,12,0">
-                                            <materialDesign:PackIcon Kind="ShieldAccount" 
-                                                                    Width="24" Height="24"
-                                                                    Foreground="White"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Name}" 
-                                                      FontWeight="SemiBold"
-                                                      FontSize="14"/>
-                                            <TextBlock Text="{Binding Description}" 
-                                                      FontSize="12"
-                                                      Opacity="0.7"
-                                                      TextTrimming="CharacterEllipsis"
-                                                      MaxWidth="180"/>
+                         Style="{StaticResource ModernListView}">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Height" Value="38"/>
+                            <Setter Property="Padding" Value="10,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Foreground" Value="#9C000000"/>
+                            <Setter Property="BorderBrush" Value="#14000000"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="Background" Value="#06FFFFFF"/>
+                        </Style>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="MinHeight" Value="44"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="10,4"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#0A000000"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#140078D4"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Width="280" Header="{x:Static loc:Strings.Col_Role}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="8,0">
+                                            <Border Width="40" Height="40"
+                                                   CornerRadius="20"
+                                                   Background="{StaticResource RoleGradientBrush}"
+                                                   Margin="0,0,12,0">
+                                                <materialDesign:PackIcon Kind="ShieldAccount"
+                                                                        Width="24" Height="24"
+                                                                        Foreground="White"
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                                <TextBlock Text="{Binding Description}" FontSize="12" Opacity="0.7" TextTrimming="CharacterEllipsis" MaxWidth="180"/>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        
-                        <!-- Description Column -->
-                        <DataGridTextColumn Header="Description" 
-                                          Binding="{Binding Description}"
-                                          Width="*"/>
-                        
-                        <!-- Default Role Indicator -->
-                        <DataGridTemplateColumn Header="Type" Width="120">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <materialDesign:Chip Content="Default"
-                                                        Background="{StaticResource InfoBrush}"
-                                                        Foreground="White"
-                                                        Margin="8,0"
-                                                        FontSize="12"
-                                                        Padding="8,4"
-                                                        Visibility="{Binding IsDefault, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        
-                        <!-- Actions Column -->
-                        <DataGridTemplateColumn Header="Actions" Width="200">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="8,0">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnPermissions"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Manage Permissions"
-                                               Margin="0,0,4,0">
-                                            <materialDesign:PackIcon Kind="KeyChainVariant"/>
-                                        </Button>
-                                        
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnEdit"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Edit Role"
-                                               Margin="0,0,4,0">
-                                            <materialDesign:PackIcon Kind="Pencil"/>
-                                        </Button>
-                                        
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnDelete"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Delete Role"
-                                               Foreground="{StaticResource ErrorBrush}"
-                                               IsEnabled="{Binding IsDefault, Converter={StaticResource Not}}">
-                                            <materialDesign:PackIcon Kind="Delete"/>
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="280" Header="{x:Static loc:Strings.Col_Common_Description}" DisplayMemberBinding="{Binding Description}"/>
+
+                            <GridViewColumn Width="120" Header="{x:Static loc:Strings.Col_Type}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:Chip Content="{x:Static loc:Strings.Type_Default}"
+                                                            Background="{StaticResource InfoBrush}"
+                                                            Foreground="White"
+                                                            Margin="8,0"
+                                                            FontSize="12"
+                                                            Padding="8,4"
+                                                            HorizontalAlignment="Left"
+                                                            Visibility="{Binding IsDefault, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="200" Header="{x:Static loc:Strings.Col_Actions}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="8,0">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnPermissions"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_ManagePermissions}"
+                                                   Margin="0,0,4,0">
+                                                <materialDesign:PackIcon Kind="KeyChainVariant"/>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnEdit"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_EditRole}"
+                                                   Margin="0,0,4,0">
+                                                <materialDesign:PackIcon Kind="Pencil"/>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnDelete"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_DeleteRole}"
+                                                   Foreground="{StaticResource ErrorBrush}"
+                                                   IsEnabled="{Binding IsDefault, Converter={StaticResource Not}}">
+                                                <materialDesign:PackIcon Kind="Delete"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </materialDesign:Card>
     </Grid>

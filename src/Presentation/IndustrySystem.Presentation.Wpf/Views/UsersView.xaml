@@ -49,7 +49,7 @@
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock Text="{x:Static loc:Strings.Nav_Users}" 
                           FontSize="22" FontWeight="SemiBold"/>
-                <TextBlock Text="Manage user accounts and access" 
+                <TextBlock Text="{x:Static loc:Strings.View_Users_Subtitle}" 
                           FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
             </StackPanel>
             
@@ -78,7 +78,7 @@
                         <materialDesign:PackIcon Kind="Export" 
                                                 VerticalAlignment="Center"
                                                 Margin="0,0,6,0"/>
-                        <TextBlock Text="Export" 
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Export}" 
                                   VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
@@ -86,11 +86,11 @@
         </Grid>
 
         <!-- Add User Card -->
-        <materialDesign:Card Grid.Row="2" Padding="16"
+        <materialDesign:Card Grid.Row="2" Padding="10"
                             materialDesign:ElevationAssist.Elevation="Dp2"
                             UniformCornerRadius="8">
             <StackPanel>
-                <TextBlock Text="Add New User" 
+                <TextBlock Text="{x:Static loc:Strings.Section_AddNewUser}" 
                           FontSize="15" FontWeight="SemiBold"/>
                 
                 <Grid Margin="0,12,0,0">
@@ -105,7 +105,7 @@
                     <!-- Username -->
                     <TextBox Grid.Column="0"
                             x:Name="UserNameBox"
-                            Height="48"
+                            Height="52"
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Field_User_UserName}"
                             materialDesign:HintAssist.IsFloating="True"/>
@@ -113,7 +113,7 @@
                     <!-- Display Name -->
                     <TextBox Grid.Column="2"
                             x:Name="DisplayNameBox"
-                            Height="48"
+                            Height="52"
                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Field_User_DisplayName}"
                             materialDesign:HintAssist.IsFloating="True"/>
@@ -154,129 +154,141 @@
                     </Grid.ColumnDefinitions>
                     
                     <TextBlock Grid.Column="0"
-                              Text="User List" 
+                              Text="{x:Static loc:Strings.Section_UserList}" 
                               FontSize="15" FontWeight="SemiBold"/>
                     
                     <TextBox Grid.Column="1"
-                            Width="220" Height="36"
+                            Width="220" Height="42"
                             Style="{StaticResource MaterialDesignFilledTextBox}"
-                            materialDesign:HintAssist.Hint="Search users..."
+                            materialDesign:HintAssist.Hint="{x:Static loc:Strings.Search_Users}"
                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
                 
-                <!-- DataGrid -->
-                <DataGrid Grid.Row="2"
+                <!-- ListView -->
+                <ListView Grid.Row="2"
                          ItemsSource="{Binding Users}"
-                         AutoGenerateColumns="False"
-                         IsReadOnly="True"
-                         CanUserAddRows="False"
-                         SelectionMode="Single"
-                         SelectionUnit="FullRow"
-                         HeadersVisibility="Column"
-                         GridLinesVisibility="Horizontal"
-                         RowHeight="48"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         materialDesign:DataGridAssist.ColumnHeaderPadding="12,8"
-                         materialDesign:DataGridAssist.CellPadding="12,6">
-                    <DataGrid.Columns>
-                        <!-- User Column with Avatar -->
-                        <DataGridTemplateColumn Header="User" Width="250">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="6,0">
-                                        <Border Width="32" Height="32"
-                                               CornerRadius="16"
-                                               Background="{StaticResource UserGradientBrush}"
-                                               Margin="0,0,10,0">
-                                            <materialDesign:PackIcon Kind="Account" 
-                                                                    Width="18" Height="18"
-                                                                    Foreground="White"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding UserName}" 
-                                                      FontWeight="Medium"
-                                                      FontSize="13"/>
-                                            <TextBlock Text="{Binding DisplayName}" 
-                                                      FontSize="11"
-                                                      Opacity="0.6"/>
+                         Style="{StaticResource ModernListView}">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Height" Value="38"/>
+                            <Setter Property="Padding" Value="10,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Foreground" Value="#9C000000"/>
+                            <Setter Property="BorderBrush" Value="#14000000"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="Background" Value="#06FFFFFF"/>
+                        </Style>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="MinHeight" Value="44"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="10,4"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#0A000000"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#140078D4"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Width="250" Header="{x:Static loc:Strings.Col_User_UserName}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <Border Width="32" Height="32"
+                                                   CornerRadius="16"
+                                                   Background="{StaticResource UserGradientBrush}"
+                                                   Margin="0,0,10,0">
+                                                <materialDesign:PackIcon Kind="Account"
+                                                                        Width="18" Height="18"
+                                                                        Foreground="White"
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding UserName}" FontWeight="Medium" FontSize="13"/>
+                                                <TextBlock Text="{Binding DisplayName}" FontSize="11" Opacity="0.6"/>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        
-                        <!-- Status Column -->
-                        <DataGridTemplateColumn Header="Status" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <materialDesign:Chip Content="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}"
-                                                        Margin="6,0"
-                                                        FontSize="11"
-                                                        Padding="6,2"
-                                                        Foreground="White">
-                                        <materialDesign:Chip.Style>
-                                            <Style TargetType="materialDesign:Chip">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                                        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </materialDesign:Chip.Style>
-                                    </materialDesign:Chip>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        
-                        <!-- Created Date -->
-                        <DataGridTextColumn Header="Created" 
-                                          Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}"
-                                          Width="*"/>
-                        
-                        <!-- Actions Column -->
-                        <DataGridTemplateColumn Header="Actions" Width="140">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="6,0">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnResetPassword"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Reset Password"
-                                               Width="32" Height="32"
-                                               Margin="0,0,4,0">
-                                            <materialDesign:PackIcon Kind="LockReset" Width="18" Height="18"/>
-                                        </Button>
-                                        
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnEdit"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Edit User"
-                                               Width="32" Height="32"
-                                               Margin="0,0,4,0">
-                                            <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
-                                        </Button>
-                                        
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                               Click="OnDelete"
-                                               Tag="{Binding Id}"
-                                               ToolTip="Delete User"
-                                               Width="32" Height="32"
-                                               Foreground="{StaticResource ErrorBrush}">
-                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="100" Header="{x:Static loc:Strings.Col_Status}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:Chip Content="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}"
+                                                            Margin="6,0"
+                                                            FontSize="11"
+                                                            Padding="6,2"
+                                                            Foreground="White"
+                                                            HorizontalAlignment="Left">
+                                            <materialDesign:Chip.Style>
+                                                <Style TargetType="materialDesign:Chip">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                            <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:Chip.Style>
+                                        </materialDesign:Chip>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="220" Header="{x:Static loc:Strings.Col_Created}" DisplayMemberBinding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
+
+                            <GridViewColumn Width="140" Header="{x:Static loc:Strings.Col_Actions}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnResetPassword"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_ResetPassword}"
+                                                   Width="32" Height="32"
+                                                   Margin="0,0,4,0">
+                                                <materialDesign:PackIcon Kind="LockReset" Width="18" Height="18"/>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnEdit"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_EditUser}"
+                                                   Width="32" Height="32"
+                                                   Margin="0,0,4,0">
+                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="OnDelete"
+                                                   Tag="{Binding Id}"
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_DeleteUser}"
+                                                   Width="32" Height="32"
+                                                   Foreground="{StaticResource ErrorBrush}">
+                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </materialDesign:Card>
     </Grid>

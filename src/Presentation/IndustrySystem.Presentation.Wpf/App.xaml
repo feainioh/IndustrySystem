@@ -26,6 +26,7 @@
                 <!-- App styles -->
                 <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/Controls.xaml" />
                 <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/ViewStyles.xaml" />
+                <ResourceDictionary Source="/IndustrySystem.Presentation.Wpf;component/Resources/Styles/AdditionalStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- NavigationView overrides -->

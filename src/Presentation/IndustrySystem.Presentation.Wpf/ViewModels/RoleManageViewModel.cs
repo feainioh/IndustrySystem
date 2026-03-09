@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Mvvm;
 using NLog;
@@ -67,7 +68,7 @@ public class RoleManageViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, "Failed to load roles");
-            MessageBox.Show($"Failed to load roles: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_LoadFailed}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -76,7 +77,7 @@ public class RoleManageViewModel : BindableBase
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            MessageBox.Show("Please enter role name", "Validation", 
+            MessageBox.Show(Strings.Msg_ValidationRoleName, Strings.Msg_ValidationTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
@@ -96,7 +97,7 @@ public class RoleManageViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to add role: {name}");
-            MessageBox.Show($"Failed to add role: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -114,13 +115,14 @@ public class RoleManageViewModel : BindableBase
         var role = Roles.FirstOrDefault(r => r.Id == id);
         if (role?.IsDefault == true)
         {
-            MessageBox.Show("Cannot delete default role", "Warning", 
+            MessageBox.Show(Strings.Msg_CannotDeleteDefault, Strings.Msg_WarningTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         
+        
         var name = role?.Name ?? id.ToString();
-        var result = MessageBox.Show($"Delete role '{name}'?", "Confirm Delete",
+        var result = MessageBox.Show($"{Strings.Msg_ConfirmDeleteRole}", Strings.Msg_ConfirmDelete,
             MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result != MessageBoxResult.Yes) return;
         
@@ -139,7 +141,7 @@ public class RoleManageViewModel : BindableBase
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to delete role: {id}");
-            MessageBox.Show($"Failed to delete role: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle, 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

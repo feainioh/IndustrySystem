@@ -30,6 +30,19 @@ public abstract class DialogViewModel : BindableBase
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
 
+    protected void RaiseSaveCanExecuteChanged()
+    {
+        switch (SaveCommand)
+        {
+            case AsyncDelegateCommand asyncDelegateCommand:
+                asyncDelegateCommand.RaiseCanExecuteChanged();
+                break;
+            case DelegateCommand delegateCommand:
+                delegateCommand.RaiseCanExecuteChanged();
+                break;
+        }
+    }
+
     protected virtual bool CanSave() => true;
 
     protected virtual Task OnSaveAsync()

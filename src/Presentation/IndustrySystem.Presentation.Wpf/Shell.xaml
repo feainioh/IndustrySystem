@@ -12,43 +12,60 @@
  ui:WindowHelper.UseModernWindowStyle="True"
  ui:TitleBar.ExtendViewIntoTitleBar="True"
  ui:TitleBar.IsBackButtonVisible="False"
- Title="{Binding [App_Title], Source={StaticResource Loc}}"
+ Title="{x:Static res:Strings.App_Title}"
  Height="800" Width="1280"
+        WindowStyle="None"
  WindowStartupLocation="CenterScreen"
  MinHeight="600" MinWidth="900"
  Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
 
     <Window.Resources>
-        <res:LocalizationProvider x:Key="Loc" />
         <conv:PermissionToVisibilityConverter x:Key="PermissionToVisibility"/>
-        
+        <!-- 标题栏渐变背景 -->
+        <LinearGradientBrush x:Key="TitleBarGradientBrush" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#0D1117" Offset="0"/>
+            <GradientStop Color="#161B22" Offset="0.5"/>
+            <GradientStop Color="#0D1117" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- 标题栏前景色 -->
+        <SolidColorBrush x:Key="TitleBarForegroundBrush" Color="#E6F3FF"/>
+
         <!-- 科技感渐变背景 -->
         <LinearGradientBrush x:Key="TechGradientBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#0F1419" Offset="0"/>
             <GradientStop Color="#1A2332" Offset="0.5"/>
             <GradientStop Color="#0F1419" Offset="1"/>
         </LinearGradientBrush>
-        
+     
+
         <!-- Accent 渐变 -->
         <LinearGradientBrush x:Key="AccentGradientBrush" StartPoint="0,0" EndPoint="1,0">
             <GradientStop Color="#0078D4" Offset="0"/>
             <GradientStop Color="#00BCF2" Offset="1"/>
         </LinearGradientBrush>
-        
+
         <!-- 发光效果 -->
         <DropShadowEffect x:Key="GlowEffect" 
                           Color="#0078D4" 
                           BlurRadius="20" 
                           ShadowDepth="0" 
                           Opacity="0.6"/>
-        
+
+        <!-- 标题阴影 -->
+        <DropShadowEffect x:Key="HeaderShadow" 
+                          Color="Black" 
+                          BlurRadius="4" 
+                          ShadowDepth="1" 
+                          Opacity="0.5"/>
+
         <!-- 卡片阴影 -->
         <DropShadowEffect x:Key="CardShadow" 
                           Color="Black" 
                           BlurRadius="10" 
                           ShadowDepth="2" 
                           Opacity="0.3"/>
-        
+
         <!-- 动画样式 -->
         <Style x:Key="FadeInAnimation" TargetType="FrameworkElement">
             <Style.Triggers>
@@ -63,87 +80,201 @@
                 </EventTrigger>
             </Style.Triggers>
         </Style>
+
+        <!-- 窗口控制按钮样式 -->
+        <Style x:Key="WindowControlButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B3D9FF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#20FFFFFF"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#30FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 关闭按钮样式 -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowControlButtonStyle}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E81123"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#C50F1F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid>
-        <!-- 标题栏区域 -->
-        <Grid Height="48" VerticalAlignment="Top" 
-              Background="{StaticResource TechGradientBrush}">
-            <Grid.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.4" Color="Black"/>
-            </Grid.Effect>
+        <!-- 自定义标题栏区域 -->
+        <Grid Height="40" VerticalAlignment="Top" 
+              Background="{StaticResource TitleBarGradientBrush}"
+              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
+            <!-- 底部发光线条 -->
+            <Rectangle Grid.ColumnSpan="4" Height="1" VerticalAlignment="Bottom">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="Transparent" Offset="0"/>
+                        <GradientStop Color="#0078D4" Offset="0.3"/>
+                        <GradientStop Color="#00BCF2" Offset="0.7"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
             <!-- Logo 和标题 -->
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="16,0,0,0">
-                <Border Width="32" Height="32" CornerRadius="6"
+            <StackPanel Grid.Column="0" Orientation="Horizontal" 
+                       Margin="16,0,0,0" VerticalAlignment="Center">
+                <!-- Logo with gradient border -->
+                <Border Width="28" Height="28" CornerRadius="6"
                         Background="{StaticResource AccentGradientBrush}"
-                        VerticalAlignment="Center">
+                        Padding="1">
                     <Border.Effect>
-                        <DropShadowEffect Color="#0078D4" BlurRadius="12" ShadowDepth="0" Opacity="0.8"/>
+                        <DropShadowEffect Color="#0078D4" BlurRadius="8" 
+                                        ShadowDepth="0" Opacity="0.6"/>
                     </Border.Effect>
-                    <ui:FontIcon Glyph="&#xE950;" FontSize="18" 
-                                 Foreground="White" 
-                                 HorizontalAlignment="Center" 
-                                 VerticalAlignment="Center"/>
+                    <Border Background="#1A1F2E" CornerRadius="5">
+                        <ui:FontIcon Glyph="&#xE950;" FontSize="14" 
+                                   Foreground="{StaticResource AccentGradientBrush}"
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+                    </Border>
                 </Border>
-                <TextBlock Text="{Binding [App_Title], Source={StaticResource Loc}}" 
-                          FontSize="16" FontWeight="SemiBold"
-                          Foreground="White"
+                
+                <!-- 标题文字 -->
+                <TextBlock Text="{x:Static res:Strings.App_Title}" 
+                          FontSize="13" FontWeight="SemiBold"
+                          Foreground="{StaticResource TitleBarForegroundBrush}"
                           VerticalAlignment="Center" 
                           Margin="12,0,0,0"/>
-            </StackPanel>
-            
-            <!-- 右侧工具栏 -->
-            <StackPanel Grid.Column="2" Orientation="Horizontal" 
-                       Margin="0,0,140,0" VerticalAlignment="Center">
-                <!-- 主题切换 -->
-                <ui:ToggleSwitch x:Name="ThemeToggle" 
-                                OnContent="🌙" OffContent="☀️"
-                                Toggled="ThemeToggle_Toggled"
-                                Margin="0,0,12,0"/>
                 
-                <!-- 用户信息 -->
-                <Border Background="#20FFFFFF" 
-                        CornerRadius="20" 
-                        Padding="12,6"
-                        Margin="8,0">
+                <!-- 版本信息 -->
+                <Border Background="#152030" 
+                       CornerRadius="3" 
+                       Padding="6,2"
+                       Margin="8,0,0,0"
+                       VerticalAlignment="Center">
+                    <TextBlock Text="v1.0" 
+                              FontSize="9" 
+                              Foreground="#6B8CAE"
+                              FontWeight="Medium"/>
+                </Border>
+            </StackPanel>
+
+            <!-- 中间工具栏 -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0">
+                
+                <!-- 主题切换按钮 -->
+                <Button Width="32" Height="32" 
+                       Background="Transparent"
+                       BorderThickness="0"
+                       ToolTip="切换主题"
+                       Margin="4,0">
+                    <ui:FontIcon Glyph="&#xE771;" FontSize="12" Foreground="#B3D9FF"/>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                               CornerRadius="4">
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#20FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#30FFFFFF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- 用户信息卡片 -->
+                <Border Background="#152030" 
+                       CornerRadius="16" 
+                       Padding="8,4"
+                       Margin="4,0">
                     <StackPanel Orientation="Horizontal">
-                        <Border Width="28" Height="28" CornerRadius="14"
-                                Background="{StaticResource AccentGradientBrush}"
-                                Margin="0,0,8,0">
+                        <Border Width="24" Height="24" CornerRadius="12"
+                               Background="{StaticResource AccentGradientBrush}"
+                               Margin="0,0,6,0">
                             <ui:FontIcon Glyph="&#xE77B;" 
-                                        FontSize="14" 
-                                        Foreground="White"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
+                                       FontSize="11" 
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{Binding CurrentUserName}" 
-                                  Foreground="White" 
+                                  Foreground="#E6F3FF" 
+                                  FontSize="11"
                                   FontWeight="Medium"
                                   VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>
-                
+
                 <!-- 登出按钮 -->
                 <Button Click="OnLogoutClick" 
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Width="36" Height="36"
-                        ToolTip="登出"
-                        Margin="4,0,0,0">
+                       Width="32" Height="32"
+                       Background="Transparent"
+                       BorderThickness="0"
+                       ToolTip="登出"
+                       Margin="4,0">
                     <ui:FontIcon Glyph="&#xF3B1;" 
-                                FontSize="16" 
-                                Foreground="#FFE0E0E0"/>
+                               FontSize="12" 
+                               Foreground="#B3D9FF"/>
                     <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                               CornerRadius="4">
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#20FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
                                     <Setter Property="Background" Value="#30FFFFFF"/>
                                 </Trigger>
                             </Style.Triggers>
@@ -151,11 +282,34 @@
                     </Button.Style>
                 </Button>
             </StackPanel>
+
+            <!-- 窗口控制按钮 -->
+            <StackPanel Grid.Column="3" Orientation="Horizontal" 
+                       VerticalAlignment="Center">
+                <!-- 最小化 -->
+                <Button Content="&#xE921;" 
+                       Style="{StaticResource WindowControlButtonStyle}"
+                       Click="MinimizeWindow_Click"
+                       ToolTip="最小化"/>
+                
+                <!-- 最大化/还原 -->
+                <Button x:Name="MaximizeRestoreButton"
+                       Content="&#xE922;" 
+                       Style="{StaticResource WindowControlButtonStyle}"
+                       Click="MaximizeRestoreWindow_Click"
+                       ToolTip="最大化"/>
+                
+                <!-- 关闭 -->
+                <Button Content="&#xE8BB;" 
+                       Style="{StaticResource CloseButtonStyle}"
+                       Click="CloseWindow_Click"
+                       ToolTip="关闭"/>
+            </StackPanel>
         </Grid>
 
         <!-- 主内容区域 -->
         <ui:NavigationView x:Name="NavView" 
-                          Margin="0,48,0,0"
+                          Margin="0,56,0,0"
                           IsSettingsVisible="False"
                           PaneDisplayMode="Left"
                           IsPaneOpen="True"
@@ -163,7 +317,16 @@
                           CompactPaneLength="56"
                           IsBackButtonVisible="Collapsed"
                           Background="Transparent">
-            
+
+            <ui:NavigationView.PaneFooter>
+                <TextBlock Text="© 2024 Industry System" 
+                          FontSize="11" 
+                          Foreground="#6B8CAE"
+                          Opacity="0.8"
+                          Margin="16,8"
+                          TextAlignment="Center"/>
+            </ui:NavigationView.PaneFooter>
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:InvokeCommandAction Command="{Binding OnLoadedCommand}"/>
@@ -175,17 +338,17 @@
 
             <ui:NavigationView.MenuItems>
                 <!-- 运行看板 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_RunDashboard], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RunDashboard}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE80F;" Foreground="#00BCF2"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_RunExperiment], Source={StaticResource Loc}}" Tag="RunExperiment">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RunExperiment}" Tag="RunExperiment">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE768;" Foreground="#0078D4"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_RealtimeData], Source={StaticResource Loc}}" Tag="RealtimeData">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RealtimeData}" Tag="RealtimeData">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE9D2;" Foreground="#00BCF2"/>
                             </ui:NavigationViewItem.Icon>
@@ -201,30 +364,36 @@
                 <ui:NavigationViewItemSeparator/>
 
                 <!-- 实验管理 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_ExperimentManagement], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentManagement}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE8F1;" Foreground="#10893E"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
                             <Binding Path="AuthState"/>
-                            <Binding><Binding.Source>Experiments.View</Binding.Source></Binding>
-                            <Binding><Binding.Source>Templates.View</Binding.Source></Binding>
-                            <Binding><Binding.Source>Templates.Edit</Binding.Source></Binding>
+                            <Binding>
+                                <Binding.Source>Experiments.View</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>Templates.View</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>Templates.Edit</Binding.Source>
+                            </Binding>
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_Templates], Source={StaticResource Loc}}" Tag="Templates">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Templates}" Tag="Templates">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8A5;" Foreground="#107C10"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_ExperimentConfig], Source={StaticResource Loc}}" Tag="ExperimentConfig">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentConfig}" Tag="ExperimentConfig">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE9E9;" Foreground="#10893E"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_ExperimentGroupConfig], Source={StaticResource Loc}}" Tag="ExperimentGroupConfig">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentGroupConfig}" Tag="ExperimentGroupConfig">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE71D;" Foreground="#107C10"/>
                             </ui:NavigationViewItem.Icon>
@@ -233,29 +402,33 @@
                 </ui:NavigationViewItem>
 
                 <!-- 物料管理 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_MaterialManagement], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_MaterialManagement}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE7B8;" Foreground="#FF8C00"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
                             <Binding Path="AuthState"/>
-                            <Binding><Binding.Source>Material.View</Binding.Source></Binding>
-                            <Binding><Binding.Source>Inventory.View</Binding.Source></Binding>
+                            <Binding>
+                                <Binding.Source>Material.View</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>Inventory.View</Binding.Source>
+                            </Binding>
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_MaterialInfo], Source={StaticResource Loc}}" Tag="MaterialInfo">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_MaterialInfo}" Tag="MaterialInfo">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8EC;" Foreground="#FF8C00"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_ShelfInfo], Source={StaticResource Loc}}" Tag="ShelfInfo">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ShelfInfo}" Tag="ShelfInfo">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE81E;" Foreground="#CA5010"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_Inventory], Source={StaticResource Loc}}" Tag="Inventory">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Inventory}" Tag="Inventory">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8B7;" Foreground="#FF8C00"/>
                             </ui:NavigationViewItem.Icon>
@@ -266,24 +439,28 @@
                 <ui:NavigationViewItemSeparator/>
 
                 <!-- 数据管理 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_DataManagement], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DataManagement}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE8B7;" Foreground="#8764B8"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
                             <Binding Path="AuthState"/>
-                            <Binding><Binding.Source>Admin</Binding.Source></Binding>
-                            <Binding><Binding.Source>SuperAdmin</Binding.Source></Binding>
+                            <Binding>
+                                <Binding.Source>Admin</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>SuperAdmin</Binding.Source>
+                            </Binding>
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_ExperimentHistory], Source={StaticResource Loc}}" Tag="ExperimentHistory">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentHistory}" Tag="ExperimentHistory">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE81C;" Foreground="#8764B8"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_OperationLogs], Source={StaticResource Loc}}" Tag="OperationLogs">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_OperationLogs}" Tag="OperationLogs">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE8BC;" Foreground="#8764B8"/>
                             </ui:NavigationViewItem.Icon>
@@ -292,24 +469,28 @@
                 </ui:NavigationViewItem>
 
                 <!-- 设备管理 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_DeviceManagement], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DeviceManagement}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xECAA;" Foreground="#E74856"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
                             <Binding Path="AuthState"/>
-                            <Binding><Binding.Source>Admin</Binding.Source></Binding>
-                            <Binding><Binding.Source>Device.Maintain</Binding.Source></Binding>
+                            <Binding>
+                                <Binding.Source>Admin</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>Device.Maintain</Binding.Source>
+                            </Binding>
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_ManualDebug], Source={StaticResource Loc}}" Tag="ManualDebug">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ManualDebug}" Tag="ManualDebug">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE9D9;" Foreground="#E74856"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_DeviceParams], Source={StaticResource Loc}}" Tag="DeviceParams">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DeviceParams}" Tag="DeviceParams">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE713;" Foreground="#C50F1F"/>
                             </ui:NavigationViewItem.Icon>
@@ -320,29 +501,33 @@
                 <ui:NavigationViewItemSeparator/>
 
                 <!-- 系统管理 -->
-                <ui:NavigationViewItem Content="{Binding [Nav_SystemManagement], Source={StaticResource Loc}}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_SystemManagement}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE115;" Foreground="#FFB900"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
                             <Binding Path="AuthState"/>
-                            <Binding><Binding.Source>SuperAdmin</Binding.Source></Binding>
-                            <Binding><Binding.Source>Admin</Binding.Source></Binding>
+                            <Binding>
+                                <Binding.Source>SuperAdmin</Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>Admin</Binding.Source>
+                            </Binding>
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{Binding [Nav_Users], Source={StaticResource Loc}}" Tag="Users">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Users}" Tag="Users">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE77B;" Foreground="#FFB900"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_Roles], Source={StaticResource Loc}}" Tag="Roles">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Roles}" Tag="Roles">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE716;" Foreground="#FFB900"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{Binding [Nav_Permissions], Source={StaticResource Loc}}" Tag="Permissions">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Permissions}" Tag="Permissions">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xE72E;" Foreground="#FFB900"/>
                             </ui:NavigationViewItem.Icon>
@@ -358,7 +543,7 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="Black"/>
                 </Border.Effect>
-                
+
                 <Grid>
                     <materialDesign:DialogHost Identifier="RootDialogHost">
                         <ContentControl x:Name="MainRegionHost" 

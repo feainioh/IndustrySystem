@@ -40,13 +40,18 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<IMotionProgramAppService, MotionProgramAppService>();
         containerRegistry.RegisterSingleton<IMotionProgramExecutor, MotionProgramExecutor>();
         
-        // Register services
+        // Register device config service
         containerRegistry.RegisterSingleton<Services.IDeviceConfigService, Services.DeviceConfigService>();
+        
+        // Register project service
+        containerRegistry.RegisterSingleton<Services.IProjectService, Services.ProjectService>();
         
         // Register ViewModels
         containerRegistry.Register<ViewModels.DesignerViewModel>();
         containerRegistry.Register<ViewModels.DeviceDebugViewModel>();
         containerRegistry.Register<ViewModels.PositionSettingsViewModel>();
+        containerRegistry.Register<ViewModels.ProjectExplorerViewModel>();
+        containerRegistry.Register<ViewModels.VariableManagerViewModel>();
         
         // Register views
         containerRegistry.RegisterForNavigation<Views.DesignerView>("DesignerView");

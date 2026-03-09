@@ -90,11 +90,11 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
 
         // Permissions (Upsert by Name)
         var permRepo = _db.GetSimpleClient<Permission>();
-        UpsertPermission(permRepo, new Permission{ Name = "Users.View", DisplayName = "查看用户" });
-        UpsertPermission(permRepo, new Permission{ Name = "Users.Edit", DisplayName = "编辑用户" });
-        UpsertPermission(permRepo, new Permission{ Name = "Roles.View", DisplayName = "查看角色" });
-        UpsertPermission(permRepo, new Permission{ Name = "Roles.Edit", DisplayName = "编辑角色" });
-        UpsertPermission(permRepo, new Permission{ Name = "Templates.Edit", DisplayName = "编辑模板" });
+        UpsertPermission(permRepo, new Permission{ Name = "Users.View", DisplayName = "查看用户", GroupName = "用户" });
+        UpsertPermission(permRepo, new Permission{ Name = "Users.Edit", DisplayName = "编辑用户", GroupName = "用户" });
+        UpsertPermission(permRepo, new Permission{ Name = "Roles.View", DisplayName = "查看角色", GroupName = "角色" });
+        UpsertPermission(permRepo, new Permission{ Name = "Roles.Edit", DisplayName = "编辑角色", GroupName = "角色" });
+        UpsertPermission(permRepo, new Permission{ Name = "Templates.Edit", DisplayName = "编辑模板", GroupName = "模板" });
 
         // Admin user (Upsert by UserName)
         var userRepo = _db.GetSimpleClient<User>();
@@ -126,6 +126,7 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         else
         {
             existing.DisplayName = input.DisplayName;
+            existing.GroupName = input.GroupName;
             repo.Update(existing);
         }
     }

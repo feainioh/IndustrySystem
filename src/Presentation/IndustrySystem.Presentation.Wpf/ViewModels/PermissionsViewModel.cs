@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Mvvm;
 using NLog;
@@ -16,9 +17,9 @@ public class PermissionsViewModel : BindableBase
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IPermissionAppService _svc;
-    
+
     public ObservableCollection<PermissionDto> Permissions { get; } = new();
-    
+
     public ICommand RefreshCommand { get; }
     public ICommand DeleteCommand { get; }
 
@@ -26,13 +27,13 @@ public class PermissionsViewModel : BindableBase
     {
         _svc = svc ?? throw new ArgumentNullException(nameof(svc));
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
-        DeleteCommand = new DelegateCommand<Guid?>(async id => 
+        DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
             if (id.HasValue) await DeleteAsync(id.Value);
         });
-        
+
         _logger.Info("PermissionsViewModel initialized");
-        
+
         // ÑÓ³Ù¼ÓÔØÊý¾Ý
         System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
         {
@@ -46,10 +47,10 @@ public class PermissionsViewModel : BindableBase
         try
         {
             _logger.Debug("Loading permissions...");
-            
+
             var permissions = await _svc.GetListAsync();
             _logger.Info($"Loaded {permissions?.Count ?? 0} permissions from database");
-            
+
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Permissions.Clear();
@@ -61,42 +62,42 @@ public class PermissionsViewModel : BindableBase
                     }
                 }
             });
-            
+
             _logger.Info($"UI updated with {Permissions.Count} permissions");
         }
         catch (Exception ex)
         {
             _logger.Error(ex, "Failed to load permissions");
-            MessageBox.Show($"Failed to load permissions: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_LoadFailed}: {ex.Message}", Strings.Msg_ErrorTitle,
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    public async Task AddAsync(string name, string displayName)
+    public async Task AddAsync(string name, string displayName, string groupName)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            MessageBox.Show("Please enter permission name", "Validation", 
+            MessageBox.Show(Strings.Msg_ValidationPermissionName, Strings.Msg_ValidationTitle,
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        
+
         try
         {
             _logger.Info($"Adding permission: {name}");
-            var dto = await _svc.CreateAsync(new PermissionDto(Guid.Empty, name, displayName ?? name));
-            
+            var dto = await _svc.CreateAsync(new PermissionDto(Guid.Empty, name, displayName ?? name, groupName ?? string.Empty));
+
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Permissions.Add(dto);
             });
-            
+
             _logger.Info($"Permission '{name}' added successfully");
         }
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to add permission: {name}");
-            MessageBox.Show($"Failed to add permission: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle,
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -104,7 +105,7 @@ public class PermissionsViewModel : BindableBase
     public void EditPermission(Guid id)
     {
         _logger.Info($"Edit permission: {id}");
-        MessageBox.Show($"Edit Permission: {id}\n\nThis feature is not yet implemented.", 
+        MessageBox.Show($"Edit Permission: {id}\n\nThis feature is not yet implemented.",
             "Edit Permission", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -112,28 +113,29 @@ public class PermissionsViewModel : BindableBase
     {
         var permission = Permissions.FirstOrDefault(p => p.Id == id);
         var name = permission?.Name ?? id.ToString();
-        
-        var result = MessageBox.Show($"Delete permission '{name}'?", "Confirm Delete",
+
+        var result = MessageBox.Show($"{Strings.Msg_ConfirmDeletePermission}", Strings.Msg_ConfirmDelete,
             MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result != MessageBoxResult.Yes) return;
-        
+
         try
         {
             _logger.Info($"Deleting permission: {id}");
             await _svc.DeleteAsync(id);
-            
+
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 if (permission != null) Permissions.Remove(permission);
             });
-            
+
             _logger.Info($"Permission '{name}' deleted successfully");
         }
         catch (Exception ex)
         {
             _logger.Error(ex, $"Failed to delete permission: {id}");
-            MessageBox.Show($"Failed to delete permission: {ex.Message}", "Error", 
+            MessageBox.Show($"{Strings.Msg_ErrorTitle}: {ex.Message}", Strings.Msg_ErrorTitle,
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
+

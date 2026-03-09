@@ -18,10 +18,12 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
  private Guid _id;
  private string _name = string.Empty;
  private string _displayName = string.Empty;
+ private string _groupName = string.Empty;
 
  public Guid Id { get => _id; set => SetProperty(ref _id, value); }
- public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "名称不能为空"); ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged(); } } }
- public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, "显示名不能为空"); ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged(); } } }
+ public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "名称不能为空"); RaiseSaveCanExecuteChanged(); } } }
+ public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, "显示名不能为空"); RaiseSaveCanExecuteChanged(); } } }
+ public string GroupName { get => _groupName; set { if (SetProperty(ref _groupName, value)) { RaiseSaveCanExecuteChanged(); } } }
 
  public PermissionEditDialogViewModel(IPermissionAppService svc)
  { _svc = svc; Title = "编辑权限"; }
@@ -34,12 +36,12 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
  var dto = await _svc.GetAsync(v);
  if (dto != null)
  {
- Id = dto.Id; Name = dto.Name; DisplayName = dto.DisplayName;
+ Id = dto.Id; Name = dto.Name; DisplayName = dto.DisplayName; GroupName = dto.GroupName;
  }
  }
  else
  {
- Id = Guid.Empty; Name = string.Empty; DisplayName = string.Empty;
+ Id = Guid.Empty; Name = string.Empty; DisplayName = string.Empty; GroupName = string.Empty;
  }
  }
 
@@ -48,7 +50,7 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
  {
  try
  {
- var input = new PermissionDto(Id, Name, DisplayName);
+ var input = new PermissionDto(Id, Name, DisplayName, GroupName ?? string.Empty);
  _ = Id == Guid.Empty ? await _svc.CreateAsync(input) : await _svc.UpdateAsync(input);
  DialogResult = true;
  }
