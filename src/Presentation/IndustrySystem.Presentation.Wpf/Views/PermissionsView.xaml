@@ -9,6 +9,15 @@
     
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="Padding" Value="10,2,10,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="CaretBrush" Value="Black"/>
+        </Style>
     </UserControl.Resources>
     
     <Grid Margin="20">
@@ -90,31 +99,28 @@
                     
                     <!-- Permission Name -->
                     <TextBox Grid.Column="0"
-                            x:Name="NameBox"
-                            Height="52"
-                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding NewName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Permission_Name}"
                             materialDesign:HintAssist.IsFloating="True"/>
                     
                     <!-- Display Name -->
                     <TextBox Grid.Column="2"
-                            x:Name="DisplayNameBox"
-                            Height="52"
-                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding NewDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Permission_DisplayName}"
                             materialDesign:HintAssist.IsFloating="True" />
 
                     <!-- Group Name -->
                     <TextBox Grid.Column="4"
-                            x:Name="GroupNameBox"
-                            Height="52"
-                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Text="{Binding NewGroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Group}"
                             materialDesign:HintAssist.IsFloating="True" />
                     
                     <!-- Add Button -->
                     <Button Grid.Column="6"
-                           Click="OnAdd"
+                           Command="{Binding AddCommand}"
                            Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
                            Width="130" Height="40">
                         <StackPanel Orientation="Horizontal">
@@ -152,8 +158,9 @@
                               FontSize="15" FontWeight="SemiBold"/>
                     
                     <TextBox Grid.Column="1"
-                            Width="220" Height="42"
-                            Style="{StaticResource MaterialDesignFilledTextBox}"
+                            Width="220"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource SearchTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Search_Permissions}"
                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
@@ -161,37 +168,11 @@
 
                 <!-- ListView -->
                 <ListView Grid.Row="2"
-                         ItemsSource="{Binding Permissions}"
+                         ItemsSource="{Binding PermissionsView}"
                          Style="{StaticResource ModernListView}">
                     <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Height" Value="38"/>
-                            <Setter Property="Padding" Value="10,0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="Foreground" Value="#9C000000"/>
-                            <Setter Property="BorderBrush" Value="#14000000"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            <Setter Property="Background" Value="#06FFFFFF"/>
-                        </Style>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="MinHeight" Value="44"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="Padding" Value="10,4"/>
-                            <Setter Property="Margin" Value="0,2"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#0A000000"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#140078D4"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
+                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -239,8 +220,8 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                   Click="OnEdit"
-                                                   Tag="{Binding Id}"
+                                                   Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_EditPermission}"
                                                    Width="32" Height="32"
                                                    Margin="0,0,4,0">
@@ -248,8 +229,8 @@
                                             </Button>
 
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                   Click="OnDelete"
-                                                   Tag="{Binding Id}"
+                                                   Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_DeletePermission}"
                                                    Width="32" Height="32"
                                                    Foreground="{StaticResource ErrorBrush}">

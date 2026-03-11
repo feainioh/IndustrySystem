@@ -5,63 +5,242 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Contracts.Dtos;
+using IndustrySystem.Application.Contracts.Services;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
 {
- private readonly IRoleAppService _svc;
- private readonly IPermissionAppService _permSvc;
- public RoleEditDialogViewModel(IRoleAppService svc, IPermissionAppService permSvc) { _svc = svc; _permSvc = permSvc; Title = "编辑角色"; }
+    private readonly IRoleAppService _svc;
+    private readonly IPermissionAppService _permSvc;
 
- private Guid _id; private string _name = string.Empty; private string? _description; private bool _isDefault;
- public Guid Id { get => _id; set => SetProperty(ref _id, value); }
- public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "名称不能为空"); } } }
- public string? Description { get => _description; set => SetProperty(ref _description, value); }
- public bool IsDefault { get => _isDefault; set => SetProperty(ref _isDefault, value); }
- public ObservableCollection<RolePermissionItem> AllPermissions { get; } = new();
+    public RoleEditDialogViewModel(IRoleAppService svc, IPermissionAppService permSvc)
+    {
+        _svc = svc;
+        _permSvc = permSvc;
+        Title = "编辑角色";
+    }
 
- public async Task LoadAsync(Guid? id)
- {
- ClearErrors(); AllPermissions.Clear();
- var perms = await _permSvc.GetListAsync(); foreach (var p in perms) AllPermissions.Add(new RolePermissionItem(p.Id, p.DisplayName));
- if (id is { } v)
- {
- var dto = await _svc.GetAsync(v); if (dto != null) { Id = dto.Id; Name = dto.Name; Description = dto.Description; IsDefault = dto.IsDefault; var checkedIds = await _svc.GetPermissionIdsAsync(Id); foreach (var item in AllPermissions) item.IsChecked = checkedIds.Contains(item.Id); }
- }
- else { Id = Guid.Empty; Name = string.Empty; Description = null; IsDefault = false; }
- }
+    private Guid _id;
+    private string _name = string.Empty;
+    private string? _description;
+    private bool _isDefault;
 
- protected override bool CanSave() => !HasErrors;
- protected override async Task OnSaveAsync()
- {
- try
- {
- var input = new RoleDto(Id, Name, Description, IsDefault); RoleDto saved = Id == Guid.Empty ? await _svc.CreateAsync(input) : await _svc.UpdateAsync(input);
- var permIds = AllPermissions.Where(x => x.IsChecked).Select(x => x.Id).ToArray(); await _svc.SetPermissionsAsync(saved.Id, permIds);
- DialogResult = true;
- }
- catch (Exception ex) { AddError(string.Empty, ex.Message); }
- }
- protected override void OnCancel() => DialogResult = false;
+    public Guid Id { get => _id; set => SetProperty(ref _id, value); }
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (SetProperty(ref _name, value))
+            {
+                ValidateRequired(nameof(Name), _name, "名称不能为空");
+            }
+        }
+    }
 
- #region Validation
- private readonly Dictionary<string, List<string>> _errors = new(); public bool HasErrors => _errors.Count > 0; public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
- public IEnumerable GetErrors(string? propertyName) { if (string.IsNullOrEmpty(propertyName)) { foreach (var kv in _errors) foreach (var e in kv.Value) yield return e; yield break; } if (_errors.TryGetValue(propertyName, out var list)) { foreach (var e in list) yield return e; } }
- private void ValidateRequired(string propertyName, string? value, string error) { if (string.IsNullOrWhiteSpace(value)) AddError(propertyName, error); else ClearError(propertyName); }
- private void AddError(string propertyName, string error) { if (!_errors.TryGetValue(propertyName, out var list)) { list = new List<string>(); _errors[propertyName] = list; } if (!list.Contains(error)) { list.Add(error); ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName)); } }
- private void ClearError(string propertyName) { if (_errors.Remove(propertyName)) { ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName)); } }
- private void ClearErrors() { var keys = _errors.Keys.ToList(); _errors.Clear(); foreach (var k in keys) ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(k)); }
- #endregion
+    public string? Description { get => _description; set => SetProperty(ref _description, value); }
+    public bool IsDefault { get => _isDefault; set => SetProperty(ref _isDefault, value); }
+
+    public ObservableCollection<RolePermissionGroup> PermissionGroups { get; } = new();
+
+    public async Task LoadAsync(Guid? id)
+    {
+        ClearErrors();
+        PermissionGroups.Clear();
+
+        var viewGroup = new RolePermissionGroup("查看权限");
+        var editGroup = new RolePermissionGroup("编辑权限");
+        var otherGroup = new RolePermissionGroup("其他权限");
+
+        var perms = await _permSvc.GetListAsync();
+        foreach (var p in perms.OrderBy(x => x.DisplayName))
+        {
+            var item = new RolePermissionItem(p.Id, p.DisplayName, p.Name);
+            switch (ClassifyPermission(p.Name))
+            {
+                case PermissionCategory.View:
+                    viewGroup.Items.Add(item);
+                    break;
+                case PermissionCategory.Edit:
+                    editGroup.Items.Add(item);
+                    break;
+                default:
+                    otherGroup.Items.Add(item);
+                    break;
+            }
+        }
+
+        PermissionGroups.Add(viewGroup);
+        PermissionGroups.Add(editGroup);
+        PermissionGroups.Add(otherGroup);
+
+        if (id is { } v)
+        {
+            var dto = await _svc.GetAsync(v);
+            if (dto != null)
+            {
+                Id = dto.Id;
+                Name = dto.Name;
+                Description = dto.Description;
+                IsDefault = dto.IsDefault;
+
+                var checkedIds = await _svc.GetPermissionIdsAsync(Id);
+                foreach (var item in PermissionGroups.SelectMany(g => g.Items))
+                {
+                    item.IsChecked = checkedIds.Contains(item.Id);
+                }
+            }
+        }
+        else
+        {
+            Id = Guid.Empty;
+            Name = string.Empty;
+            Description = null;
+            IsDefault = false;
+        }
+    }
+
+    protected override bool CanSave() => !HasErrors;
+
+    protected override async Task OnSaveAsync()
+    {
+        try
+        {
+            var input = new RoleDto(Id, Name, Description, IsDefault);
+            var saved = Id == Guid.Empty ? await _svc.CreateAsync(input) : await _svc.UpdateAsync(input);
+
+            var permIds = PermissionGroups
+                .SelectMany(g => g.Items)
+                .Where(x => x.IsChecked)
+                .Select(x => x.Id)
+                .ToArray();
+
+            await _svc.SetPermissionsAsync(saved.Id, permIds);
+            DialogResult = true;
+        }
+        catch (Exception ex)
+        {
+            AddError(string.Empty, ex.Message);
+        }
+    }
+
+    protected override void OnCancel() => DialogResult = false;
+
+    private static PermissionCategory ClassifyPermission(string? permissionName)
+    {
+        if (string.IsNullOrWhiteSpace(permissionName)) return PermissionCategory.Other;
+        if (permissionName.EndsWith(".View", StringComparison.OrdinalIgnoreCase)) return PermissionCategory.View;
+        if (permissionName.EndsWith(".Edit", StringComparison.OrdinalIgnoreCase)) return PermissionCategory.Edit;
+        return PermissionCategory.Other;
+    }
+
+    #region Validation
+    private readonly Dictionary<string, List<string>> _errors = new();
+    public bool HasErrors => _errors.Count > 0;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName))
+        {
+            foreach (var kv in _errors)
+            {
+                foreach (var e in kv.Value)
+                {
+                    yield return e;
+                }
+            }
+            yield break;
+        }
+
+        if (_errors.TryGetValue(propertyName, out var list))
+        {
+            foreach (var e in list)
+            {
+                yield return e;
+            }
+        }
+    }
+
+    private void ValidateRequired(string propertyName, string? value, string error)
+    {
+        if (string.IsNullOrWhiteSpace(value)) AddError(propertyName, error);
+        else ClearError(propertyName);
+    }
+
+    private void AddError(string propertyName, string error)
+    {
+        if (!_errors.TryGetValue(propertyName, out var list))
+        {
+            list = new List<string>();
+            _errors[propertyName] = list;
+        }
+
+        if (!list.Contains(error))
+        {
+            list.Add(error);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+    }
+
+    private void ClearError(string propertyName)
+    {
+        if (_errors.Remove(propertyName))
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+    }
+
+    private void ClearErrors()
+    {
+        var keys = _errors.Keys.ToList();
+        _errors.Clear();
+        foreach (var k in keys)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(k));
+        }
+    }
+    #endregion
+}
+
+public class RolePermissionGroup
+{
+    public string Title { get; }
+    public ObservableCollection<RolePermissionItem> Items { get; } = new();
+
+    public RolePermissionGroup(string title)
+    {
+        Title = title;
+    }
 }
 
 public class RolePermissionItem : Prism.Mvvm.BindableBase
 {
- public Guid Id { get; }
- public string Name { get; }
- private bool _isChecked; public bool IsChecked { get => _isChecked; set => SetProperty(ref _isChecked, value); }
- public RolePermissionItem(Guid id, string name) { Id = id; Name = name; }
+    public Guid Id { get; }
+    public string Name { get; }
+    public string PermissionName { get; }
+
+    private bool _isChecked;
+    public bool IsChecked
+    {
+        get => _isChecked;
+        set => SetProperty(ref _isChecked, value);
+    }
+
+    public RolePermissionItem(Guid id, string name, string permissionName)
+    {
+        Id = id;
+        Name = name;
+        PermissionName = permissionName;
+    }
+}
+
+public enum PermissionCategory
+{
+    View,
+    Edit,
+    Other
 }

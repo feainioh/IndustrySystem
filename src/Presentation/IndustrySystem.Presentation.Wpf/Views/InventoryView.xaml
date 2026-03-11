@@ -1,7 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.InventoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid>
-    <TextBlock Text="库存管理 (占位)" />
-  </Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             Background="{DynamicResource MaterialDesignPaper}">
+    <UserControl.Resources>
+        <loc:LocalizationProvider x:Key="Loc" />
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="Padding" Value="10,2,10,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="CaretBrush" Value="Black"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page Header -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Width="48" Height="48"
+                    CornerRadius="24"
+                    Background="{StaticResource ExperimentGradientBrush}"
+                    VerticalAlignment="Center"
+                    Margin="0,0,16,0">
+                <materialDesign:PackIcon Kind="Warehouse"
+                                         Width="28" Height="28"
+                                         Foreground="White"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="{x:Static loc:Strings.Nav_Inventory}" FontSize="22" FontWeight="SemiBold"/>
+                <TextBlock Text="物料库存管理 · 入库 / 出库 / 批次追踪" FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding RefreshCommand}"
+                        Height="36" Padding="12,0"
+                        Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                        Command="{Binding InboundCommand}"
+                        Height="36" Padding="12,0"
+                        Background="{StaticResource SuccessBrush}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="入库" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Inventory List Card -->
+        <materialDesign:Card Grid.Row="2" Padding="16" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Section header + search -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="库存清单" FontSize="15" FontWeight="SemiBold"/>
+
+                    <TextBox Grid.Column="1"
+                             Width="280"
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource SearchTextField}"
+                             materialDesign:HintAssist.Hint="搜索物料名称 / 编码 / 批号 / 位置..."
+                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
+                </Grid>
+
+                <!-- ListView -->
+                <ListView Grid.Row="2" ItemsSource="{Binding InventoryView}" Style="{StaticResource ModernListView}">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+
+                            <!-- 物料 -->
+                            <GridViewColumn Width="200" Header="物料">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <Border Width="30" Height="30" CornerRadius="15"
+                                                    Background="{StaticResource ExperimentGradientBrush}" Margin="0,0,10,0">
+                                                <materialDesign:PackIcon Kind="PackageVariant" Width="16" Height="16"
+                                                                         Foreground="White"
+                                                                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding MaterialName}" FontWeight="SemiBold" FontSize="13"/>
+                                                <TextBlock Text="{Binding MaterialCode}" FontSize="11" Opacity="0.65"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- 批号 -->
+                            <GridViewColumn Width="140" Header="批号" DisplayMemberBinding="{Binding BatchNo}"/>
+
+                            <!-- 库存 / 安全库存 -->
+                            <GridViewColumn Width="130" Header="库存 / 安全库存">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontSize="13" FontWeight="SemiBold">
+                                                <TextBlock.Text>
+                                                    <Binding Path="Quantity" StringFormat="{}{0:0.##}"/>
+                                                </TextBlock.Text>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Value="True">
+                                                                <DataTrigger.Binding>
+                                                                    <MultiBinding Converter="{StaticResource LessThanConverter}">
+                                                                        <Binding Path="Quantity"/>
+                                                                        <Binding Path="SafetyStock"/>
+                                                                    </MultiBinding>
+                                                                </DataTrigger.Binding>
+                                                                <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Text=" / " FontSize="12" Opacity="0.5"/>
+                                            <TextBlock Text="{Binding SafetyStock, StringFormat={}{0:0.##}}" FontSize="12" Opacity="0.6"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- 单位 -->
+                            <GridViewColumn Width="70" Header="单位" DisplayMemberBinding="{Binding Unit}"/>
+
+                            <!-- 入库日期 -->
+                            <GridViewColumn Width="110" Header="入库日期" DisplayMemberBinding="{Binding InboundDate, StringFormat=yyyy-MM-dd}"/>
+
+                            <!-- 过期日期 -->
+                            <GridViewColumn Width="110" Header="过期日期" DisplayMemberBinding="{Binding ExpiryDate, StringFormat=yyyy-MM-dd}"/>
+
+                            <!-- 位置 -->
+                            <GridViewColumn Width="100" Header="位置" DisplayMemberBinding="{Binding Location}"/>
+
+                            <!-- 操作 -->
+                            <GridViewColumn Width="160" Header="{x:Static loc:Strings.Col_Actions}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <!-- 出库 -->
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.OutboundCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    ToolTip="出库"
+                                                    Width="32" Height="32" Margin="0,0,2,0"
+                                                    Foreground="{StaticResource WarningBrush}">
+                                                <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" Width="18" Height="18"/>
+                                            </Button>
+                                            <!-- 编辑 -->
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}"
+                                                    Width="32" Height="32" Margin="0,0,2,0">
+                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                            </Button>
+                                            <!-- 删除 -->
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    ToolTip="{x:Static loc:Strings.Btn_Delete}"
+                                                    Width="32" Height="32"
+                                                    Foreground="{StaticResource ErrorBrush}">
+                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
 </UserControl>

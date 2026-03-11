@@ -732,4 +732,49 @@
   <data name="Hint_Template_Description" xml:space="preserve">
     <value>模板描述</value>
   </data>
+  <data name="Material_Storage_RoomTemperature" xml:space="preserve">
+    <value>常温</value>
+  </data>
+  <data name="Material_Storage_Refrigerated" xml:space="preserve">
+    <value>冷藏</value>
+  </data>
+  <data name="Material_Storage_LightProtected" xml:space="preserve">
+    <value>避光</value>
+  </data>
+  <data name="Material_Category_Solid" xml:space="preserve">
+    <value>固体</value>
+  </data>
+  <data name="Material_Category_Liquid" xml:space="preserve">
+    <value>液体</value>
+  </data>
+  <data name="Material_Category_Gas" xml:space="preserve">
+    <value>气体</value>
+  </data>
+  <data name="Material_Hazard_None" xml:space="preserve">
+    <value>无危险</value>
+  </data>
+  <data name="Material_Hazard_Low" xml:space="preserve">
+    <value>低危</value>
+  </data>
+  <data name="Material_Hazard_Medium" xml:space="preserve">
+    <value>中危险</value>
+  </data>
+  <data name="Material_Hazard_High" xml:space="preserve">
+    <value>高危险</value>
+  </data>
+  <data name="Material_Type_RawMaterial" xml:space="preserve">
+    <value>原料</value>
+  </data>
+  <data name="Material_Type_Consumable" xml:space="preserve">
+    <value>耗材</value>
+  </data>
+  <data name="Material_Type_Intermediate" xml:space="preserve">
+    <value>中间产物</value>
+  </data>
+  <data name="Material_Type_Product" xml:space="preserve">
+    <value>产物</value>
+  </data>
+  <data name="Material_Type_Other" xml:space="preserve">
+    <value>其他</value>
+  </data>
 </root>

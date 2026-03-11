@@ -7,7 +7,11 @@ namespace IndustrySystem.Application.Contracts.Services;
 
 public interface IInventoryAppService
 {
-    Task<IReadOnlyList<InventoryItemDto>> GetListAsync();
-    Task InAsync(Guid id);
-    Task OutAsync(Guid id);
+    Task<IReadOnlyList<InventoryRecordDto>> GetListAsync();
+    Task<InventoryRecordDto?> GetAsync(Guid id);
+    Task<InventoryRecordDto> CreateAsync(InventoryRecordDto input);
+    Task<InventoryRecordDto> UpdateAsync(InventoryRecordDto input);
+    Task DeleteAsync(Guid id);
+    Task InboundAsync(Guid id, decimal qty);
+    Task OutboundAsync(Guid id, decimal qty);
 }

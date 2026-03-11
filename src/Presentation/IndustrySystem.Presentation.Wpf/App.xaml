@@ -41,6 +41,10 @@
             <conv:PermissionToVisibilityConverter x:Key="PermissionToVisibility"/>
             <conv:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
             <conv:BooleanNegationConverter x:Key="Not"/>
+            <conv:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+            <conv:LessThanConverter x:Key="LessThanConverter"/>
+            <conv:NotNullToBoolConverter x:Key="NotNull"/>
+            <conv:ContainerTypeToIconConverter x:Key="ContainerTypeToIcon"/>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>

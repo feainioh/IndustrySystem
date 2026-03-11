@@ -1,9 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.ShelfInfoView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="False">
-    <Grid Margin="16">
-        <TextBlock Text="Shelf Info: Feature in progress..." FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             Background="{DynamicResource MaterialDesignPaper}">
+    <UserControl.Resources>
+        <loc:LocalizationProvider x:Key="Loc" />
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═══════════════ Page Header ═══════════════ -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Width="48" Height="48" CornerRadius="24"
+                    Background="{StaticResource DeviceGradientBrush}" VerticalAlignment="Center" Margin="0,0,16,0">
+                <materialDesign:PackIcon Kind="ViewGrid" Width="28" Height="28"
+                                         Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="{x:Static loc:Strings.Nav_ShelfInfo}" FontSize="22" FontWeight="SemiBold"/>
+                <TextBlock Text="货架槽位总览 · 点击槽位配置容器与库存" FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding RefreshCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding OpenContainerListCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="PackageVariant" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="容器配置" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding OpenShelfListCommand}" Height="36" Padding="12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ViewGrid" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="货架配置" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══════════════ Shelf Selector Bar ═══════════════ -->
+        <materialDesign:Card Grid.Row="2" Padding="14,10"
+                             materialDesign:ElevationAssist.Elevation="Dp1" UniformCornerRadius="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="当前货架" FontSize="14" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Margin="0,0,14,0"/>
+
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding Shelves}"
+                          SelectedItem="{Binding SelectedShelf}"
+                          DisplayMemberPath="Name"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Width="200"
+                          materialDesign:HintAssist.Hint="选择货架"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <Border Background="{StaticResource PrimaryBrush}" CornerRadius="4" Padding="8,3" Margin="0,0,10,0">
+                        <TextBlock Foreground="White" FontSize="12">
+                            <Run Text="{Binding ShelfRows, Mode=OneWay}"/>
+                            <Run Text=" 行 × "/>
+                            <Run Text="{Binding ShelfColumns, Mode=OneWay}"/>
+                            <Run Text=" 列"/>
+                        </TextBlock>
+                    </Border>
+                    <TextBlock Text="{Binding SelectedShelf.Description}" FontSize="12" Opacity="0.6"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Legend -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="12" Height="12" CornerRadius="2" Background="#E0E0E0" Margin="0,0,4,0"/>
+                    <TextBlock Text="空位" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource PrimaryBrush}" Opacity="0.25" Margin="0,0,4,0"/>
+                    <TextBlock Text="有容器" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource SuccessBrush}" Opacity="0.35" Margin="0,0,4,0"/>
+                    <TextBlock Text="有库存" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource ErrorBrush}" Opacity="0.2" Margin="0,0,4,0"/>
+                    <TextBlock Text="已禁用" FontSize="11" Opacity="0.6"/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- ═══════════════ Slot Grid ═══════════════ -->
+        <materialDesign:Card Grid.Row="4" Padding="12"
+                             materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Slots}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="{Binding DataContext.ShelfRows, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                         Columns="{Binding DataContext.ShelfColumns, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.ConfigureSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    Margin="4" Padding="0" Cursor="Hand"
+                                    Height="Auto" MinHeight="110" MinWidth="120"
+                                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                                <Button.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding PositionLabel}"/>
+                                        <TextBlock Text="{Binding StatusLine1}"/>
+                                        <TextBlock Text="{Binding StatusLine2}" Visibility="{Binding HasInventory, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding QuantityText}" Visibility="{Binding HasInventory, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding Remark}" Opacity="0.7"/>
+                                    </StackPanel>
+                                </Button.ToolTip>
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                        <Setter Property="BorderBrush" Value="#25000000"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <!-- 已禁用 -->
+                                            <DataTrigger Binding="{Binding IsDisabled}" Value="True">
+                                                <Setter Property="Background" Value="#15F44336"/>
+                                                <Setter Property="BorderBrush" Value="#30F44336"/>
+                                                <Setter Property="Opacity" Value="0.6"/>
+                                            </DataTrigger>
+                                            <!-- 有容器无库存 -->
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding HasContainer}" Value="True"/>
+                                                    <Condition Binding="{Binding HasInventory}" Value="False"/>
+                                                    <Condition Binding="{Binding IsDisabled}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.08"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="BorderBrush">
+                                                    <Setter.Value>
+                                                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.35"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </MultiDataTrigger>
+                                            <!-- 有库存 -->
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding HasInventory}" Value="True"/>
+                                                    <Condition Binding="{Binding IsDisabled}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <SolidColorBrush Color="{StaticResource SuccessColor}" Opacity="0.10"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="BorderBrush">
+                                                    <Setter.Value>
+                                                        <SolidColorBrush Color="{StaticResource SuccessColor}" Opacity="0.45"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                                <Grid Margin="8,6">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Row 0: Position label + container size badge -->
+                                    <Grid Grid.Row="0" Margin="0,0,0,4">
+                                        <TextBlock Text="{Binding PositionLabel}" FontSize="10" Opacity="0.45"
+                                                   FontWeight="Medium" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding ContainerSizeLabel}" FontSize="9" Opacity="0.4"
+                                                   HorizontalAlignment="Right"
+                                                   Visibility="{Binding HasContainer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Grid>
+
+                                    <!-- Row 1: Container icon (large, centered) -->
+                                    <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <!-- Disabled state -->
+                                        <materialDesign:PackIcon Kind="Cancel" Width="30" Height="30"
+                                                                 Foreground="{StaticResource ErrorBrush}" Opacity="0.5"
+                                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Visibility>
+                                                <Binding Path="IsDisabled" Converter="{StaticResource BooleanToVisibilityConverter}"/>
+                                            </materialDesign:PackIcon.Visibility>
+                                        </materialDesign:PackIcon>
+
+                                        <!-- Empty slot -->
+                                        <materialDesign:PackIcon Kind="TrayRemove" Width="28" Height="28"
+                                                                 Foreground="#60000000"
+                                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Visibility>
+                                                <Binding Path="IsEmpty" Converter="{StaticResource BooleanToVisibilityConverter}"/>
+                                            </materialDesign:PackIcon.Visibility>
+                                        </materialDesign:PackIcon>
+
+                                        <!-- Has container: show type-specific icon -->
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    Visibility="{Binding HasContainer, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDisabled}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <materialDesign:PackIcon Width="30" Height="30"
+                                                                     Kind="{Binding ContainerTypeValue, Converter={StaticResource ContainerTypeToIcon}}"
+                                                                     HorizontalAlignment="Center">
+                                                <materialDesign:PackIcon.Style>
+                                                    <Style TargetType="materialDesign:PackIcon">
+                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasInventory}" Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </materialDesign:PackIcon.Style>
+                                            </materialDesign:PackIcon>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Row 2: Container name / status line -->
+                                    <TextBlock Grid.Row="2" Text="{Binding StatusLine1}" FontSize="11"
+                                               TextTrimming="CharacterEllipsis" TextAlignment="Center"
+                                               HorizontalAlignment="Center" Margin="0,2,0,0"
+                                               FontWeight="Medium" Opacity="0.8"/>
+
+                                    <!-- Row 3: Material + quantity -->
+                                    <StackPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,1,0,0"
+                                                Visibility="{Binding HasInventory, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="{Binding StatusLine2}" FontSize="10"
+                                                   TextTrimming="CharacterEllipsis" TextAlignment="Center"
+                                                   Foreground="{StaticResource SuccessBrush}" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding QuantityText}" FontSize="9"
+                                                   TextAlignment="Center" Opacity="0.6"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

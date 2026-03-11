@@ -9,6 +9,15 @@
     
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="Padding" Value="10,2,10,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="CaretBrush" Value="Black"/>
+        </Style>
     </UserControl.Resources>
     
     <Grid Style="{StaticResource PageContainer}">
@@ -83,7 +92,7 @@
                     
                     <!-- Role Name -->
                     <TextBox Grid.Column="0"
-                            x:Name="RoleNameBox"
+                            Text="{Binding NewRoleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Hint_Role_Name}"
                             materialDesign:HintAssist.IsFloating="True"/>
@@ -91,14 +100,14 @@
                     
                     <!-- Description -->
                     <TextBox Grid.Column="2"
-                            x:Name="DescBox"
+                            Text="{Binding NewRoleDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Common_Description}"
                             materialDesign:HintAssist.IsFloating="True"/>
                     
                     <!-- Add Button -->
                     <Button Grid.Column="4"
-                           Click="OnAdd"
+                           Command="{Binding AddCommand}"
                            Style="{StaticResource MaterialAccentButton}"
                            Width="120"
                            Height="48">
@@ -136,46 +145,20 @@
                     
                     <TextBox Grid.Column="1"
                             Width="250"
-                            Style="{StaticResource MaterialDesignFilledTextBox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource SearchTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Search_Roles}"
                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
-                            materialDesign:TextFieldAssist.LeadingIcon="Magnify"
-                            Height="40"/>
+                            materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
                 
                 <!-- ListView -->
                 <ListView Grid.Row="2"
-                         ItemsSource="{Binding Roles}"
+                         ItemsSource="{Binding RolesView}"
                          Style="{StaticResource ModernListView}">
                     <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Height" Value="38"/>
-                            <Setter Property="Padding" Value="10,0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="Foreground" Value="#9C000000"/>
-                            <Setter Property="BorderBrush" Value="#14000000"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            <Setter Property="Background" Value="#06FFFFFF"/>
-                        </Style>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="MinHeight" Value="44"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="Padding" Value="10,4"/>
-                            <Setter Property="Margin" Value="0,2"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#0A000000"/>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#140078D4"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
+                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -224,24 +207,24 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="8,0">
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                   Click="OnPermissions"
-                                                   Tag="{Binding Id}"
+                                                   Command="{Binding DataContext.ManagePermissionsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_ManagePermissions}"
                                                    Margin="0,0,4,0">
                                                 <materialDesign:PackIcon Kind="KeyChainVariant"/>
                                             </Button>
 
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                   Click="OnEdit"
-                                                   Tag="{Binding Id}"
+                                                   Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_EditRole}"
                                                    Margin="0,0,4,0">
                                                 <materialDesign:PackIcon Kind="Pencil"/>
                                             </Button>
 
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                   Click="OnDelete"
-                                                   Tag="{Binding Id}"
+                                                   Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                   CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_DeleteRole}"
                                                    Foreground="{StaticResource ErrorBrush}"
                                                    IsEnabled="{Binding IsDefault, Converter={StaticResource Not}}">

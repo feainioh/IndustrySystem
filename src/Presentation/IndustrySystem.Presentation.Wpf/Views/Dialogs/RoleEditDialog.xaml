@@ -2,55 +2,146 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.RoleEditDialog"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
  xmlns:prism="http://prismlibrary.com/"
  xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
- prism:ViewModelLocator.AutoWireViewModel="False">
- <UserControl.Resources>
- <loc:LocalizationProvider x:Key="Loc" />
- </UserControl.Resources>
- <Grid Margin="16">
- <Grid.RowDefinitions>
- <RowDefinition Height="Auto"/>
- <RowDefinition Height="*"/>
- <RowDefinition Height="Auto"/>
- </Grid.RowDefinitions>
+ prism:ViewModelLocator.AutoWireViewModel="False"
+ MinWidth="680" MinHeight="560">
+    <UserControl.Resources>
+        <loc:LocalizationProvider x:Key="Loc" />
+        <Style x:Key="FormField" TargetType="TextBox" BasedOn="{StaticResource MaterialTextField}">
+            <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+    </UserControl.Resources>
 
- <TextBlock Text="{Binding [Dialog_RoleEdit_Title], Source={StaticResource Loc}}" FontSize="18" FontWeight="SemiBold"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
- <Grid Grid.Row="1" Margin="0,12,0,12">
- <Grid.ColumnDefinitions>
- <ColumnDefinition Width="*"/>
- <ColumnDefinition Width="260"/>
- </Grid.ColumnDefinitions>
- <StackPanel>
- <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
- <TextBlock Text="{Binding [Field_Common_Name], Source={StaticResource Loc}}" Width="120" VerticalAlignment="Center"/>
- <TextBox Width="240" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, NotifyOnValidationError=True}"/>
- </StackPanel>
- <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
- <TextBlock Text="{Binding [Field_Common_Description], Source={StaticResource Loc}}" Width="120" VerticalAlignment="Center"/>
- <TextBox Width="300" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
- </StackPanel>
- <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
- <TextBlock Text="{Binding [Field_Role_Default], Source={StaticResource Loc}}" Width="120" VerticalAlignment="Center"/>
- <CheckBox IsChecked="{Binding IsDefault}"/>
- </StackPanel>
- </StackPanel>
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource RoleGradientBrush}" Padding="24,18">
+            <StackPanel Orientation="Horizontal">
+                <Border Width="40" Height="40" CornerRadius="20"
+                        Background="#33FFFFFF" Margin="0,0,14,0">
+                    <materialDesign:PackIcon Kind="ShieldEditOutline" Width="22" Height="22"
+                                             Foreground="White"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding [Dialog_RoleEdit_Title], Source={StaticResource Loc}}"
+                               FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock Text="编辑角色信息与权限分配"
+                               FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
 
- <GroupBox Grid.Column="1" Header="{Binding [Nav_Permissions], Source={StaticResource Loc}}" Padding="8">
- <ItemsControl ItemsSource="{Binding AllPermissions}">
- <ItemsControl.ItemTemplate>
- <DataTemplate>
- <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
- </DataTemplate>
- </ItemsControl.ItemTemplate>
- </ItemsControl>
- </GroupBox>
- </Grid>
+        <!-- Scrollable Body -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="24,20,24,10">
 
- <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
- <Button Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}" Margin="0,0,8,0" Command="{Binding CancelCommand}"/>
- <Button Content="{Binding [Btn_Save], Source={StaticResource Loc}}" Command="{Binding SaveCommand}"/>
- </StackPanel>
- </Grid>
+                <!-- Section 1: 基本信息 -->
+                <materialDesign:Card Padding="18" Margin="0,0,0,14"
+                                     materialDesign:ElevationAssist.Elevation="Dp1"
+                                     UniformCornerRadius="8">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
+                                                     Foreground="{StaticResource PrimaryBrush}"
+                                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="基本信息" FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormField}"
+                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="{Binding [Field_Common_Name], Source={StaticResource Loc}}"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
+                                     Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="{Binding [Field_Common_Description], Source={StaticResource Loc}}"/>
+
+                            <CheckBox Grid.Row="1" Grid.Column="0"
+                                      IsChecked="{Binding IsDefault}"
+                                      Content="{Binding [Field_Role_Default], Source={StaticResource Loc}}"
+                                      FontSize="13" Margin="0,0,0,6"/>
+                        </Grid>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Section 2: 权限分配 -->
+                <materialDesign:Card Padding="18" Margin="0,0,0,6"
+                                     materialDesign:ElevationAssist.Elevation="Dp1"
+                                     UniformCornerRadius="8">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <materialDesign:PackIcon Kind="KeyOutline" Width="20" Height="20"
+                                                     Foreground="#8764B8"
+                                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding [Nav_Permissions], Source={StaticResource Loc}}"
+                                       FontSize="15" FontWeight="SemiBold" Foreground="#8764B8"/>
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding PermissionGroups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,12">
+                                        <TextBlock Text="{Binding Title}" FontSize="13"
+                                                   FontWeight="SemiBold" Opacity="0.7" Margin="0,0,0,6"/>
+                                        <ItemsControl ItemsSource="{Binding Items}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Name}"
+                                                              IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                              Margin="0,3,20,3" FontSize="13"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </materialDesign:Card>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer Actions -->
+        <Border Grid.Row="2" BorderBrush="#14000000" BorderThickness="0,1,0,0" Padding="24,14">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}"
+                        Command="{Binding CancelCommand}"
+                        Width="100" Height="36" Margin="0,0,10,0"/>
+                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        Content="{Binding [Btn_Save], Source={StaticResource Loc}}"
+                        Command="{Binding SaveCommand}"
+                        Background="{StaticResource PrimaryBrush}"
+                        Foreground="White"
+                        Width="100" Height="36"/>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

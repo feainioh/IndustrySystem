@@ -8,7 +8,9 @@ public class Permission
     public string DisplayName { get; set; } = string.Empty;
     public string GroupName { get; set; } = string.Empty;
 
+    [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    [SqlSugar.SugarColumn(IsNullable = true)]
+    public DateTime? UpdatedAt { get; set; }
 }

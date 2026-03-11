@@ -11,4 +11,6 @@ public interface IUserAppService
     Task DeleteAsync(Guid id);
     Task<Guid[]> GetRoleIdsAsync(Guid userId);
     Task SetRolesAsync(Guid userId, Guid[] roleIds);
+    Task<bool> ValidateCredentialsAsync(string userName, string password);
+    Task ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
 }

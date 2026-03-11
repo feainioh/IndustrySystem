@@ -102,6 +102,8 @@ public partial class App : PrismApplication
         containerRegistry.Register<IExperimentHistoryAppService, ExperimentHistoryAppService>();
         containerRegistry.Register<IAlarmAppService, AlarmAppService>();
         containerRegistry.Register<IInventoryAppService, InventoryAppService>();
+        containerRegistry.Register<IMaterialAppService, MaterialAppService>();
+        containerRegistry.Register<IShelfAppService, ShelfAppService>();
         containerRegistry.Register<IRunExperimentAppService, RunExperimentAppService>();
         containerRegistry.Register<ICommunicationAppService, CommunicationAppService>();
         containerRegistry.Register<IModbusTcpClient, ModbusTcpClient>();

@@ -1,36 +1,75 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Domain.Entities.Inventory;
+using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
 public class InventoryAppService : IInventoryAppService
 {
-    private static readonly ConcurrentDictionary<Guid, InventoryItemDto> _store = new();
+    private readonly IRepository<InventoryRecord> _repo;
+    private readonly IMapper _mapper;
 
-    static InventoryAppService()
+    public InventoryAppService(IRepository<InventoryRecord> repo, IMapper mapper)
     {
-        var a = new InventoryItemDto(Guid.NewGuid(), "物料A", 5);
-        var b = new InventoryItemDto(Guid.NewGuid(), "物料B", 2);
-        _store[a.Id] = a; _store[b.Id] = b;
+        _repo = repo;
+        _mapper = mapper;
     }
 
-    public Task<IReadOnlyList<InventoryItemDto>> GetListAsync()
-        => Task.FromResult<IReadOnlyList<InventoryItemDto>>(_store.Values.ToList());
-
-    public Task InAsync(Guid id)
+    public async Task<IReadOnlyList<InventoryRecordDto>> GetListAsync()
     {
-        if (_store.TryGetValue(id, out var item)) _store[id] = item with { Qty = item.Qty + 1 };
-        return Task.CompletedTask;
+        var list = await _repo.GetListAsync();
+        return list.OrderBy(x => x.MaterialName)
+                   .Select(_mapper.Map<InventoryRecordDto>)
+                   .ToList();
     }
 
-    public Task OutAsync(Guid id)
+    public async Task<InventoryRecordDto?> GetAsync(Guid id)
     {
-        if (_store.TryGetValue(id, out var item) && item.Qty > 0) _store[id] = item with { Qty = item.Qty - 1 };
-        return Task.CompletedTask;
+        var entity = await _repo.GetAsync(id);
+        return entity is null ? null : _mapper.Map<InventoryRecordDto>(entity);
+    }
+
+    public async Task<InventoryRecordDto> CreateAsync(InventoryRecordDto input)
+    {
+        var entity = _mapper.Map<InventoryRecord>(input);
+        entity.Id = entity.Id == Guid.Empty ? Guid.NewGuid() : entity.Id;
+        entity.CreatedAt = DateTime.UtcNow;
+        entity.UpdatedAt = DateTime.UtcNow;
+        var saved = await _repo.InsertAsync(entity);
+        return _mapper.Map<InventoryRecordDto>(saved);
+    }
+
+    public async Task<InventoryRecordDto> UpdateAsync(InventoryRecordDto input)
+    {
+        var entity = _mapper.Map<InventoryRecord>(input);
+        entity.UpdatedAt = DateTime.UtcNow;
+        var saved = await _repo.UpdateAsync(entity);
+        return _mapper.Map<InventoryRecordDto>(saved);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _repo.DeleteAsync(id);
+    }
+
+    public async Task InboundAsync(Guid id, decimal qty)
+    {
+        var entity = await _repo.GetAsync(id);
+        if (entity is null) return;
+        entity.Quantity += qty;
+        entity.UpdatedAt = DateTime.UtcNow;
+        await _repo.UpdateAsync(entity);
+    }
+
+    public async Task OutboundAsync(Guid id, decimal qty)
+    {
+        var entity = await _repo.GetAsync(id);
+        if (entity is null) return;
+        if (entity.Quantity < qty) return;
+        entity.Quantity -= qty;
+        entity.UpdatedAt = DateTime.UtcNow;
+        await _repo.UpdateAsync(entity);
     }
 }
