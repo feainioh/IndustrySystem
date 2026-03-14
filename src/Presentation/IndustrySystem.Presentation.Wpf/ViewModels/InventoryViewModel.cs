@@ -30,24 +30,43 @@ public class InventoryViewModel : BindableBase
         set
         {
             if (SetProperty(ref _searchText, value))
+            {
                 InventoryView.Refresh();
+                SummaryView.Refresh();
+            }
         }
     }
 
+    // ── Detail records ──
     public ObservableCollection<InventoryRecordDto> Items { get; } = new();
     public ICollectionView InventoryView { get; }
+
+    // ── Summary (grouped by MaterialId + BatchNo) ──
+    public ObservableCollection<InventorySummaryDto> SummaryItems { get; } = new();
+    public ICollectionView SummaryView { get; }
+
+    private bool _showSummary;
+    public bool ShowSummary
+    {
+        get => _showSummary;
+        set => SetProperty(ref _showSummary, value);
+    }
 
     public ICommand RefreshCommand { get; }
     public ICommand InboundCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand OutboundCommand { get; }
     public ICommand DeleteCommand { get; }
+    public ICommand ToggleSummaryCommand { get; }
 
     public InventoryViewModel(IInventoryAppService svc)
     {
         _svc = svc;
         InventoryView = CollectionViewSource.GetDefaultView(Items);
         InventoryView.Filter = FilterItems;
+
+        SummaryView = CollectionViewSource.GetDefaultView(SummaryItems);
+        SummaryView.Filter = FilterSummary;
 
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         InboundCommand = new DelegateCommand(async () => await OpenInboundDialogAsync());
@@ -63,6 +82,7 @@ public class InventoryViewModel : BindableBase
         {
             if (id.HasValue) await DeleteAsync(id.Value);
         });
+        ToggleSummaryCommand = new DelegateCommand(() => ShowSummary = !ShowSummary);
 
         _ = LoadAsync();
     }
@@ -78,12 +98,27 @@ public class InventoryViewModel : BindableBase
                || record.Location.Contains(key, StringComparison.OrdinalIgnoreCase);
     }
 
+    private bool FilterSummary(object item)
+    {
+        if (item is not InventorySummaryDto summary) return false;
+        if (string.IsNullOrWhiteSpace(SearchText)) return true;
+        var key = SearchText.Trim();
+        return summary.MaterialCode.Contains(key, StringComparison.OrdinalIgnoreCase)
+               || summary.MaterialName.Contains(key, StringComparison.OrdinalIgnoreCase)
+               || summary.BatchNo.Contains(key, StringComparison.OrdinalIgnoreCase);
+    }
+
     public async Task LoadAsync()
     {
         var list = await _svc.GetListAsync();
         Items.Clear();
         foreach (var item in list)
             Items.Add(item);
+
+        var summaries = await _svc.GetSummaryListAsync();
+        SummaryItems.Clear();
+        foreach (var s in summaries)
+            SummaryItems.Add(s);
     }
 
     /// <summary>入库：弹出完整入库弹窗（新建库存记录）</summary>

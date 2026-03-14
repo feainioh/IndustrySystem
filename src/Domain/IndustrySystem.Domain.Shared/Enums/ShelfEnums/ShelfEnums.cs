@@ -4,18 +4,18 @@ namespace IndustrySystem.Domain.Shared.Enums.ShelfEnums;
 
 public enum ContainerType
 {
-    [Description("离心瓶")]
+    [Description("Shelf_Container_CentrifugeBottle")]
     CentrifugeBottle,
-    [Description("取样瓶")]
+    [Description("Shelf_Container_SamplingBottle")]
     SamplingBottle,
-    [Description("原液瓶")]
+    [Description("Shelf_Container_StockBottle")]
     StockBottle,
-    [Description("试剂盒")]
+    [Description("Shelf_Container_ReagentKit")]
     ReagentKit,
-    [Description("粉筒")]
+    [Description("Shelf_Container_PowderCylinder")]
     PowderCylinder,
-    [Description("耗材")]
+    [Description("Shelf_Container_Consumable")]
     Consumable,
-    [Description("其他")]
+    [Description("Shelf_Container_Other")]
     Other
 }

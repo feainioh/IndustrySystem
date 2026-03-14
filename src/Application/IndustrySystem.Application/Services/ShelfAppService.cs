@@ -119,16 +119,72 @@ public class ShelfAppService : IShelfAppService
         var containers = await _containerRepo.GetListAsync();
         var invRecords = await _invRepo.GetListAsync();
 
-        return slots.Select(s =>
+        // 按槽位分组所有库存记录（通过 InventoryRecord.ShelfSlotId 关联）
+        var invBySlot = invRecords
+            .Where(i => i.ShelfSlotId.HasValue)
+            .GroupBy(i => i.ShelfSlotId!.Value)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        var result = new List<ShelfSlotDto>();
+
+        foreach (var s in slots)
         {
-            var container = s.ContainerId.HasValue ? containers.FirstOrDefault(c => c.Id == s.ContainerId.Value) : null;
-            var inv = s.InventoryRecordId.HasValue ? invRecords.FirstOrDefault(i => i.Id == s.InventoryRecordId.Value) : null;
-            return new ShelfSlotDto(
+            var container = s.ContainerId.HasValue
+                ? containers.FirstOrDefault(c => c.Id == s.ContainerId.Value)
+                : null;
+
+            // 从库存表中查询该槽位关联的所有库存记录
+            invBySlot.TryGetValue(s.Id, out var slotInvRecords);
+            slotInvRecords ??= [];
+
+            // 孔位级别的库存记录（WellRow > 0 && WellColumn > 0）
+            var wellRecords = slotInvRecords
+                .Where(i => i.WellRow > 0 && i.WellColumn > 0)
+                .Select(i => new WellOccupancyDto(i.WellRow, i.WellColumn, i.MaterialName, i.Quantity, i.Unit))
+                .ToList();
+
+            // 从所有关联库存记录中汇总信息作为槽位级别显示
+            string? materialName = null;
+            decimal? totalQuantity = null;
+            string? unit = null;
+            int inventoryRecordCount = slotInvRecords.Count;
+
+            if (slotInvRecords.Count > 0)
+            {
+                totalQuantity = slotInvRecords.Sum(i => i.Quantity);
+                unit = slotInvRecords[0].Unit;
+
+                // 获取不重复的物料名称
+                var distinctMaterials = slotInvRecords
+                    .Select(i => i.MaterialName)
+                    .Where(n => !string.IsNullOrWhiteSpace(n))
+                    .Distinct()
+                    .ToList();
+                materialName = distinctMaterials.Count switch
+                {
+                    1 => distinctMaterials[0],
+                    > 1 => $"{distinctMaterials[0]} 等{distinctMaterials.Count}种",
+                    _ => null
+                };
+            }
+
+            // 自动同步：将首条库存记录ID回写到槽位的 InventoryRecordId
+            var primaryInvId = slotInvRecords.Count > 0 ? slotInvRecords[0].Id : (Guid?)null;
+            if (s.InventoryRecordId != primaryInvId)
+            {
+                s.InventoryRecordId = primaryInvId;
+                await _slotRepo.UpdateAsync(s);
+            }
+
+            result.Add(new ShelfSlotDto(
                 s.Id, s.ShelfId, s.Row, s.Column,
+                s.AllowedContainerTypeList,
                 s.ContainerId, s.InventoryRecordId, s.IsDisabled, s.Remark,
                 container?.Name, container?.ContainerType, container?.Rows, container?.Columns,
-                inv?.MaterialName, inv?.Quantity, inv?.Unit);
-        }).ToList();
+                materialName, totalQuantity, unit, wellRecords, inventoryRecordCount));
+        }
+
+        return result;
     }
 
     public async Task SaveSlotsAsync(Guid shelfId, IReadOnlyList<ShelfSlotDto> slots)
@@ -137,6 +193,7 @@ public class ShelfAppService : IShelfAppService
         {
             var entity = await _slotRepo.GetAsync(dto.Id);
             if (entity is null) continue;
+            entity.AllowedContainerTypeList = dto.AllowedContainerTypes.ToList();
             entity.ContainerId = dto.ContainerId;
             entity.InventoryRecordId = dto.InventoryRecordId;
             entity.IsDisabled = dto.IsDisabled;

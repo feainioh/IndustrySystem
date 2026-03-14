@@ -85,16 +85,26 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Section header + search -->
+                <!-- Section header + search + toggle -->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="库存清单" FontSize="15" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="0" Text="库存清单" FontSize="15" FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
 
-                    <TextBox Grid.Column="1"
+                    <ToggleButton Grid.Column="1" IsChecked="{Binding ShowSummary}"
+                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                  ToolTip="切换汇总视图" Margin="16,0,6,0"
+                                  VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="汇总视图" FontSize="12" Opacity="0.6"
+                               VerticalAlignment="Center"/>
+
+                    <TextBox Grid.Column="3"
                              Width="280"
                              Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource SearchTextField}"
@@ -103,8 +113,17 @@
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
 
-                <!-- ListView -->
-                <ListView Grid.Row="2" ItemsSource="{Binding InventoryView}" Style="{StaticResource ModernListView}">
+                <!-- Detail ListView (ShowSummary=False) -->
+                <ListView Grid.Row="2" ItemsSource="{Binding InventoryView}">
+                    <ListView.Style>
+                        <Style TargetType="ListView" BasedOn="{StaticResource ModernListView}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowSummary}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
                     <ListView.Resources>
                         <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
@@ -179,6 +198,22 @@
                             <!-- 位置 -->
                             <GridViewColumn Width="100" Header="位置" DisplayMemberBinding="{Binding Location}"/>
 
+                            <!-- 孔位 -->
+                            <GridViewColumn Width="80" Header="孔位">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="12" Opacity="0.75">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource WellPosition}">
+                                                    <Binding Path="WellRow"/>
+                                                    <Binding Path="WellColumn"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                             <!-- 操作 -->
                             <GridViewColumn Width="160" Header="{x:Static loc:Strings.Col_Actions}">
                                 <GridViewColumn.CellTemplate>
@@ -211,6 +246,100 @@
                                                 <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
                                             </Button>
                                         </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- Summary ListView (ShowSummary=True) -->
+                <ListView Grid.Row="2" ItemsSource="{Binding SummaryView}">
+                    <ListView.Style>
+                        <Style TargetType="ListView" BasedOn="{StaticResource ModernListView}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowSummary}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Style>
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+
+                            <!-- 物料 -->
+                            <GridViewColumn Width="200" Header="物料">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <Border Width="30" Height="30" CornerRadius="15"
+                                                    Background="{StaticResource MaterialGradientBrush}" Margin="0,0,10,0">
+                                                <materialDesign:PackIcon Kind="ChartBox" Width="16" Height="16"
+                                                                         Foreground="White"
+                                                                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding MaterialName}" FontWeight="SemiBold" FontSize="13"/>
+                                                <TextBlock Text="{Binding MaterialCode}" FontSize="11" Opacity="0.65"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- 批号 -->
+                            <GridViewColumn Width="140" Header="批号" DisplayMemberBinding="{Binding BatchNo}"/>
+
+                            <!-- 总库存 / 安全库存 -->
+                            <GridViewColumn Width="150" Header="总库存 / 安全库存">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontSize="14" FontWeight="Bold">
+                                                <TextBlock.Text>
+                                                    <Binding Path="TotalQuantity" StringFormat="{}{0:0.##}"/>
+                                                </TextBlock.Text>
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Value="True">
+                                                                <DataTrigger.Binding>
+                                                                    <MultiBinding Converter="{StaticResource LessThanConverter}">
+                                                                        <Binding Path="TotalQuantity"/>
+                                                                        <Binding Path="SafetyStock"/>
+                                                                    </MultiBinding>
+                                                                </DataTrigger.Binding>
+                                                                <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Text=" / " FontSize="12" Opacity="0.5"/>
+                                            <TextBlock Text="{Binding SafetyStock, StringFormat={}{0:0.##}}" FontSize="12" Opacity="0.6"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- 单位 -->
+                            <GridViewColumn Width="70" Header="单位" DisplayMemberBinding="{Binding Unit}"/>
+
+                            <!-- 记录数 -->
+                            <GridViewColumn Width="90" Header="记录数">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{StaticResource PrimaryBrush}" CornerRadius="10"
+                                                Padding="8,2" HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding RecordCount}" Foreground="White"
+                                                       FontSize="12" FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </Border>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

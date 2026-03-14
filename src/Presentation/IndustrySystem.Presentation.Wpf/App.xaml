@@ -45,6 +45,7 @@
             <conv:LessThanConverter x:Key="LessThanConverter"/>
             <conv:NotNullToBoolConverter x:Key="NotNull"/>
             <conv:ContainerTypeToIconConverter x:Key="ContainerTypeToIcon"/>
+            <conv:WellPositionConverter x:Key="WellPosition"/>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>

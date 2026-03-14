@@ -8,6 +8,7 @@ namespace IndustrySystem.Application.Contracts.Services;
 public interface IInventoryAppService
 {
     Task<IReadOnlyList<InventoryRecordDto>> GetListAsync();
+    Task<IReadOnlyList<InventorySummaryDto>> GetSummaryListAsync();
     Task<InventoryRecordDto?> GetAsync(Guid id);
     Task<InventoryRecordDto> CreateAsync(InventoryRecordDto input);
     Task<InventoryRecordDto> UpdateAsync(InventoryRecordDto input);

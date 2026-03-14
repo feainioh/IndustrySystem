@@ -37,6 +37,16 @@ public class InventoryRecord
     /// <summary>存放位置/货架</summary>
     public string Location { get; set; } = string.Empty;
 
+    /// <summary>容器内孔位行号（从1开始，0或null表示不适用）</summary>
+    public int WellRow { get; set; }
+
+    /// <summary>容器内孔位列号（从1开始，0或null表示不适用）</summary>
+    public int WellColumn { get; set; }
+
+    /// <summary>关联货架槽位ID（可空=未放置在货架上）</summary>
+    [SqlSugar.SugarColumn(IsNullable = true)]
+    public Guid? ShelfSlotId { get; set; }
+
     /// <summary>备注</summary>
     public string Remark { get; set; } = string.Empty;
 

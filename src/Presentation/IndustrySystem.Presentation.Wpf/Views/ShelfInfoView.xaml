@@ -199,7 +199,7 @@
                                     </Grid.RowDefinitions>
 
                                     <!-- Row 0: Position label + container size badge -->
-                                    <Grid Grid.Row="0" Margin="0,0,0,4">
+                                    <Grid Grid.Row="0" Margin="0,0,0,3">
                                         <TextBlock Text="{Binding PositionLabel}" FontSize="10" Opacity="0.45"
                                                    FontWeight="Medium" HorizontalAlignment="Left"/>
                                         <TextBlock Text="{Binding ContainerSizeLabel}" FontSize="9" Opacity="0.4"
@@ -207,53 +207,62 @@
                                                    Visibility="{Binding HasContainer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                     </Grid>
 
-                                    <!-- Row 1: Container icon (large, centered) -->
+                                    <!-- Row 1: Well grid or icon -->
                                     <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+
                                         <!-- Disabled state -->
                                         <materialDesign:PackIcon Kind="Cancel" Width="30" Height="30"
                                                                  Foreground="{StaticResource ErrorBrush}" Opacity="0.5"
-                                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <materialDesign:PackIcon.Visibility>
-                                                <Binding Path="IsDisabled" Converter="{StaticResource BooleanToVisibilityConverter}"/>
-                                            </materialDesign:PackIcon.Visibility>
-                                        </materialDesign:PackIcon>
+                                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                 Visibility="{Binding IsDisabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                        <!-- Empty slot -->
+                                        <!-- Empty slot (no container) -->
                                         <materialDesign:PackIcon Kind="TrayRemove" Width="28" Height="28"
                                                                  Foreground="#60000000"
-                                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <materialDesign:PackIcon.Visibility>
-                                                <Binding Path="IsEmpty" Converter="{StaticResource BooleanToVisibilityConverter}"/>
-                                            </materialDesign:PackIcon.Visibility>
-                                        </materialDesign:PackIcon>
+                                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                 Visibility="{Binding IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                        <!-- Has container: show type-specific icon -->
-                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                    Visibility="{Binding HasContainer, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <StackPanel.Style>
-                                                <Style TargetType="StackPanel">
+                                        <!-- Has container: show mini well grid -->
+                                        <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                BorderBrush="#30000000" BorderThickness="1" CornerRadius="3"
+                                                Padding="1"
+                                                Visibility="{Binding HasContainer, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsDisabled}" Value="True">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </StackPanel.Style>
-                                            <materialDesign:PackIcon Width="30" Height="30"
-                                                                     Kind="{Binding ContainerTypeValue, Converter={StaticResource ContainerTypeToIcon}}"
-                                                                     HorizontalAlignment="Center">
-                                                <materialDesign:PackIcon.Style>
-                                                    <Style TargetType="materialDesign:PackIcon">
-                                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding HasInventory}" Value="True">
-                                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </materialDesign:PackIcon.Style>
-                                            </materialDesign:PackIcon>
-                                        </StackPanel>
+                                            </Border.Style>
+                                            <ItemsControl ItemsSource="{Binding WellItems}"
+                                                          MaxWidth="80" MaxHeight="52">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <UniformGrid Rows="{Binding DataContext.ContainerRows, RelativeSource={RelativeSource AncestorType=Button}}"
+                                                                     Columns="{Binding DataContext.ContainerColumns, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Width="6" Height="6" CornerRadius="3"
+                                                                Margin="0.5" ToolTip="{Binding TooltipText}">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="Background" Value="#E0E0E0"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsOccupied}" Value="True">
+                                                                            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
                                     </Grid>
 
                                     <!-- Row 2: Container name / status line -->

@@ -148,6 +148,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
                             <DatePicker Grid.Row="0" Grid.Column="0"
@@ -171,6 +172,14 @@
                             <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="备注"/>
+
+                            <TextBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FormField}"
+                                     Text="{Binding WellRow, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="孔位行号（0=不适用）"/>
+
+                            <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource FormField}"
+                                     Text="{Binding WellColumn, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="孔位列号（0=不适用）"/>
                         </Grid>
                     </StackPanel>
                 </materialDesign:Card>

@@ -19,6 +19,9 @@ public record InventoryRecordDto(
     DateTime? InboundDate,
     DateTime? ExpiryDate,
     string Location,
+    int WellRow,
+    int WellColumn,
+    Guid? ShelfSlotId,
     string Remark);
 
 
@@ -63,6 +66,7 @@ public record ShelfSlotDto(
     Guid ShelfId,
     int Row,
     int Column,
+    IReadOnlyList<ContainerType> AllowedContainerTypes,
     Guid? ContainerId,
     Guid? InventoryRecordId,
     bool IsDisabled,
@@ -73,4 +77,25 @@ public record ShelfSlotDto(
     int? ContainerColumns,
     string? MaterialName,
     decimal? Quantity,
-    string? Unit);
+    string? Unit,
+    IReadOnlyList<WellOccupancyDto> OccupiedWells,
+    int InventoryRecordCount = 0);
+
+/// <summary>容器内单个孔位的占用信息</summary>
+public record WellOccupancyDto(
+    int WellRow,
+    int WellColumn,
+    string MaterialName,
+    decimal Quantity,
+    string Unit);
+
+/// <summary>按物料+批号汇总的库存概览</summary>
+public record InventorySummaryDto(
+    Guid MaterialId,
+    string MaterialCode,
+    string MaterialName,
+    string BatchNo,
+    string Unit,
+    decimal TotalQuantity,
+    decimal SafetyStock,
+    int RecordCount);

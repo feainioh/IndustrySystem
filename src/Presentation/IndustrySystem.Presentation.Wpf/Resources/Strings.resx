@@ -777,4 +777,37 @@
   <data name="Material_Type_Other" xml:space="preserve">
     <value>其他</value>
   </data>
+  <data name="Location_Row" xml:space="preserve">
+    <value>行</value>
+  </data>
+  <data name="Location_Column" xml:space="preserve">
+    <value>列</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>孔位</value>
+  </data>
+  <data name="Shelf" xml:space="preserve">
+    <value>货架</value>
+  </data>
+  <data name="Shelf_Container_CentrifugeBottle" xml:space="preserve">
+    <value>离心瓶</value>
+  </data>
+  <data name="Shelf_Container_SamplingBottle" xml:space="preserve">
+    <value>取样瓶</value>
+  </data>
+  <data name="Shelf_Container_StockBottle" xml:space="preserve">
+    <value>原液瓶</value>
+  </data>
+  <data name="Shelf_Container_ReagentKit" xml:space="preserve">
+    <value>试剂盒</value>
+  </data>
+  <data name="Shelf_Container_PowderCylinder" xml:space="preserve">
+    <value>加粉筒</value>
+  </data>
+  <data name="Shelf_Container_Consumable" xml:space="preserve">
+    <value>耗材</value>
+  </data>
+  <data name="Shelf_Container_Other" xml:space="preserve">
+    <value>其他</value>
+  </data>
 </root>

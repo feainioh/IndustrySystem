@@ -9,7 +9,6 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public RunExperimentView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<RunExperimentViewModel>();
         }
     }
 }

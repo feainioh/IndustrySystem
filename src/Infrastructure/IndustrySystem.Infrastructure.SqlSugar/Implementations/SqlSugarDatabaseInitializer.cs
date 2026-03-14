@@ -126,6 +126,12 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0006", MaterialName = "双氧水", BatchNo = "B20250301-01", Quantity = 8, SafetyStock = 10, Unit = "L", InboundDate = new DateTime(2025, 3, 1), ExpiryDate = new DateTime(2025, 9, 1), Location = "C-01-01", Remark = "库存不足，需补货" });
         UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0007", MaterialName = "维生素C", BatchNo = "B20250315-01", Quantity = 100, SafetyStock = 20, Unit = "kg", InboundDate = new DateTime(2025, 3, 15), ExpiryDate = new DateTime(2026, 3, 15), Location = "A-03-01", Remark = "成品区" });
 
+        // Well-positioned inventory samples (for multi-well containers)
+        UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0001", MaterialName = "乙醇", BatchNo = "B20250401-W01", Quantity = 0.2m, SafetyStock = 0, Unit = "mL", WellRow = 1, WellColumn = 1, InboundDate = new DateTime(2025, 4, 1), ExpiryDate = new DateTime(2026, 4, 1), Location = "SHELF-A R1C1", Remark = "96孔板A1" });
+        UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0002", MaterialName = "氯化钠", BatchNo = "B20250401-W02", Quantity = 0.15m, SafetyStock = 0, Unit = "mL", WellRow = 1, WellColumn = 2, InboundDate = new DateTime(2025, 4, 1), ExpiryDate = new DateTime(2026, 4, 1), Location = "SHELF-A R1C1", Remark = "96孔板A2" });
+        UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0003", MaterialName = "丙酮", BatchNo = "B20250401-W03", Quantity = 0.1m, SafetyStock = 0, Unit = "mL", WellRow = 2, WellColumn = 1, InboundDate = new DateTime(2025, 4, 1), ExpiryDate = new DateTime(2026, 4, 1), Location = "SHELF-A R1C1", Remark = "96孔板B1" });
+        UpsertInventory(invRepo, new InventoryRecord { MaterialCode = "MAT-0004", MaterialName = "硫酸", BatchNo = "B20250401-W04", Quantity = 0.05m, SafetyStock = 0, Unit = "mL", WellRow = 3, WellColumn = 3, InboundDate = new DateTime(2025, 4, 1), ExpiryDate = new DateTime(2026, 4, 1), Location = "SHELF-A R1C1", Remark = "96孔板C3" });
+
         // Containers (Upsert by Name)
         var containerRepo = _db.GetSimpleClient<ContainerInfo>();
         UpsertContainer(containerRepo, new ContainerInfo { Name = "50mL离心瓶", ContainerType = ContainerType.CentrifugeBottle, Rows = 1, Columns = 1, Description = "50mL标准离心瓶" });
@@ -266,6 +272,9 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
             existing.InboundDate = input.InboundDate;
             existing.ExpiryDate = input.ExpiryDate;
             existing.Location = input.Location;
+            existing.WellRow = input.WellRow;
+            existing.WellColumn = input.WellColumn;
+            existing.ShelfSlotId = input.ShelfSlotId;
             existing.Remark = input.Remark;
             existing.UpdatedAt = DateTime.UtcNow;
             repo.Update(existing);

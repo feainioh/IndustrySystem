@@ -124,6 +124,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 新增角色 的本地化字符串。
+        /// </summary>
+        public static string Btn_AddRole {
+            get {
+                return ResourceManager.GetString("Btn_AddRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 新增模板 的本地化字符串。
         /// </summary>
         public static string Btn_AddTemplate {
@@ -165,6 +174,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Btn_Edit {
             get {
                 return ResourceManager.GetString("Btn_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导出 的本地化字符串。
+        /// </summary>
+        public static string Btn_Export {
+            get {
+                return ResourceManager.GetString("Btn_Export", resourceCulture);
             }
         }
         
@@ -385,6 +403,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 角色 的本地化字符串。
+        /// </summary>
+        public static string Col_Role {
+            get {
+                return ResourceManager.GetString("Col_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 默认 的本地化字符串。
         /// </summary>
         public static string Col_Role_Default {
@@ -408,6 +435,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Col_Status {
             get {
                 return ResourceManager.GetString("Col_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 类型 的本地化字符串。
+        /// </summary>
+        public static string Col_Type {
+            get {
+                return ResourceManager.GetString("Col_Type", resourceCulture);
             }
         }
         
@@ -673,6 +709,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 模板描述 的本地化字符串。
+        /// </summary>
+        public static string Hint_Template_Description {
+            get {
+                return ResourceManager.GetString("Hint_Template_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 模板名称 的本地化字符串。
+        /// </summary>
+        public static string Hint_Template_Name {
+            get {
+                return ResourceManager.GetString("Hint_Template_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 跳转 的本地化字符串。
         /// </summary>
         public static string Lbl_JumpTo {
@@ -687,6 +741,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Lbl_LogLevel {
             get {
                 return ResourceManager.GetString("Lbl_LogLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未登录 的本地化字符串。
+        /// </summary>
+        public static string Lbl_NotLoggedIn {
+            get {
+                return ResourceManager.GetString("Lbl_NotLoggedIn", resourceCulture);
             }
         }
         
@@ -763,6 +826,402 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 列 的本地化字符串。
+        /// </summary>
+        public static string Location_Column {
+            get {
+                return ResourceManager.GetString("Location_Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 行 的本地化字符串。
+        /// </summary>
+        public static string Location_Row {
+            get {
+                return ResourceManager.GetString("Location_Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确认告警：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_Alarm_Acknowledge {
+            get {
+                return ResourceManager.GetString("Log_Alarm_Acknowledge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 告警数据加载完成，共 {0} 条 的本地化字符串。
+        /// </summary>
+        public static string Log_Alarm_LoadComplete {
+            get {
+                return ResourceManager.GetString("Log_Alarm_LoadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始加载告警数据 的本地化字符串。
+        /// </summary>
+        public static string Log_Alarm_LoadStart {
+            get {
+                return ResourceManager.GetString("Log_Alarm_LoadStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 告警视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_AlarmViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_AlarmViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验历史加载完成，共 {0} 条 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentHistory_LoadComplete {
+            get {
+                return ResourceManager.GetString("Log_ExperimentHistory_LoadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始加载实验历史 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentHistory_LoadStart {
+            get {
+                return ResourceManager.GetString("Log_ExperimentHistory_LoadStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验历史视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentHistoryViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_ExperimentHistoryViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除实验：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_Experiments_Delete {
+            get {
+                return ResourceManager.GetString("Log_Experiments_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验数据加载完成，共 {0} 条 的本地化字符串。
+        /// </summary>
+        public static string Log_Experiments_LoadComplete {
+            get {
+                return ResourceManager.GetString("Log_Experiments_LoadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始加载实验数据 的本地化字符串。
+        /// </summary>
+        public static string Log_Experiments_LoadStart {
+            get {
+                return ResourceManager.GetString("Log_Experiments_LoadStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentsViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_ExperimentsViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 新增实验模板：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentTemplate_Add {
+            get {
+                return ResourceManager.GetString("Log_ExperimentTemplate_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除实验模板：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentTemplate_Delete {
+            get {
+                return ResourceManager.GetString("Log_ExperimentTemplate_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验模板加载完成，共 {0} 条 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentTemplate_LoadComplete {
+            get {
+                return ResourceManager.GetString("Log_ExperimentTemplate_LoadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始加载实验模板 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentTemplate_LoadStart {
+            get {
+                return ResourceManager.GetString("Log_ExperimentTemplate_LoadStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 实验模板视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_ExperimentTemplateViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_ExperimentTemplateViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 硬件连接成功 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_Connected {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_Connected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 硬件连接失败：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_ConnectFailed {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_ConnectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 正在连接硬件… 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_Connecting {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 硬件已断开连接 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_Disconnected {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 正在断开硬件连接… 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_Disconnecting {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_Disconnecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 读取失败：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_ReadFailed {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_ReadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 读取寄存器：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_Reading {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_Reading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 读取成功：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_ReadSuccess {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_ReadSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 写入失败：值为空 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteEmpty {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 写入失败：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteFailed {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 写入格式错误 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteFormatError {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 批量写入成功，数量：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteMultiSuccess {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteMultiSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 单点写入成功：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteSingleSuccess {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteSingleSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 写入值格式错误：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebug_WriteValueFormatError {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebug_WriteValueFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 硬件调试视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_HardwareDebugViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_HardwareDebugViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 入库：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_Inventory_In {
+            get {
+                return ResourceManager.GetString("Log_Inventory_In", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 库存加载完成，共 {0} 条 的本地化字符串。
+        /// </summary>
+        public static string Log_Inventory_LoadComplete {
+            get {
+                return ResourceManager.GetString("Log_Inventory_LoadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始加载库存 的本地化字符串。
+        /// </summary>
+        public static string Log_Inventory_LoadStart {
+            get {
+                return ResourceManager.GetString("Log_Inventory_LoadStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 出库：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_Inventory_Out {
+            get {
+                return ResourceManager.GetString("Log_Inventory_Out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 库存视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_InventoryViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_InventoryViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 加载可运行实验列表 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperiment_LoadExperiments {
+            get {
+                return ResourceManager.GetString("Log_RunExperiment_LoadExperiments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 暂停实验 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperiment_Pause {
+            get {
+                return ResourceManager.GetString("Log_RunExperiment_Pause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 继续实验 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperiment_Resume {
+            get {
+                return ResourceManager.GetString("Log_RunExperiment_Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始运行实验：{0} 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperiment_Start {
+            get {
+                return ResourceManager.GetString("Log_RunExperiment_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 停止实验 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperiment_Stop {
+            get {
+                return ResourceManager.GetString("Log_RunExperiment_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 运行实验视图模型已初始化 的本地化字符串。
+        /// </summary>
+        public static string Log_RunExperimentViewModel_Initialized {
+            get {
+                return ResourceManager.GetString("Log_RunExperimentViewModel_Initialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 快速登录 的本地化字符串。
         /// </summary>
         public static string Login_Quick {
@@ -777,6 +1236,141 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Login_Remember {
             get {
                 return ResourceManager.GetString("Login_Remember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 气体 的本地化字符串。
+        /// </summary>
+        public static string Material_Category_Gas {
+            get {
+                return ResourceManager.GetString("Material_Category_Gas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 液体 的本地化字符串。
+        /// </summary>
+        public static string Material_Category_Liquid {
+            get {
+                return ResourceManager.GetString("Material_Category_Liquid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 固体 的本地化字符串。
+        /// </summary>
+        public static string Material_Category_Solid {
+            get {
+                return ResourceManager.GetString("Material_Category_Solid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 高危险 的本地化字符串。
+        /// </summary>
+        public static string Material_Hazard_High {
+            get {
+                return ResourceManager.GetString("Material_Hazard_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 低危 的本地化字符串。
+        /// </summary>
+        public static string Material_Hazard_Low {
+            get {
+                return ResourceManager.GetString("Material_Hazard_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 中危险 的本地化字符串。
+        /// </summary>
+        public static string Material_Hazard_Medium {
+            get {
+                return ResourceManager.GetString("Material_Hazard_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 无危险 的本地化字符串。
+        /// </summary>
+        public static string Material_Hazard_None {
+            get {
+                return ResourceManager.GetString("Material_Hazard_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 避光 的本地化字符串。
+        /// </summary>
+        public static string Material_Storage_LightProtected {
+            get {
+                return ResourceManager.GetString("Material_Storage_LightProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 冷藏 的本地化字符串。
+        /// </summary>
+        public static string Material_Storage_Refrigerated {
+            get {
+                return ResourceManager.GetString("Material_Storage_Refrigerated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 常温 的本地化字符串。
+        /// </summary>
+        public static string Material_Storage_RoomTemperature {
+            get {
+                return ResourceManager.GetString("Material_Storage_RoomTemperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 耗材 的本地化字符串。
+        /// </summary>
+        public static string Material_Type_Consumable {
+            get {
+                return ResourceManager.GetString("Material_Type_Consumable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 中间产物 的本地化字符串。
+        /// </summary>
+        public static string Material_Type_Intermediate {
+            get {
+                return ResourceManager.GetString("Material_Type_Intermediate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 其他 的本地化字符串。
+        /// </summary>
+        public static string Material_Type_Other {
+            get {
+                return ResourceManager.GetString("Material_Type_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 产物 的本地化字符串。
+        /// </summary>
+        public static string Material_Type_Product {
+            get {
+                return ResourceManager.GetString("Material_Type_Product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 原料 的本地化字符串。
+        /// </summary>
+        public static string Material_Type_RawMaterial {
+            get {
+                return ResourceManager.GetString("Material_Type_RawMaterial", resourceCulture);
             }
         }
         
@@ -799,11 +1393,38 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 确认删除？ 的本地化字符串。
+        /// </summary>
+        public static string Msg_ConfirmDelete {
+            get {
+                return ResourceManager.GetString("Msg_ConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 确定删除此权限？ 的本地化字符串。
         /// </summary>
         public static string Msg_ConfirmDeletePermission {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDeletePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确定删除此角色？ 的本地化字符串。
+        /// </summary>
+        public static string Msg_ConfirmDeleteRole {
+            get {
+                return ResourceManager.GetString("Msg_ConfirmDeleteRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确定删除此用户？ 的本地化字符串。
+        /// </summary>
+        public static string Msg_ConfirmDeleteUser {
+            get {
+                return ResourceManager.GetString("Msg_ConfirmDeleteUser", resourceCulture);
             }
         }
         
@@ -1285,6 +1906,87 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 货架 的本地化字符串。
+        /// </summary>
+        public static string Shelf {
+            get {
+                return ResourceManager.GetString("Shelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 离心瓶 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_CentrifugeBottle {
+            get {
+                return ResourceManager.GetString("Shelf_Container_CentrifugeBottle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 耗材 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_Consumable {
+            get {
+                return ResourceManager.GetString("Shelf_Container_Consumable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 其他 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_Other {
+            get {
+                return ResourceManager.GetString("Shelf_Container_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 加粉筒 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_PowderCylinder {
+            get {
+                return ResourceManager.GetString("Shelf_Container_PowderCylinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 试剂盒 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_ReagentKit {
+            get {
+                return ResourceManager.GetString("Shelf_Container_ReagentKit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 取样瓶 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_SamplingBottle {
+            get {
+                return ResourceManager.GetString("Shelf_Container_SamplingBottle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 原液瓶 的本地化字符串。
+        /// </summary>
+        public static string Shelf_Container_StockBottle {
+            get {
+                return ResourceManager.GetString("Shelf_Container_StockBottle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 孔位 的本地化字符串。
+        /// </summary>
+        public static string Slot {
+            get {
+                return ResourceManager.GetString("Slot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 启用 的本地化字符串。
         /// </summary>
         public static string Status_Active {
@@ -1312,6 +2014,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 删除角色 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_DeleteRole {
+            get {
+                return ResourceManager.GetString("Tooltip_DeleteRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除用户 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_DeleteUser {
+            get {
+                return ResourceManager.GetString("Tooltip_DeleteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 编辑权限 的本地化字符串。
         /// </summary>
         public static string Tooltip_EditPermission {
@@ -1321,11 +2041,47 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
+        ///   查找类似 编辑角色 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_EditRole {
+            get {
+                return ResourceManager.GetString("Tooltip_EditRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 编辑用户 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_EditUser {
+            get {
+                return ResourceManager.GetString("Tooltip_EditUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 导出日志 的本地化字符串。
         /// </summary>
         public static string Tooltip_ExportLogs {
             get {
                 return ResourceManager.GetString("Tooltip_ExportLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 管理权限 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_ManagePermissions {
+            get {
+                return ResourceManager.GetString("Tooltip_ManagePermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重置密码 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_ResetPassword {
+            get {
+                return ResourceManager.GetString("Tooltip_ResetPassword", resourceCulture);
             }
         }
         
@@ -1382,112 +2138,5 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("View_Users_Subtitle", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   查找类似 导出 的本地化字符串。
-        /// </summary>
-        public static string Btn_Export {
-            get {
-                return ResourceManager.GetString("Btn_Export", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   查找类似 确认删除？ 的本地化字符串。
-        /// </summary>
-        public static string Msg_ConfirmDelete {
-            get {
-                return ResourceManager.GetString("Msg_ConfirmDelete", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   查找类似 确定删除此用户？ 的本地化字符串。
-        /// </summary>
-        public static string Msg_ConfirmDeleteUser {
-            get {
-                return ResourceManager.GetString("Msg_ConfirmDeleteUser", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   查找类似 确定删除此角色？ 的本地化字符串。
-        /// </summary>
-        public static string Msg_ConfirmDeleteRole {
-            get {
-                return ResourceManager.GetString("Msg_ConfirmDeleteRole", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   查找类似 未登录 的本地化字符串。
-        /// </summary>
-        public static string Lbl_NotLoggedIn {
-            get {
-                return ResourceManager.GetString("Lbl_NotLoggedIn", resourceCulture);
-            }
-        }
-
-        public static string Tooltip_ResetPassword => ResourceManager.GetString("Tooltip_ResetPassword", resourceCulture);
-        public static string Tooltip_EditUser => ResourceManager.GetString("Tooltip_EditUser", resourceCulture);
-        public static string Tooltip_DeleteUser => ResourceManager.GetString("Tooltip_DeleteUser", resourceCulture);
-        public static string Tooltip_EditRole => ResourceManager.GetString("Tooltip_EditRole", resourceCulture);
-        public static string Tooltip_DeleteRole => ResourceManager.GetString("Tooltip_DeleteRole", resourceCulture);
-        public static string Tooltip_ManagePermissions => ResourceManager.GetString("Tooltip_ManagePermissions", resourceCulture);
-        public static string Col_Role => ResourceManager.GetString("Col_Role", resourceCulture);
-        public static string Col_Type => ResourceManager.GetString("Col_Type", resourceCulture);
-
-        public static string Log_AlarmViewModel_Initialized => ResourceManager.GetString("Log_AlarmViewModel_Initialized", resourceCulture);
-        public static string Log_Alarm_LoadStart => ResourceManager.GetString("Log_Alarm_LoadStart", resourceCulture);
-        public static string Log_Alarm_LoadComplete => ResourceManager.GetString("Log_Alarm_LoadComplete", resourceCulture);
-        public static string Log_Alarm_Acknowledge => ResourceManager.GetString("Log_Alarm_Acknowledge", resourceCulture);
-
-        public static string Log_ExperimentHistoryViewModel_Initialized => ResourceManager.GetString("Log_ExperimentHistoryViewModel_Initialized", resourceCulture);
-        public static string Log_ExperimentHistory_LoadStart => ResourceManager.GetString("Log_ExperimentHistory_LoadStart", resourceCulture);
-        public static string Log_ExperimentHistory_LoadComplete => ResourceManager.GetString("Log_ExperimentHistory_LoadComplete", resourceCulture);
-
-        public static string Log_ExperimentTemplateViewModel_Initialized => ResourceManager.GetString("Log_ExperimentTemplateViewModel_Initialized", resourceCulture);
-        public static string Log_ExperimentTemplate_LoadStart => ResourceManager.GetString("Log_ExperimentTemplate_LoadStart", resourceCulture);
-        public static string Log_ExperimentTemplate_LoadComplete => ResourceManager.GetString("Log_ExperimentTemplate_LoadComplete", resourceCulture);
-        public static string Log_ExperimentTemplate_Add => ResourceManager.GetString("Log_ExperimentTemplate_Add", resourceCulture);
-        public static string Log_ExperimentTemplate_Delete => ResourceManager.GetString("Log_ExperimentTemplate_Delete", resourceCulture);
-
-        public static string Log_ExperimentsViewModel_Initialized => ResourceManager.GetString("Log_ExperimentsViewModel_Initialized", resourceCulture);
-        public static string Log_Experiments_LoadStart => ResourceManager.GetString("Log_Experiments_LoadStart", resourceCulture);
-        public static string Log_Experiments_LoadComplete => ResourceManager.GetString("Log_Experiments_LoadComplete", resourceCulture);
-        public static string Log_Experiments_Delete => ResourceManager.GetString("Log_Experiments_Delete", resourceCulture);
-
-        public static string Log_InventoryViewModel_Initialized => ResourceManager.GetString("Log_InventoryViewModel_Initialized", resourceCulture);
-        public static string Log_Inventory_LoadStart => ResourceManager.GetString("Log_Inventory_LoadStart", resourceCulture);
-        public static string Log_Inventory_LoadComplete => ResourceManager.GetString("Log_Inventory_LoadComplete", resourceCulture);
-        public static string Log_Inventory_In => ResourceManager.GetString("Log_Inventory_In", resourceCulture);
-        public static string Log_Inventory_Out => ResourceManager.GetString("Log_Inventory_Out", resourceCulture);
-
-        public static string Log_HardwareDebugViewModel_Initialized => ResourceManager.GetString("Log_HardwareDebugViewModel_Initialized", resourceCulture);
-        public static string Log_HardwareDebug_Connecting => ResourceManager.GetString("Log_HardwareDebug_Connecting", resourceCulture);
-        public static string Log_HardwareDebug_Connected => ResourceManager.GetString("Log_HardwareDebug_Connected", resourceCulture);
-        public static string Log_HardwareDebug_ConnectFailed => ResourceManager.GetString("Log_HardwareDebug_ConnectFailed", resourceCulture);
-        public static string Log_HardwareDebug_Disconnecting => ResourceManager.GetString("Log_HardwareDebug_Disconnecting", resourceCulture);
-        public static string Log_HardwareDebug_Disconnected => ResourceManager.GetString("Log_HardwareDebug_Disconnected", resourceCulture);
-        public static string Log_HardwareDebug_Reading => ResourceManager.GetString("Log_HardwareDebug_Reading", resourceCulture);
-        public static string Log_HardwareDebug_ReadSuccess => ResourceManager.GetString("Log_HardwareDebug_ReadSuccess", resourceCulture);
-        public static string Log_HardwareDebug_ReadFailed => ResourceManager.GetString("Log_HardwareDebug_ReadFailed", resourceCulture);
-        public static string Log_HardwareDebug_WriteEmpty => ResourceManager.GetString("Log_HardwareDebug_WriteEmpty", resourceCulture);
-        public static string Log_HardwareDebug_WriteSingleSuccess => ResourceManager.GetString("Log_HardwareDebug_WriteSingleSuccess", resourceCulture);
-        public static string Log_HardwareDebug_WriteFormatError => ResourceManager.GetString("Log_HardwareDebug_WriteFormatError", resourceCulture);
-        public static string Log_HardwareDebug_WriteValueFormatError => ResourceManager.GetString("Log_HardwareDebug_WriteValueFormatError", resourceCulture);
-        public static string Log_HardwareDebug_WriteMultiSuccess => ResourceManager.GetString("Log_HardwareDebug_WriteMultiSuccess", resourceCulture);
-        public static string Log_HardwareDebug_WriteFailed => ResourceManager.GetString("Log_HardwareDebug_WriteFailed", resourceCulture);
-
-        public static string Log_RunExperimentViewModel_Initialized => ResourceManager.GetString("Log_RunExperimentViewModel_Initialized", resourceCulture);
-        public static string Log_RunExperiment_Start => ResourceManager.GetString("Log_RunExperiment_Start", resourceCulture);
-        public static string Log_RunExperiment_Pause => ResourceManager.GetString("Log_RunExperiment_Pause", resourceCulture);
-        public static string Log_RunExperiment_Resume => ResourceManager.GetString("Log_RunExperiment_Resume", resourceCulture);
-        public static string Log_RunExperiment_Stop => ResourceManager.GetString("Log_RunExperiment_Stop", resourceCulture);
-        public static string Log_RunExperiment_LoadExperiments => ResourceManager.GetString("Log_RunExperiment_LoadExperiments", resourceCulture);
-
-        public static string Btn_AddRole => ResourceManager.GetString("Btn_AddRole", resourceCulture);
-        public static string Hint_Template_Name => ResourceManager.GetString("Hint_Template_Name", resourceCulture);
-        public static string Hint_Template_Description => ResourceManager.GetString("Hint_Template_Description", resourceCulture);
     }
 }

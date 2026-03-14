@@ -25,6 +25,29 @@ public class InventoryAppService : IInventoryAppService
                    .ToList();
     }
 
+    public async Task<IReadOnlyList<InventorySummaryDto>> GetSummaryListAsync()
+    {
+        var list = await _repo.GetListAsync();
+        return list
+            .GroupBy(r => new { r.MaterialId, r.BatchNo })
+            .Select(g =>
+            {
+                var first = g.First();
+                return new InventorySummaryDto(
+                    first.MaterialId,
+                    first.MaterialCode,
+                    first.MaterialName,
+                    first.BatchNo,
+                    first.Unit,
+                    g.Sum(r => r.Quantity),
+                    first.SafetyStock,
+                    g.Count());
+            })
+            .OrderBy(s => s.MaterialName)
+            .ThenBy(s => s.BatchNo)
+            .ToList();
+    }
+
     public async Task<InventoryRecordDto?> GetAsync(Guid id)
     {
         var entity = await _repo.GetAsync(id);

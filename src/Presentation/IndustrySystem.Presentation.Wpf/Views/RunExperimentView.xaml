@@ -164,7 +164,7 @@
         <!-- Status Message -->
         <Border Grid.Row="2" CornerRadius="4" Padding="16,12"
                 Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibilityConverter}}">
+                Visibility="{Binding StatusMessage}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" 
                        VerticalAlignment="Center" Margin="0,0,12,0"

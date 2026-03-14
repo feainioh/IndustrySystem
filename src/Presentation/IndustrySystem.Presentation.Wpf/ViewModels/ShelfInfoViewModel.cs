@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
@@ -26,19 +28,52 @@ public class SlotDisplayItem : BindableBase
     public int Column { get; set; }
 
     private Guid? _containerId;
-    public Guid? ContainerId { get => _containerId; set => SetProperty(ref _containerId, value); }
+    public Guid? ContainerId
+    {
+        get => _containerId;
+        set
+        {
+            if (SetProperty(ref _containerId, value))
+            {
+                RaisePropertyChanged(nameof(HasContainer));
+                RaisePropertyChanged(nameof(IsEmpty));
+            }
+        }
+    }
+
+    private IReadOnlyList<ContainerType> _allowedContainerTypes = [];
+    public IReadOnlyList<ContainerType> AllowedContainerTypes { get => _allowedContainerTypes; set => SetProperty(ref _allowedContainerTypes, value); }
 
     private Guid? _inventoryRecordId;
     public Guid? InventoryRecordId { get => _inventoryRecordId; set => SetProperty(ref _inventoryRecordId, value); }
 
     private bool _isDisabled;
-    public bool IsDisabled { get => _isDisabled; set => SetProperty(ref _isDisabled, value); }
+    public bool IsDisabled
+    {
+        get => _isDisabled;
+        set
+        {
+            if (SetProperty(ref _isDisabled, value))
+            {
+                RaisePropertyChanged(nameof(IsEmpty));
+                RaisePropertyChanged(nameof(StatusLine1));
+            }
+        }
+    }
 
     private string _remark = string.Empty;
     public string Remark { get => _remark; set => SetProperty(ref _remark, value); }
 
     private string? _containerName;
-    public string? ContainerName { get => _containerName; set => SetProperty(ref _containerName, value); }
+    public string? ContainerName
+    {
+        get => _containerName;
+        set
+        {
+            if (SetProperty(ref _containerName, value))
+                RaisePropertyChanged(nameof(StatusLine1));
+        }
+    }
 
     private ContainerType? _containerType;
     public ContainerType? ContainerTypeValue { get => _containerType; set => SetProperty(ref _containerType, value); }
@@ -50,18 +85,57 @@ public class SlotDisplayItem : BindableBase
     public int? ContainerColumns { get => _containerColumns; set => SetProperty(ref _containerColumns, value); }
 
     private string? _materialName;
-    public string? MaterialName { get => _materialName; set => SetProperty(ref _materialName, value); }
+    public string? MaterialName
+    {
+        get => _materialName;
+        set
+        {
+            if (SetProperty(ref _materialName, value))
+                RaisePropertyChanged(nameof(StatusLine2));
+        }
+    }
 
     private decimal? _quantity;
-    public decimal? Quantity { get => _quantity; set => SetProperty(ref _quantity, value); }
+    public decimal? Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (SetProperty(ref _quantity, value))
+                RaisePropertyChanged(nameof(QuantityText));
+        }
+    }
 
     private string? _unit;
-    public string? Unit { get => _unit; set => SetProperty(ref _unit, value); }
+    public string? Unit
+    {
+        get => _unit;
+        set
+        {
+            if (SetProperty(ref _unit, value))
+                RaisePropertyChanged(nameof(QuantityText));
+        }
+    }
+
+    private int _inventoryRecordCount;
+    public int InventoryRecordCount
+    {
+        get => _inventoryRecordCount;
+        set
+        {
+            if (SetProperty(ref _inventoryRecordCount, value))
+            {
+                RaisePropertyChanged(nameof(HasInventory));
+                RaisePropertyChanged(nameof(IsEmpty));
+                RaisePropertyChanged(nameof(QuantityText));
+            }
+        }
+    }
 
     public string PositionLabel => $"R{Row}C{Column}";
 
     public bool HasContainer => ContainerId.HasValue;
-    public bool HasInventory => InventoryRecordId.HasValue;
+    public bool HasInventory => InventoryRecordCount > 0;
     public bool IsEmpty => !IsDisabled && !HasContainer && !HasInventory;
 
     public string ContainerSizeLabel => ContainerRows.HasValue && ContainerColumns.HasValue
@@ -90,15 +164,73 @@ public class SlotDisplayItem : BindableBase
     {
         get
         {
-            if (Quantity.HasValue) return $"{Quantity:0.##} {Unit}";
-            return string.Empty;
+            if (!Quantity.HasValue) return string.Empty;
+            var text = $"{Quantity:0.##} {Unit}";
+            if (InventoryRecordCount > 1) text += $" ({InventoryRecordCount}条)";
+            return text;
         }
     }
+
+    /// <summary>容器孔位网格模型（用于在槽位中渲染mini网格）</summary>
+    public ObservableCollection<WellDisplayItem> WellItems { get; } = new();
+
+    /// <summary>构建容器的孔位网格</summary>
+    public void BuildWellGrid(IReadOnlyList<WellOccupancyDto> occupiedWells)
+    {
+        WellItems.Clear();
+        if (!ContainerRows.HasValue || !ContainerColumns.HasValue
+            || ContainerRows.Value <= 0 || ContainerColumns.Value <= 0)
+            return;
+
+        for (int r = 1; r <= ContainerRows.Value; r++)
+        {
+            for (int c = 1; c <= ContainerColumns.Value; c++)
+            {
+                var occ = occupiedWells.FirstOrDefault(w => w.WellRow == r && w.WellColumn == c);
+                WellItems.Add(new WellDisplayItem
+                {
+                    WellRow = r,
+                    WellColumn = c,
+                    IsOccupied = occ is not null,
+                    MaterialName = occ?.MaterialName,
+                    Quantity = occ?.Quantity,
+                    Unit = occ?.Unit
+                });
+            }
+        }
+    }
+}
+
+/// <summary>容器内单个孔位的显示模型</summary>
+public class WellDisplayItem : BindableBase
+{
+    public int WellRow { get; set; }
+    public int WellColumn { get; set; }
+
+    private bool _isOccupied;
+    public bool IsOccupied { get => _isOccupied; set => SetProperty(ref _isOccupied, value); }
+
+    private string? _materialName;
+    public string? MaterialName { get => _materialName; set => SetProperty(ref _materialName, value); }
+
+    private decimal? _quantity;
+    public decimal? Quantity { get => _quantity; set => SetProperty(ref _quantity, value); }
+
+    private string? _unit;
+    public string? Unit { get => _unit; set => SetProperty(ref _unit, value); }
+
+    public string Label => $"{(char)('A' + WellRow - 1)}{WellColumn}";
+
+    public string TooltipText => IsOccupied
+        ? $"{Label}: {MaterialName} ({Quantity:0.##}{Unit})"
+        : $"{Label}: 空";
 }
 
 public class ShelfInfoViewModel : BindableBase
 {
     private readonly IShelfAppService _svc;
+    private readonly DispatcherTimer _autoRefreshTimer;
+    private static readonly TimeSpan AutoRefreshInterval = TimeSpan.FromSeconds(10);
 
     // Track whether a list dialog is currently open so nested actions
     // (add/edit/delete) can close it first and re-open afterwards.
@@ -160,6 +292,11 @@ public class ShelfInfoViewModel : BindableBase
 
         ConfigureSlotCommand = new DelegateCommand<SlotDisplayItem>(async slot => { if (slot is not null) await OpenSlotConfigAsync(slot); });
 
+        // Auto-refresh timer to poll inventory changes
+        _autoRefreshTimer = new DispatcherTimer { Interval = AutoRefreshInterval };
+        _autoRefreshTimer.Tick += async (_, _) => await RefreshSlotsQuietAsync();
+        _autoRefreshTimer.Start();
+
         _ = LoadAllAsync();
     }
 
@@ -199,12 +336,13 @@ public class ShelfInfoViewModel : BindableBase
         var list = await _svc.GetSlotsByShelfAsync(SelectedShelf.Id);
         foreach (var dto in list)
         {
-            Slots.Add(new SlotDisplayItem
+            var item = new SlotDisplayItem
             {
                 Id = dto.Id,
                 ShelfId = dto.ShelfId,
                 Row = dto.Row,
                 Column = dto.Column,
+                AllowedContainerTypes = dto.AllowedContainerTypes,
                 ContainerId = dto.ContainerId,
                 InventoryRecordId = dto.InventoryRecordId,
                 IsDisabled = dto.IsDisabled,
@@ -215,8 +353,11 @@ public class ShelfInfoViewModel : BindableBase
                 ContainerColumns = dto.ContainerColumns,
                 MaterialName = dto.MaterialName,
                 Quantity = dto.Quantity,
-                Unit = dto.Unit
-            });
+                Unit = dto.Unit,
+                InventoryRecordCount = dto.InventoryRecordCount
+            };
+            item.BuildWellGrid(dto.OccupiedWells);
+            Slots.Add(item);
         }
     }
 
@@ -227,6 +368,50 @@ public class ShelfInfoViewModel : BindableBase
         if (_containerListOpen || _shelfListOpen)
         {
             try { DialogHost.Close("RootDialogHost"); } catch { }
+        }
+    }
+
+    /// <summary>
+    /// Quiet refresh: re-query slots from service and update well occupancy
+    /// in-place without rebuilding the full Slots collection (avoids UI flicker).
+    /// Skips if a dialog is open to prevent conflicts.
+    /// </summary>
+    private async Task RefreshSlotsQuietAsync()
+    {
+        if (_containerListOpen || _shelfListOpen) return;
+        if (SelectedShelf is null) return;
+
+        try
+        {
+            var list = await _svc.GetSlotsByShelfAsync(SelectedShelf.Id);
+            var dtoMap = list.ToDictionary(d => d.Id);
+
+            foreach (var slot in Slots)
+            {
+                if (!dtoMap.TryGetValue(slot.Id, out var dto)) continue;
+
+                // Update container info
+                slot.ContainerId = dto.ContainerId;
+                slot.AllowedContainerTypes = dto.AllowedContainerTypes;
+                slot.ContainerName = dto.ContainerName;
+                slot.ContainerTypeValue = dto.ContainerTypeValue;
+                slot.ContainerRows = dto.ContainerRows;
+                slot.ContainerColumns = dto.ContainerColumns;
+                slot.IsDisabled = dto.IsDisabled;
+                slot.Remark = dto.Remark;
+                slot.InventoryRecordId = dto.InventoryRecordId;
+                slot.MaterialName = dto.MaterialName;
+                slot.Quantity = dto.Quantity;
+                slot.Unit = dto.Unit;
+                slot.InventoryRecordCount = dto.InventoryRecordCount;
+
+                // Rebuild well grid
+                slot.BuildWellGrid(dto.OccupiedWells);
+            }
+        }
+        catch
+        {
+            // Swallow errors during quiet refresh to avoid disrupting the UI
         }
     }
 

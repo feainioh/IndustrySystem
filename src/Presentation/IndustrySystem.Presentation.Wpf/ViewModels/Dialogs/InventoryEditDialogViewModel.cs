@@ -45,6 +45,15 @@ public class InventoryEditDialogViewModel : DialogViewModel
     private string _location = string.Empty;
     public string Location { get => _location; set => SetProperty(ref _location, value); }
 
+    private int _wellRow;
+    public int WellRow { get => _wellRow; set => SetProperty(ref _wellRow, value); }
+
+    private int _wellColumn;
+    public int WellColumn { get => _wellColumn; set => SetProperty(ref _wellColumn, value); }
+
+    private Guid? _shelfSlotId;
+    public Guid? ShelfSlotId { get => _shelfSlotId; set => SetProperty(ref _shelfSlotId, value); }
+
     private string _remark = string.Empty;
     public string Remark { get => _remark; set => SetProperty(ref _remark, value); }
 
@@ -92,6 +101,9 @@ public class InventoryEditDialogViewModel : DialogViewModel
             InboundDate = DateTime.Today;
             ExpiryDate = null;
             Location = string.Empty;
+            WellRow = 0;
+            WellColumn = 0;
+            ShelfSlotId = null;
             Remark = string.Empty;
             SelectedMaterial = null;
             return;
@@ -111,6 +123,9 @@ public class InventoryEditDialogViewModel : DialogViewModel
         InboundDate = item.InboundDate;
         ExpiryDate = item.ExpiryDate;
         Location = item.Location;
+        WellRow = item.WellRow;
+        WellColumn = item.WellColumn;
+        ShelfSlotId = item.ShelfSlotId;
         Remark = item.Remark;
         SelectedMaterial = MaterialOptions.FirstOrDefault(m => m.Id == item.MaterialId);
     }
@@ -123,7 +138,8 @@ public class InventoryEditDialogViewModel : DialogViewModel
         var dto = new InventoryRecordDto(
             Id, MaterialId, MaterialCode.Trim(), MaterialName.Trim(),
             BatchNo.Trim(), Quantity, SafetyStock, Unit.Trim(),
-            InboundDate, ExpiryDate, Location.Trim(), Remark.Trim());
+            InboundDate, ExpiryDate, Location.Trim(),
+            WellRow, WellColumn, ShelfSlotId, Remark.Trim());
 
         if (Id == Guid.Empty)
             _ = await _svc.CreateAsync(dto);
