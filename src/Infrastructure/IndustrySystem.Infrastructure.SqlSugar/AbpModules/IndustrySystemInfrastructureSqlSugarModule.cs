@@ -20,7 +20,7 @@ public class IndustrySystemInfrastructureSqlSugarModule : AbpModule
 
         context.Services.AddSingleton<ISqlSugarClient>(_ =>
         {
-            var db = new SqlSugarClient(new ConnectionConfig
+            var db = new SqlSugarScope(new ConnectionConfig
             {
                 ConnectionString = options.ConnectionString,
                 DbType = DbType.MySql,

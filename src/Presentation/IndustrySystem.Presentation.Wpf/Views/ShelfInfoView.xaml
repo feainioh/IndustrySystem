@@ -78,7 +78,7 @@
                 <TextBlock Grid.Column="0" Text="当前货架" FontSize="14" FontWeight="SemiBold"
                            VerticalAlignment="Center" Margin="0,0,14,0"/>
 
-                <ComboBox Grid.Column="1"
+                <ComboBox Grid.Column="1" 
                           ItemsSource="{Binding Shelves}"
                           SelectedItem="{Binding SelectedShelf}"
                           DisplayMemberPath="Name"
