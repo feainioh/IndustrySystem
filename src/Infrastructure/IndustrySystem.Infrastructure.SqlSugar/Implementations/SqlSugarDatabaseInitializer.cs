@@ -61,9 +61,24 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
                     if (_options.InitBuildSchema)
                     {
                         _db.CodeFirst.InitTables(
-                            typeof(Role), typeof(Permission), typeof(ExperimentTemplate), typeof(ExperimentGroup), typeof(Experiment), typeof(User), typeof(Material), typeof(InventoryRecord),
+                            typeof(Role), typeof(Permission), typeof(ExperimentTemplate), typeof(ExperimentGroup), typeof(Experiment),
+                            typeof(ReactionParameter), typeof(RotaryEvaporationParameter), typeof(DetectionParameter), typeof(FiltrationParameter), typeof(DryingParameter),
+                            typeof(QuenchingParameter), typeof(ExtractionParameter), typeof(SamplingParameter), typeof(CentrifugationParameter), typeof(CustomDetectionParameter),
+                            typeof(User), typeof(Material), typeof(InventoryRecord),
                             typeof(ContainerInfo), typeof(ShelfConfig), typeof(ShelfSlot)
                         );
+
+                        // Fix: ensure nullable columns in Experiment table (CodeFirst may not alter existing NOT NULL → NULL)
+                        try
+                        {
+                            _db.Ado.ExecuteCommand("ALTER TABLE `Experiment` MODIFY COLUMN `ParameterId` CHAR(36) NULL DEFAULT NULL");
+                            _db.Ado.ExecuteCommand("ALTER TABLE `Experiment` MODIFY COLUMN `GroupId` CHAR(36) NULL DEFAULT NULL");
+                            _db.Ado.ExecuteCommand("ALTER TABLE `Experiment` MODIFY COLUMN `UpdatedAt` DATETIME NULL DEFAULT NULL");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Warn(ex, "[DB Init] ALTER TABLE for nullable columns failed (table may not exist yet or columns already nullable).");
+                        }
                     }
 
                     if (_options.InitSeedData)

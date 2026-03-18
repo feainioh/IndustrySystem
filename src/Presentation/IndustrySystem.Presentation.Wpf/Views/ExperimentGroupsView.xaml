@@ -2,31 +2,188 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.ExperimentGroupsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="Padding" Value="10,2,10,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
+        </Style>
+        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
-    <Grid Margin="16">
+
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="{Binding [Btn_Add], Source={StaticResource Loc}}" Click="OnAdd"/>
-        </StackPanel>
-        <ListView Grid.Row="1">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="{Binding [Col_Common_Name], Source={StaticResource Loc}}"/>
-                    <GridViewColumn Header="{Binding [Col_Common_Actions], Source={StaticResource Loc}}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="{Binding [Btn_Edit], Source={StaticResource Loc}}" Click="OnEdit"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="40" Height="40" CornerRadius="8"
+                        Background="{StaticResource ExperimentGradientBrush}"
+                        VerticalAlignment="Center" Margin="0,0,16,0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
+                    </Border.Effect>
+                    <materialDesign:PackIcon Kind="FormatListChecks" Width="20" Height="20"
+                                             Foreground="White"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="实验组管理" FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="维护实验组及其关联实验步骤" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding RefreshCommand}"
+                        Height="36" Padding="12,0"
+                        Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="刷新" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                        Command="{Binding AddCommand}"
+                        Height="36" Padding="12,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="新增实验组" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="2"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="16"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="260"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="实验组列表" FontSize="15" FontWeight="SemiBold"/>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource SearchTextField}"
+                             materialDesign:HintAssist.Hint="搜索编号 / 名称 / 创建人"
+                             materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
+                </Grid>
+
+                <ListView Grid.Row="2"
+                          ItemsSource="{Binding GroupsView}"
+                          Style="{StaticResource OperationLikeListView}">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False"> 
+                            <GridViewColumn Width="160" Header="实验组名称" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Width="220" Header="描述" DisplayMemberBinding="{Binding Description}"/>
+                            <GridViewColumn Width="220" Header="实验步骤摘要" DisplayMemberBinding="{Binding StepDisplay}"/>
+                            <GridViewColumn Width="120" Header="启用状态">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:Chip Content="{Binding IsEnabled, Converter={StaticResource BoolToStatusConverter}}"
+                                                            Margin="6,0"
+                                                            FontSize="11"
+                                                            Padding="6,2"
+                                                            Foreground="White"
+                                                            HorizontalAlignment="Left">
+                                            <materialDesign:Chip.Style>
+                                                <Style TargetType="materialDesign:Chip">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                            <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:Chip.Style>
+                                        </materialDesign:Chip>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="120" Header="创建人" DisplayMemberBinding="{Binding CreatedBy}"/>
+                            <!--<GridViewColumn Width="160" Header="创建时间" DisplayMemberBinding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
+                            <GridViewColumn Width="160" Header="更新时间" DisplayMemberBinding="{Binding UpdatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>-->
+                            <GridViewColumn Width="120" Header="操作">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    ToolTip="编辑"
+                                                    Width="32" Height="32"
+                                                    Margin="0,0,4,0">
+                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    ToolTip="删除"
+                                                    Width="32" Height="32"
+                                                    Foreground="{StaticResource ErrorBrush}">
+                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

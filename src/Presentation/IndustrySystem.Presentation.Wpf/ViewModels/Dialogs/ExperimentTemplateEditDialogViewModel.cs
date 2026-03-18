@@ -1,64 +1,94 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
-using Prism.Commands;
+using IndustrySystem.Domain.Shared.Enums;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class ExperimentTemplateEditDialogViewModel : DialogViewModel
 {
- private readonly IExperimentTemplateAppService _svc;
- private Guid _id;
- private string _name = string.Empty;
- private string? _description;
+    private readonly IExperimentTemplateAppService _svc;
+    private Guid _id;
+    private string _name = string.Empty;
+    private string? _description;
+    private ExperimentType _selectedType = ExperimentType.Reaction;
 
- public Guid Id { get => _id; set => SetProperty(ref _id, value); }
- public string Name { get => _name; set => SetProperty(ref _name, value); }
- public string? Description { get => _description; set => SetProperty(ref _description, value); }
+    public Guid Id { get => _id; set => SetProperty(ref _id, value); }
 
- public ICommand SaveCommand { get; }
- public ICommand CancelCommand { get; }
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (SetProperty(ref _name, value))
+                RaiseSaveCanExecuteChanged();
+        }
+    }
 
- public ExperimentTemplateEditDialogViewModel(IExperimentTemplateAppService svc)
- {
- _svc = svc;
- Title = "�༭ʵ��ģ��";
- SaveCommand = new AsyncDelegateCommand(SaveAsync, CanSave);
- CancelCommand = new DelegateCommand(Cancel);
- }
+    public string? Description { get => _description; set => SetProperty(ref _description, value); }
 
- public async Task LoadAsync(Guid? id)
- {
- if (id is { } v)
- {
- var dto = await _svc.GetAsync(v);
- if (dto != null)
- {
- Id = dto.Id;
- Name = dto.Name;
- Description = dto.Description;
- }
- }
- else
- {
- Id = Guid.Empty;
- Name = string.Empty;
- Description = null;
- }
- }
+    public ExperimentType SelectedType
+    {
+        get => _selectedType;
+        set => SetProperty(ref _selectedType, value);
+    }
 
- private bool CanSave() => !string.IsNullOrWhiteSpace(Name);
+    public ObservableCollection<ExperimentType> ExperimentTypes { get; } =
+        Enum.GetValues(typeof(ExperimentType)).Cast<ExperimentType>().ToObservableCollection();
 
- private async Task SaveAsync()
- {
- var input = new ExperimentTemplateDto(Id, Name, Description);
- var result = Id == Guid.Empty
- ? await _svc.CreateAsync(input)
- : await _svc.UpdateAsync(input);
- DialogResult = true;
- }
+    public ExperimentTemplateEditDialogViewModel(IExperimentTemplateAppService svc)
+    {
+        _svc = svc;
+        Title = "新建实验模板";
+    }
 
- private void Cancel() => DialogResult = false;
+    public async Task LoadAsync(Guid? id)
+    {
+        if (id is { } v)
+        {
+            Title = "编辑实验模板";
+            var dto = await _svc.GetAsync(v);
+            if (dto != null)
+            {
+                Id = dto.Id;
+                Name = dto.Name;
+                SelectedType = dto.Type;
+                Description = dto.Description;
+            }
+        }
+        else
+        {
+            Title = "新建实验模板";
+            Id = Guid.Empty;
+            Name = string.Empty;
+            SelectedType = ExperimentType.Reaction;
+            Description = null;
+        }
+    }
+
+    protected override bool CanSave() => !string.IsNullOrWhiteSpace(Name);
+
+    protected override async Task OnSaveAsync()
+    {
+        var now = DateTime.Now;
+        var input = new ExperimentTemplateDto(
+            Id,
+            Name.Trim(),
+            SelectedType,
+            null,
+            true,
+            Id == Guid.Empty ? now : now,
+            now,
+            Description);
+
+        _ = Id == Guid.Empty
+            ? await _svc.CreateAsync(input)
+            : await _svc.UpdateAsync(input);
+        DialogResult = true;
+    }
+
+    protected override void OnCancel() => DialogResult = false;
 }

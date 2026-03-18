@@ -5,7 +5,7 @@
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="False"
-             Background="{DynamicResource MaterialDesignPaper}">
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
@@ -18,70 +18,84 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="CaretBrush" Value="Black"/>
         </Style>
+        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
+        </Style>
+        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     
-    <Grid Style="{StaticResource PageContainer}">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="12"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Page Header -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <!-- Icon and Title -->
-            <Border Grid.Column="0"
-                    Style="{StaticResource ModuleIconBadge}"
-                    Background="{StaticResource RoleGradientBrush}">
-                <Border.Effect>
-                    <DropShadowEffect Color="#10893E" BlurRadius="16" 
-                                    ShadowDepth="0" Opacity="0.6"/>
-                </Border.Effect>
-                <materialDesign:PackIcon Kind="ShieldAccount" 
-                                        Width="32" Height="32"
-                                        Foreground="White"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
-            </Border>
-            
-            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <TextBlock Text="{x:Static loc:Strings.Nav_Roles}" 
-                          Style="{StaticResource PageTitle}"/>
-                <TextBlock Text="{x:Static loc:Strings.View_Roles_Subtitle}" 
-                          Style="{StaticResource PageSubtitle}"/>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="40" Height="40" CornerRadius="8"
+                        Background="{StaticResource RoleGradientBrush}"
+                        VerticalAlignment="Center" Margin="0,0,16,0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#10893E" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
+                    </Border.Effect>
+                    <materialDesign:PackIcon Kind="ShieldAccount"
+                                            Width="20" Height="20"
+                                            Foreground="White"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{x:Static loc:Strings.Nav_Roles}" FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="{x:Static loc:Strings.View_Roles_Subtitle}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                </StackPanel>
             </StackPanel>
-            
-            <!-- Action Buttons -->
-            <Button Grid.Column="2"
+
+            <Button Grid.Column="1"
                    Style="{StaticResource MaterialDesignOutlinedButton}"
                    Command="{Binding RefreshCommand}"
                    VerticalAlignment="Center"
-                   Height="40">
+                   Height="36" Padding="12,0">
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Refresh" 
-                                            VerticalAlignment="Center"
-                                            Margin="0,0,8,0"/>
-                    <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" 
-                              VerticalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </Grid>
 
         <!-- Add Role Card -->
-        <materialDesign:Card Grid.Row="2" Style="{StaticResource MaterialCard}">
+        <Border Grid.Row="2"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="10"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
             <StackPanel>
-                <TextBlock Text="{x:Static loc:Strings.Section_AddNewRole}" 
-                          Style="{StaticResource SectionTitle}"/>
-                
-                <Grid Margin="0,16,0,0">
+                <TextBlock Text="{x:Static loc:Strings.Section_AddNewRole}" Style="{StaticResource SectionTitle}"/>
+                <Grid Margin="0,12,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="16"/>
@@ -121,10 +135,17 @@
                     </Button>
                 </Grid>
             </StackPanel>
-        </materialDesign:Card>
+        </Border>
 
         <!-- Roles List Card -->
-        <materialDesign:Card Grid.Row="4" Style="{StaticResource MaterialCard}">
+        <Border Grid.Row="4"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="16"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -155,10 +176,10 @@
                 <!-- ListView -->
                 <ListView Grid.Row="2"
                          ItemsSource="{Binding RolesView}"
-                         Style="{StaticResource ModernListView}">
+                         Style="{StaticResource OperationLikeListView}">
                     <ListView.Resources>
                         <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -238,6 +259,6 @@
                     </ListView.View>
                 </ListView>
             </Grid>
-        </materialDesign:Card>
+        </Border>
     </Grid>
 </UserControl>

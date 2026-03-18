@@ -1,10 +1,31 @@
+using IndustrySystem.Domain.Shared.Enums;
 using IndustrySystem.Domain.Shared.Enums.MaterialEnums;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
 
 namespace IndustrySystem.Application.Contracts.Dtos;
 
-public record ExperimentTemplateDto(Guid Id, string Name, string? Description);
-public record ExperimentGroupDto(Guid Id, string Name);
+public record ExperimentTemplateDto(
+    Guid Id,
+    string Name,
+    ExperimentType Type,
+    Guid? ParameterId,
+    bool IsTemplate,
+    DateTime CreatedAt,
+    DateTime? UpdatedAt,
+    string? Description = null);
+
+public record ExperimentGroupDto(
+    Guid Id,
+    string GroupCode,
+    string Name,
+    string Description,
+    IReadOnlyList<Guid> StepExperimentIds,
+    bool IsEnabled,
+    string CreatedBy,
+    DateTime CreatedAt,
+    DateTime? UpdatedAt,
+    string StepDisplay = "");
+
 public record ExperimentDto(Guid Id, Guid TemplateId, Guid GroupId, string Name, DateTime CreatedAt);
 
 public record InventoryRecordDto(

@@ -84,11 +84,11 @@ public partial class App : PrismApplication
                             column.PropertyName == nameof(Domain.Entities.Roles.RolePermission.PermissionId))
                         { column.IsPrimarykey = true; column.IsIdentity = false; }
                     }
-                    if (column.PropertyInfo.PropertyType == typeof(DateTime?)) { column.IsNullable = true; }
+                    if (Nullable.GetUnderlyingType(column.PropertyInfo.PropertyType) != null) { column.IsNullable = true; }
                 }
             }
         };
-        containerRegistry.RegisterInstance<ISqlSugarClient>(new SqlSugarClient(conn));
+        containerRegistry.RegisterInstance<ISqlSugarClient>(new SqlSugarScope(conn));
 
         containerRegistry.Register(typeof(IRepository<>), typeof(SqlSugarRepository<>));
         containerRegistry.Register<IUserRoleRepository, UserRoleRepository>();
@@ -96,9 +96,11 @@ public partial class App : PrismApplication
 
         containerRegistry.Register<IRoleAppService, RoleAppService>();
         containerRegistry.Register<IExperimentTemplateAppService, ExperimentTemplateAppService>();
+        containerRegistry.Register<IExperimentParameterAppService, ExperimentParameterAppService>();
         containerRegistry.Register<IPermissionAppService, PermissionAppService>();
         containerRegistry.Register<IUserAppService, UserAppService>();
         containerRegistry.Register<IExperimentAppService, ExperimentAppService>();
+        containerRegistry.Register<IExperimentGroupAppService, ExperimentGroupAppService>();
         containerRegistry.Register<IExperimentHistoryAppService, ExperimentHistoryAppService>();
         containerRegistry.Register<IAlarmAppService, AlarmAppService>();
         containerRegistry.Register<IInventoryAppService, InventoryAppService>();
@@ -139,6 +141,18 @@ public partial class App : PrismApplication
 
         // Register LoginView as dialog
         containerRegistry.RegisterDialog<LoginView, LoginViewModel>();
+
+        // Register type-specific parameter edit views for region navigation
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog>();
     }
 
     protected override void OnStartup(StartupEventArgs e)

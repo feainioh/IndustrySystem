@@ -5,7 +5,7 @@
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="False"
-             Background="{DynamicResource MaterialDesignPaper}">
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
@@ -18,9 +18,25 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="CaretBrush" Value="Black"/>
         </Style>
+        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
+        </Style>
+        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     
-    <Grid Margin="20">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -32,38 +48,32 @@
         <!-- Page Header -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <!-- Icon and Title -->
-            <Border Grid.Column="0"
-                    Width="48" Height="48"
-                    CornerRadius="24"
-                    Background="{StaticResource PermissionGradient}"
-                    VerticalAlignment="Center"
-                    Margin="0,0,16,0">
-                <Border.Effect>
-                    <DropShadowEffect Color="#8764B8" BlurRadius="12" 
-                                    ShadowDepth="0" Opacity="0.5"/>
-                </Border.Effect>
-                <materialDesign:PackIcon Kind="LockOutline" 
-                                        Width="28" Height="28"
-                                        Foreground="White"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
-            </Border>
-            
-            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <TextBlock Text="{x:Static loc:Strings.Nav_Permissions}" 
-                          FontSize="22" FontWeight="SemiBold"/>
-                <TextBlock Text="{x:Static loc:Strings.View_Permissions_Subtitle}" 
-                          FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="40" Height="40" CornerRadius="8"
+                        Background="{StaticResource PermissionGradient}"
+                        VerticalAlignment="Center" Margin="0,0,16,0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
+                    </Border.Effect>
+                    <materialDesign:PackIcon Kind="LockOutline" Width="20" Height="20"
+                                            Foreground="White"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{x:Static loc:Strings.Nav_Permissions}" 
+                              FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="{x:Static loc:Strings.View_Permissions_Subtitle}" 
+                              FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                </StackPanel>
             </StackPanel>
-            
-            <!-- Action Buttons -->
-            <Button Grid.Column="2"
+
+            <Button Grid.Column="1"
                    Style="{StaticResource MaterialDesignOutlinedButton}"
                    Command="{Binding RefreshCommand}"
                    VerticalAlignment="Center"
@@ -79,9 +89,14 @@
         </Grid>
 
         <!-- Add Permission Card -->
-        <materialDesign:Card Grid.Row="2" Padding="10"
-                            materialDesign:ElevationAssist.Elevation="Dp2"
-                            UniformCornerRadius="8">
+        <Border Grid.Row="2"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="10"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
             <StackPanel>
                 <TextBlock Text="{x:Static loc:Strings.Section_AddNewPermission}" 
                           FontSize="15" FontWeight="SemiBold"/>
@@ -97,28 +112,24 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     
-                    <!-- Permission Name -->
                     <TextBox Grid.Column="0"
                             Text="{Binding NewName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Permission_Name}"
                             materialDesign:HintAssist.IsFloating="True"/>
                     
-                    <!-- Display Name -->
                     <TextBox Grid.Column="2"
                             Text="{Binding NewDisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Permission_DisplayName}"
                             materialDesign:HintAssist.IsFloating="True" />
 
-                    <!-- Group Name -->
                     <TextBox Grid.Column="4"
                             Text="{Binding NewGroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialTextField}"
                             materialDesign:HintAssist.Hint="{x:Static loc:Strings.Col_Group}"
                             materialDesign:HintAssist.IsFloating="True" />
                     
-                    <!-- Add Button -->
                     <Button Grid.Column="6"
                            Command="{Binding AddCommand}"
                            Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
@@ -133,12 +144,17 @@
                     </Button>
                 </Grid>
             </StackPanel>
-        </materialDesign:Card>
+        </Border>
 
         <!-- Permissions List Card -->
-        <materialDesign:Card Grid.Row="4" Padding="16"
-                            materialDesign:ElevationAssist.Elevation="Dp2"
-                            UniformCornerRadius="8">
+        <Border Grid.Row="4"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                CornerRadius="8" Padding="16"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -146,7 +162,6 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
-                <!-- Section Header with Search -->
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -166,13 +181,12 @@
                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
 
-                <!-- ListView -->
                 <ListView Grid.Row="2"
                          ItemsSource="{Binding PermissionsView}"
-                         Style="{StaticResource ModernListView}">
+                         Style="{StaticResource OperationLikeListView}">
                     <ListView.Resources>
                         <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
@@ -244,6 +258,6 @@
                     </ListView.View>
                 </ListView>
             </Grid>
-        </materialDesign:Card>
+        </Border>
     </Grid>
 </UserControl>
