@@ -1,57 +1,48 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
-using MaterialDesignThemes.Wpf;
+using Prism.Dialogs;
 using IndustrySystem.Presentation.Wpf.ViewModels;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
     public partial class ExperimentGroupsView : UserControl
     {
-        public ExperimentGroupsView(ExperimentGroupsViewModel viewModel)
+        private readonly IDialogService _dialogService;
+
+        public ExperimentGroupsView(ExperimentGroupsViewModel viewModel, IDialogService dialogService)
         {
             InitializeComponent();
             DataContext = viewModel;
+            _dialogService = dialogService;
         }
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            _ = OpenGroupDialogAsync(null);
+            OpenGroupDialog(null);
         }
 
         private void OnEdit(object sender, RoutedEventArgs e)
         {
             if ((sender as FrameworkElement)?.DataContext is Application.Contracts.Dtos.ExperimentGroupDto g)
             {
-                _ = OpenGroupDialogAsync(g.Id);
+                OpenGroupDialog(g.Id);
             }
         }
 
-        private async System.Threading.Tasks.Task OpenGroupDialogAsync(Guid? id)
+        private void OpenGroupDialog(Guid? id)
         {
-            var vm = ContainerLocator.Current.Resolve<ExperimentGroupEditDialogViewModel>();
-            await vm.LoadAsync(id);
-            var dialog = new Dialogs.ExperimentGroupEditDialog { DataContext = vm };
-
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            var parameters = new DialogParameters { { "id", id } };
+            _dialogService.ShowDialog(nameof(Dialogs.ExperimentGroupEditDialog), parameters, async result =>
             {
-                if (e.PropertyName == nameof(ViewModels.DialogViewModel.DialogResult))
+                if (result.Result == ButtonResult.OK)
                 {
-                    DialogHost.Close("RootDialogHost", vm.DialogResult);
+                    if (DataContext is ExperimentGroupsViewModel vm)
+                    {
+                        await vm.LoadAsync();
+                    }
                 }
-            };
-            vm.PropertyChanged += handler;
-            try
-            {
-                var result = await DialogHost.Show(dialog, "RootDialogHost");
-                // TODO: refresh list when viewmodel exists
-            }
-            finally
-            {
-                vm.PropertyChanged -= handler;
-            }
+            });
         }
     }
 }

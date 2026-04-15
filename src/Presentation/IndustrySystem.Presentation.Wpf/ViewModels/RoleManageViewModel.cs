@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,16 +13,17 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class RoleManageViewModel : BindableBase
+public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IRoleAppService _svc;
+    private readonly IDialogService _dialogService;
 
     /// <summary>
     /// 新增角色名称输入。
@@ -67,18 +69,19 @@ public class RoleManageViewModel : BindableBase
     public ICommand DeleteCommand { get; }
     public ICommand ManagePermissionsCommand { get; }
 
-    public RoleManageViewModel(IRoleAppService svc)
+    public RoleManageViewModel(IRoleAppService svc, IDialogService dialogService)
     {
         _svc = svc ?? throw new ArgumentNullException(nameof(svc));
+        _dialogService = dialogService;
         RolesView = CollectionViewSource.GetDefaultView(Roles);
         RolesView.Filter = FilterRoles;
 
         // 页面命令：刷新、新增、编辑、删除、权限管理
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
-        EditCommand = new DelegateCommand<Guid?>(async id =>
+        EditCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenRoleDialogAsync(id.Value);
+            if (id.HasValue) OpenRoleDialogAsync(id.Value);
         });
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
@@ -125,33 +128,16 @@ public class RoleManageViewModel : BindableBase
     /// <summary>
     /// 打开角色编辑弹窗，保存后刷新列表。
     /// </summary>
-    private async Task OpenRoleDialogAsync(Guid id)
+    private void OpenRoleDialogAsync(Guid id)
     {
-        var dialogVm = ContainerLocator.Current.Resolve<RoleEditDialogViewModel>();
-        await dialogVm.LoadAsync(id);
-        var dialog = new Views.Dialogs.RoleEditDialog { DataContext = dialogVm };
-
-        System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", (Guid?)id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.RoleEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-            {
-                DialogHost.Close("RootDialogHost", dialogVm.DialogResult);
-            }
-        };
-
-        dialogVm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
             {
                 await LoadAsync();
             }
-        }
-        finally
-        {
-            dialogVm.PropertyChanged -= handler;
-        }
+        });
     }
 
     /// <summary>
@@ -223,10 +209,11 @@ public class RoleManageViewModel : BindableBase
     /// <summary>
     /// 管理角色权限：打开角色编辑弹窗进行权限配置。
     /// </summary>
-    public async Task ManagePermissionsAsync(Guid id)
+    public Task ManagePermissionsAsync(Guid id)
     {
         _logger.Info($"Managing permissions for role {id}");
-        await OpenRoleDialogAsync(id);
+        OpenRoleDialogAsync(id);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -266,5 +253,8 @@ public class RoleManageViewModel : BindableBase
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    protected override async Task<IReadOnlyList<RoleDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }
 

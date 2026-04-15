@@ -1,62 +1,54 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Ioc;
+using Prism.Dialogs;
 using IndustrySystem.Presentation.Wpf.ViewModels;
-using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
-using MaterialDesignThemes.Wpf;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
     public partial class ExperimentTemplateView : UserControl
     {
+        private readonly IDialogService _dialogService;
         private ExperimentTemplateViewModel ViewModel => (ExperimentTemplateViewModel)DataContext;
 
-        public ExperimentTemplateView(ExperimentTemplateViewModel viewModel)
+        public ExperimentTemplateView(ExperimentTemplateViewModel viewModel, IDialogService dialogService)
         {
             InitializeComponent();
             DataContext = viewModel;
+            _dialogService = dialogService;
+            Loaded += OnViewLoaded;
+        }
+
+        private void OnViewLoaded(object sender, RoutedEventArgs e)
+        {
+            // Region 仅在 View 进入可视树并触发 Loaded 后才由 Prism 创建，
+            // 此处补偿 VM 构造阶段因 region 不存在而跳过的首次导航。
+            ViewModel.NavigateToCurrentParameterEditor();
         }
 
         private void OnAdd(object sender, RoutedEventArgs e)
         {
-            _ = OpenTemplateDialogAsync(null);
+            OpenTemplateDialog(null);
         }
 
         private void OnEdit(object sender, RoutedEventArgs e)
         {
             if ((sender as FrameworkElement)?.DataContext is Application.Contracts.Dtos.ExperimentTemplateDto t)
             {
-                _ = OpenTemplateDialogAsync(t.Id);
+                OpenTemplateDialog(t.Id);
             }
         }
 
-        private async System.Threading.Tasks.Task OpenTemplateDialogAsync(Guid? id)
+        private void OpenTemplateDialog(Guid? id)
         {
-            var vm = ContainerLocator.Current.Resolve<ExperimentTemplateEditDialogViewModel>();
-            await vm.LoadAsync(id);
-            var dialog = new Dialogs.ExperimentTemplateEditDialog { DataContext = vm };
-
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+            var parameters = new DialogParameters { { "id", id } };
+            _dialogService.ShowDialog(nameof(Dialogs.ExperimentTemplateEditDialog), parameters, async result =>
             {
-                if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                {
-                    DialogHost.Close("RootDialogHost", vm.DialogResult);
-                }
-            };
-            vm.PropertyChanged += handler;
-            try
-            {
-                var result = await DialogHost.Show(dialog, "RootDialogHost");
-                if (result is true)
+                if (result.Result == ButtonResult.OK)
                 {
                     await ViewModel.LoadAsync();
                 }
-            }
-            finally
-            {
-                vm.PropertyChanged -= handler;
-            }
+            });
         }
     }
 }

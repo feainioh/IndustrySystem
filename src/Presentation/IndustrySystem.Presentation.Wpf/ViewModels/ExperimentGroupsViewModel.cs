@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,14 +13,15 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentGroupsViewModel : BindableBase
+public class ExperimentGroupsViewModel : NagetiveCurdVeiwModel<ExperimentGroupDto>
 {
     private readonly IExperimentGroupAppService _svc;
+    private readonly IDialogService _dialogService;
 
     public ObservableCollection<ExperimentGroupDto> Groups { get; } = new();
     public ICollectionView GroupsView { get; }
@@ -42,18 +44,19 @@ public class ExperimentGroupsViewModel : BindableBase
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
 
-    public ExperimentGroupsViewModel(IExperimentGroupAppService svc)
+    public ExperimentGroupsViewModel(IExperimentGroupAppService svc, IDialogService dialogService)
     {
         _svc = svc;
+        _dialogService = dialogService;
 
         GroupsView = CollectionViewSource.GetDefaultView(Groups);
         GroupsView.Filter = FilterGroups;
 
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
-        AddCommand = new DelegateCommand(async () => await OpenDialogAsync(null));
-        EditCommand = new DelegateCommand<Guid?>(async id =>
+        AddCommand = new DelegateCommand(() => OpenDialogAsync(null));
+        EditCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenDialogAsync(id.Value);
+            if (id.HasValue) OpenDialogAsync(id.Value);
         });
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
@@ -88,34 +91,16 @@ public class ExperimentGroupsViewModel : BindableBase
         });
     }
 
-    private async Task OpenDialogAsync(Guid? id)
+    private void OpenDialogAsync(Guid? id)
     {
-        var vm = ContainerLocator.Current.Resolve<ExperimentGroupEditDialogViewModel>();
-        await vm.LoadAsync(id);
-
-        var dialog = new Views.Dialogs.ExperimentGroupEditDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (_, e) =>
+        var parameters = new DialogParameters { { "id", id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.ExperimentGroupEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-            {
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-            }
-        };
-
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
             {
                 await LoadAsync();
             }
-        }
-        finally
-        {
-            vm.PropertyChanged -= handler;
-        }
+        });
     }
 
     private async Task DeleteAsync(Guid id)
@@ -131,4 +116,7 @@ public class ExperimentGroupsViewModel : BindableBase
             Groups.Remove(target);
         }
     }
+
+    protected override async Task<IReadOnlyList<ExperimentGroupDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }

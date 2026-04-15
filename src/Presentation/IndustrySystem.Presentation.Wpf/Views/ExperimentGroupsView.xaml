@@ -61,8 +61,8 @@
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="实验组管理" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="维护实验组及其关联实验步骤" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Title]}" FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Subtitle]}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
                 </StackPanel>
             </StackPanel>
 
@@ -73,7 +73,7 @@
                         Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="刷新" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
@@ -81,7 +81,7 @@
                         Height="36" Padding="12,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="新增实验组" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_AddExperimentGroup]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -107,11 +107,11 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="260"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="实验组列表" FontSize="15" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentGroupList]}" FontSize="15" FontWeight="SemiBold"/>
                     <TextBox Grid.Column="1"
                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource SearchTextField}"
-                             materialDesign:HintAssist.Hint="搜索编号 / 名称 / 创建人"
+                             materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_Search_ExperimentGroup]}"
                              materialDesign:TextFieldAssist.HasLeadingIcon="True"
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
@@ -125,10 +125,10 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False"> 
-                            <GridViewColumn Width="160" Header="实验组名称" DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Width="220" Header="描述" DisplayMemberBinding="{Binding Description}"/>
-                            <GridViewColumn Width="220" Header="实验步骤摘要" DisplayMemberBinding="{Binding StepDisplay}"/>
-                            <GridViewColumn Width="120" Header="启用状态">
+                            <GridViewColumn Width="160" Header="{Binding Source={StaticResource Loc}, Path=[Col_GroupName]}" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_Description]}" DisplayMemberBinding="{Binding Description}"/>
+                            <GridViewColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_StepSummary]}" DisplayMemberBinding="{Binding StepDisplay}"/>
+                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_EnabledStatus]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <materialDesign:Chip Content="{Binding IsEnabled, Converter={StaticResource BoolToStatusConverter}}"
@@ -153,17 +153,17 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="120" Header="创建人" DisplayMemberBinding="{Binding CreatedBy}"/>
+                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_CreatedBy]}" DisplayMemberBinding="{Binding CreatedBy}"/>
                             <!--<GridViewColumn Width="160" Header="创建时间" DisplayMemberBinding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
                             <GridViewColumn Width="160" Header="更新时间" DisplayMemberBinding="{Binding UpdatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>-->
-                            <GridViewColumn Width="120" Header="操作">
+                            <GridViewColumn Width="120" Header="{x:Static loc:Strings.Col_Actions}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
-                                                    ToolTip="编辑"
+                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}"
                                                     Width="32" Height="32"
                                                     Margin="0,0,4,0">
                                                 <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
@@ -171,7 +171,7 @@
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
-                                                    ToolTip="删除"
+                                                    ToolTip="{x:Static loc:Strings.Btn_Delete}"
                                                     Width="32" Height="32"
                                                     Foreground="{StaticResource ErrorBrush}">
                                                 <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>

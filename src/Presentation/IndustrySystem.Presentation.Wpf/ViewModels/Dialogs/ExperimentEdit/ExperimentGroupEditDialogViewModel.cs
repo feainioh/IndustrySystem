@@ -1,6 +1,7 @@
-using IndustrySystem.Application.Contracts.Dtos;
+ï»¿using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Presentation.Wpf.Services;
+using Prism.Dialogs;
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
@@ -61,9 +62,9 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
         get
         {
             var selected = ExperimentOptions.Where(x => x.IsSelected).ToList();
-            if (selected.Count == 0) return "Î´Ñ¡Ôñ²½Öè";
-            if (selected.Count <= 3) return string.Join("£¬", selected.Select(x => x.Name));
-            return $"ÒÑÑ¡Ôñ {selected.Count} ¸öÊµÑé²½Öè";
+            if (selected.Count == 0) return "æœªé€‰æ‹©æ­¥éª¤";
+            if (selected.Count <= 3) return string.Join(" â†’ ", selected.Select(x => x.Name));
+            return $"å·²é€‰æ‹© {selected.Count} ä¸ªå®žéªŒæ­¥éª¤";
         }
     }
 
@@ -71,7 +72,13 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         _authState = authState;
-        Title = "ÊµÑé×é±à¼­";
+        Title = "å®žéªŒç»„ç¼–è¾‘";
+    }
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
     }
 
     public async Task LoadAsync(Guid? id)
@@ -99,7 +106,7 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
             Name = string.Empty;
             Description = string.Empty;
             IsEnabled = true;
-            CreatedBy = _authState.UserName ?? "ÏµÍ³";
+            CreatedBy = _authState.UserName ?? "ç³»ç»Ÿ";
             CreatedAt = DateTime.Now;
             UpdatedAt = null;
             RaisePropertyChanged(nameof(StepSummary));
@@ -138,7 +145,7 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
             Description?.Trim() ?? string.Empty,
             ExperimentOptions.Where(x => x.IsSelected).Select(x => x.Id).ToList(),
             IsEnabled,
-            string.IsNullOrWhiteSpace(CreatedBy) ? (_authState.UserName ?? "ÏµÍ³") : CreatedBy.Trim(),
+            string.IsNullOrWhiteSpace(CreatedBy) ? (_authState.UserName ?? "ç³»ç»Ÿ") : CreatedBy.Trim(),
             CreatedAt == default ? DateTime.Now : CreatedAt,
             DateTime.Now);
 
@@ -147,8 +154,8 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
         else
             await _svc.UpdateAsync(dto);
 
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

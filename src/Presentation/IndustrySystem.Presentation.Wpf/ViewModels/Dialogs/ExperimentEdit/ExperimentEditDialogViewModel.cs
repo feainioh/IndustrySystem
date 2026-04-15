@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
@@ -19,7 +19,13 @@ public class ExperimentEditDialogViewModel : DialogViewModel
  public Guid GroupId { get => _groupId; set => SetProperty(ref _groupId, value); }
  public string Name { get => _name; set => SetProperty(ref _name, value); }
 
- public ExperimentEditDialogViewModel() { Title = "�༭ʵ��"; }
+ public ExperimentEditDialogViewModel() { Title = "编辑实验"; }
+
+ public override void OnDialogOpened(IDialogParameters parameters)
+ {
+ var id = parameters.GetValue<Guid?>("id");
+ _ = LoadAsync(id);
+ }
 
  public Task LoadAsync(Guid? id)
  {
@@ -34,8 +40,8 @@ public class ExperimentEditDialogViewModel : DialogViewModel
  protected override bool CanSave() => !string.IsNullOrWhiteSpace(Name);
  protected override Task OnSaveAsync()
  {
- DialogResult = true;
+ RequestClose.Invoke(new DialogResult(ButtonResult.OK));
  return Task.CompletedTask;
  }
- protected override void OnCancel() => DialogResult = false;
+ protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

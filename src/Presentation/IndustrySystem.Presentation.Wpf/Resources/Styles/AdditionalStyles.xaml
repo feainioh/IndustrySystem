@@ -105,5 +105,14 @@
                       BlurRadius="4" 
                       ShadowDepth="1" 
                       Opacity="0.3"/>
+ 
+        <Style x:Key="DialogHostWindowStyle" TargetType="Window">
+            <Setter Property="WindowStyle" Value="None"/>
+            <Setter Property="AllowsTransparency" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+            <Setter Property="ResizeMode" Value="NoResize"/>
+            <Setter Property="ShowInTaskbar" Value="False"/>
+        </Style> 
 
 </ResourceDictionary>

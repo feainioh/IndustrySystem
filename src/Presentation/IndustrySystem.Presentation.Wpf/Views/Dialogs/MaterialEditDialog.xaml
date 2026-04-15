@@ -1,13 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.MaterialEditDialog"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
- xmlns:prism="http://prismlibrary.com/"
  xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
- prism:ViewModelLocator.AutoWireViewModel="False"
+ xmlns:prism="http://prismlibrary.com/"
  MinWidth="880" MinHeight="640">
+    <prism:Dialog.WindowStyle>
+        <StaticResource ResourceKey="DialogHostWindowStyle" />
+    </prism:Dialog.WindowStyle>
     <UserControl.Resources>
+        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="#FFFDFDFE" />
+        <SolidColorBrush x:Key="DialogFooterBrush" Color="#FFF8F9FC" />
         <loc:LocalizationProvider x:Key="Loc" />
         <Style x:Key="FormField" TargetType="TextBox" BasedOn="{StaticResource  MaterialTextField}">
             <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
@@ -20,8 +24,13 @@
             <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
         </Style>
     </UserControl.Resources>
-
-    <Grid>
+         <Border Background="Transparent" Padding="24">
+        <Border Background="{StaticResource DialogSurfaceBrush}"
+                CornerRadius="18">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.22" Color="#000000" Direction="270"/>
+            </Border.Effect>
+    <Grid >
         <!-- Header -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,7 +38,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="{StaticResource MaterialGradientBrush}" Padding="24,18">
+        <Border CornerRadius="18 18 0 0 " Grid.Row="0" Background="{StaticResource MaterialGradientBrush}" Padding="24,18">
             <StackPanel Orientation="Horizontal">
                 <Border Width="40" Height="40" CornerRadius="20"
 						Background="#33FFFFFF" Margin="0,0,14,0">
@@ -37,11 +46,11 @@
 											 Foreground="White"
 											 HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{Binding [Dialog_MaterialEdit_Title], Source={StaticResource Loc}}"
-							   FontSize="18" FontWeight="SemiBold" Foreground="White"/>
-                    <TextBlock Text="填写物料基本信息、理化参数与安全来源"
-							   FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
+				<StackPanel VerticalAlignment="Center">
+					<TextBlock Text="{Binding [Dialog_MaterialEdit_Title], Source={StaticResource Loc}}"
+						   FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+					<TextBlock Text="{Binding [Dialog_MaterialEdit_Subtitle], Source={StaticResource Loc}}"
+						   FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -50,19 +59,19 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
 					  HorizontalScrollBarVisibility="Disabled"
 					  Padding="0">
-            <StackPanel Margin="24,20,24,10">
+            <StackPanel Margin="24,10,24,0">
 
-                <!-- Section 1: 基础信息 -->
-                <materialDesign:Card Padding="18" Margin="0,0,0,14"
+                <!-- Section 1: 鍩虹淇℃伅 -->
+                <materialDesign:Card Padding="3" Margin="0,0,0,14"
 									 materialDesign:ElevationAssist.Elevation="Dp1"
 									 UniformCornerRadius="8">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
-													 Foreground="{StaticResource PrimaryBrush}"
-													 VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="基础信息" FontSize="15" FontWeight="SemiBold"
-									   Foreground="{StaticResource PrimaryBrush}"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+							<materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
+											 Foreground="{StaticResource PrimaryBrush}"
+											 VerticalAlignment="Center" Margin="0,0,8,0"/>
+							<TextBlock Text="{Binding [Section_BasicInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+								   Foreground="{StaticResource PrimaryBrush}"/>
                         </StackPanel>
 
                         <Grid>
@@ -78,38 +87,38 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormField}"
 									 Text="{Binding MaterialCode, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="物料编码 *"/>
-                            <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
+									 materialDesign:HintAssist.Hint="{Binding [Hint_MaterialCode], Source={StaticResource Loc}}"/>
+							<TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="名称 *"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Name], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
 									 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="全称"/>
-                            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
+									 materialDesign:HintAssist.Hint="{Binding [Hint_FullName], Source={StaticResource Loc}}"/>
+							<TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding MolecularFormula, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="分子式"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_MolecularFormula], Source={StaticResource Loc}}"/>
 
-                            <ComboBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FormCombo}"
+							<ComboBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FormCombo}"
 									  ItemsSource="{Binding CategoryOptions}"
 									  SelectedItem="{Binding Category}"
-									  materialDesign:HintAssist.Hint="物料类别">
+									  materialDesign:HintAssist.Hint="{Binding [Hint_MaterialCategory], Source={StaticResource Loc}}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="计量单位"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Unit], Source={StaticResource Loc}}"/>
 
 							<ComboBox Grid.Row="3" Grid.Column="0" Style="{StaticResource FormCombo}"
 									  ItemsSource="{Binding MaterialTypeOptions}"
 									  SelectedItem="{Binding MaterialType}"
-									  materialDesign:HintAssist.Hint="物料类型">
+									  materialDesign:HintAssist.Hint="{Binding [Hint_MaterialType], Source={StaticResource Loc}}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
@@ -121,16 +130,16 @@
                 </materialDesign:Card>
 
                 <!-- Section 2: 理化信息 -->
-                <materialDesign:Card Padding="18" Margin="0,0,0,14"
+                <materialDesign:Card Padding="3" Margin="0,0,0,14"
 									 materialDesign:ElevationAssist.Elevation="Dp1"
 									 UniformCornerRadius="8">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="FlaskOutline" Width="20" Height="20"
-													 Foreground="#FF8C00"
-													 VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="理化信息" FontSize="15" FontWeight="SemiBold"
-									   Foreground="#FF8C00"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+							<materialDesign:PackIcon Kind="FlaskOutline" Width="20" Height="20"
+											 Foreground="#FF8C00"
+											 VerticalAlignment="Center" Margin="0,0,8,0"/>
+							<TextBlock Text="{Binding [Section_PhysicalChemicalInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+								   Foreground="#FF8C00"/>
                         </StackPanel>
 
                         <Grid>
@@ -144,20 +153,20 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormField}"
 									 Text="{Binding CasNo, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="CAS号"/>
-                            <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
+									 materialDesign:HintAssist.Hint="{Binding [Hint_CasNo], Source={StaticResource Loc}}"/>
+							<TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding Purity, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="纯净等级"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Purity], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
 									 Text="{Binding Density, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="密度"/>
-                            <ComboBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormCombo}"
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Density], Source={StaticResource Loc}}"/>
+							<ComboBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormCombo}"
 									  ItemsSource="{Binding HazardLevelOptions}"
 									  SelectedItem="{Binding HazardLevel}"
-									  materialDesign:HintAssist.Hint="安全等级">
+									  materialDesign:HintAssist.Hint="{Binding [Hint_HazardLevel], Source={StaticResource Loc}}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
@@ -169,16 +178,16 @@
                 </materialDesign:Card>
 
                 <!-- Section 3: 安全与来源 -->
-                <materialDesign:Card Padding="18" Margin="0,0,0,6"
+                <materialDesign:Card Padding="3" Margin="0,0,0,6"
 									 materialDesign:ElevationAssist.Elevation="Dp1"
 									 UniformCornerRadius="8">
                     <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="ShieldCheckOutline" Width="20" Height="20"
-													 Foreground="#10893E"
-													 VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="安全与来源" FontSize="15" FontWeight="SemiBold"
-									   Foreground="#10893E"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+							<materialDesign:PackIcon Kind="ShieldCheckOutline" Width="20" Height="20"
+											 Foreground="#10893E"
+											 VerticalAlignment="Center" Margin="0,0,8,0"/>
+							<TextBlock Text="{Binding [Section_SafetyInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+								   Foreground="#10893E"/>
                         </StackPanel>
 
                         <Grid>
@@ -192,26 +201,26 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <ComboBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormCombo}"
+							<ComboBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormCombo}"
 									  ItemsSource="{Binding StorageConditionOptions}"
 									  SelectedItem="{Binding StorageCondition}"
-									  materialDesign:HintAssist.Hint="存储条件">
+									  materialDesign:HintAssist.Hint="{Binding [Hint_StorageCondition], Source={StaticResource Loc}}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding Precautions, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="注意事项"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_SafetyNotes], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
+							<TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
 									 Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="品牌"/>
-                            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Brand], Source={StaticResource Loc}}"/>
+							<TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
 									 Text="{Binding Supplier, UpdateSourceTrigger=PropertyChanged}"
-									 materialDesign:HintAssist.Hint="供应商"/>
+									 materialDesign:HintAssist.Hint="{Binding [Hint_Supplier], Source={StaticResource Loc}}"/>
                         </Grid>
                     </StackPanel>
                 </materialDesign:Card>
@@ -220,7 +229,7 @@
         </ScrollViewer>
 
         <!-- Footer Actions -->
-        <Border Grid.Row="2" BorderBrush="#14000000" BorderThickness="0,1,0,0" Padding="24,14">
+        <Border Grid.Row="2" CornerRadius="0 0 18 18" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="24,14">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{StaticResource MaterialDesignOutlinedButton}"
 						Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}"
@@ -235,4 +244,7 @@
             </StackPanel>
         </Border>
     </Grid>
+    </Border>
+    </Border>
 </UserControl>
+

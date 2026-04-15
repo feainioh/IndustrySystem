@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace IndustrySystem.Presentation.Wpf.Views.Dialogs;
 
-public partial class SamplingParameterEditDialog : UserControl
+public partial class CentrifugationParameterEditDialog : UserControl
 {
-    public SamplingParameterEditDialog()
+    public CentrifugationParameterEditDialog()
     {
         InitializeComponent();
     }

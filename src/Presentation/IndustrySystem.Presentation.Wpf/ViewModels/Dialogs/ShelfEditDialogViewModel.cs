@@ -8,6 +8,7 @@ using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Mvvm;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
@@ -145,6 +146,12 @@ public class ShelfEditDialogViewModel : DialogViewModel
         ClearContainerTypesCommand = new DelegateCommand<SlotEditItem>(slot => slot?.ClearAllContainerTypes());
     }
 
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
+    }
+
     public async Task LoadAsync(Guid? id)
     {
         _existingSlots = null;
@@ -231,7 +238,7 @@ public class ShelfEditDialogViewModel : DialogViewModel
         // Save slot configurations
         await SaveSlotConfigsAsync(shelfId);
 
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
     private async Task SaveSlotConfigsAsync(Guid shelfId)
@@ -257,5 +264,5 @@ public class ShelfEditDialogViewModel : DialogViewModel
             await _svc.SaveSlotsAsync(shelfId, slotDtos!);
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

@@ -7,116 +7,116 @@
              xmlns:vm="clr-namespace:IndustrySystem.Presentation.Wpf.ViewModels"
              prism:ViewModelLocator.AutoWireViewModel="False"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
-  <UserControl.Resources>
-    <!-- 模板列表项容器样式 -->
-    <Style x:Key="TemplateListBoxItem" TargetType="ListBoxItem">
-      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-      <Setter Property="Padding" Value="0"/>
-      <Setter Property="Margin" Value="0,0,0,4"/>
-      <Setter Property="Cursor" Value="Hand"/>
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="ListBoxItem">
-            <Border x:Name="RootBorder"
+    <UserControl.Resources>
+        <!-- 模板列表项容器样式 -->
+        <Style x:Key="TemplateListBoxItem" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="RootBorder"
                     Background="Transparent"
                     CornerRadius="8"
                     Padding="12,10"
                     BorderThickness="1"
                     BorderBrush="Transparent"
                     SnapsToDevicePixels="True">
-              <ContentPresenter/>
-            </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="RootBorder" Property="Background" Value="#F0F6FF"/>
-                <Setter TargetName="RootBorder" Property="BorderBrush" Value="#D0E0F0"/>
-              </Trigger>
-              <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="RootBorder" Property="Background" Value="#E3EFFD"/>
-                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1.5"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
-  </UserControl.Resources>
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="RootBorder" Property="Background" Value="#F0F6FF"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="#D0E0F0"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="RootBorder" Property="Background" Value="#E3EFFD"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
-  <Grid Margin="24">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="16"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <!-- 顶部标题栏 -->
-    <Grid Grid.Row="0">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
+        <!-- 顶部标题栏 -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-      <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-        <Border Width="40" Height="40" CornerRadius="8"
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="40" Height="40" CornerRadius="8"
                 Background="{StaticResource ExperimentGradientBrush}"
                 VerticalAlignment="Center" Margin="0,0,16,0">
-          <Border.Effect>
-            <DropShadowEffect Color="#0078D4" BlurRadius="12" ShadowDepth="0" Opacity="0.4"/>
-          </Border.Effect>
-          <materialDesign:PackIcon Kind="FlaskOutline" Width="20" Height="20"
+                    <Border.Effect>
+                        <DropShadowEffect Color="#0078D4" BlurRadius="12" ShadowDepth="0" Opacity="0.4"/>
+                    </Border.Effect>
+                    <materialDesign:PackIcon Kind="FlaskOutline" Width="20" Height="20"
                                    Foreground="White"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
-        </Border>
-        <StackPanel VerticalAlignment="Center">
-          <TextBlock Text="实验模板" FontSize="24" FontWeight="SemiBold"/>
-          <TextBlock Text="管理实验模板与参数配置" FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
-        </StackPanel>
-      </StackPanel>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Title]}" FontSize="24" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Subtitle]}" FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
 
-      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                 Command="{Binding RefreshCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
-          <StackPanel Orientation="Horizontal">
-            <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
-            <TextBlock Text="刷新" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Button>
-        <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_Refresh]}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
                 Click="OnAdd" Height="36" Padding="12,0">
-          <StackPanel Orientation="Horizontal">
-            <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
-            <TextBlock Text="新建模板" VerticalAlignment="Center"/>
-          </StackPanel>
-        </Button>
-      </StackPanel>
-    </Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_NewTemplate]}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
 
-    <!-- 主体区域 -->
-    <Grid Grid.Row="2">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="320"/>
-        <ColumnDefinition Width="16"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
+        <!-- 主体区域 -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-      <!-- 左：模板列表 -->
-      <Border Grid.Column="0"
+            <!-- 左：模板列表 -->
+            <Border Grid.Column="0"
               Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
               CornerRadius="8" Padding="12"
               BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
               BorderThickness="1">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-          <TextBlock Grid.Row="0" Text="模板列表" FontSize="15" FontWeight="SemiBold" Margin="4,0,0,0"/>
+                    <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateList]}" FontSize="15" FontWeight="SemiBold" Margin="4,0,0,0"/>
 
-          <ListBox Grid.Row="2"
+                    <ListBox Grid.Row="2"
                    ItemsSource="{Binding Templates}"
                    SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
                    ItemContainerStyle="{StaticResource TemplateListBoxItem}"
@@ -124,151 +124,154 @@
                    Background="Transparent"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                    VirtualizingPanel.IsVirtualizing="True">
-            <ListBox.ItemTemplate>
-              <DataTemplate>
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                  </Grid.ColumnDefinitions>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                  <!-- 类型色块指示器 -->
-                  <Border Grid.Column="0" Width="4" CornerRadius="2"
+                                    <!-- 类型色块指示器 -->
+                                    <Border Grid.Column="0" Width="4" CornerRadius="2"
                           Background="{StaticResource ExperimentGradientBrush}"
                           VerticalAlignment="Stretch" Margin="0,2"/>
 
-                  <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                  <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"
                                TextTrimming="CharacterEllipsis" MaxWidth="180"/>
-                               <TextBlock Text="{Binding Description}" FontSize="12" Margin="5 3"/>
-                   </StackPanel>
-                   <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                      <Border Background="#E8F0FE" CornerRadius="4" Padding="6,2" Margin="0,0,6,0">
-                        <TextBlock Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}"
+                                            <TextBlock Text="{Binding Description}" FontSize="12" Margin="5 3"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <Border Background="#E8F0FE" CornerRadius="4" Padding="6,2" Margin="0,0,6,0">
+                                                <TextBlock Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}"
                                    FontSize="11" Foreground="{StaticResource PrimaryBrush}"/>
-                      </Border>
-                      <TextBlock Text="{Binding UpdatedAt, StringFormat=MM-dd HH:mm}"
+                                            </Border>
+                                            <TextBlock Text="{Binding UpdatedAt, StringFormat=MM-dd HH:mm}"
                                  Opacity="0.5" FontSize="11" VerticalAlignment="Center"/>
-                    </StackPanel>
-                  </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
 
-                  <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
                             Click="OnEdit"
-                            ToolTip="编辑" Width="28" Height="28" Padding="0">
-                      <materialDesign:PackIcon Kind="Pencil" Width="15" Height="15"
+                            ToolTip="{Binding Source={StaticResource Loc}, Path=[Tooltip_EditTemplate]}" Width="28" Height="28" Padding="0">
+                                            <materialDesign:PackIcon Kind="Pencil" Width="15" Height="15"
                                                Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-                    </Button>
-                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                        </Button>
+                                        <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
                             Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                             CommandParameter="{Binding Id}"
-                            ToolTip="删除" Width="28" Height="28" Padding="0">
-                      <materialDesign:PackIcon Kind="DeleteOutline" Width="15" Height="15"
+                            ToolTip="{Binding Source={StaticResource Loc}, Path=[Tooltip_DeleteTemplate]}" Width="28" Height="28" Padding="0">
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Width="15" Height="15"
                                                Foreground="{StaticResource ErrorBrush}"/>
-                    </Button>
-                  </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </Grid>
-      </Border>
+            </Border>
 
-      <!-- 右：模板详情与参数编辑 -->
-      <Border Grid.Column="2"
+            <!-- 右：模板详情与参数编辑 -->
+            <Border Grid.Column="2"
               Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
               CornerRadius="8" Padding="16"
               BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
               BorderThickness="1">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="16"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="16"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-            <!-- 模板基本信息 -->
-            <TextBlock Grid.Row="0" Text="模板信息" FontSize="15" FontWeight="SemiBold"/>
+                        <!-- 模板基本信息 -->
+                        <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateInfo]}" FontSize="15" FontWeight="SemiBold"/>
 
-            <Grid Grid.Row="2">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="12"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="12"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-              <TextBox Grid.Row="0" Grid.Column="0"
+                            <TextBox Grid.Row="0" Grid.Column="0"
                        Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}"
                        Style="{StaticResource MaterialTextField}"
-                       materialDesign:HintAssist.Hint="实验名称"
+                       materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentName]}"
                        materialDesign:HintAssist.IsFloating="True"/>
 
-              <ComboBox Grid.Row="0" Grid.Column="2"
+                            <ComboBox Grid.Row="0" Grid.Column="2"
                         ItemsSource="{Binding ExperimentTypes}"
                         SelectedItem="{Binding SelectedType}"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                        materialDesign:HintAssist.Hint="实验类型"
+                        materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentType]}"
                         materialDesign:HintAssist.IsFloating="True">
-                <ComboBox.ItemTemplate>
-                  <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
-                  </DataTemplate>
-                </ComboBox.ItemTemplate>
-              </ComboBox>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
 
-              <ComboBox Grid.Row="2" Grid.Column="0"
+                            <ComboBox Grid.ColumnSpan="3" Grid.Row="2" Grid.Column="0"
                         ItemsSource="{Binding ParameterOptions}"
                         SelectedItem="{Binding SelectedParameter, Mode=TwoWay}"
                         DisplayMemberPath="Name"
                         Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                        materialDesign:HintAssist.Hint="关联参数"
+                        materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_LinkedParameter]}"
                         materialDesign:HintAssist.IsFloating="True"/>
 
-              <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,0">
-                <TextBlock Text="是否模板" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <ToggleButton IsChecked="{Binding IsTemplate}" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
-              </StackPanel>
+                            <StackPanel Visibility="Collapsed" Grid.Row="2" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,0">
+                                <TextBlock Text="是否模板" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ToggleButton IsChecked="{Binding IsTemplate}" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
+                            </StackPanel>
 
-              <TextBox Grid.Row="4" Grid.Column="0"
+                            <TextBox Visibility="Collapsed" Grid.Row="4" Grid.Column="0"
                        Text="{Binding EditingId}" IsReadOnly="True"
                        Style="{StaticResource MaterialTextField}"
-                       materialDesign:HintAssist.Hint="实验ID"
+                       materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentId]}"
                        materialDesign:HintAssist.IsFloating="True"
                        Opacity="0.6"/>
 
-              <TextBox Grid.Row="4" Grid.Column="2"
+                            <TextBox Visibility="Collapsed" Grid.Row="4" Grid.Column="2"
                        Text="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm:ss}" IsReadOnly="True"
                        Style="{StaticResource MaterialTextField}"
-                       materialDesign:HintAssist.Hint="创建时间"
+                       materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_CreatedAt]}"
                        materialDesign:HintAssist.IsFloating="True"
                        Opacity="0.6"/>
-            </Grid>
+                        </Grid>
 
-            <!-- 参数编辑区域 -->
-            <TextBlock Grid.Row="4" Text="实验参数" FontSize="15" FontWeight="SemiBold" Margin="0,16,0,8"/>
+                        <!-- 参数编辑区域 -->
+                        <TextBlock Grid.Row="4" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentParameters]}" FontSize="15" FontWeight="SemiBold" Margin="0,16,0,8"/>
 
-            <Border Grid.Row="5"
+                        <Border Grid.Row="5"
                     BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="1"
-                    CornerRadius="6" Padding="10" MinHeight="200">
-              <ContentControl prism:RegionManager.RegionName="{x:Static vm:ExperimentTemplateViewModel.ParameterEditorRegionName}"/>
+                    CornerRadius="6" Padding="4" MinHeight="200">
+                            <ContentControl prism:RegionManager.RegionName="{x:Static vm:ExperimentTemplateViewModel.ParameterEditorRegionName}"/>
+                        </Border>
+                        <Button Command="{Binding SaveCommand}" Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Grid.Row="6" HorizontalAlignment="Right" Margin="5"
+                                Content="{Binding Source={StaticResource Loc},Path=[Btn_Save]}"/>
+                    </Grid>
+                </ScrollViewer>
             </Border>
-          </Grid>
-        </ScrollViewer>
-      </Border>
+        </Grid>
     </Grid>
-  </Grid>
 </UserControl>

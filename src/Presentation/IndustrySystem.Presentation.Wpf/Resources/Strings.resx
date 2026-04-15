@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -809,5 +809,404 @@
   </data>
   <data name="Shelf_Container_Other" xml:space="preserve">
     <value>其他</value>
+  </data>
+  <data name="Page_Templates_Title" xml:space="preserve">
+    <value>实验模板</value>
+  </data>
+  <data name="Page_Templates_Subtitle" xml:space="preserve">
+    <value>管理实验模板与参数配置</value>
+  </data>
+  <data name="Section_TemplateList" xml:space="preserve">
+    <value>模板列表</value>
+  </data>
+  <data name="Section_TemplateInfo" xml:space="preserve">
+    <value>模板信息</value>
+  </data>
+  <data name="Section_ExperimentParameters" xml:space="preserve">
+    <value>实验参数</value>
+  </data>
+  <data name="Btn_NewTemplate" xml:space="preserve">
+    <value>新建模板</value>
+  </data>
+  <data name="Field_ExperimentType" xml:space="preserve">
+    <value>实验类型</value>
+  </data>
+  <data name="Field_LinkedParameter" xml:space="preserve">
+    <value>关联参数</value>
+  </data>
+  <data name="Field_IsTemplate" xml:space="preserve">
+    <value>是否模板</value>
+  </data>
+  <data name="Field_ExperimentName" xml:space="preserve">
+    <value>实验名称</value>
+  </data>
+  <data name="Field_ExperimentId" xml:space="preserve">
+    <value>实验ID</value>
+  </data>
+  <data name="Field_CreatedAt" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="Msg_ConfirmDeleteTemplate" xml:space="preserve">
+    <value>确认删除该实验模板？</value>
+  </data>
+  <data name="Tooltip_EditTemplate" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="Tooltip_DeleteTemplate" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Page_MaterialInfo_Title" xml:space="preserve">
+    <value>物料管理</value>
+  </data>
+  <data name="Page_MaterialInfo_Subtitle" xml:space="preserve">
+    <value>物料信息管理</value>
+  </data>
+  <data name="Section_MaterialList" xml:space="preserve">
+    <value>物料清单</value>
+  </data>
+  <data name="Hint_Search_Material" xml:space="preserve">
+    <value>搜索名称 / CAS / 品牌 / 供应商...</value>
+  </data>
+  <data name="Col_Material" xml:space="preserve">
+    <value>物料</value>
+  </data>
+  <data name="Col_MolecularFormula" xml:space="preserve">
+    <value>分子式</value>
+  </data>
+  <data name="Col_Category" xml:space="preserve">
+    <value>类别</value>
+  </data>
+  <data name="Col_MaterialType" xml:space="preserve">
+    <value>物料类型</value>
+  </data>
+  <data name="Col_CasNo" xml:space="preserve">
+    <value>CAS号</value>
+  </data>
+  <data name="Col_Purity" xml:space="preserve">
+    <value>纯度</value>
+  </data>
+  <data name="Col_Unit" xml:space="preserve">
+    <value>单位</value>
+  </data>
+  <data name="Col_HazardLevel" xml:space="preserve">
+    <value>安全等级</value>
+  </data>
+  <data name="Col_StorageCondition" xml:space="preserve">
+    <value>存储条件</value>
+  </data>
+  <data name="Col_Supplier" xml:space="preserve">
+    <value>供应商</value>
+  </data>
+  <data name="Page_Inventory_Title" xml:space="preserve">
+    <value>库存管理</value>
+  </data>
+  <data name="Page_Inventory_Subtitle" xml:space="preserve">
+    <value>物料库存管理 · 入库 / 出库 / 批次追踪</value>
+  </data>
+  <data name="Section_InventoryList" xml:space="preserve">
+    <value>库存清单</value>
+  </data>
+  <data name="Hint_Search_Inventory" xml:space="preserve">
+    <value>搜索物料名称 / 编码 / 批号 / 位置...</value>
+  </data>
+  <data name="Btn_Inbound" xml:space="preserve">
+    <value>入库</value>
+  </data>
+  <data name="Tooltip_ToggleSummaryView" xml:space="preserve">
+    <value>切换汇总视图</value>
+  </data>
+  <data name="Label_SummaryView" xml:space="preserve">
+    <value>汇总视图</value>
+  </data>
+  <data name="Col_BatchNo" xml:space="preserve">
+    <value>批号</value>
+  </data>
+  <data name="Col_Inventory_SafetyStock" xml:space="preserve">
+    <value>库存 / 安全库存</value>
+  </data>
+  <data name="Col_ManufactureDate" xml:space="preserve">
+    <value>生产日期</value>
+  </data>
+  <data name="Col_ExpiryDate" xml:space="preserve">
+    <value>有效期</value>
+  </data>
+  <data name="Col_Location" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Col_LastInboundDate" xml:space="preserve">
+    <value>最近入库</value>
+  </data>
+  <data name="Col_TotalQuantity" xml:space="preserve">
+    <value>总量</value>
+  </data>
+  <data name="Col_BatchCount" xml:space="preserve">
+    <value>批次数</value>
+  </data>
+  <data name="Btn_Outbound" xml:space="preserve">
+    <value>出库</value>
+  </data>
+  <data name="Btn_Details" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="Page_ShelfInfo_Title" xml:space="preserve">
+    <value>货架管理</value>
+  </data>
+  <data name="Page_ShelfInfo_Subtitle" xml:space="preserve">
+    <value>货架槽位总览 · 点击槽位配置容器与库存</value>
+  </data>
+  <data name="Btn_ContainerConfig" xml:space="preserve">
+    <value>容器配置</value>
+  </data>
+  <data name="Btn_ShelfConfig" xml:space="preserve">
+    <value>货架配置</value>
+  </data>
+  <data name="Label_CurrentShelf" xml:space="preserve">
+    <value>当前货架</value>
+  </data>
+  <data name="Hint_SelectShelf" xml:space="preserve">
+    <value>选择货架</value>
+  </data>
+  <data name="Label_Rows" xml:space="preserve">
+    <value>行</value>
+  </data>
+  <data name="Label_Columns" xml:space="preserve">
+    <value>列</value>
+  </data>
+  <data name="Legend_EmptySlot" xml:space="preserve">
+    <value>空位</value>
+  </data>
+  <data name="Legend_HasContainer" xml:space="preserve">
+    <value>有容器</value>
+  </data>
+  <data name="Legend_HasInventory" xml:space="preserve">
+    <value>有库存</value>
+  </data>
+  <data name="Legend_Disabled" xml:space="preserve">
+    <value>已禁用</value>
+  </data>
+  <data name="Page_ExperimentGroups_Title" xml:space="preserve">
+    <value>实验组管理</value>
+  </data>
+  <data name="Page_ExperimentGroups_Subtitle" xml:space="preserve">
+    <value>维护实验组及其关联实验步骤</value>
+  </data>
+  <data name="Section_ExperimentGroupList" xml:space="preserve">
+    <value>实验组列表</value>
+  </data>
+  <data name="Hint_Search_ExperimentGroup" xml:space="preserve">
+    <value>搜索编号 / 名称 / 创建人</value>
+  </data>
+  <data name="Btn_AddExperimentGroup" xml:space="preserve">
+    <value>新增实验组</value>
+  </data>
+  <data name="Col_GroupName" xml:space="preserve">
+    <value>实验组名称</value>
+  </data>
+  <data name="Col_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="Col_StepSummary" xml:space="preserve">
+    <value>实验步骤摘要</value>
+  </data>
+  <data name="Col_EnabledStatus" xml:space="preserve">
+    <value>启用状态</value>
+  </data>
+  <data name="Col_CreatedBy" xml:space="preserve">
+    <value>创建人</value>
+  </data>
+  <data name="Dialog_MaterialEdit_Title" xml:space="preserve">
+    <value>编辑物料</value>
+  </data>
+  <data name="Dialog_MaterialEdit_Subtitle" xml:space="preserve">
+    <value>填写物料基本信息、理化参数与安全来源</value>
+  </data>
+  <data name="Section_BasicInfo" xml:space="preserve">
+    <value>基础信息</value>
+  </data>
+  <data name="Section_PhysicalChemicalInfo" xml:space="preserve">
+    <value>理化信息</value>
+  </data>
+  <data name="Section_SafetyInfo" xml:space="preserve">
+    <value>安全信息</value>
+  </data>
+  <data name="Section_SourceInfo" xml:space="preserve">
+    <value>来源信息</value>
+  </data>
+  <data name="Hint_MaterialCode" xml:space="preserve">
+    <value>物料编码 *</value>
+  </data>
+  <data name="Hint_Name" xml:space="preserve">
+    <value>名称 *</value>
+  </data>
+  <data name="Hint_FullName" xml:space="preserve">
+    <value>全称</value>
+  </data>
+  <data name="Hint_MolecularFormula" xml:space="preserve">
+    <value>分子式</value>
+  </data>
+  <data name="Hint_MaterialCategory" xml:space="preserve">
+    <value>物料类别</value>
+  </data>
+  <data name="Hint_Unit" xml:space="preserve">
+    <value>计量单位</value>
+  </data>
+  <data name="Hint_MaterialType" xml:space="preserve">
+    <value>物料类型</value>
+  </data>
+  <data name="Hint_CasNo" xml:space="preserve">
+    <value>CAS号</value>
+  </data>
+  <data name="Hint_Purity" xml:space="preserve">
+    <value>纯度</value>
+  </data>
+  <data name="Hint_MolecularWeight" xml:space="preserve">
+    <value>分子量</value>
+  </data>
+  <data name="Hint_Density" xml:space="preserve">
+    <value>密度</value>
+  </data>
+  <data name="Hint_HazardLevel" xml:space="preserve">
+    <value>安全等级</value>
+  </data>
+  <data name="Hint_StorageCondition" xml:space="preserve">
+    <value>存储条件</value>
+  </data>
+  <data name="Hint_SafetyNotes" xml:space="preserve">
+    <value>安全注意事项</value>
+  </data>
+  <data name="Hint_Supplier" xml:space="preserve">
+    <value>供应商</value>
+  </data>
+  <data name="Hint_Brand" xml:space="preserve">
+    <value>品牌</value>
+  </data>
+  <data name="Hint_LotNumber" xml:space="preserve">
+    <value>货号</value>
+  </data>
+  <data name="Hint_Remarks" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="Dialog_InventoryEdit_Subtitle" xml:space="preserve">
+    <value>填写物料库存批次信息</value>
+  </data>
+  <data name="Section_MaterialInfo" xml:space="preserve">
+    <value>物料信息</value>
+  </data>
+  <data name="Section_InventoryQuantity" xml:space="preserve">
+    <value>库存数量</value>
+  </data>
+  <data name="Section_DateAndLocation" xml:space="preserve">
+    <value>日期与位置</value>
+  </data>
+  <data name="Hint_SelectMaterial" xml:space="preserve">
+    <value>选择物料 *</value>
+  </data>
+  <data name="Hint_BatchNo" xml:space="preserve">
+    <value>批号 *</value>
+  </data>
+  <data name="Hint_MaterialCodeAuto" xml:space="preserve">
+    <value>物料编码（自动填充）</value>
+  </data>
+  <data name="Hint_InboundQuantity" xml:space="preserve">
+    <value>入库数量</value>
+  </data>
+  <data name="Hint_SafetyStock" xml:space="preserve">
+    <value>安全库存</value>
+  </data>
+  <data name="Hint_ManufactureDate" xml:space="preserve">
+    <value>生产日期</value>
+  </data>
+  <data name="Hint_ExpiryDate" xml:space="preserve">
+    <value>有效期至</value>
+  </data>
+  <data name="Hint_Shelf" xml:space="preserve">
+    <value>货架</value>
+  </data>
+  <data name="Hint_ShelfRow" xml:space="preserve">
+    <value>货架行</value>
+  </data>
+  <data name="Hint_ShelfColumn" xml:space="preserve">
+    <value>货架列</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Hint_ShelfCode" xml:space="preserve">
+    <value>货架编码 *</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Hint_ShelfName" xml:space="preserve">
+    <value>货架名称 *</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Hint_Rows" xml:space="preserve">
+    <value>行数</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Hint_Columns" xml:space="preserve">
+    <value>列数</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Hint_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Tip" xml:space="preserve">
+    <value>提示：点击槽位切换启用/禁用状态，右键勾选允许的容器类型</value>
+  </data>
+  <data name="Dialog_ShelfEdit_SlotLayoutPreview" xml:space="preserve">
+    <value>槽位布局预览</value>
+  </data>
+  <data name="Dialog_ShelfEdit_ClearAllRestrictions" xml:space="preserve">
+    <value>清除所有限制</value>
+  </data>
+  <data name="Dialog_ShelfEdit_AllowedContainerTypes" xml:space="preserve">
+    <value>允许的容器类型（多选）</value>
+  </data>
+  <data name="Dialog_ExperimentGroupEdit_Title" xml:space="preserve">
+    <value>实验组编辑</value>
+  </data>
+  <data name="Dialog_ExperimentGroupEdit_Subtitle" xml:space="preserve">
+    <value>配置实验组编号、步骤和启用状态</value>
+  </data>
+  <data name="Hint_ExperimentGroupCode" xml:space="preserve">
+    <value>实验组编号（留空自动生成，如 EG202601001）</value>
+  </data>
+  <data name="Hint_ExperimentGroupName" xml:space="preserve">
+    <value>实验组名称 *</value>
+  </data>
+  <data name="Hint_CreatedBy" xml:space="preserve">
+    <value>创建人</value>
+  </data>
+  <data name="Label_EnabledStatus" xml:space="preserve">
+    <value>启用状态</value>
+  </data>
+  <data name="Label_ExperimentSteps" xml:space="preserve">
+    <value>实验步骤（多选，关联实验ID）</value>
+  </data>
+  <data name="Dialog_InventoryEdit_Title" xml:space="preserve">
+    <value>库存记录</value>
+  </data>
+  <data name="Dialog_InventoryOutbound_Title" xml:space="preserve">
+    <value>出库</value>
+  </data>
+  <data name="Dialog_ContainerEdit_Title" xml:space="preserve">
+    <value>容器信息</value>
+  </data>
+  <data name="Dialog_ShelfEdit_Title" xml:space="preserve">
+    <value>货架配置</value>
+  </data>
+  <data name="Dialog_SlotConfig_Title" xml:space="preserve">
+    <value>槽位配置</value>
+  </data>
+  <data name="Dialog_Confirm_Title" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Validation_NameRequired" xml:space="preserve">
+    <value>名称不能为空</value>
+  </data>
+  <data name="Validation_DisplayNameRequired" xml:space="preserve">
+    <value>显示名不能为空</value>
+  </data>
+  <data name="PermGroup_View" xml:space="preserve">
+    <value>查看权限</value>
+  </data>
+  <data name="PermGroup_Edit" xml:space="preserve">
+    <value>编辑权限</value>
+  </data>
+  <data name="PermGroup_Other" xml:space="preserve">
+    <value>其他权限</value>
   </data>
 </root>

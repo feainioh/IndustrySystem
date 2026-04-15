@@ -103,7 +103,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
                 BathTemperatureC = input.BathTemperatureC, VaporTemperatureC = input.VaporTemperatureC,
                 VacuumKpa = input.VacuumKpa, RotationRpm = input.RotationRpm,
                 LiftStrokeMm = input.LiftStrokeMm, CoolantTemperatureC = input.CoolantTemperatureC,
-                CollectCondensate = input.CollectCondensate ?? false, ContinuousFeed = input.ContinuousFeed ?? false,
+                CollectCondensate = input.CollectCondensate, ContinuousFeed = input.ContinuousFeed,
                 UpdatedAt = DateTime.UtcNow
             })),
             ExperimentType.Detection => Map(await _detectionRepo.InsertAsync(new DetectionParameter
@@ -132,7 +132,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
                 Id = id, Name = input.Name,
                 QuenchingAgent = input.QuenchingAgent, QuenchingAgentVolumeMl = input.QuenchingAgentVolumeMl,
                 QuenchingAgentDripSpeedMlMin = input.QuenchingAgentDripSpeedMlMin,
-                AddQuenchingAgentFirst = input.AddQuenchingAgentFirst ?? false,
+                AddQuenchingAgentFirst = input.AddQuenchingAgentFirst,
                 PreTemperatureC = input.PreTemperatureC, MaxTemperatureC = input.MaxTemperatureC,
                 StirSpeedRpm = input.StirSpeedRpm, DurationMinutes = input.DurationMinutes,
                 Detergent = input.Detergent, DetergentVolumeMl = input.DetergentVolumeMl,
@@ -195,7 +195,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
                 BathTemperatureC = input.BathTemperatureC, VaporTemperatureC = input.VaporTemperatureC,
                 VacuumKpa = input.VacuumKpa, RotationRpm = input.RotationRpm,
                 LiftStrokeMm = input.LiftStrokeMm, CoolantTemperatureC = input.CoolantTemperatureC,
-                CollectCondensate = input.CollectCondensate ?? false, ContinuousFeed = input.ContinuousFeed ?? false,
+                CollectCondensate = input.CollectCondensate, ContinuousFeed = input.ContinuousFeed,
                 UpdatedAt = DateTime.UtcNow
             })),
             ExperimentType.Detection => Map(await _detectionRepo.UpdateAsync(new DetectionParameter
@@ -224,7 +224,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
                 Id = input.Id, Name = input.Name,
                 QuenchingAgent = input.QuenchingAgent, QuenchingAgentVolumeMl = input.QuenchingAgentVolumeMl,
                 QuenchingAgentDripSpeedMlMin = input.QuenchingAgentDripSpeedMlMin,
-                AddQuenchingAgentFirst = input.AddQuenchingAgentFirst ?? false,
+                AddQuenchingAgentFirst = input.AddQuenchingAgentFirst,
                 PreTemperatureC = input.PreTemperatureC, MaxTemperatureC = input.MaxTemperatureC,
                 StirSpeedRpm = input.StirSpeedRpm, DurationMinutes = input.DurationMinutes,
                 Detergent = input.Detergent, DetergentVolumeMl = input.DetergentVolumeMl,

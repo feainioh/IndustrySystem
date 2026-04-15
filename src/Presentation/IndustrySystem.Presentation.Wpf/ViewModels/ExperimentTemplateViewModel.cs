@@ -11,10 +11,11 @@ using IndustrySystem.Domain.Shared.Enums;
 using Prism;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Navigation;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentTemplateViewModel : BindableBase
+public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTemplateDto>
 {
     public const string ParameterEditorRegionName = "ExperimentTemplateParameterRegion";
 
@@ -104,6 +105,14 @@ public class ExperimentTemplateViewModel : BindableBase
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
 
+    /// <summary>
+    /// 由 View 的 Loaded 事件调用，确保 region 存在后执行首次导航。
+    /// </summary>
+    public void NavigateToCurrentParameterEditor()
+    {
+        NavigateParameterEditor(SelectedType);
+    }
+
     public ExperimentTemplateViewModel(IExperimentTemplateAppService svc, IExperimentParameterAppService parameterSvc, IRegionManager regionManager)
     {
         _svc = svc;
@@ -131,6 +140,9 @@ public class ExperimentTemplateViewModel : BindableBase
 
         if (SelectedTemplate is null && Templates.Count > 0)
             SelectedTemplate = Templates[0];
+
+        // 确保 region 导航在 View 加载后执行（构造函数阶段 region 不存在，此处补偿）
+        NavigateParameterEditor(SelectedType);
     }
 
     /// <summary>
@@ -147,7 +159,7 @@ public class ExperimentTemplateViewModel : BindableBase
         {
             var defaultParam = await _parameterSvc.CreateAsync(new ExperimentParameterItemDto
             {
-                Id = Guid.Empty,
+                Id = Guid.NewGuid(),
                 Type = SelectedType,
                 Name = $"{GetTypeDisplayName(SelectedType)}-默认参数",
                 CreatedAt = DateTime.Now,
@@ -175,6 +187,8 @@ public class ExperimentTemplateViewModel : BindableBase
     /// <summary>根据参数ID加载参数详情到编辑器</summary>
     private async Task LoadParameterIntoEditorAsync(ExperimentType type, Guid parameterId)
     {
+        // 确保 region 中已导航到对应类型的参数编辑视图，再加载详情
+        NavigateParameterEditor(type);
         var detail = await _parameterSvc.GetAsync(type, parameterId);
         CurrentParameterDetail = detail;
     }
@@ -201,14 +215,18 @@ public class ExperimentTemplateViewModel : BindableBase
         EditingId = dto.Id;
         TemplateName = dto.Name;
 
-        // 先设置 ParameterIdText，再设置 SelectedType 触发参数加载
+        // 先设置 ParameterIdText
         ParameterIdText = dto.ParameterId?.ToString() ?? string.Empty;
         IsTemplate = dto.IsTemplate;
         CreatedAt = dto.CreatedAt;
         UpdatedAt = dto.UpdatedAt;
 
-        // SelectedType setter 会触发 LoadParameterOptionsAndSelectAsync
-        SelectedType = dto.Type;
+        // 直接设置 backing field 并通知 UI，避免 setter 中条件触发导致同类型模板切换时不导航
+        SetProperty(ref _selectedType, dto.Type, nameof(SelectedType));
+
+        // 始终重新加载参数列表和导航参数编辑器
+        _ = LoadParameterOptionsAndSelectAsync();
+        NavigateParameterEditor(dto.Type);
     }
 
     private void NavigateParameterEditor(ExperimentType type)
@@ -228,7 +246,16 @@ public class ExperimentTemplateViewModel : BindableBase
             _ => "ReactionParameterEditDialog"
         };
 
-        _regionManager.RequestNavigate(ParameterEditorRegionName, target);
+        // 仅在 region 已由 View 创建后才导航（构造函数阶段 region 尚未注册）
+        if (_regionManager.Regions.ContainsRegionWithName(ParameterEditorRegionName))
+        {
+            var navParams = new NavigationParameters
+            {
+                { "ExperimentType", type },
+                { "ParentVm", this }
+            };
+            _regionManager.RequestNavigate(ParameterEditorRegionName, target, navParams);
+        }
     }
 
     private async Task SaveAsync()
@@ -292,6 +319,9 @@ public class ExperimentTemplateViewModel : BindableBase
         ExperimentType.CustomDetection => "自定义检测",
         _ => type.ToString()
     };
+
+    protected override async Task<IReadOnlyList<ExperimentTemplateDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }
 
 static class CollectionExtensions

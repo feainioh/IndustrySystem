@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,7 +20,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
     {
         _svc = svc;
         _permSvc = permSvc;
-        Title = "编辑角色";
+        Title = "缂栬緫瑙掕壊";
     }
 
     private Guid _id;
@@ -36,7 +36,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
         {
             if (SetProperty(ref _name, value))
             {
-                ValidateRequired(nameof(Name), _name, "名称不能为空");
+                ValidateRequired(nameof(Name), _name, "鍚嶇О涓嶈兘涓虹┖");
             }
         }
     }
@@ -46,14 +46,20 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
 
     public ObservableCollection<RolePermissionGroup> PermissionGroups { get; } = new();
 
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
+    }
+
     public async Task LoadAsync(Guid? id)
     {
         ClearErrors();
         PermissionGroups.Clear();
 
-        var viewGroup = new RolePermissionGroup("查看权限");
-        var editGroup = new RolePermissionGroup("编辑权限");
-        var otherGroup = new RolePermissionGroup("其他权限");
+        var viewGroup = new RolePermissionGroup("鏌ョ湅鏉冮檺");
+        var editGroup = new RolePermissionGroup("缂栬緫鏉冮檺");
+        var otherGroup = new RolePermissionGroup("鍏朵粬鏉冮檺");
 
         var perms = await _permSvc.GetListAsync();
         foreach (var p in perms.OrderBy(x => x.DisplayName))
@@ -119,7 +125,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
                 .ToArray();
 
             await _svc.SetPermissionsAsync(saved.Id, permIds);
-            DialogResult = true;
+            RequestClose.Invoke(new DialogResult(ButtonResult.OK));
         }
         catch (Exception ex)
         {
@@ -127,7 +133,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
         }
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 
     private static PermissionCategory ClassifyPermission(string? permissionName)
     {

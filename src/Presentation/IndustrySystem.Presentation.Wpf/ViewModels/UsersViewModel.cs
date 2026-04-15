@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -13,16 +14,18 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using NLog;
+using IndustrySystem.Presentation.Wpf.Views.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class UsersViewModel : BindableBase
+public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IUserAppService _svc;
+    private readonly IDialogService _dialogService;
 
     /// <summary>
     /// 新增用户名输入。
@@ -68,18 +71,19 @@ public class UsersViewModel : BindableBase
     public ICommand DeleteCommand { get; }
     public ICommand ResetPasswordCommand { get; }
 
-    public UsersViewModel(IUserAppService svc)
+    public UsersViewModel(IUserAppService svc, IDialogService dialogService)
     {
         _svc = svc ?? throw new ArgumentNullException(nameof(svc));
+        _dialogService = dialogService;
         UsersView = CollectionViewSource.GetDefaultView(Users);
         UsersView.Filter = FilterUsers;
 
         // 页面命令：刷新、新增、编辑、删除、重置密码
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
-        EditCommand = new DelegateCommand<Guid?>(async id =>
+        EditCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenUserDialogAsync(id.Value);
+            if (id.HasValue) OpenUserDialogAsync(id.Value);
         });
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
@@ -126,33 +130,16 @@ public class UsersViewModel : BindableBase
     /// <summary>
     /// 打开用户编辑弹窗，保存后刷新列表。
     /// </summary>
-    private async Task OpenUserDialogAsync(Guid id)
+    private void OpenUserDialogAsync(Guid id)
     {
-        var dialogVm = ContainerLocator.Current.Resolve<UserEditDialogViewModel>();
-        await dialogVm.LoadAsync(id);
-        var dialog = new Views.Dialogs.UserEditDialog { DataContext = dialogVm };
-
-        System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", (Guid?)id } };
+        _dialogService.ShowDialog(nameof(UserEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-            {
-                DialogHost.Close("RootDialogHost", dialogVm.DialogResult);
-            }
-        };
-
-        dialogVm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
             {
                 await LoadAsync();
             }
-        }
-        finally
-        {
-            dialogVm.PropertyChanged -= handler;
-        }
+        });
     }
 
     /// <summary>
@@ -330,5 +317,8 @@ public class UsersViewModel : BindableBase
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    protected override async Task<IReadOnlyList<UserDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }
 

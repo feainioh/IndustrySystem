@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -35,6 +36,12 @@ public class ContainerEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         Title = "容器信息";
+    }
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
     }
 
     public async Task LoadAsync(Guid? id)
@@ -69,8 +76,8 @@ public class ContainerEditDialogViewModel : DialogViewModel
             await _svc.CreateContainerAsync(dto);
         else
             await _svc.UpdateContainerAsync(dto);
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
+using Prism.Dialogs;
 using Prism.Mvvm;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
@@ -53,6 +54,14 @@ public class SlotConfigDialogViewModel : DialogViewModel
             AllowedContainerTypeOptions.Add(new ContainerTypeOption(ct));
     }
 
+    public override async void OnDialogOpened(IDialogParameters parameters)
+    {
+        if (parameters.TryGetValue<SlotDisplayItem>("slot", out var slot))
+        {
+            await LoadAsync(slot);
+        }
+    }
+
     public async Task LoadAsync(SlotDisplayItem slot)
     {
         SlotId = slot.Id;
@@ -95,8 +104,8 @@ public class SlotConfigDialogViewModel : DialogViewModel
             null, null, null, null,
             null, null, null, []);
         await _shelfSvc.SaveSlotsAsync(Guid.Empty, [dto]);
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

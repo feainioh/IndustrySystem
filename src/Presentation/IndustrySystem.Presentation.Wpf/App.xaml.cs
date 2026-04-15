@@ -1,34 +1,35 @@
-﻿using System.Windows;
-using Prism.DryIoc;
-using Prism.Ioc;
-using Prism.Dialogs;
-using Volo.Abp;
+﻿using AutoMapper;
 using IndustrySystem.Application.AbpModules;
-using Microsoft.Extensions.Configuration;
-using SqlSugar;
-using IndustrySystem.Infrastructure.SqlSugar;
-using IndustrySystem.Domain.Repositories;
-using IndustrySystem.Infrastructure.SqlSugar.Repositories;
 using IndustrySystem.Application.Contracts.Services;
-using IndustrySystem.Application.Services;
-using AutoMapper;
 using IndustrySystem.Application.Profiles;
-using Prism.Mvvm;
-using IndustrySystem.Presentation.Wpf.ViewModels;
-using IndustrySystem.Infrastructure.SqlSugar.Abstractions;
-using IndustrySystem.Infrastructure.SqlSugar.Implementations;
+using IndustrySystem.Application.Services;
+using IndustrySystem.Domain.Repositories;
 using IndustrySystem.Infrastructure.Communication.Abstractions;
 using IndustrySystem.Infrastructure.Communication.Implementations;
-using NLog;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using ModernWpf;
-using System.Globalization;
-using System;
-using System.Reflection;
+using IndustrySystem.Infrastructure.SqlSugar;
+using IndustrySystem.Infrastructure.SqlSugar.Abstractions;
+using IndustrySystem.Infrastructure.SqlSugar.Implementations;
+using IndustrySystem.Infrastructure.SqlSugar.Repositories;
 using IndustrySystem.Presentation.Wpf.Resources;
-using IndustrySystem.Presentation.Wpf.Views;
 using IndustrySystem.Presentation.Wpf.Services;
+using IndustrySystem.Presentation.Wpf.ViewModels;
+using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
+using IndustrySystem.Presentation.Wpf.Views;
+using Microsoft.Extensions.Configuration;
+using ModernWpf;
+using NLog;
+using Prism.Dialogs;
+using Prism.DryIoc;
+using Prism.Ioc;
+using Prism.Mvvm;
+using SqlSugar;
+using System;
+using System.Globalization;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using Volo.Abp;
 
 namespace IndustrySystem.Presentation.Wpf;
 
@@ -120,39 +121,72 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<IAuthState, AuthState>();
 
         // Register ViewModels
-        ViewModelLocationProvider.Register<Views.RoleManageView, RoleManageViewModel>();
-        ViewModelLocationProvider.Register<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
-        ViewModelLocationProvider.Register<Views.PermissionsView, PermissionsViewModel>();
-        ViewModelLocationProvider.Register<Views.UsersView, UsersViewModel>();
-        ViewModelLocationProvider.Register<Views.AlarmView, AlarmViewModel>();
-        ViewModelLocationProvider.Register<Views.RunExperimentView, RunExperimentViewModel>();
-        ViewModelLocationProvider.Register<Views.ExperimentsView, ExperimentsViewModel>();
-        ViewModelLocationProvider.Register<Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
-        ViewModelLocationProvider.Register<Views.InventoryView, InventoryViewModel>();
-        ViewModelLocationProvider.Register<Views.HardwareDebugView, HardwareDebugViewModel>();
-        ViewModelLocationProvider.Register<Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
-        ViewModelLocationProvider.Register<Views.ExperimentConfigView, ExperimentConfigViewModel>();
-        ViewModelLocationProvider.Register<Views.MaterialInfoView, MaterialInfoViewModel>();
-        ViewModelLocationProvider.Register<Views.ShelfInfoView, ShelfInfoViewModel>();
-        ViewModelLocationProvider.Register<Views.OperationLogsView, OperationLogsViewModel>();
-        ViewModelLocationProvider.Register<Views.RealtimeDataView, RealtimeDataViewModel>();
-        ViewModelLocationProvider.Register<Views.PeripheralDebugView, PeripheralDebugViewModel>();
-        ViewModelLocationProvider.Register<Views.DeviceParamsView, DeviceParamsViewModel>();
+        containerRegistry.RegisterForNavigation<RoleManageView, RoleManageViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
+        containerRegistry.RegisterForNavigation<Views.PermissionsView, PermissionsViewModel>();
+        containerRegistry.RegisterForNavigation<Views.UsersView, UsersViewModel>();
+        containerRegistry.RegisterForNavigation<Views.AlarmView, AlarmViewModel>();
+        containerRegistry.RegisterForNavigation<Views.RunExperimentView, RunExperimentViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ExperimentsView, ExperimentsViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
+        containerRegistry.RegisterForNavigation<Views.InventoryView, InventoryViewModel>();
+        containerRegistry.RegisterForNavigation<Views.HardwareDebugView, HardwareDebugViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ExperimentConfigView, ExperimentConfigViewModel>();
+        containerRegistry.RegisterForNavigation<Views.MaterialInfoView, MaterialInfoViewModel>();
+        containerRegistry.RegisterForNavigation<Views.ShelfInfoView, ShelfInfoViewModel>();
+        containerRegistry.RegisterForNavigation<Views.OperationLogsView, OperationLogsViewModel>();
+        containerRegistry.RegisterForNavigation<Views.RealtimeDataView, RealtimeDataViewModel>();
+        containerRegistry.RegisterForNavigation<Views.PeripheralDebugView, PeripheralDebugViewModel>();
+        containerRegistry.RegisterForNavigation<Views.DeviceParamsView, DeviceParamsViewModel>();
+        //ViewModelLocationProvider.Register<Views.RoleManageView, RoleManageViewModel>();
+        //ViewModelLocationProvider.Register<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
+        //ViewModelLocationProvider.Register<Views.PermissionsView, PermissionsViewModel>();
+        //ViewModelLocationProvider.Register<Views.UsersView, UsersViewModel>();
+        //ViewModelLocationProvider.Register<Views.AlarmView, AlarmViewModel>();
+        //ViewModelLocationProvider.Register<Views.RunExperimentView, RunExperimentViewModel>();
+        //ViewModelLocationProvider.Register<Views.ExperimentsView, ExperimentsViewModel>();
+        //ViewModelLocationProvider.Register<Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
+        //ViewModelLocationProvider.Register<Views.InventoryView, InventoryViewModel>();
+        //ViewModelLocationProvider.Register<Views.HardwareDebugView, HardwareDebugViewModel>();
+        //ViewModelLocationProvider.Register<Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
+        //ViewModelLocationProvider.Register<Views.ExperimentConfigView, ExperimentConfigViewModel>();
+        //ViewModelLocationProvider.Register<Views.MaterialInfoView, MaterialInfoViewModel>();
+        //ViewModelLocationProvider.Register<Views.ShelfInfoView, ShelfInfoViewModel>();
+        //ViewModelLocationProvider.Register<Views.OperationLogsView, OperationLogsViewModel>();
+        //ViewModelLocationProvider.Register<Views.RealtimeDataView, RealtimeDataViewModel>();
+        //ViewModelLocationProvider.Register<Views.PeripheralDebugView, PeripheralDebugViewModel>();
+        //ViewModelLocationProvider.Register<Views.DeviceParamsView, DeviceParamsViewModel>();
 
         // Register LoginView as dialog
         containerRegistry.RegisterDialog<LoginView, LoginViewModel>();
 
+        // Register edit dialogs for IDialogService
+        containerRegistry.RegisterDialog<Views.Dialogs.UserEditDialog, ViewModels.Dialogs.UserEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.PermissionEditDialog, ViewModels.Dialogs.PermissionEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.RoleEditDialog, ViewModels.Dialogs.RoleEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.MaterialEditDialog, ViewModels.Dialogs.MaterialEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ShelfEditDialog, ViewModels.Dialogs.ShelfEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.SlotConfigDialog, ViewModels.Dialogs.SlotConfigDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.InventoryEditDialog, ViewModels.Dialogs.InventoryEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.InventoryOutboundDialog, ViewModels.Dialogs.InventoryOutboundDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ContainerEditDialog, ViewModels.Dialogs.ContainerEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ExperimentTemplateEditDialog, ViewModels.Dialogs.ExperimentTemplateEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ExperimentGroupEditDialog, ViewModels.Dialogs.ExperimentGroupEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ExperimentEditDialog, ViewModels.Dialogs.ExperimentEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ConfirmDialog, ViewModels.Dialogs.ConfirmDialogViewModel>();
+
         // Register type-specific parameter edit views for region navigation
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
     }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -183,7 +217,11 @@ public partial class App : PrismApplication
         };
 
         Initialize();
-
+        // 确保 ViewModelLocator 使用容器来创建 ViewModel 实例
+        ViewModelLocationProvider.SetDefaultViewModelFactory((viewModelType) =>
+        {
+            return Container.Resolve(viewModelType);
+        }); 
         // Initialize database first, then show login
         Dispatcher.BeginInvoke(new Action(async () =>
         {

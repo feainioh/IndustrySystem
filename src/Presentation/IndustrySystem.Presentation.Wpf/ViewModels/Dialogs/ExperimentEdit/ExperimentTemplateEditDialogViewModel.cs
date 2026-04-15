@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -43,6 +44,12 @@ public class ExperimentTemplateEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         Title = "新建实验模板";
+    }
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
     }
 
     public async Task LoadAsync(Guid? id)
@@ -87,8 +94,8 @@ public class ExperimentTemplateEditDialogViewModel : DialogViewModel
         _ = Id == Guid.Empty
             ? await _svc.CreateAsync(input)
             : await _svc.UpdateAsync(input);
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

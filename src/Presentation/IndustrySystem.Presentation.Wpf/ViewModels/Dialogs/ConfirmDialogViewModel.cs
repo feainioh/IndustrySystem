@@ -1,5 +1,5 @@
-using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -9,12 +9,18 @@ public class ConfirmDialogViewModel : DialogViewModel
     public string Message { get => _message; set => SetProperty(ref _message, value); }
 
     public DelegateCommand OkCommand { get; }
-    public DelegateCommand CancelCommand { get; }
+    public new DelegateCommand CancelCommand { get; }
 
     public ConfirmDialogViewModel()
     {
-        Title = "ȷ��";
-        OkCommand = new DelegateCommand(() => DialogResult = true);
-        CancelCommand = new DelegateCommand(() => DialogResult = false);
+        Title = "确认";
+        OkCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.OK)));
+        CancelCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
+    }
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        if (parameters.TryGetValue<string>("message", out var msg))
+            Message = msg;
     }
 }

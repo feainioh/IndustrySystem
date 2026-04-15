@@ -1,13 +1,13 @@
 using Prism.Commands;
-using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class OperationLogsViewModel : BindableBase
+public class OperationLogsViewModel : NagetiveCurdVeiwModel<OperationLog>
 {
     #region Properties
     
@@ -231,6 +231,9 @@ public class OperationLogsViewModel : BindableBase
     }
 
     #endregion
+
+    protected override Task<IReadOnlyList<OperationLog>> LoadItemsAsync()
+        => Task.FromResult<IReadOnlyList<OperationLog>>(GenerateSampleLogs());
 }
 
 /// <summary>

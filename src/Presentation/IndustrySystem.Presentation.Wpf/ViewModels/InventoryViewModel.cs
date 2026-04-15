@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,16 +13,17 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class InventoryViewModel : BindableBase
+public class InventoryViewModel : NagetiveCurdVeiwModel<InventoryRecordDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IInventoryAppService _svc;
+    private readonly IDialogService _dialogService;
 
     private string _searchText = string.Empty;
     public string SearchText
@@ -59,9 +61,10 @@ public class InventoryViewModel : BindableBase
     public ICommand DeleteCommand { get; }
     public ICommand ToggleSummaryCommand { get; }
 
-    public InventoryViewModel(IInventoryAppService svc)
+    public InventoryViewModel(IInventoryAppService svc, IDialogService dialogService)
     {
         _svc = svc;
+        _dialogService = dialogService;
         InventoryView = CollectionViewSource.GetDefaultView(Items);
         InventoryView.Filter = FilterItems;
 
@@ -69,14 +72,14 @@ public class InventoryViewModel : BindableBase
         SummaryView.Filter = FilterSummary;
 
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
-        InboundCommand = new DelegateCommand(async () => await OpenInboundDialogAsync());
-        EditCommand = new DelegateCommand<Guid?>(async id =>
+        InboundCommand = new DelegateCommand(() => OpenInboundDialogAsync());
+        EditCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenEditDialogAsync(id.Value);
+            if (id.HasValue) OpenEditDialogAsync(id.Value);
         });
-        OutboundCommand = new DelegateCommand<Guid?>(async id =>
+        OutboundCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenOutboundDialogAsync(id.Value);
+            if (id.HasValue) OpenOutboundDialogAsync(id.Value);
         });
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
@@ -122,83 +125,36 @@ public class InventoryViewModel : BindableBase
     }
 
     /// <summary>入库：弹出完整入库弹窗（新建库存记录）</summary>
-    private async Task OpenInboundDialogAsync()
+    private void OpenInboundDialogAsync()
     {
-        var vm = ContainerLocator.Current.Resolve<InventoryEditDialogViewModel>();
-        vm.Title = "物料入库";
-        await vm.LoadAsync(null);
-        var dialog = new Views.Dialogs.InventoryEditDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", (Guid?)null } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.InventoryEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
                 await LoadAsync();
-        }
-        finally
-        {
-            vm.PropertyChanged -= handler;
-        }
+        });
     }
 
     /// <summary>编辑：弹出编辑弹窗（修改已有库存记录）</summary>
-    private async Task OpenEditDialogAsync(Guid id)
+    private void OpenEditDialogAsync(Guid id)
     {
-        var vm = ContainerLocator.Current.Resolve<InventoryEditDialogViewModel>();
-        vm.Title = "编辑库存记录";
-        await vm.LoadAsync(id);
-        var dialog = new Views.Dialogs.InventoryEditDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", (Guid?)id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.InventoryEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
                 await LoadAsync();
-        }
-        finally
-        {
-            vm.PropertyChanged -= handler;
-        }
+        });
     }
 
     /// <summary>出库：弹出出库弹窗，自主选择出库数量</summary>
-    private async Task OpenOutboundDialogAsync(Guid id)
+    private void OpenOutboundDialogAsync(Guid id)
     {
-        var vm = ContainerLocator.Current.Resolve<InventoryOutboundDialogViewModel>();
-        await vm.LoadAsync(id);
-        var dialog = new Views.Dialogs.InventoryOutboundDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.InventoryOutboundDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
                 await LoadAsync();
-        }
-        finally
-        {
-            vm.PropertyChanged -= handler;
-        }
+        });
     }
 
     private async Task DeleteAsync(Guid id)
@@ -209,4 +165,7 @@ public class InventoryViewModel : BindableBase
         await _svc.DeleteAsync(id);
         await LoadAsync();
     }
+
+    protected override async Task<IReadOnlyList<InventoryRecordDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }

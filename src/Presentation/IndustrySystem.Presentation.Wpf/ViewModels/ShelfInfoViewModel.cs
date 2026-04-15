@@ -14,6 +14,7 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Mvvm;
 
@@ -229,6 +230,7 @@ public class WellDisplayItem : BindableBase
 public class ShelfInfoViewModel : BindableBase
 {
     private readonly IShelfAppService _svc;
+    private readonly IDialogService _dialogService;
     private readonly DispatcherTimer _autoRefreshTimer;
     private static readonly TimeSpan AutoRefreshInterval = TimeSpan.FromSeconds(10);
 
@@ -274,9 +276,10 @@ public class ShelfInfoViewModel : BindableBase
     public ICommand RefreshCommand { get; }
     public ICommand ConfigureSlotCommand { get; }
 
-    public ShelfInfoViewModel(IShelfAppService svc)
+    public ShelfInfoViewModel(IShelfAppService svc, IDialogService dialogService)
     {
         _svc = svc;
+        _dialogService = dialogService;
 
         RefreshCommand = new DelegateCommand(async () => await LoadAllAsync());
 
@@ -290,7 +293,7 @@ public class ShelfInfoViewModel : BindableBase
         DeleteShelfCommand = new DelegateCommand<Guid?>(async id => { if (id.HasValue) await DeleteShelfAsync(id.Value); });
         OpenShelfListCommand = new DelegateCommand(async () => await OpenShelfListDialogAsync());
 
-        ConfigureSlotCommand = new DelegateCommand<SlotDisplayItem>(async slot => { if (slot is not null) await OpenSlotConfigAsync(slot); });
+        ConfigureSlotCommand = new DelegateCommand<SlotDisplayItem>(slot => { if (slot is not null) OpenSlotConfigAsync(slot); });
 
         // Auto-refresh timer to poll inventory changes
         _autoRefreshTimer = new DispatcherTimer { Interval = AutoRefreshInterval };
@@ -426,26 +429,16 @@ public class ShelfInfoViewModel : BindableBase
         // Small delay to allow the dialog host to finish closing
         if (wasListOpen) await Task.Delay(50);
 
-        var vm = ContainerLocator.Current.Resolve<ContainerEditDialogViewModel>();
-        await vm.LoadAsync(id);
-        var dialog = new Views.Dialogs.ContainerEditDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.ContainerEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is true) await LoadContainersAsync();
-        }
-        finally { vm.PropertyChanged -= handler; }
+            if (result.Result == ButtonResult.OK)
+                await LoadContainersAsync();
 
-        // Re-open the list dialog if it was previously open
-        if (wasListOpen)
-            await OpenContainerListDialogAsync();
+            // Re-open the list dialog if it was previously open
+            if (wasListOpen)
+                await OpenContainerListDialogAsync();
+        });
     }
 
     private async Task DeleteContainerAsync(Guid id)
@@ -478,26 +471,16 @@ public class ShelfInfoViewModel : BindableBase
 
         if (wasListOpen) await Task.Delay(50);
 
-        var vm = ContainerLocator.Current.Resolve<ShelfEditDialogViewModel>();
-        await vm.LoadAsync(id);
-        var dialog = new Views.Dialogs.ShelfEditDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.ShelfEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is true) await LoadShelvesAsync();
-        }
-        finally { vm.PropertyChanged -= handler; }
+            if (result.Result == ButtonResult.OK)
+                await LoadShelvesAsync();
 
-        // Re-open the list dialog if it was previously open
-        if (wasListOpen)
-            await OpenShelfListDialogAsync();
+            // Re-open the list dialog if it was previously open
+            if (wasListOpen)
+                await OpenShelfListDialogAsync();
+        });
     }
 
     private async Task DeleteShelfAsync(Guid id)
@@ -523,23 +506,13 @@ public class ShelfInfoViewModel : BindableBase
 
     // ── 槽位配置 ──
 
-    private async Task OpenSlotConfigAsync(SlotDisplayItem slot)
+    private void OpenSlotConfigAsync(SlotDisplayItem slot)
     {
-        var vm = ContainerLocator.Current.Resolve<SlotConfigDialogViewModel>();
-        await vm.LoadAsync(slot);
-        var dialog = new Views.Dialogs.SlotConfigDialog { DataContext = vm };
-
-        PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "slot", slot } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.SlotConfigDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-                DialogHost.Close("RootDialogHost", vm.DialogResult);
-        };
-        vm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is true) await LoadSlotsAsync();
-        }
-        finally { vm.PropertyChanged -= handler; }
+            if (result.Result == ButtonResult.OK)
+                await LoadSlotsAsync();
+        });
     }
 }

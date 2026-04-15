@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -82,6 +83,12 @@ public class InventoryEditDialogViewModel : DialogViewModel
         Title = "库存记录";
     }
 
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
+    }
+
     public async Task LoadAsync(Guid? id)
     {
         var materials = await _materialSvc.GetListAsync();
@@ -146,8 +153,8 @@ public class InventoryEditDialogViewModel : DialogViewModel
         else
             _ = await _svc.UpdateAsync(dto);
 
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

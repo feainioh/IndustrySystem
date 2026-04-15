@@ -1,9 +1,11 @@
-<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.ExperimentEditDialog"
+﻿<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.ExperimentEditDialog"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:prism="http://prismlibrary.com/"
  xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
- prism:ViewModelLocator.AutoWireViewModel="False">
+ xmlns:prism="http://prismlibrary.com/">
+	<prism:Dialog.WindowStyle>
+        <StaticResource ResourceKey="DialogHostWindowStyle" />
+    </prism:Dialog.WindowStyle>
 	<UserControl.Resources>
 		<loc:LocalizationProvider x:Key="Loc" />
 	</UserControl.Resources>
@@ -34,3 +36,4 @@
 		</StackPanel>
 	</Grid>
 </UserControl>
+

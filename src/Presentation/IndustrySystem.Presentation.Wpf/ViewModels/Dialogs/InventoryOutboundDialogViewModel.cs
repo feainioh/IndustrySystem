@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -39,6 +40,12 @@ public class InventoryOutboundDialogViewModel : DialogViewModel
         Title = "出库";
     }
 
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid>("id");
+        _ = LoadAsync(id);
+    }
+
     public async Task LoadAsync(Guid id)
     {
         var item = await _svc.GetAsync(id);
@@ -58,8 +65,8 @@ public class InventoryOutboundDialogViewModel : DialogViewModel
     protected override async Task OnSaveAsync()
     {
         await _svc.OutboundAsync(_recordId, OutboundQty);
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
     }
 
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 }

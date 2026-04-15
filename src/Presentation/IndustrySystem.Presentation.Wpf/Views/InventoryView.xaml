@@ -66,7 +66,7 @@
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="{x:Static loc:Strings.Nav_Inventory}" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="物料库存管理 · 入库 / 出库 / 批次追踪" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Inventory_Subtitle]}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
                 </StackPanel>
             </StackPanel>
 
@@ -87,7 +87,7 @@
                         Background="{StaticResource SuccessBrush}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="入库" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_Inbound]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -118,21 +118,21 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="库存清单" FontSize="15" FontWeight="SemiBold"
+                    <TextBlock Grid.Column="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_InventoryList]}" FontSize="15" FontWeight="SemiBold"
                                VerticalAlignment="Center"/>
 
                     <ToggleButton Grid.Column="1" IsChecked="{Binding ShowSummary}"
                                   Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                  ToolTip="切换汇总视图" Margin="16,0,6,0"
+                                  ToolTip="{Binding Source={StaticResource Loc}, Path=[Tooltip_ToggleSummaryView]}" Margin="16,0,6,0"
                                   VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="2" Text="汇总视图" FontSize="12" Opacity="0.6"
+                    <TextBlock Grid.Column="2" Text="{Binding Source={StaticResource Loc}, Path=[Label_SummaryView]}" FontSize="12" Opacity="0.6"
                                VerticalAlignment="Center"/>
 
                     <TextBox Grid.Column="3"
                              Width="280"
                              Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource SearchTextField}"
-                             materialDesign:HintAssist.Hint="搜索物料名称 / 编码 / 批号 / 位置..."
+                             materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_Search_Inventory]}"
                              materialDesign:TextFieldAssist.HasLeadingIcon="True"
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
@@ -156,7 +156,7 @@
                         <GridView AllowsColumnReorder="False">
 
                             <!-- 物料 -->
-                            <GridViewColumn Width="200" Header="物料">
+                            <GridViewColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
@@ -176,10 +176,10 @@
                             </GridViewColumn>
 
                             <!-- 批号 -->
-                            <GridViewColumn Width="140" Header="批号" DisplayMemberBinding="{Binding BatchNo}"/>
+                            <GridViewColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" DisplayMemberBinding="{Binding BatchNo}"/>
 
                             <!-- 库存 / 安全库存 -->
-                            <GridViewColumn Width="130" Header="库存 / 安全库存">
+                            <GridViewColumn Width="130" Header="{Binding Source={StaticResource Loc}, Path=[Col_Inventory_SafetyStock]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -211,19 +211,19 @@
                             </GridViewColumn>
 
                             <!-- 单位 -->
-                            <GridViewColumn Width="70" Header="单位" DisplayMemberBinding="{Binding Unit}"/>
+                            <GridViewColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" DisplayMemberBinding="{Binding Unit}"/>
 
                             <!-- 入库日期 -->
-                            <GridViewColumn Width="110" Header="入库日期" DisplayMemberBinding="{Binding InboundDate, StringFormat=yyyy-MM-dd}"/>
+                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_LastInboundDate]}" DisplayMemberBinding="{Binding InboundDate, StringFormat=yyyy-MM-dd}"/>
 
                             <!-- 过期日期 -->
-                            <GridViewColumn Width="110" Header="过期日期" DisplayMemberBinding="{Binding ExpiryDate, StringFormat=yyyy-MM-dd}"/>
+                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_ExpiryDate]}" DisplayMemberBinding="{Binding ExpiryDate, StringFormat=yyyy-MM-dd}"/>
 
                             <!-- 位置 -->
-                            <GridViewColumn Width="100" Header="位置" DisplayMemberBinding="{Binding Location}"/>
+                            <GridViewColumn Width="100" Header="{Binding Source={StaticResource Loc}, Path=[Col_Location]}" DisplayMemberBinding="{Binding Location}"/>
 
                             <!-- 孔位 -->
-                            <GridViewColumn Width="80" Header="孔位">
+                            <GridViewColumn Width="80" Header="{Binding Source={StaticResource Loc}, Path=[Slot]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock FontSize="12" Opacity="0.75">
@@ -247,7 +247,7 @@
                                             <Button Style="{StaticResource MaterialDesignIconButton}"
                                                     Command="{Binding DataContext.OutboundCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
-                                                    ToolTip="出库"
+                                                    ToolTip="{Binding Source={StaticResource Loc}, Path=[Btn_Outbound]}"
                                                     Width="32" Height="32" Margin="0,0,2,0"
                                                     Foreground="{StaticResource WarningBrush}">
                                                 <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" Width="18" Height="18"/>
@@ -297,7 +297,7 @@
                         <GridView AllowsColumnReorder="False">
 
                             <!-- 物料 -->
-                            <GridViewColumn Width="200" Header="物料">
+                            <GridViewColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
@@ -317,10 +317,16 @@
                             </GridViewColumn>
 
                             <!-- 批号 -->
-                            <GridViewColumn Width="140" Header="批号" DisplayMemberBinding="{Binding BatchNo}"/>
+                            <GridViewColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" DisplayMemberBinding="{Binding BatchNo}"/>
 
                             <!-- 总库存 / 安全库存 -->
-                            <GridViewColumn Width="150" Header="总库存 / 安全库存">
+                            <GridViewColumn Width="150">
+                                <GridViewColumn.Header>
+                                    <MultiBinding StringFormat="{}{0} / {1}">
+                                        <Binding Source="{StaticResource Loc}" Path="[Col_TotalQuantity]"/>
+                                        <Binding Source="{StaticResource Loc}" Path="[Hint_SafetyStock]"/>
+                                    </MultiBinding>
+                                </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -352,10 +358,10 @@
                             </GridViewColumn>
 
                             <!-- 单位 -->
-                            <GridViewColumn Width="70" Header="单位" DisplayMemberBinding="{Binding Unit}"/>
+                            <GridViewColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" DisplayMemberBinding="{Binding Unit}"/>
 
                             <!-- 记录数 -->
-                            <GridViewColumn Width="90" Header="记录数">
+                            <GridViewColumn Width="90" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchCount]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Background="{StaticResource PrimaryBrush}" CornerRadius="10"

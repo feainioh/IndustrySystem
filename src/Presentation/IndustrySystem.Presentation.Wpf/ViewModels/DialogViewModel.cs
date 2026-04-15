@@ -1,24 +1,17 @@
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
-using Prism.Mvvm;
-using System.Threading.Tasks;
+using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public abstract class DialogViewModel : BindableBase
+public abstract class DialogViewModel : BaseViewModel, IDialogAware
 {
     private string _title = string.Empty;
     public string Title
     {
         get => _title;
         set => SetProperty(ref _title, value);
-    }
-
-    private bool? _dialogResult;
-    public bool? DialogResult
-    {
-        get => _dialogResult;
-        protected set => SetProperty(ref _dialogResult, value);
     }
 
     protected DialogViewModel()
@@ -29,6 +22,18 @@ public abstract class DialogViewModel : BindableBase
 
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
+
+    #region IDialogAware
+
+    public DialogCloseListener RequestClose { get; set; }
+
+    public virtual bool CanCloseDialog() => true;
+
+    public virtual void OnDialogClosed() { }
+
+    public virtual void OnDialogOpened(IDialogParameters parameters) { }
+
+    #endregion
 
     protected void RaiseSaveCanExecuteChanged()
     {
@@ -47,9 +52,12 @@ public abstract class DialogViewModel : BindableBase
 
     protected virtual Task OnSaveAsync()
     {
-        DialogResult = true;
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK));
         return Task.CompletedTask;
     }
 
-    protected virtual void OnCancel() => DialogResult = false;
+    protected virtual void OnCancel()
+    {
+        RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
+    }
 }

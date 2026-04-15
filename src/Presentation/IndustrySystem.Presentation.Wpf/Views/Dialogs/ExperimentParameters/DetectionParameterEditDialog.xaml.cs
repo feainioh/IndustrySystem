@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace IndustrySystem.Presentation.Wpf.Views.Dialogs;
 
-public partial class SamplingParameterEditDialog : UserControl
+public partial class DetectionParameterEditDialog : UserControl
 {
-    public SamplingParameterEditDialog()
+    public DetectionParameterEditDialog()
     {
         InitializeComponent();
     }

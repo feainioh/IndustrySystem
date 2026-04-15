@@ -65,7 +65,7 @@
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="{x:Static loc:Strings.Nav_MaterialInfo}" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="物料信息管理" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_MaterialInfo_Subtitle]}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
                 </StackPanel>
             </StackPanel>
 
@@ -112,13 +112,13 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="物料清单" FontSize="15" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_MaterialList]}" FontSize="15" FontWeight="SemiBold"/>
 
                     <TextBox Grid.Column="1"
                              Width="280"
                              Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource SearchTextField}"
-                             materialDesign:HintAssist.Hint="搜索名称 / CAS / 品牌 / 供应商..."
+                             materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_Search_Material]}"
                              materialDesign:TextFieldAssist.HasLeadingIcon="True"
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
@@ -131,7 +131,7 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
 
-                            <GridViewColumn Width="260" Header="物料">
+                            <GridViewColumn Width="260" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
@@ -147,9 +147,9 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Width="110" Header="分子式" DisplayMemberBinding="{Binding MolecularFormula}"/>
+                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_MolecularFormula]}" DisplayMemberBinding="{Binding MolecularFormula}"/>
 
-                            <GridViewColumn Width="110" Header="类别">
+                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_Category]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <materialDesign:Chip Content="{Binding Category, Converter={StaticResource EnumDescriptionConverter}}" Margin="6,0" Padding="8,2" FontSize="11"/>
@@ -157,7 +157,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Width="110" Header="物料类型">
+                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_MaterialType]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding MaterialType, Converter={StaticResource EnumDescriptionConverter}}"/>
@@ -165,24 +165,24 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Width="140" Header="CAS号" DisplayMemberBinding="{Binding CasNo}"/>
-                            <GridViewColumn Width="120" Header="纯度" DisplayMemberBinding="{Binding Purity}"/>
-                            <GridViewColumn Width="100" Header="单位" DisplayMemberBinding="{Binding Unit}"/>
-                            <GridViewColumn Width="120" Header="安全等级">
+                            <GridViewColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_CasNo]}" DisplayMemberBinding="{Binding CasNo}"/>
+                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_Purity]}" DisplayMemberBinding="{Binding Purity}"/>
+                            <GridViewColumn Width="100" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" DisplayMemberBinding="{Binding Unit}"/>
+                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_HazardLevel]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding HazardLevel, Converter={StaticResource EnumDescriptionConverter}}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="120" Header="存储条件">
+                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_StorageCondition]}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding StorageCondition, Converter={StaticResource EnumDescriptionConverter}}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="130" Header="供应商" DisplayMemberBinding="{Binding Supplier}"/>
+                            <GridViewColumn Width="130" Header="{Binding Source={StaticResource Loc}, Path=[Col_Supplier]}" DisplayMemberBinding="{Binding Supplier}"/>
 
                             <GridViewColumn Width="130" Header="{x:Static loc:Strings.Col_Actions}">
                                 <GridViewColumn.CellTemplate>

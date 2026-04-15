@@ -16,8 +16,16 @@ public class SqlSugarRepository<TEntity> : IRepository<TEntity> where TEntity : 
 
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        await _db.Insertable(entity).ExecuteCommandAsync();
-        return entity;
+        try
+        {
+            var res = await _db.Insertable(entity).ExecuteCommandAsync();
+            return entity;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+            //e.Message;
+            return entity;
+        }
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)

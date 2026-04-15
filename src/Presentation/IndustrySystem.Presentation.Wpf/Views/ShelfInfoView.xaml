@@ -36,7 +36,7 @@
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <TextBlock Text="{x:Static loc:Strings.Nav_ShelfInfo}" FontSize="22" FontWeight="SemiBold"/>
-                <TextBlock Text="货架槽位总览 · 点击槽位配置容器与库存" FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
+                <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ShelfInfo_Subtitle]}" FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
@@ -51,14 +51,14 @@
                         Command="{Binding OpenContainerListCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="PackageVariant" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="容器配置" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_ContainerConfig]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                         Command="{Binding OpenShelfListCommand}" Height="36" Padding="12,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ViewGrid" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="货架配置" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_ShelfConfig]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -75,7 +75,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="当前货架" FontSize="14" FontWeight="SemiBold"
+                <TextBlock Grid.Column="0" Text="{Binding Source={StaticResource Loc}, Path=[Label_CurrentShelf]}" FontSize="14" FontWeight="SemiBold"
                            VerticalAlignment="Center" Margin="0,0,14,0"/>
 
                 <ComboBox Grid.Column="1" 
@@ -84,15 +84,18 @@
                           DisplayMemberPath="Name"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
                           Width="200"
-                          materialDesign:HintAssist.Hint="选择货架"/>
+                          materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_SelectShelf]}"/>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
                     <Border Background="{StaticResource PrimaryBrush}" CornerRadius="4" Padding="8,3" Margin="0,0,10,0">
                         <TextBlock Foreground="White" FontSize="12">
                             <Run Text="{Binding ShelfRows, Mode=OneWay}"/>
-                            <Run Text=" 行 × "/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding Source={StaticResource Loc}, Path=[Label_Rows], Mode=OneWay}"/>
+                            <Run Text=" × "/>
                             <Run Text="{Binding ShelfColumns, Mode=OneWay}"/>
-                            <Run Text=" 列"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding Source={StaticResource Loc}, Path=[Label_Columns], Mode=OneWay}"/>
                         </TextBlock>
                     </Border>
                     <TextBlock Text="{Binding SelectedShelf.Description}" FontSize="12" Opacity="0.6"
@@ -102,13 +105,13 @@
                 <!-- Legend -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
                     <Border Width="12" Height="12" CornerRadius="2" Background="#E0E0E0" Margin="0,0,4,0"/>
-                    <TextBlock Text="空位" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Legend_EmptySlot]}" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
                     <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource PrimaryBrush}" Opacity="0.25" Margin="0,0,4,0"/>
-                    <TextBlock Text="有容器" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Legend_HasContainer]}" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
                     <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource SuccessBrush}" Opacity="0.35" Margin="0,0,4,0"/>
-                    <TextBlock Text="有库存" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Legend_HasInventory]}" FontSize="11" Opacity="0.6" Margin="0,0,12,0"/>
                     <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource ErrorBrush}" Opacity="0.2" Margin="0,0,4,0"/>
-                    <TextBlock Text="已禁用" FontSize="11" Opacity="0.6"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Legend_Disabled]}" FontSize="11" Opacity="0.6"/>
                 </StackPanel>
             </Grid>
         </materialDesign:Card>

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,12 +21,18 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
     private string _groupName = string.Empty;
 
     public Guid Id { get => _id; set => SetProperty(ref _id, value); }
-    public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "Ãû³Æ²»ÄÜÎª¿Õ"); RaiseSaveCanExecuteChanged(); } } }
-    public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, "ÏÔÊ¾Ãû²»ÄÜÎª¿Õ"); RaiseSaveCanExecuteChanged(); } } }
+    public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "åç§°ä¸èƒ½ä¸ºç©º"); RaiseSaveCanExecuteChanged(); } } }
+    public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, "æ˜¾ç¤ºåä¸èƒ½ä¸ºç©º"); RaiseSaveCanExecuteChanged(); } } }
     public string GroupName { get => _groupName; set { if (SetProperty(ref _groupName, value)) { RaiseSaveCanExecuteChanged(); } } }
 
     public PermissionEditDialogViewModel(IPermissionAppService svc)
-    { _svc = svc; Title = "±à¼­È¨ÏŞ"; }
+    { _svc = svc; Title = "ç¼–è¾‘æƒé™"; }
+
+    public override void OnDialogOpened(IDialogParameters parameters)
+    {
+        var id = parameters.GetValue<Guid?>("id");
+        _ = LoadAsync(id);
+    }
 
     public async Task LoadAsync(Guid? id)
     {
@@ -52,14 +58,14 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
         {
             var input = new PermissionDto(Id, Name, DisplayName, GroupName ?? string.Empty);
             _ = Id == Guid.Empty ? await _svc.CreateAsync(input) : await _svc.UpdateAsync(input);
-            DialogResult = true;
+            RequestClose.Invoke(new DialogResult(ButtonResult.OK));
         }
         catch (Exception ex)
         {
             AddError(string.Empty, ex.Message);
         }
     }
-    protected override void OnCancel() => DialogResult = false;
+    protected override void OnCancel() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
 
     #region Validation
     private readonly Dictionary<string, List<string>> _errors = new();

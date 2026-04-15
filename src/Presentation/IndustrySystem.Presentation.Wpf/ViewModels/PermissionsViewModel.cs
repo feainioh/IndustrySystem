@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,16 +13,17 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class PermissionsViewModel : BindableBase
+public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IPermissionAppService _svc;
+    private readonly IDialogService _dialogService;
 
     /// <summary>
     /// 新增权限名称输入。
@@ -72,18 +74,19 @@ public class PermissionsViewModel : BindableBase
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
 
-    public PermissionsViewModel(IPermissionAppService svc)
+    public PermissionsViewModel(IPermissionAppService svc, IDialogService dialogService)
     {
         _svc = svc ?? throw new ArgumentNullException(nameof(svc));
+        _dialogService = dialogService;
         PermissionsView = CollectionViewSource.GetDefaultView(Permissions);
         PermissionsView.Filter = FilterPermissions;
 
         // 页面命令：刷新、新增、编辑、删除
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
-        EditCommand = new DelegateCommand<Guid?>(async id =>
+        EditCommand = new DelegateCommand<Guid?>(id =>
         {
-            if (id.HasValue) await OpenPermissionDialogAsync(id.Value);
+            if (id.HasValue) OpenPermissionDialogAsync(id.Value);
         });
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
         {
@@ -128,33 +131,16 @@ public class PermissionsViewModel : BindableBase
     /// <summary>
     /// 打开权限编辑弹窗，保存成功后刷新列表。
     /// </summary>
-    private async Task OpenPermissionDialogAsync(Guid id)
+    private void OpenPermissionDialogAsync(Guid id)
     {
-        var dialogVm = ContainerLocator.Current.Resolve<PermissionEditDialogViewModel>();
-        await dialogVm.LoadAsync(id);
-        var dialog = new Views.Dialogs.PermissionEditDialog { DataContext = dialogVm };
-
-        System.ComponentModel.PropertyChangedEventHandler handler = (s, e) =>
+        var parameters = new DialogParameters { { "id", (Guid?)id } };
+        _dialogService.ShowDialog(nameof(Views.Dialogs.PermissionEditDialog), parameters, async result =>
         {
-            if (e.PropertyName == nameof(DialogViewModel.DialogResult))
-            {
-                DialogHost.Close("RootDialogHost", dialogVm.DialogResult);
-            }
-        };
-
-        dialogVm.PropertyChanged += handler;
-        try
-        {
-            var result = await DialogHost.Show(dialog, "RootDialogHost");
-            if (result is bool saved && saved)
+            if (result.Result == ButtonResult.OK)
             {
                 await LoadAsync();
             }
-        }
-        finally
-        {
-            dialogVm.PropertyChanged -= handler;
-        }
+        });
     }
 
     /// <summary>
@@ -254,5 +240,8 @@ public class PermissionsViewModel : BindableBase
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    protected override async Task<IReadOnlyList<PermissionDto>> LoadItemsAsync()
+        => await _svc.GetListAsync();
 }
 
