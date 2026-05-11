@@ -43,9 +43,9 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding [Dialog_RoleEdit_Title], Source={StaticResource Loc}}"
-                               FontSize="18" FontWeight="SemiBold" Foreground="White"/>
-                            <TextBlock Text="编辑角色信息与权限分配"
-                               FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
+                                       FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="{Binding [Dialog_RoleEdit_Subtitle], Source={StaticResource Loc}}"
+                                       FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -65,7 +65,7 @@
                                                      Foreground="{StaticResource PrimaryBrush}"
                                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
                                     <TextBlock Text="基本信息" FontSize="15" FontWeight="SemiBold"
-                                       Foreground="{StaticResource PrimaryBrush}"/>
+                                               Foreground="{StaticResource PrimaryBrush}"/>
                                 </StackPanel>
 
                                 <Grid>

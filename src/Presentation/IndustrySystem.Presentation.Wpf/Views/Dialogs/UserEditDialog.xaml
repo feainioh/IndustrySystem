@@ -45,7 +45,7 @@
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding [Dialog_UserEdit_Title], Source={StaticResource Loc}}"
                                        FontSize="18" FontWeight="SemiBold" Foreground="White"/>
-                            <TextBlock Text="编辑用户基本信息与角色分配"
+                            <TextBlock Text="{Binding [Dialog_UserEdit_Subtitle], Source={StaticResource Loc}}"
                                        FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
@@ -67,7 +67,7 @@
                                     <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
                                                              Foreground="{StaticResource PrimaryBrush}"
                                                              VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBlock Text="基本信息" FontSize="15" FontWeight="SemiBold"
+                                    <TextBlock Text="{Binding [Section_BasicInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
                                                Foreground="{StaticResource PrimaryBrush}"/>
                                 </StackPanel>
 

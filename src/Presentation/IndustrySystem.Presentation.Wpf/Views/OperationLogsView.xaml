@@ -208,11 +208,11 @@
                     
                     <DataGrid.Columns>
                         <!-- 时间 -->
-                        <DataGridTextColumn Header="时间" Binding="{Binding Timestamp, StringFormat='yyyy-MM-dd HH:mm:ss'}" 
+                        <DataGridTextColumn Header="{x:Static loc:Strings.Col_Timestamp}" Binding="{Binding Timestamp, StringFormat='yyyy-MM-dd HH:mm:ss'}" 
                                            Width="160" FontFamily="Consolas"/>
-                        
+
                         <!-- 级别 -->
-                        <DataGridTemplateColumn Header="级别" Width="80">
+                        <DataGridTemplateColumn Header="{x:Static loc:Strings.Col_Level}" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="12" Padding="8,4" HorizontalAlignment="Center">
@@ -260,10 +260,10 @@
                         </DataGridTemplateColumn>
                         
                         <!-- 操作类型 -->
-                        <DataGridTextColumn Header="操作类型" Binding="{Binding OperationType}" Width="120" FontWeight="Medium"/>
+                        <DataGridTextColumn Header="{x:Static loc:Strings.Col_OperationType}" Binding="{Binding OperationType}" Width="120" FontWeight="Medium"/>
                         
                         <!-- 操作人 -->
-                        <DataGridTemplateColumn Header="操作人" Width="150">
+                        <DataGridTemplateColumn Header="{x:Static loc:Strings.Lbl_Operator}" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -281,16 +281,16 @@
                         </DataGridTemplateColumn>
                         
                         <!-- 描述 -->
-                        <DataGridTextColumn Header="操作描述" Binding="{Binding Description}" Width="*" />
+                        <DataGridTextColumn Header="{x:Static loc:Strings.Col_OperationDesc}" Binding="{Binding Description}" Width="*" />
                         
                         <!-- IP地址 -->
-                        <DataGridTextColumn Header="IP地址" Binding="{Binding IPAddress}" Width="130" FontFamily="Consolas"/>
+                        <DataGridTextColumn Header="{x:Static loc:Strings.Col_IPAddress}" Binding="{Binding IPAddress}" Width="130" FontFamily="Consolas"/>
                         
                         <!-- 操作 -->
-                        <DataGridTemplateColumn Header="操作" Width="100">
+                        <DataGridTemplateColumn Header="{x:Static loc:Strings.Col_Actions}" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="详情" 
+                                    <Button Content="{x:Static loc:Strings.Btn_Details}" 
                                            Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                            CommandParameter="{Binding}"
                                            Style="{DynamicResource AccentButtonStyle}"
@@ -307,7 +307,7 @@
                     <ui:FontIcon Glyph="&#xE8BC;" FontSize="64" 
                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                                 Opacity="0.3"/>
-                    <TextBlock Text="暂无日志记录" 
+                    <TextBlock Text="{x:Static loc:Strings.Msg_NoLogsAvailable}" 
                               FontSize="16" Margin="0,16,0,0"
                               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
                 </StackPanel>
@@ -329,20 +329,20 @@
                 
                 <!-- 统计信息 -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="共 " Opacity="0.7"/>
+                    <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
                     <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" 
                               Foreground="{StaticResource HeaderGradient}"/>
-                    <TextBlock Text=" 条记录" Opacity="0.7"/>
+                    <TextBlock Text="{x:Static loc:Strings.Lbl_Records}" Opacity="0.7"/>
                 </StackPanel>
                 
                 <!-- 分页控件 -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                     <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding FirstPageCommand}"
-                           ToolTip="首页" Width="36" Height="36" Margin="0,0,8,0"/>
+                           ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Width="36" Height="36" Margin="0,0,8,0"/>
                     <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding PreviousPageCommand}"
-                           ToolTip="上一页" Width="36" Height="36" Margin="0,0,8,0"/>
+                           ToolTip="{x:Static loc:Strings.Btn_Prev}" Width="36" Height="36" Margin="0,0,8,0"/>
                     
                     <Border Background="{DynamicResource SystemControlAltMediumLowBrush}"
                            CornerRadius="4" Padding="12,6">
@@ -355,10 +355,10 @@
                     
                     <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding NextPageCommand}"
-                           ToolTip="下一页" Width="36" Height="36" Margin="8,0,0,0"/>
+                           ToolTip="{x:Static loc:Strings.Btn_Next}" Width="36" Height="36" Margin="8,0,0,0"/>
                     <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding LastPageCommand}"
-                           ToolTip="末页" Width="36" Height="36" Margin="8,0,0,0"/>
+                           ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Width="36" Height="36" Margin="8,0,0,0"/>
                     
                     <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
                              Width="80" Margin="12,0,0,0">
@@ -367,7 +367,7 @@
                         <ComboBoxItem Content="50"/>
                         <ComboBoxItem Content="100"/>
                     </ComboBox>
-                    <TextBlock Text="条/页" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Lbl_PerPage}" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>

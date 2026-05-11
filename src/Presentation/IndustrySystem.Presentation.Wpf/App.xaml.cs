@@ -166,10 +166,12 @@ public partial class App : PrismApplication
         containerRegistry.RegisterDialog<Views.Dialogs.PermissionEditDialog, ViewModels.Dialogs.PermissionEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.RoleEditDialog, ViewModels.Dialogs.RoleEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.MaterialEditDialog, ViewModels.Dialogs.MaterialEditDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ShelfListDialog, ViewModels.Dialogs.ShelfListDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.ShelfEditDialog, ViewModels.Dialogs.ShelfEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.SlotConfigDialog, ViewModels.Dialogs.SlotConfigDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.InventoryEditDialog, ViewModels.Dialogs.InventoryEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.InventoryOutboundDialog, ViewModels.Dialogs.InventoryOutboundDialogViewModel>();
+        containerRegistry.RegisterDialog<Views.Dialogs.ContainerListDialog, ViewModels.Dialogs.ContainerListDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.ContainerEditDialog, ViewModels.Dialogs.ContainerEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.ExperimentTemplateEditDialog, ViewModels.Dialogs.ExperimentTemplateEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.ExperimentGroupEditDialog, ViewModels.Dialogs.ExperimentGroupEditDialogViewModel>();
@@ -221,7 +223,7 @@ public partial class App : PrismApplication
         ViewModelLocationProvider.SetDefaultViewModelFactory((viewModelType) =>
         {
             return Container.Resolve(viewModelType);
-        }); 
+        });
         // Initialize database first, then show login
         Dispatcher.BeginInvoke(new Action(async () =>
         {

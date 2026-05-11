@@ -1,5 +1,4 @@
-﻿ 
-<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.InventoryEditDialog"
+﻿<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.InventoryEditDialog"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -24,194 +23,194 @@
             <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
         </Style>
     </UserControl.Resources>
-         <Border Background="Transparent" Padding="24">
+    <Border Background="Transparent" Padding="24">
         <Border Background="{StaticResource DialogSurfaceBrush}"
                 CornerRadius="18">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.22" Color="#000000" Direction="270"/>
             </Border.Effect>
-    <Grid  >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+            <Grid  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" CornerRadius="18 18 0 0" Background="{StaticResource SuccessBrush}" Padding="24,18">
-            <StackPanel Orientation="Horizontal">
-                <Border Width="40" Height="40" CornerRadius="20"
+                <!-- Header -->
+                <Border Grid.Row="0" CornerRadius="18 18 0 0" Background="{StaticResource SuccessBrush}" Padding="24,18">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="20"
                         Background="#33FFFFFF" Margin="0,0,14,0">
-                    <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" Width="22" Height="22"
+                            <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" Width="22" Height="22"
                                              Foreground="White"
                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="{Binding [Dialog_InventoryEdit_Subtitle], Source={StaticResource Loc}}" FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
                 </Border>
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
-                    <TextBlock Text="{Binding [Dialog_InventoryEdit_Subtitle], Source={StaticResource Loc}}" FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
 
-        <!-- Scrollable Body -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                <!-- Scrollable Body -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
-            <StackPanel Margin="24,10,24,0">
+                    <StackPanel Margin="24,10,24,0">
 
-                <!-- Section 1: 物料选择 -->
-                <materialDesign:Card Padding="3" Margin="0,0,0,14"
+                        <!-- Section 1: 物料选择 -->
+                        <materialDesign:Card Padding="3" Margin="0,0,0,14"
                                      materialDesign:ElevationAssist.Elevation="Dp1"
                                      UniformCornerRadius="8">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                    <materialDesign:PackIcon Kind="InformationOutline" Width="20" Height="20"
                                                      Foreground="{StaticResource PrimaryBrush}"
                                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding [Section_MaterialInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+                                    <TextBlock Text="{Binding [Section_MaterialInfo], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
                                        Foreground="{StaticResource PrimaryBrush}"/>
-                        </StackPanel>
+                                </StackPanel>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                            <ComboBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormCombo}"
+                                    <ComboBox Grid.Row="0" Grid.Column="0" Style="{StaticResource FormCombo}"
                                       ItemsSource="{Binding MaterialOptions}"
                                       SelectedItem="{Binding SelectedMaterial}"
                                       DisplayMemberPath="Name"
                                       materialDesign:HintAssist.Hint="{Binding [Hint_SelectMaterial], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding BatchNo, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="{Binding [Hint_BatchNo], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
                                      Text="{Binding MaterialCode}"
                                      IsReadOnly="True" Opacity="0.7"
                                      materialDesign:HintAssist.Hint="{Binding [Hint_MaterialCodeAuto], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="{Binding [Hint_Unit], Source={StaticResource Loc}}"/>
-                        </Grid>
-                    </StackPanel>
-                </materialDesign:Card>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
 
-                <!-- Section 2: 库存数量 -->
-                <materialDesign:Card Padding="3" Margin="0,0,0,14"
+                        <!-- Section 2: 库存数量 -->
+                        <materialDesign:Card Padding="3" Margin="0,0,0,14"
                                      materialDesign:ElevationAssist.Elevation="Dp1"
                                      UniformCornerRadius="8">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="PackageVariant" Width="20" Height="20"
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                    <materialDesign:PackIcon Kind="PackageVariant" Width="20" Height="20"
                                                      Foreground="#FF8C00"
                                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding [Section_InventoryQuantity], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+                                    <TextBlock Text="{Binding [Section_InventoryQuantity], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
                                        Foreground="#FF8C00"/>
-                        </StackPanel>
+                                </StackPanel>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Column="0" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Column="0" Style="{StaticResource FormField}"
                                      Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="{Binding [Hint_InboundQuantity], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Column="2" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding SafetyStock, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="{Binding [Hint_SafetyStock], Source={StaticResource Loc}}"/>
-                        </Grid>
-                    </StackPanel>
-                </materialDesign:Card>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
 
-                <!-- Section 3: 日期与位置 -->
-                <materialDesign:Card Padding="3" Margin="0,0,0,6"
+                        <!-- Section 3: 日期与位置 -->
+                        <materialDesign:Card Padding="3" Margin="0,0,0,6"
                                      materialDesign:ElevationAssist.Elevation="Dp1"
                                      UniformCornerRadius="8">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
-                            <materialDesign:PackIcon Kind="CalendarClock" Width="20" Height="20"
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                    <materialDesign:PackIcon Kind="CalendarClock" Width="20" Height="20"
                                                      Foreground="#10893E"
                                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding [Section_DateAndLocation], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
+                                    <TextBlock Text="{Binding [Section_DateAndLocation], Source={StaticResource Loc}}" FontSize="15" FontWeight="SemiBold"
                                        Foreground="#10893E"/>
-                        </StackPanel>
+                                </StackPanel>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                            <DatePicker Grid.Row="0" Grid.Column="0"
+                                    <DatePicker Grid.Row="0" Grid.Column="0"
                                         SelectedDate="{Binding InboundDate}"
-                                        materialDesign:HintAssist.Hint="入库日期"
+                                        materialDesign:HintAssist.Hint="{Binding [Hint_InboundDate], Source={StaticResource Loc}}"
                                         materialDesign:HintAssist.IsFloating="True"
                                         Margin="0,0,0,14" FontSize="13"
                                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
 
-                            <DatePicker Grid.Row="0" Grid.Column="2"
+                                    <DatePicker Grid.Row="0" Grid.Column="2"
                                         SelectedDate="{Binding ExpiryDate}"
-                                        materialDesign:HintAssist.Hint="过期日期"
+                                        materialDesign:HintAssist.Hint="{Binding [Hint_ExpiryDate], Source={StaticResource Loc}}"
                                         materialDesign:HintAssist.IsFloating="True"
                                         Margin="0,0,0,14" FontSize="13"
                                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource FormField}"
                                      Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="存放位置"/>
+                                     materialDesign:HintAssist.Hint="{Binding [Hint_Location], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="备注"/>
+                                     materialDesign:HintAssist.Hint="{Binding [Hint_Remark], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="2" Grid.Column="0" Style="{StaticResource FormField}"
                                      Text="{Binding WellRow, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="孔位行号（0=不适用）"/>
+                                     materialDesign:HintAssist.Hint="{Binding [Hint_WellRow], Source={StaticResource Loc}}"/>
 
-                            <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource FormField}"
+                                    <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource FormField}"
                                      Text="{Binding WellColumn, UpdateSourceTrigger=PropertyChanged}"
-                                     materialDesign:HintAssist.Hint="孔位列号（0=不适用）"/>
-                        </Grid>
+                                     materialDesign:HintAssist.Hint="{Binding [Hint_WellColumn], Source={StaticResource Loc}}"/>
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:Card>
                     </StackPanel>
-                </materialDesign:Card>
-            </StackPanel>
-        </ScrollViewer>
+                </ScrollViewer>
 
-        <!-- Footer Actions -->
-        <Border Grid.Row="2" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="24,14">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                <!-- Footer Actions -->
+                <Border Grid.Row="2" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="24,14">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                         Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}"
                         Command="{Binding CancelCommand}"
                         Width="100" Height="36" Margin="0,0,10,0"/>
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
                         Content="{Binding [Btn_Save], Source={StaticResource Loc}}"
                         Command="{Binding SaveCommand}"
                         Background="{StaticResource SuccessBrush}"
                         Foreground="White" BorderBrush="Transparent"
                         Width="100" Height="36"/>
-            </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Border>
-    </Grid>
-</Border>
-</Border>
+    </Border>
 </UserControl>
 

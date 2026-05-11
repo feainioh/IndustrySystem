@@ -1191,6 +1191,18 @@
   <data name="Dialog_SlotConfig_Title" xml:space="preserve">
     <value>槽位配置</value>
   </data>
+  <data name="Dialog_SlotConfig_AllowedContainerTypes" xml:space="preserve">
+    <value>允许的容器类型（不选=不限制）</value>
+  </data>
+  <data name="Hint_SelectContainer" xml:space="preserve">
+    <value>选择容器</value>
+  </data>
+  <data name="Hint_BindInventoryRecord" xml:space="preserve">
+    <value>绑定库存记录</value>
+  </data>
+  <data name="Chk_DisableSlot" xml:space="preserve">
+    <value>禁用此槽位</value>
+  </data>
   <data name="Dialog_Confirm_Title" xml:space="preserve">
     <value>确认</value>
   </data>
@@ -1208,5 +1220,92 @@
   </data>
   <data name="PermGroup_Other" xml:space="preserve">
     <value>其他权限</value>
+  </data>
+  <data name="Col_Timestamp" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="Col_Level" xml:space="preserve">
+    <value>级别</value>
+  </data>
+  <data name="Col_OperationType" xml:space="preserve">
+    <value>操作类型</value>
+  </data>
+  <data name="Col_OperationDesc" xml:space="preserve">
+    <value>操作描述</value>
+  </data>
+  <data name="Col_IPAddress" xml:space="preserve">
+    <value>IP地址</value>
+  </data>
+  <data name="Msg_NoLogsAvailable" xml:space="preserve">
+    <value>暂无日志记录</value>
+  </data>
+  <data name="Lbl_Total" xml:space="preserve">
+    <value>共 </value>
+  </data>
+  <data name="Lbl_Records" xml:space="preserve">
+    <value> 条记录</value>
+  </data>
+  <data name="Tooltip_FirstPage" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Tooltip_LastPage" xml:space="preserve">
+    <value>末页</value>
+  </data>
+  <data name="Lbl_PerPage" xml:space="preserve">
+    <value>条/页</value>
+  </data>
+  <data name="Dialog_ContainerList_Title" xml:space="preserve">
+    <value>容器管理</value>
+  </data>
+  <data name="Lbl_GridSize" xml:space="preserve">
+    <value>行×列</value>
+  </data>
+  <data name="Btn_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Btn_OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Hint_InboundDate" xml:space="preserve">
+    <value>入库日期</value>
+  </data>
+  <data name="Hint_Location" xml:space="preserve">
+    <value>存放位置</value>
+  </data>
+  <data name="Hint_Remark" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="Hint_WellRow" xml:space="preserve">
+    <value>孔位行号（0=不适用）</value>
+  </data>
+  <data name="Hint_WellColumn" xml:space="preserve">
+    <value>孔位列号（0=不适用）</value>
+  </data>
+  <data name="Dialog_InventoryOutbound_Subtitle" xml:space="preserve">
+    <value>选择出库数量</value>
+  </data>
+  <data name="Lbl_Material_Name" xml:space="preserve">
+    <value>物料名称</value>
+  </data>
+  <data name="Lbl_Current_Stock" xml:space="preserve">
+    <value>当前库存</value>
+  </data>
+  <data name="Hint_OutboundQty" xml:space="preserve">
+    <value>出库数量</value>
+  </data>
+  <data name="Dialog_InventoryOutbound_Confirm" xml:space="preserve">
+    <value>确认出库</value>
+  </data>
+  <data name="Dialog_UserEdit_Subtitle" xml:space="preserve">
+    <value>编辑用户基本信息与角色分配</value>
+  </data>
+  <data name="Dialog_RoleEdit_Subtitle" xml:space="preserve">
+    <value>编辑角色信息与权限分配</value>
+  </data>
+  <data name="Dialog_PermissionEdit_Subtitle" xml:space="preserve">
+    <value>编辑权限标识、显示名与分组</value>
+  </data>
+  <data name="Section_PermissionInfo" xml:space="preserve">
+    <value>权限信息</value>
   </data>
 </root>

@@ -19,10 +19,10 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Strings {
+    internal class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IndustrySystem.Presentation.Wpf.Resources.Strings", typeof(Strings).Assembly);
@@ -47,11 +47,11 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         }
         
         /// <summary>
-        ///   重写当前线程的 CurrentUICulture 属性，对
-        ///   使用此强类型资源类的所有资源查找执行重写。
+        ///   使用此强类型资源类，为所有资源查找
+        ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 暂无告警 的本地化字符串。
         /// </summary>
-        public static string Alarm_NoAlarms {
+        internal static string Alarm_NoAlarms {
             get {
                 return ResourceManager.GetString("Alarm_NoAlarms", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 已确认 的本地化字符串。
         /// </summary>
-        public static string Alarm_Status_Acknowledged {
+        internal static string Alarm_Status_Acknowledged {
             get {
                 return ResourceManager.GetString("Alarm_Status_Acknowledged", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 未确认 的本地化字符串。
         /// </summary>
-        public static string Alarm_Status_Unacknowledged {
+        internal static string Alarm_Status_Unacknowledged {
             get {
                 return ResourceManager.GetString("Alarm_Status_Unacknowledged", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 工业系统 的本地化字符串。
         /// </summary>
-        public static string App_Title {
+        internal static string App_Title {
             get {
                 return ResourceManager.GetString("App_Title", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认 的本地化字符串。
         /// </summary>
-        public static string Btn_Acknowledge {
+        internal static string Btn_Acknowledge {
             get {
                 return ResourceManager.GetString("Btn_Acknowledge", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增 的本地化字符串。
         /// </summary>
-        public static string Btn_Add {
+        internal static string Btn_Add {
             get {
                 return ResourceManager.GetString("Btn_Add", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增实验组 的本地化字符串。
         /// </summary>
-        public static string Btn_AddExperimentGroup {
+        internal static string Btn_AddExperimentGroup {
             get {
                 return ResourceManager.GetString("Btn_AddExperimentGroup", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增权限 的本地化字符串。
         /// </summary>
-        public static string Btn_AddPermission {
+        internal static string Btn_AddPermission {
             get {
                 return ResourceManager.GetString("Btn_AddPermission", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增角色 的本地化字符串。
         /// </summary>
-        public static string Btn_AddRole {
+        internal static string Btn_AddRole {
             get {
                 return ResourceManager.GetString("Btn_AddRole", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增模板 的本地化字符串。
         /// </summary>
-        public static string Btn_AddTemplate {
+        internal static string Btn_AddTemplate {
             get {
                 return ResourceManager.GetString("Btn_AddTemplate", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增用户 的本地化字符串。
         /// </summary>
-        public static string Btn_AddUser {
+        internal static string Btn_AddUser {
             get {
                 return ResourceManager.GetString("Btn_AddUser", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 取消 的本地化字符串。
         /// </summary>
-        public static string Btn_Cancel {
+        internal static string Btn_Cancel {
             get {
                 return ResourceManager.GetString("Btn_Cancel", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 关闭 的本地化字符串。
         /// </summary>
-        public static string Btn_Close {
+        internal static string Btn_Close {
             get {
                 return ResourceManager.GetString("Btn_Close", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 容器配置 的本地化字符串。
         /// </summary>
-        public static string Btn_ContainerConfig {
+        internal static string Btn_ContainerConfig {
             get {
                 return ResourceManager.GetString("Btn_ContainerConfig", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除 的本地化字符串。
         /// </summary>
-        public static string Btn_Delete {
+        internal static string Btn_Delete {
             get {
                 return ResourceManager.GetString("Btn_Delete", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 详情 的本地化字符串。
         /// </summary>
-        public static string Btn_Details {
+        internal static string Btn_Details {
             get {
                 return ResourceManager.GetString("Btn_Details", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑 的本地化字符串。
         /// </summary>
-        public static string Btn_Edit {
+        internal static string Btn_Edit {
             get {
                 return ResourceManager.GetString("Btn_Edit", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 导出 的本地化字符串。
         /// </summary>
-        public static string Btn_Export {
+        internal static string Btn_Export {
             get {
                 return ResourceManager.GetString("Btn_Export", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 首页 的本地化字符串。
         /// </summary>
-        public static string Btn_First {
+        internal static string Btn_First {
             get {
                 return ResourceManager.GetString("Btn_First", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确定 的本地化字符串。
         /// </summary>
-        public static string Btn_Go {
+        internal static string Btn_Go {
             get {
                 return ResourceManager.GetString("Btn_Go", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 入库 的本地化字符串。
         /// </summary>
-        public static string Btn_Inbound {
+        internal static string Btn_Inbound {
             get {
                 return ResourceManager.GetString("Btn_Inbound", resourceCulture);
             }
@@ -252,7 +252,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 末页 的本地化字符串。
         /// </summary>
-        public static string Btn_Last {
+        internal static string Btn_Last {
             get {
                 return ResourceManager.GetString("Btn_Last", resourceCulture);
             }
@@ -261,7 +261,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 登录 的本地化字符串。
         /// </summary>
-        public static string Btn_Login {
+        internal static string Btn_Login {
             get {
                 return ResourceManager.GetString("Btn_Login", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新建模板 的本地化字符串。
         /// </summary>
-        public static string Btn_NewTemplate {
+        internal static string Btn_NewTemplate {
             get {
                 return ResourceManager.GetString("Btn_NewTemplate", resourceCulture);
             }
@@ -279,7 +279,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 下一页 的本地化字符串。
         /// </summary>
-        public static string Btn_Next {
+        internal static string Btn_Next {
             get {
                 return ResourceManager.GetString("Btn_Next", resourceCulture);
             }
@@ -288,7 +288,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确定 的本地化字符串。
         /// </summary>
-        public static string Btn_OK {
+        internal static string Btn_OK {
             get {
                 return ResourceManager.GetString("Btn_OK", resourceCulture);
             }
@@ -297,7 +297,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 出库 的本地化字符串。
         /// </summary>
-        public static string Btn_Outbound {
+        internal static string Btn_Outbound {
             get {
                 return ResourceManager.GetString("Btn_Outbound", resourceCulture);
             }
@@ -306,7 +306,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 暂停 的本地化字符串。
         /// </summary>
-        public static string Btn_Pause {
+        internal static string Btn_Pause {
             get {
                 return ResourceManager.GetString("Btn_Pause", resourceCulture);
             }
@@ -315,7 +315,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 上一页 的本地化字符串。
         /// </summary>
-        public static string Btn_Prev {
+        internal static string Btn_Prev {
             get {
                 return ResourceManager.GetString("Btn_Prev", resourceCulture);
             }
@@ -324,7 +324,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 刷新 的本地化字符串。
         /// </summary>
-        public static string Btn_Refresh {
+        internal static string Btn_Refresh {
             get {
                 return ResourceManager.GetString("Btn_Refresh", resourceCulture);
             }
@@ -333,7 +333,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 继续 的本地化字符串。
         /// </summary>
-        public static string Btn_Resume {
+        internal static string Btn_Resume {
             get {
                 return ResourceManager.GetString("Btn_Resume", resourceCulture);
             }
@@ -342,7 +342,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 保存 的本地化字符串。
         /// </summary>
-        public static string Btn_Save {
+        internal static string Btn_Save {
             get {
                 return ResourceManager.GetString("Btn_Save", resourceCulture);
             }
@@ -351,7 +351,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 查询 的本地化字符串。
         /// </summary>
-        public static string Btn_Search {
+        internal static string Btn_Search {
             get {
                 return ResourceManager.GetString("Btn_Search", resourceCulture);
             }
@@ -360,7 +360,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架配置 的本地化字符串。
         /// </summary>
-        public static string Btn_ShelfConfig {
+        internal static string Btn_ShelfConfig {
             get {
                 return ResourceManager.GetString("Btn_ShelfConfig", resourceCulture);
             }
@@ -369,7 +369,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始 的本地化字符串。
         /// </summary>
-        public static string Btn_Start {
+        internal static string Btn_Start {
             get {
                 return ResourceManager.GetString("Btn_Start", resourceCulture);
             }
@@ -378,25 +378,16 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 停止 的本地化字符串。
         /// </summary>
-        public static string Btn_Stop {
+        internal static string Btn_Stop {
             get {
                 return ResourceManager.GetString("Btn_Stop", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 禁用此槽位 的本地化字符串。
-        /// </summary>
-        public static string Chk_DisableSlot {
-            get {
-                return ResourceManager.GetString("Chk_DisableSlot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 操作 的本地化字符串。
         /// </summary>
-        public static string Col_Actions {
+        internal static string Col_Actions {
             get {
                 return ResourceManager.GetString("Col_Actions", resourceCulture);
             }
@@ -405,7 +396,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 批次数 的本地化字符串。
         /// </summary>
-        public static string Col_BatchCount {
+        internal static string Col_BatchCount {
             get {
                 return ResourceManager.GetString("Col_BatchCount", resourceCulture);
             }
@@ -414,7 +405,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 批号 的本地化字符串。
         /// </summary>
-        public static string Col_BatchNo {
+        internal static string Col_BatchNo {
             get {
                 return ResourceManager.GetString("Col_BatchNo", resourceCulture);
             }
@@ -423,7 +414,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 CAS号 的本地化字符串。
         /// </summary>
-        public static string Col_CasNo {
+        internal static string Col_CasNo {
             get {
                 return ResourceManager.GetString("Col_CasNo", resourceCulture);
             }
@@ -432,7 +423,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 类别 的本地化字符串。
         /// </summary>
-        public static string Col_Category {
+        internal static string Col_Category {
             get {
                 return ResourceManager.GetString("Col_Category", resourceCulture);
             }
@@ -441,7 +432,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作 的本地化字符串。
         /// </summary>
-        public static string Col_Common_Actions {
+        internal static string Col_Common_Actions {
             get {
                 return ResourceManager.GetString("Col_Common_Actions", resourceCulture);
             }
@@ -450,7 +441,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 描述 的本地化字符串。
         /// </summary>
-        public static string Col_Common_Description {
+        internal static string Col_Common_Description {
             get {
                 return ResourceManager.GetString("Col_Common_Description", resourceCulture);
             }
@@ -459,7 +450,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 ID 的本地化字符串。
         /// </summary>
-        public static string Col_Common_Id {
+        internal static string Col_Common_Id {
             get {
                 return ResourceManager.GetString("Col_Common_Id", resourceCulture);
             }
@@ -468,7 +459,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 名称 的本地化字符串。
         /// </summary>
-        public static string Col_Common_Name {
+        internal static string Col_Common_Name {
             get {
                 return ResourceManager.GetString("Col_Common_Name", resourceCulture);
             }
@@ -477,7 +468,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 创建时间 的本地化字符串。
         /// </summary>
-        public static string Col_Created {
+        internal static string Col_Created {
             get {
                 return ResourceManager.GetString("Col_Created", resourceCulture);
             }
@@ -486,7 +477,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 创建人 的本地化字符串。
         /// </summary>
-        public static string Col_CreatedBy {
+        internal static string Col_CreatedBy {
             get {
                 return ResourceManager.GetString("Col_CreatedBy", resourceCulture);
             }
@@ -495,7 +486,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 描述 的本地化字符串。
         /// </summary>
-        public static string Col_Description {
+        internal static string Col_Description {
             get {
                 return ResourceManager.GetString("Col_Description", resourceCulture);
             }
@@ -504,7 +495,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 显示名 的本地化字符串。
         /// </summary>
-        public static string Col_DisplayName {
+        internal static string Col_DisplayName {
             get {
                 return ResourceManager.GetString("Col_DisplayName", resourceCulture);
             }
@@ -513,7 +504,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 启用状态 的本地化字符串。
         /// </summary>
-        public static string Col_EnabledStatus {
+        internal static string Col_EnabledStatus {
             get {
                 return ResourceManager.GetString("Col_EnabledStatus", resourceCulture);
             }
@@ -522,7 +513,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 有效期 的本地化字符串。
         /// </summary>
-        public static string Col_ExpiryDate {
+        internal static string Col_ExpiryDate {
             get {
                 return ResourceManager.GetString("Col_ExpiryDate", resourceCulture);
             }
@@ -531,7 +522,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 分组 的本地化字符串。
         /// </summary>
-        public static string Col_Group {
+        internal static string Col_Group {
             get {
                 return ResourceManager.GetString("Col_Group", resourceCulture);
             }
@@ -540,7 +531,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组名称 的本地化字符串。
         /// </summary>
-        public static string Col_GroupName {
+        internal static string Col_GroupName {
             get {
                 return ResourceManager.GetString("Col_GroupName", resourceCulture);
             }
@@ -549,7 +540,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 安全等级 的本地化字符串。
         /// </summary>
-        public static string Col_HazardLevel {
+        internal static string Col_HazardLevel {
             get {
                 return ResourceManager.GetString("Col_HazardLevel", resourceCulture);
             }
@@ -558,7 +549,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存 / 安全库存 的本地化字符串。
         /// </summary>
-        public static string Col_Inventory_SafetyStock {
+        internal static string Col_Inventory_SafetyStock {
             get {
                 return ResourceManager.GetString("Col_Inventory_SafetyStock", resourceCulture);
             }
@@ -567,7 +558,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 IP地址 的本地化字符串。
         /// </summary>
-        public static string Col_IPAddress {
+        internal static string Col_IPAddress {
             get {
                 return ResourceManager.GetString("Col_IPAddress", resourceCulture);
             }
@@ -576,7 +567,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 最近入库 的本地化字符串。
         /// </summary>
-        public static string Col_LastInboundDate {
+        internal static string Col_LastInboundDate {
             get {
                 return ResourceManager.GetString("Col_LastInboundDate", resourceCulture);
             }
@@ -585,7 +576,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 级别 的本地化字符串。
         /// </summary>
-        public static string Col_Level {
+        internal static string Col_Level {
             get {
                 return ResourceManager.GetString("Col_Level", resourceCulture);
             }
@@ -594,7 +585,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 位置 的本地化字符串。
         /// </summary>
-        public static string Col_Location {
+        internal static string Col_Location {
             get {
                 return ResourceManager.GetString("Col_Location", resourceCulture);
             }
@@ -603,7 +594,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 生产日期 的本地化字符串。
         /// </summary>
-        public static string Col_ManufactureDate {
+        internal static string Col_ManufactureDate {
             get {
                 return ResourceManager.GetString("Col_ManufactureDate", resourceCulture);
             }
@@ -612,7 +603,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料 的本地化字符串。
         /// </summary>
-        public static string Col_Material {
+        internal static string Col_Material {
             get {
                 return ResourceManager.GetString("Col_Material", resourceCulture);
             }
@@ -621,7 +612,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料类型 的本地化字符串。
         /// </summary>
-        public static string Col_MaterialType {
+        internal static string Col_MaterialType {
             get {
                 return ResourceManager.GetString("Col_MaterialType", resourceCulture);
             }
@@ -630,7 +621,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 分子式 的本地化字符串。
         /// </summary>
-        public static string Col_MolecularFormula {
+        internal static string Col_MolecularFormula {
             get {
                 return ResourceManager.GetString("Col_MolecularFormula", resourceCulture);
             }
@@ -639,7 +630,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作描述 的本地化字符串。
         /// </summary>
-        public static string Col_OperationDesc {
+        internal static string Col_OperationDesc {
             get {
                 return ResourceManager.GetString("Col_OperationDesc", resourceCulture);
             }
@@ -648,7 +639,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作类型 的本地化字符串。
         /// </summary>
-        public static string Col_OperationType {
+        internal static string Col_OperationType {
             get {
                 return ResourceManager.GetString("Col_OperationType", resourceCulture);
             }
@@ -657,7 +648,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限 的本地化字符串。
         /// </summary>
-        public static string Col_Permission {
+        internal static string Col_Permission {
             get {
                 return ResourceManager.GetString("Col_Permission", resourceCulture);
             }
@@ -666,7 +657,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限显示名 的本地化字符串。
         /// </summary>
-        public static string Col_Permission_DisplayName {
+        internal static string Col_Permission_DisplayName {
             get {
                 return ResourceManager.GetString("Col_Permission_DisplayName", resourceCulture);
             }
@@ -675,7 +666,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限名称 的本地化字符串。
         /// </summary>
-        public static string Col_Permission_Name {
+        internal static string Col_Permission_Name {
             get {
                 return ResourceManager.GetString("Col_Permission_Name", resourceCulture);
             }
@@ -684,7 +675,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 纯度 的本地化字符串。
         /// </summary>
-        public static string Col_Purity {
+        internal static string Col_Purity {
             get {
                 return ResourceManager.GetString("Col_Purity", resourceCulture);
             }
@@ -693,7 +684,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色 的本地化字符串。
         /// </summary>
-        public static string Col_Role {
+        internal static string Col_Role {
             get {
                 return ResourceManager.GetString("Col_Role", resourceCulture);
             }
@@ -702,7 +693,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 默认 的本地化字符串。
         /// </summary>
-        public static string Col_Role_Default {
+        internal static string Col_Role_Default {
             get {
                 return ResourceManager.GetString("Col_Role_Default", resourceCulture);
             }
@@ -711,7 +702,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限 的本地化字符串。
         /// </summary>
-        public static string Col_Role_Permissions {
+        internal static string Col_Role_Permissions {
             get {
                 return ResourceManager.GetString("Col_Role_Permissions", resourceCulture);
             }
@@ -720,7 +711,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 状态 的本地化字符串。
         /// </summary>
-        public static string Col_Status {
+        internal static string Col_Status {
             get {
                 return ResourceManager.GetString("Col_Status", resourceCulture);
             }
@@ -729,7 +720,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验步骤摘要 的本地化字符串。
         /// </summary>
-        public static string Col_StepSummary {
+        internal static string Col_StepSummary {
             get {
                 return ResourceManager.GetString("Col_StepSummary", resourceCulture);
             }
@@ -738,7 +729,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 存储条件 的本地化字符串。
         /// </summary>
-        public static string Col_StorageCondition {
+        internal static string Col_StorageCondition {
             get {
                 return ResourceManager.GetString("Col_StorageCondition", resourceCulture);
             }
@@ -747,7 +738,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 供应商 的本地化字符串。
         /// </summary>
-        public static string Col_Supplier {
+        internal static string Col_Supplier {
             get {
                 return ResourceManager.GetString("Col_Supplier", resourceCulture);
             }
@@ -756,7 +747,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 时间 的本地化字符串。
         /// </summary>
-        public static string Col_Timestamp {
+        internal static string Col_Timestamp {
             get {
                 return ResourceManager.GetString("Col_Timestamp", resourceCulture);
             }
@@ -765,7 +756,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 总量 的本地化字符串。
         /// </summary>
-        public static string Col_TotalQuantity {
+        internal static string Col_TotalQuantity {
             get {
                 return ResourceManager.GetString("Col_TotalQuantity", resourceCulture);
             }
@@ -774,7 +765,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 类型 的本地化字符串。
         /// </summary>
-        public static string Col_Type {
+        internal static string Col_Type {
             get {
                 return ResourceManager.GetString("Col_Type", resourceCulture);
             }
@@ -783,7 +774,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 单位 的本地化字符串。
         /// </summary>
-        public static string Col_Unit {
+        internal static string Col_Unit {
             get {
                 return ResourceManager.GetString("Col_Unit", resourceCulture);
             }
@@ -792,7 +783,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 显示名 的本地化字符串。
         /// </summary>
-        public static string Col_User_DisplayName {
+        internal static string Col_User_DisplayName {
             get {
                 return ResourceManager.GetString("Col_User_DisplayName", resourceCulture);
             }
@@ -801,7 +792,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 启用 的本地化字符串。
         /// </summary>
-        public static string Col_User_IsActive {
+        internal static string Col_User_IsActive {
             get {
                 return ResourceManager.GetString("Col_User_IsActive", resourceCulture);
             }
@@ -810,7 +801,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色 的本地化字符串。
         /// </summary>
-        public static string Col_User_Roles {
+        internal static string Col_User_Roles {
             get {
                 return ResourceManager.GetString("Col_User_Roles", resourceCulture);
             }
@@ -819,7 +810,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 用户名 的本地化字符串。
         /// </summary>
-        public static string Col_User_UserName {
+        internal static string Col_User_UserName {
             get {
                 return ResourceManager.GetString("Col_User_UserName", resourceCulture);
             }
@@ -828,7 +819,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 系统操作记录 的本地化字符串。
         /// </summary>
-        public static string Desc_OperationLogs {
+        internal static string Desc_OperationLogs {
             get {
                 return ResourceManager.GetString("Desc_OperationLogs", resourceCulture);
             }
@@ -837,7 +828,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认 的本地化字符串。
         /// </summary>
-        public static string Dialog_Confirm_Title {
+        internal static string Dialog_Confirm_Title {
             get {
                 return ResourceManager.GetString("Dialog_Confirm_Title", resourceCulture);
             }
@@ -846,7 +837,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 容器信息 的本地化字符串。
         /// </summary>
-        public static string Dialog_ContainerEdit_Title {
+        internal static string Dialog_ContainerEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_ContainerEdit_Title", resourceCulture);
             }
@@ -855,7 +846,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 容器管理 的本地化字符串。
         /// </summary>
-        public static string Dialog_ContainerList_Title {
+        internal static string Dialog_ContainerList_Title {
             get {
                 return ResourceManager.GetString("Dialog_ContainerList_Title", resourceCulture);
             }
@@ -864,7 +855,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_ExperimentEdit_Title {
+        internal static string Dialog_ExperimentEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_ExperimentEdit_Title", resourceCulture);
             }
@@ -873,7 +864,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 配置实验组编号、步骤和启用状态 的本地化字符串。
         /// </summary>
-        public static string Dialog_ExperimentGroupEdit_Subtitle {
+        internal static string Dialog_ExperimentGroupEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_ExperimentGroupEdit_Subtitle", resourceCulture);
             }
@@ -882,7 +873,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_ExperimentGroupEdit_Title {
+        internal static string Dialog_ExperimentGroupEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_ExperimentGroupEdit_Title", resourceCulture);
             }
@@ -891,7 +882,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验模板编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_ExperimentTemplateEdit_Title {
+        internal static string Dialog_ExperimentTemplateEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_ExperimentTemplateEdit_Title", resourceCulture);
             }
@@ -900,7 +891,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 填写物料库存批次信息 的本地化字符串。
         /// </summary>
-        public static string Dialog_InventoryEdit_Subtitle {
+        internal static string Dialog_InventoryEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_InventoryEdit_Subtitle", resourceCulture);
             }
@@ -909,7 +900,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存记录 的本地化字符串。
         /// </summary>
-        public static string Dialog_InventoryEdit_Title {
+        internal static string Dialog_InventoryEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_InventoryEdit_Title", resourceCulture);
             }
@@ -918,7 +909,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认出库 的本地化字符串。
         /// </summary>
-        public static string Dialog_InventoryOutbound_Confirm {
+        internal static string Dialog_InventoryOutbound_Confirm {
             get {
                 return ResourceManager.GetString("Dialog_InventoryOutbound_Confirm", resourceCulture);
             }
@@ -927,7 +918,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 选择出库数量 的本地化字符串。
         /// </summary>
-        public static string Dialog_InventoryOutbound_Subtitle {
+        internal static string Dialog_InventoryOutbound_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_InventoryOutbound_Subtitle", resourceCulture);
             }
@@ -936,7 +927,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 出库 的本地化字符串。
         /// </summary>
-        public static string Dialog_InventoryOutbound_Title {
+        internal static string Dialog_InventoryOutbound_Title {
             get {
                 return ResourceManager.GetString("Dialog_InventoryOutbound_Title", resourceCulture);
             }
@@ -945,7 +936,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 填写物料基本信息、理化参数与安全来源 的本地化字符串。
         /// </summary>
-        public static string Dialog_MaterialEdit_Subtitle {
+        internal static string Dialog_MaterialEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_MaterialEdit_Subtitle", resourceCulture);
             }
@@ -954,7 +945,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑物料 的本地化字符串。
         /// </summary>
-        public static string Dialog_MaterialEdit_Title {
+        internal static string Dialog_MaterialEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_MaterialEdit_Title", resourceCulture);
             }
@@ -963,7 +954,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑权限标识、显示名与分组 的本地化字符串。
         /// </summary>
-        public static string Dialog_PermissionEdit_Subtitle {
+        internal static string Dialog_PermissionEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_PermissionEdit_Subtitle", resourceCulture);
             }
@@ -972,7 +963,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_PermissionEdit_Title {
+        internal static string Dialog_PermissionEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_PermissionEdit_Title", resourceCulture);
             }
@@ -981,7 +972,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑角色信息与权限分配 的本地化字符串。
         /// </summary>
-        public static string Dialog_RoleEdit_Subtitle {
+        internal static string Dialog_RoleEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_RoleEdit_Subtitle", resourceCulture);
             }
@@ -990,7 +981,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_RoleEdit_Title {
+        internal static string Dialog_RoleEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_RoleEdit_Title", resourceCulture);
             }
@@ -999,7 +990,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 允许的容器类型（多选） 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_AllowedContainerTypes {
+        internal static string Dialog_ShelfEdit_AllowedContainerTypes {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_AllowedContainerTypes", resourceCulture);
             }
@@ -1008,7 +999,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 清除所有限制 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_ClearAllRestrictions {
+        internal static string Dialog_ShelfEdit_ClearAllRestrictions {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_ClearAllRestrictions", resourceCulture);
             }
@@ -1017,7 +1008,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 列数 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Hint_Columns {
+        internal static string Dialog_ShelfEdit_Hint_Columns {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Hint_Columns", resourceCulture);
             }
@@ -1026,7 +1017,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 描述 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Hint_Description {
+        internal static string Dialog_ShelfEdit_Hint_Description {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Hint_Description", resourceCulture);
             }
@@ -1035,7 +1026,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 行数 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Hint_Rows {
+        internal static string Dialog_ShelfEdit_Hint_Rows {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Hint_Rows", resourceCulture);
             }
@@ -1044,7 +1035,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架编码 * 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Hint_ShelfCode {
+        internal static string Dialog_ShelfEdit_Hint_ShelfCode {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Hint_ShelfCode", resourceCulture);
             }
@@ -1053,7 +1044,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架名称 * 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Hint_ShelfName {
+        internal static string Dialog_ShelfEdit_Hint_ShelfName {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Hint_ShelfName", resourceCulture);
             }
@@ -1062,7 +1053,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 槽位布局预览 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_SlotLayoutPreview {
+        internal static string Dialog_ShelfEdit_SlotLayoutPreview {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_SlotLayoutPreview", resourceCulture);
             }
@@ -1071,7 +1062,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 提示：点击槽位切换启用/禁用状态，右键勾选允许的容器类型 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Tip {
+        internal static string Dialog_ShelfEdit_Tip {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Tip", resourceCulture);
             }
@@ -1080,25 +1071,16 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架配置 的本地化字符串。
         /// </summary>
-        public static string Dialog_ShelfEdit_Title {
+        internal static string Dialog_ShelfEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_ShelfEdit_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 允许的容器类型（不选=不限制） 的本地化字符串。
-        /// </summary>
-        public static string Dialog_SlotConfig_AllowedContainerTypes {
-            get {
-                return ResourceManager.GetString("Dialog_SlotConfig_AllowedContainerTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 槽位配置 的本地化字符串。
         /// </summary>
-        public static string Dialog_SlotConfig_Title {
+        internal static string Dialog_SlotConfig_Title {
             get {
                 return ResourceManager.GetString("Dialog_SlotConfig_Title", resourceCulture);
             }
@@ -1107,7 +1089,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑用户基本信息与角色分配 的本地化字符串。
         /// </summary>
-        public static string Dialog_UserEdit_Subtitle {
+        internal static string Dialog_UserEdit_Subtitle {
             get {
                 return ResourceManager.GetString("Dialog_UserEdit_Subtitle", resourceCulture);
             }
@@ -1116,7 +1098,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 用户编辑 的本地化字符串。
         /// </summary>
-        public static string Dialog_UserEdit_Title {
+        internal static string Dialog_UserEdit_Title {
             get {
                 return ResourceManager.GetString("Dialog_UserEdit_Title", resourceCulture);
             }
@@ -1125,7 +1107,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 启用 的本地化字符串。
         /// </summary>
-        public static string Field_Common_Active {
+        internal static string Field_Common_Active {
             get {
                 return ResourceManager.GetString("Field_Common_Active", resourceCulture);
             }
@@ -1134,7 +1116,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 描述 的本地化字符串。
         /// </summary>
-        public static string Field_Common_Description {
+        internal static string Field_Common_Description {
             get {
                 return ResourceManager.GetString("Field_Common_Description", resourceCulture);
             }
@@ -1143,7 +1125,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 显示名 的本地化字符串。
         /// </summary>
-        public static string Field_Common_DisplayName {
+        internal static string Field_Common_DisplayName {
             get {
                 return ResourceManager.GetString("Field_Common_DisplayName", resourceCulture);
             }
@@ -1152,7 +1134,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 名称 的本地化字符串。
         /// </summary>
-        public static string Field_Common_Name {
+        internal static string Field_Common_Name {
             get {
                 return ResourceManager.GetString("Field_Common_Name", resourceCulture);
             }
@@ -1161,7 +1143,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 创建时间 的本地化字符串。
         /// </summary>
-        public static string Field_CreatedAt {
+        internal static string Field_CreatedAt {
             get {
                 return ResourceManager.GetString("Field_CreatedAt", resourceCulture);
             }
@@ -1170,7 +1152,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组Id 的本地化字符串。
         /// </summary>
-        public static string Field_Experiment_GroupId {
+        internal static string Field_Experiment_GroupId {
             get {
                 return ResourceManager.GetString("Field_Experiment_GroupId", resourceCulture);
             }
@@ -1179,7 +1161,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 模板Id 的本地化字符串。
         /// </summary>
-        public static string Field_Experiment_TemplateId {
+        internal static string Field_Experiment_TemplateId {
             get {
                 return ResourceManager.GetString("Field_Experiment_TemplateId", resourceCulture);
             }
@@ -1188,7 +1170,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验ID 的本地化字符串。
         /// </summary>
-        public static string Field_ExperimentId {
+        internal static string Field_ExperimentId {
             get {
                 return ResourceManager.GetString("Field_ExperimentId", resourceCulture);
             }
@@ -1197,7 +1179,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验名称 的本地化字符串。
         /// </summary>
-        public static string Field_ExperimentName {
+        internal static string Field_ExperimentName {
             get {
                 return ResourceManager.GetString("Field_ExperimentName", resourceCulture);
             }
@@ -1206,7 +1188,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验类型 的本地化字符串。
         /// </summary>
-        public static string Field_ExperimentType {
+        internal static string Field_ExperimentType {
             get {
                 return ResourceManager.GetString("Field_ExperimentType", resourceCulture);
             }
@@ -1215,7 +1197,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 是否模板 的本地化字符串。
         /// </summary>
-        public static string Field_IsTemplate {
+        internal static string Field_IsTemplate {
             get {
                 return ResourceManager.GetString("Field_IsTemplate", resourceCulture);
             }
@@ -1224,7 +1206,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 关联参数 的本地化字符串。
         /// </summary>
-        public static string Field_LinkedParameter {
+        internal static string Field_LinkedParameter {
             get {
                 return ResourceManager.GetString("Field_LinkedParameter", resourceCulture);
             }
@@ -1233,7 +1215,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 数量 的本地化字符串。
         /// </summary>
-        public static string Field_Material_Qty {
+        internal static string Field_Material_Qty {
             get {
                 return ResourceManager.GetString("Field_Material_Qty", resourceCulture);
             }
@@ -1242,7 +1224,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 默认 的本地化字符串。
         /// </summary>
-        public static string Field_Role_Default {
+        internal static string Field_Role_Default {
             get {
                 return ResourceManager.GetString("Field_Role_Default", resourceCulture);
             }
@@ -1251,7 +1233,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 显示名 的本地化字符串。
         /// </summary>
-        public static string Field_User_DisplayName {
+        internal static string Field_User_DisplayName {
             get {
                 return ResourceManager.GetString("Field_User_DisplayName", resourceCulture);
             }
@@ -1260,7 +1242,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 密码 的本地化字符串。
         /// </summary>
-        public static string Field_User_Password {
+        internal static string Field_User_Password {
             get {
                 return ResourceManager.GetString("Field_User_Password", resourceCulture);
             }
@@ -1269,7 +1251,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 用户名 的本地化字符串。
         /// </summary>
-        public static string Field_User_UserName {
+        internal static string Field_User_UserName {
             get {
                 return ResourceManager.GetString("Field_User_UserName", resourceCulture);
             }
@@ -1278,7 +1260,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 全部级别 的本地化字符串。
         /// </summary>
-        public static string Hint_AllLevels {
+        internal static string Hint_AllLevels {
             get {
                 return ResourceManager.GetString("Hint_AllLevels", resourceCulture);
             }
@@ -1287,7 +1269,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 全部类型 的本地化字符串。
         /// </summary>
-        public static string Hint_AllTypes {
+        internal static string Hint_AllTypes {
             get {
                 return ResourceManager.GetString("Hint_AllTypes", resourceCulture);
             }
@@ -1296,25 +1278,16 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 批号 * 的本地化字符串。
         /// </summary>
-        public static string Hint_BatchNo {
+        internal static string Hint_BatchNo {
             get {
                 return ResourceManager.GetString("Hint_BatchNo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 绑定库存记录 的本地化字符串。
-        /// </summary>
-        public static string Hint_BindInventoryRecord {
-            get {
-                return ResourceManager.GetString("Hint_BindInventoryRecord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 品牌 的本地化字符串。
         /// </summary>
-        public static string Hint_Brand {
+        internal static string Hint_Brand {
             get {
                 return ResourceManager.GetString("Hint_Brand", resourceCulture);
             }
@@ -1323,7 +1296,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 CAS号 的本地化字符串。
         /// </summary>
-        public static string Hint_CasNo {
+        internal static string Hint_CasNo {
             get {
                 return ResourceManager.GetString("Hint_CasNo", resourceCulture);
             }
@@ -1332,7 +1305,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 创建人 的本地化字符串。
         /// </summary>
-        public static string Hint_CreatedBy {
+        internal static string Hint_CreatedBy {
             get {
                 return ResourceManager.GetString("Hint_CreatedBy", resourceCulture);
             }
@@ -1341,7 +1314,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 密度 的本地化字符串。
         /// </summary>
-        public static string Hint_Density {
+        internal static string Hint_Density {
             get {
                 return ResourceManager.GetString("Hint_Density", resourceCulture);
             }
@@ -1350,7 +1323,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 结束日期 的本地化字符串。
         /// </summary>
-        public static string Hint_EndDate {
+        internal static string Hint_EndDate {
             get {
                 return ResourceManager.GetString("Hint_EndDate", resourceCulture);
             }
@@ -1359,7 +1332,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 请输入用户名 的本地化字符串。
         /// </summary>
-        public static string Hint_EnterUserName {
+        internal static string Hint_EnterUserName {
             get {
                 return ResourceManager.GetString("Hint_EnterUserName", resourceCulture);
             }
@@ -1368,7 +1341,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组编号（留空自动生成，如 EG202601001） 的本地化字符串。
         /// </summary>
-        public static string Hint_ExperimentGroupCode {
+        internal static string Hint_ExperimentGroupCode {
             get {
                 return ResourceManager.GetString("Hint_ExperimentGroupCode", resourceCulture);
             }
@@ -1377,7 +1350,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组名称 * 的本地化字符串。
         /// </summary>
-        public static string Hint_ExperimentGroupName {
+        internal static string Hint_ExperimentGroupName {
             get {
                 return ResourceManager.GetString("Hint_ExperimentGroupName", resourceCulture);
             }
@@ -1386,7 +1359,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 有效期至 的本地化字符串。
         /// </summary>
-        public static string Hint_ExpiryDate {
+        internal static string Hint_ExpiryDate {
             get {
                 return ResourceManager.GetString("Hint_ExpiryDate", resourceCulture);
             }
@@ -1395,7 +1368,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 全称 的本地化字符串。
         /// </summary>
-        public static string Hint_FullName {
+        internal static string Hint_FullName {
             get {
                 return ResourceManager.GetString("Hint_FullName", resourceCulture);
             }
@@ -1404,7 +1377,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 安全等级 的本地化字符串。
         /// </summary>
-        public static string Hint_HazardLevel {
+        internal static string Hint_HazardLevel {
             get {
                 return ResourceManager.GetString("Hint_HazardLevel", resourceCulture);
             }
@@ -1413,7 +1386,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 入库日期 的本地化字符串。
         /// </summary>
-        public static string Hint_InboundDate {
+        internal static string Hint_InboundDate {
             get {
                 return ResourceManager.GetString("Hint_InboundDate", resourceCulture);
             }
@@ -1422,7 +1395,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 入库数量 的本地化字符串。
         /// </summary>
-        public static string Hint_InboundQuantity {
+        internal static string Hint_InboundQuantity {
             get {
                 return ResourceManager.GetString("Hint_InboundQuantity", resourceCulture);
             }
@@ -1431,7 +1404,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 存放位置 的本地化字符串。
         /// </summary>
-        public static string Hint_Location {
+        internal static string Hint_Location {
             get {
                 return ResourceManager.GetString("Hint_Location", resourceCulture);
             }
@@ -1440,7 +1413,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货号 的本地化字符串。
         /// </summary>
-        public static string Hint_LotNumber {
+        internal static string Hint_LotNumber {
             get {
                 return ResourceManager.GetString("Hint_LotNumber", resourceCulture);
             }
@@ -1449,7 +1422,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 生产日期 的本地化字符串。
         /// </summary>
-        public static string Hint_ManufactureDate {
+        internal static string Hint_ManufactureDate {
             get {
                 return ResourceManager.GetString("Hint_ManufactureDate", resourceCulture);
             }
@@ -1458,7 +1431,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料类别 的本地化字符串。
         /// </summary>
-        public static string Hint_MaterialCategory {
+        internal static string Hint_MaterialCategory {
             get {
                 return ResourceManager.GetString("Hint_MaterialCategory", resourceCulture);
             }
@@ -1467,7 +1440,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料编码 * 的本地化字符串。
         /// </summary>
-        public static string Hint_MaterialCode {
+        internal static string Hint_MaterialCode {
             get {
                 return ResourceManager.GetString("Hint_MaterialCode", resourceCulture);
             }
@@ -1476,7 +1449,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料编码（自动填充） 的本地化字符串。
         /// </summary>
-        public static string Hint_MaterialCodeAuto {
+        internal static string Hint_MaterialCodeAuto {
             get {
                 return ResourceManager.GetString("Hint_MaterialCodeAuto", resourceCulture);
             }
@@ -1485,7 +1458,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料类型 的本地化字符串。
         /// </summary>
-        public static string Hint_MaterialType {
+        internal static string Hint_MaterialType {
             get {
                 return ResourceManager.GetString("Hint_MaterialType", resourceCulture);
             }
@@ -1494,7 +1467,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 分子式 的本地化字符串。
         /// </summary>
-        public static string Hint_MolecularFormula {
+        internal static string Hint_MolecularFormula {
             get {
                 return ResourceManager.GetString("Hint_MolecularFormula", resourceCulture);
             }
@@ -1503,7 +1476,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 分子量 的本地化字符串。
         /// </summary>
-        public static string Hint_MolecularWeight {
+        internal static string Hint_MolecularWeight {
             get {
                 return ResourceManager.GetString("Hint_MolecularWeight", resourceCulture);
             }
@@ -1512,7 +1485,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 名称 * 的本地化字符串。
         /// </summary>
-        public static string Hint_Name {
+        internal static string Hint_Name {
             get {
                 return ResourceManager.GetString("Hint_Name", resourceCulture);
             }
@@ -1521,7 +1494,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 出库数量 的本地化字符串。
         /// </summary>
-        public static string Hint_OutboundQty {
+        internal static string Hint_OutboundQty {
             get {
                 return ResourceManager.GetString("Hint_OutboundQty", resourceCulture);
             }
@@ -1530,7 +1503,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 纯度 的本地化字符串。
         /// </summary>
-        public static string Hint_Purity {
+        internal static string Hint_Purity {
             get {
                 return ResourceManager.GetString("Hint_Purity", resourceCulture);
             }
@@ -1539,7 +1512,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 备注 的本地化字符串。
         /// </summary>
-        public static string Hint_Remark {
+        internal static string Hint_Remark {
             get {
                 return ResourceManager.GetString("Hint_Remark", resourceCulture);
             }
@@ -1548,7 +1521,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 备注 的本地化字符串。
         /// </summary>
-        public static string Hint_Remarks {
+        internal static string Hint_Remarks {
             get {
                 return ResourceManager.GetString("Hint_Remarks", resourceCulture);
             }
@@ -1557,7 +1530,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色名称 的本地化字符串。
         /// </summary>
-        public static string Hint_Role_Name {
+        internal static string Hint_Role_Name {
             get {
                 return ResourceManager.GetString("Hint_Role_Name", resourceCulture);
             }
@@ -1566,7 +1539,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 安全注意事项 的本地化字符串。
         /// </summary>
-        public static string Hint_SafetyNotes {
+        internal static string Hint_SafetyNotes {
             get {
                 return ResourceManager.GetString("Hint_SafetyNotes", resourceCulture);
             }
@@ -1575,7 +1548,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 安全库存 的本地化字符串。
         /// </summary>
-        public static string Hint_SafetyStock {
+        internal static string Hint_SafetyStock {
             get {
                 return ResourceManager.GetString("Hint_SafetyStock", resourceCulture);
             }
@@ -1584,7 +1557,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索编号 / 名称 / 创建人 的本地化字符串。
         /// </summary>
-        public static string Hint_Search_ExperimentGroup {
+        internal static string Hint_Search_ExperimentGroup {
             get {
                 return ResourceManager.GetString("Hint_Search_ExperimentGroup", resourceCulture);
             }
@@ -1593,7 +1566,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索物料名称 / 编码 / 批号 / 位置... 的本地化字符串。
         /// </summary>
-        public static string Hint_Search_Inventory {
+        internal static string Hint_Search_Inventory {
             get {
                 return ResourceManager.GetString("Hint_Search_Inventory", resourceCulture);
             }
@@ -1602,25 +1575,16 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索名称 / CAS / 品牌 / 供应商... 的本地化字符串。
         /// </summary>
-        public static string Hint_Search_Material {
+        internal static string Hint_Search_Material {
             get {
                 return ResourceManager.GetString("Hint_Search_Material", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 选择容器 的本地化字符串。
-        /// </summary>
-        public static string Hint_SelectContainer {
-            get {
-                return ResourceManager.GetString("Hint_SelectContainer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 选择物料 * 的本地化字符串。
         /// </summary>
-        public static string Hint_SelectMaterial {
+        internal static string Hint_SelectMaterial {
             get {
                 return ResourceManager.GetString("Hint_SelectMaterial", resourceCulture);
             }
@@ -1629,7 +1593,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 选择货架 的本地化字符串。
         /// </summary>
-        public static string Hint_SelectShelf {
+        internal static string Hint_SelectShelf {
             get {
                 return ResourceManager.GetString("Hint_SelectShelf", resourceCulture);
             }
@@ -1638,7 +1602,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架 的本地化字符串。
         /// </summary>
-        public static string Hint_Shelf {
+        internal static string Hint_Shelf {
             get {
                 return ResourceManager.GetString("Hint_Shelf", resourceCulture);
             }
@@ -1647,7 +1611,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架列 的本地化字符串。
         /// </summary>
-        public static string Hint_ShelfColumn {
+        internal static string Hint_ShelfColumn {
             get {
                 return ResourceManager.GetString("Hint_ShelfColumn", resourceCulture);
             }
@@ -1656,7 +1620,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架行 的本地化字符串。
         /// </summary>
-        public static string Hint_ShelfRow {
+        internal static string Hint_ShelfRow {
             get {
                 return ResourceManager.GetString("Hint_ShelfRow", resourceCulture);
             }
@@ -1665,7 +1629,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始日期 的本地化字符串。
         /// </summary>
-        public static string Hint_StartDate {
+        internal static string Hint_StartDate {
             get {
                 return ResourceManager.GetString("Hint_StartDate", resourceCulture);
             }
@@ -1674,7 +1638,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 存储条件 的本地化字符串。
         /// </summary>
-        public static string Hint_StorageCondition {
+        internal static string Hint_StorageCondition {
             get {
                 return ResourceManager.GetString("Hint_StorageCondition", resourceCulture);
             }
@@ -1683,7 +1647,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 供应商 的本地化字符串。
         /// </summary>
-        public static string Hint_Supplier {
+        internal static string Hint_Supplier {
             get {
                 return ResourceManager.GetString("Hint_Supplier", resourceCulture);
             }
@@ -1692,7 +1656,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 模板描述 的本地化字符串。
         /// </summary>
-        public static string Hint_Template_Description {
+        internal static string Hint_Template_Description {
             get {
                 return ResourceManager.GetString("Hint_Template_Description", resourceCulture);
             }
@@ -1701,7 +1665,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 模板名称 的本地化字符串。
         /// </summary>
-        public static string Hint_Template_Name {
+        internal static string Hint_Template_Name {
             get {
                 return ResourceManager.GetString("Hint_Template_Name", resourceCulture);
             }
@@ -1710,7 +1674,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 计量单位 的本地化字符串。
         /// </summary>
-        public static string Hint_Unit {
+        internal static string Hint_Unit {
             get {
                 return ResourceManager.GetString("Hint_Unit", resourceCulture);
             }
@@ -1719,7 +1683,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 孔位列号（0=不适用） 的本地化字符串。
         /// </summary>
-        public static string Hint_WellColumn {
+        internal static string Hint_WellColumn {
             get {
                 return ResourceManager.GetString("Hint_WellColumn", resourceCulture);
             }
@@ -1728,7 +1692,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 孔位行号（0=不适用） 的本地化字符串。
         /// </summary>
-        public static string Hint_WellRow {
+        internal static string Hint_WellRow {
             get {
                 return ResourceManager.GetString("Hint_WellRow", resourceCulture);
             }
@@ -1737,7 +1701,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 列 的本地化字符串。
         /// </summary>
-        public static string Label_Columns {
+        internal static string Label_Columns {
             get {
                 return ResourceManager.GetString("Label_Columns", resourceCulture);
             }
@@ -1746,7 +1710,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 当前货架 的本地化字符串。
         /// </summary>
-        public static string Label_CurrentShelf {
+        internal static string Label_CurrentShelf {
             get {
                 return ResourceManager.GetString("Label_CurrentShelf", resourceCulture);
             }
@@ -1755,7 +1719,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 启用状态 的本地化字符串。
         /// </summary>
-        public static string Label_EnabledStatus {
+        internal static string Label_EnabledStatus {
             get {
                 return ResourceManager.GetString("Label_EnabledStatus", resourceCulture);
             }
@@ -1764,7 +1728,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验步骤（多选，关联实验ID） 的本地化字符串。
         /// </summary>
-        public static string Label_ExperimentSteps {
+        internal static string Label_ExperimentSteps {
             get {
                 return ResourceManager.GetString("Label_ExperimentSteps", resourceCulture);
             }
@@ -1773,7 +1737,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 行 的本地化字符串。
         /// </summary>
-        public static string Label_Rows {
+        internal static string Label_Rows {
             get {
                 return ResourceManager.GetString("Label_Rows", resourceCulture);
             }
@@ -1782,7 +1746,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 汇总视图 的本地化字符串。
         /// </summary>
-        public static string Label_SummaryView {
+        internal static string Label_SummaryView {
             get {
                 return ResourceManager.GetString("Label_SummaryView", resourceCulture);
             }
@@ -1791,7 +1755,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 当前库存 的本地化字符串。
         /// </summary>
-        public static string Lbl_Current_Stock {
+        internal static string Lbl_Current_Stock {
             get {
                 return ResourceManager.GetString("Lbl_Current_Stock", resourceCulture);
             }
@@ -1800,7 +1764,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 行×列 的本地化字符串。
         /// </summary>
-        public static string Lbl_GridSize {
+        internal static string Lbl_GridSize {
             get {
                 return ResourceManager.GetString("Lbl_GridSize", resourceCulture);
             }
@@ -1809,7 +1773,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 跳转 的本地化字符串。
         /// </summary>
-        public static string Lbl_JumpTo {
+        internal static string Lbl_JumpTo {
             get {
                 return ResourceManager.GetString("Lbl_JumpTo", resourceCulture);
             }
@@ -1818,7 +1782,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 日志级别 的本地化字符串。
         /// </summary>
-        public static string Lbl_LogLevel {
+        internal static string Lbl_LogLevel {
             get {
                 return ResourceManager.GetString("Lbl_LogLevel", resourceCulture);
             }
@@ -1827,7 +1791,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料名称 的本地化字符串。
         /// </summary>
-        public static string Lbl_Material_Name {
+        internal static string Lbl_Material_Name {
             get {
                 return ResourceManager.GetString("Lbl_Material_Name", resourceCulture);
             }
@@ -1836,7 +1800,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 未登录 的本地化字符串。
         /// </summary>
-        public static string Lbl_NotLoggedIn {
+        internal static string Lbl_NotLoggedIn {
             get {
                 return ResourceManager.GetString("Lbl_NotLoggedIn", resourceCulture);
             }
@@ -1845,7 +1809,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作类型 的本地化字符串。
         /// </summary>
-        public static string Lbl_OperationType {
+        internal static string Lbl_OperationType {
             get {
                 return ResourceManager.GetString("Lbl_OperationType", resourceCulture);
             }
@@ -1854,7 +1818,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作员 的本地化字符串。
         /// </summary>
-        public static string Lbl_Operator {
+        internal static string Lbl_Operator {
             get {
                 return ResourceManager.GetString("Lbl_Operator", resourceCulture);
             }
@@ -1863,7 +1827,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 第 {0}/{1} 页 (共 {2} 条) 的本地化字符串。
         /// </summary>
-        public static string Lbl_PageInfoFormat {
+        internal static string Lbl_PageInfoFormat {
             get {
                 return ResourceManager.GetString("Lbl_PageInfoFormat", resourceCulture);
             }
@@ -1872,7 +1836,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 每页 的本地化字符串。
         /// </summary>
-        public static string Lbl_PageSize {
+        internal static string Lbl_PageSize {
             get {
                 return ResourceManager.GetString("Lbl_PageSize", resourceCulture);
             }
@@ -1881,7 +1845,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 条/页 的本地化字符串。
         /// </summary>
-        public static string Lbl_PerPage {
+        internal static string Lbl_PerPage {
             get {
                 return ResourceManager.GetString("Lbl_PerPage", resourceCulture);
             }
@@ -1890,7 +1854,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似  条记录 的本地化字符串。
         /// </summary>
-        public static string Lbl_Records {
+        internal static string Lbl_Records {
             get {
                 return ResourceManager.GetString("Lbl_Records", resourceCulture);
             }
@@ -1899,7 +1863,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 时间范围 的本地化字符串。
         /// </summary>
-        public static string Lbl_TimeRange {
+        internal static string Lbl_TimeRange {
             get {
                 return ResourceManager.GetString("Lbl_TimeRange", resourceCulture);
             }
@@ -1908,7 +1872,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 至 的本地化字符串。
         /// </summary>
-        public static string Lbl_To {
+        internal static string Lbl_To {
             get {
                 return ResourceManager.GetString("Lbl_To", resourceCulture);
             }
@@ -1917,7 +1881,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 共  的本地化字符串。
         /// </summary>
-        public static string Lbl_Total {
+        internal static string Lbl_Total {
             get {
                 return ResourceManager.GetString("Lbl_Total", resourceCulture);
             }
@@ -1926,7 +1890,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 总页数 的本地化字符串。
         /// </summary>
-        public static string Lbl_TotalPages {
+        internal static string Lbl_TotalPages {
             get {
                 return ResourceManager.GetString("Lbl_TotalPages", resourceCulture);
             }
@@ -1935,7 +1899,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 总记录 的本地化字符串。
         /// </summary>
-        public static string Lbl_TotalRecords {
+        internal static string Lbl_TotalRecords {
             get {
                 return ResourceManager.GetString("Lbl_TotalRecords", resourceCulture);
             }
@@ -1944,7 +1908,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 已禁用 的本地化字符串。
         /// </summary>
-        public static string Legend_Disabled {
+        internal static string Legend_Disabled {
             get {
                 return ResourceManager.GetString("Legend_Disabled", resourceCulture);
             }
@@ -1953,7 +1917,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 空位 的本地化字符串。
         /// </summary>
-        public static string Legend_EmptySlot {
+        internal static string Legend_EmptySlot {
             get {
                 return ResourceManager.GetString("Legend_EmptySlot", resourceCulture);
             }
@@ -1962,7 +1926,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 有容器 的本地化字符串。
         /// </summary>
-        public static string Legend_HasContainer {
+        internal static string Legend_HasContainer {
             get {
                 return ResourceManager.GetString("Legend_HasContainer", resourceCulture);
             }
@@ -1971,7 +1935,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 有库存 的本地化字符串。
         /// </summary>
-        public static string Legend_HasInventory {
+        internal static string Legend_HasInventory {
             get {
                 return ResourceManager.GetString("Legend_HasInventory", resourceCulture);
             }
@@ -1980,7 +1944,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 列 的本地化字符串。
         /// </summary>
-        public static string Location_Column {
+        internal static string Location_Column {
             get {
                 return ResourceManager.GetString("Location_Column", resourceCulture);
             }
@@ -1989,7 +1953,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 行 的本地化字符串。
         /// </summary>
-        public static string Location_Row {
+        internal static string Location_Row {
             get {
                 return ResourceManager.GetString("Location_Row", resourceCulture);
             }
@@ -1998,7 +1962,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认告警：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_Alarm_Acknowledge {
+        internal static string Log_Alarm_Acknowledge {
             get {
                 return ResourceManager.GetString("Log_Alarm_Acknowledge", resourceCulture);
             }
@@ -2007,7 +1971,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 告警数据加载完成，共 {0} 条 的本地化字符串。
         /// </summary>
-        public static string Log_Alarm_LoadComplete {
+        internal static string Log_Alarm_LoadComplete {
             get {
                 return ResourceManager.GetString("Log_Alarm_LoadComplete", resourceCulture);
             }
@@ -2016,7 +1980,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始加载告警数据 的本地化字符串。
         /// </summary>
-        public static string Log_Alarm_LoadStart {
+        internal static string Log_Alarm_LoadStart {
             get {
                 return ResourceManager.GetString("Log_Alarm_LoadStart", resourceCulture);
             }
@@ -2025,7 +1989,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 告警视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_AlarmViewModel_Initialized {
+        internal static string Log_AlarmViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_AlarmViewModel_Initialized", resourceCulture);
             }
@@ -2034,7 +1998,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验历史加载完成，共 {0} 条 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentHistory_LoadComplete {
+        internal static string Log_ExperimentHistory_LoadComplete {
             get {
                 return ResourceManager.GetString("Log_ExperimentHistory_LoadComplete", resourceCulture);
             }
@@ -2043,7 +2007,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始加载实验历史 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentHistory_LoadStart {
+        internal static string Log_ExperimentHistory_LoadStart {
             get {
                 return ResourceManager.GetString("Log_ExperimentHistory_LoadStart", resourceCulture);
             }
@@ -2052,7 +2016,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验历史视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentHistoryViewModel_Initialized {
+        internal static string Log_ExperimentHistoryViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_ExperimentHistoryViewModel_Initialized", resourceCulture);
             }
@@ -2061,7 +2025,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除实验：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_Experiments_Delete {
+        internal static string Log_Experiments_Delete {
             get {
                 return ResourceManager.GetString("Log_Experiments_Delete", resourceCulture);
             }
@@ -2070,7 +2034,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验数据加载完成，共 {0} 条 的本地化字符串。
         /// </summary>
-        public static string Log_Experiments_LoadComplete {
+        internal static string Log_Experiments_LoadComplete {
             get {
                 return ResourceManager.GetString("Log_Experiments_LoadComplete", resourceCulture);
             }
@@ -2079,7 +2043,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始加载实验数据 的本地化字符串。
         /// </summary>
-        public static string Log_Experiments_LoadStart {
+        internal static string Log_Experiments_LoadStart {
             get {
                 return ResourceManager.GetString("Log_Experiments_LoadStart", resourceCulture);
             }
@@ -2088,7 +2052,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentsViewModel_Initialized {
+        internal static string Log_ExperimentsViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_ExperimentsViewModel_Initialized", resourceCulture);
             }
@@ -2097,7 +2061,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 新增实验模板：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentTemplate_Add {
+        internal static string Log_ExperimentTemplate_Add {
             get {
                 return ResourceManager.GetString("Log_ExperimentTemplate_Add", resourceCulture);
             }
@@ -2106,7 +2070,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除实验模板：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentTemplate_Delete {
+        internal static string Log_ExperimentTemplate_Delete {
             get {
                 return ResourceManager.GetString("Log_ExperimentTemplate_Delete", resourceCulture);
             }
@@ -2115,7 +2079,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验模板加载完成，共 {0} 条 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentTemplate_LoadComplete {
+        internal static string Log_ExperimentTemplate_LoadComplete {
             get {
                 return ResourceManager.GetString("Log_ExperimentTemplate_LoadComplete", resourceCulture);
             }
@@ -2124,7 +2088,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始加载实验模板 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentTemplate_LoadStart {
+        internal static string Log_ExperimentTemplate_LoadStart {
             get {
                 return ResourceManager.GetString("Log_ExperimentTemplate_LoadStart", resourceCulture);
             }
@@ -2133,7 +2097,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验模板视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_ExperimentTemplateViewModel_Initialized {
+        internal static string Log_ExperimentTemplateViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_ExperimentTemplateViewModel_Initialized", resourceCulture);
             }
@@ -2142,7 +2106,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 硬件连接成功 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_Connected {
+        internal static string Log_HardwareDebug_Connected {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_Connected", resourceCulture);
             }
@@ -2151,7 +2115,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 硬件连接失败：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_ConnectFailed {
+        internal static string Log_HardwareDebug_ConnectFailed {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_ConnectFailed", resourceCulture);
             }
@@ -2160,7 +2124,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 正在连接硬件… 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_Connecting {
+        internal static string Log_HardwareDebug_Connecting {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_Connecting", resourceCulture);
             }
@@ -2169,7 +2133,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 硬件已断开连接 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_Disconnected {
+        internal static string Log_HardwareDebug_Disconnected {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_Disconnected", resourceCulture);
             }
@@ -2178,7 +2142,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 正在断开硬件连接… 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_Disconnecting {
+        internal static string Log_HardwareDebug_Disconnecting {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_Disconnecting", resourceCulture);
             }
@@ -2187,7 +2151,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 读取失败：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_ReadFailed {
+        internal static string Log_HardwareDebug_ReadFailed {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_ReadFailed", resourceCulture);
             }
@@ -2196,7 +2160,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 读取寄存器：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_Reading {
+        internal static string Log_HardwareDebug_Reading {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_Reading", resourceCulture);
             }
@@ -2205,7 +2169,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 读取成功：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_ReadSuccess {
+        internal static string Log_HardwareDebug_ReadSuccess {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_ReadSuccess", resourceCulture);
             }
@@ -2214,7 +2178,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 写入失败：值为空 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteEmpty {
+        internal static string Log_HardwareDebug_WriteEmpty {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteEmpty", resourceCulture);
             }
@@ -2223,7 +2187,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 写入失败：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteFailed {
+        internal static string Log_HardwareDebug_WriteFailed {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteFailed", resourceCulture);
             }
@@ -2232,7 +2196,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 写入格式错误 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteFormatError {
+        internal static string Log_HardwareDebug_WriteFormatError {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteFormatError", resourceCulture);
             }
@@ -2241,7 +2205,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 批量写入成功，数量：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteMultiSuccess {
+        internal static string Log_HardwareDebug_WriteMultiSuccess {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteMultiSuccess", resourceCulture);
             }
@@ -2250,7 +2214,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 单点写入成功：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteSingleSuccess {
+        internal static string Log_HardwareDebug_WriteSingleSuccess {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteSingleSuccess", resourceCulture);
             }
@@ -2259,7 +2223,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 写入值格式错误：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebug_WriteValueFormatError {
+        internal static string Log_HardwareDebug_WriteValueFormatError {
             get {
                 return ResourceManager.GetString("Log_HardwareDebug_WriteValueFormatError", resourceCulture);
             }
@@ -2268,7 +2232,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 硬件调试视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_HardwareDebugViewModel_Initialized {
+        internal static string Log_HardwareDebugViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_HardwareDebugViewModel_Initialized", resourceCulture);
             }
@@ -2277,7 +2241,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 入库：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_Inventory_In {
+        internal static string Log_Inventory_In {
             get {
                 return ResourceManager.GetString("Log_Inventory_In", resourceCulture);
             }
@@ -2286,7 +2250,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存加载完成，共 {0} 条 的本地化字符串。
         /// </summary>
-        public static string Log_Inventory_LoadComplete {
+        internal static string Log_Inventory_LoadComplete {
             get {
                 return ResourceManager.GetString("Log_Inventory_LoadComplete", resourceCulture);
             }
@@ -2295,7 +2259,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始加载库存 的本地化字符串。
         /// </summary>
-        public static string Log_Inventory_LoadStart {
+        internal static string Log_Inventory_LoadStart {
             get {
                 return ResourceManager.GetString("Log_Inventory_LoadStart", resourceCulture);
             }
@@ -2304,7 +2268,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 出库：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_Inventory_Out {
+        internal static string Log_Inventory_Out {
             get {
                 return ResourceManager.GetString("Log_Inventory_Out", resourceCulture);
             }
@@ -2313,7 +2277,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_InventoryViewModel_Initialized {
+        internal static string Log_InventoryViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_InventoryViewModel_Initialized", resourceCulture);
             }
@@ -2322,7 +2286,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 加载可运行实验列表 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperiment_LoadExperiments {
+        internal static string Log_RunExperiment_LoadExperiments {
             get {
                 return ResourceManager.GetString("Log_RunExperiment_LoadExperiments", resourceCulture);
             }
@@ -2331,7 +2295,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 暂停实验 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperiment_Pause {
+        internal static string Log_RunExperiment_Pause {
             get {
                 return ResourceManager.GetString("Log_RunExperiment_Pause", resourceCulture);
             }
@@ -2340,7 +2304,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 继续实验 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperiment_Resume {
+        internal static string Log_RunExperiment_Resume {
             get {
                 return ResourceManager.GetString("Log_RunExperiment_Resume", resourceCulture);
             }
@@ -2349,7 +2313,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 开始运行实验：{0} 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperiment_Start {
+        internal static string Log_RunExperiment_Start {
             get {
                 return ResourceManager.GetString("Log_RunExperiment_Start", resourceCulture);
             }
@@ -2358,7 +2322,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 停止实验 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperiment_Stop {
+        internal static string Log_RunExperiment_Stop {
             get {
                 return ResourceManager.GetString("Log_RunExperiment_Stop", resourceCulture);
             }
@@ -2367,7 +2331,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 运行实验视图模型已初始化 的本地化字符串。
         /// </summary>
-        public static string Log_RunExperimentViewModel_Initialized {
+        internal static string Log_RunExperimentViewModel_Initialized {
             get {
                 return ResourceManager.GetString("Log_RunExperimentViewModel_Initialized", resourceCulture);
             }
@@ -2376,7 +2340,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 快速登录 的本地化字符串。
         /// </summary>
-        public static string Login_Quick {
+        internal static string Login_Quick {
             get {
                 return ResourceManager.GetString("Login_Quick", resourceCulture);
             }
@@ -2385,7 +2349,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 记住账号 的本地化字符串。
         /// </summary>
-        public static string Login_Remember {
+        internal static string Login_Remember {
             get {
                 return ResourceManager.GetString("Login_Remember", resourceCulture);
             }
@@ -2394,7 +2358,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 气体 的本地化字符串。
         /// </summary>
-        public static string Material_Category_Gas {
+        internal static string Material_Category_Gas {
             get {
                 return ResourceManager.GetString("Material_Category_Gas", resourceCulture);
             }
@@ -2403,7 +2367,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 液体 的本地化字符串。
         /// </summary>
-        public static string Material_Category_Liquid {
+        internal static string Material_Category_Liquid {
             get {
                 return ResourceManager.GetString("Material_Category_Liquid", resourceCulture);
             }
@@ -2412,7 +2376,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 固体 的本地化字符串。
         /// </summary>
-        public static string Material_Category_Solid {
+        internal static string Material_Category_Solid {
             get {
                 return ResourceManager.GetString("Material_Category_Solid", resourceCulture);
             }
@@ -2421,7 +2385,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 高危险 的本地化字符串。
         /// </summary>
-        public static string Material_Hazard_High {
+        internal static string Material_Hazard_High {
             get {
                 return ResourceManager.GetString("Material_Hazard_High", resourceCulture);
             }
@@ -2430,7 +2394,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 低危 的本地化字符串。
         /// </summary>
-        public static string Material_Hazard_Low {
+        internal static string Material_Hazard_Low {
             get {
                 return ResourceManager.GetString("Material_Hazard_Low", resourceCulture);
             }
@@ -2439,7 +2403,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 中危险 的本地化字符串。
         /// </summary>
-        public static string Material_Hazard_Medium {
+        internal static string Material_Hazard_Medium {
             get {
                 return ResourceManager.GetString("Material_Hazard_Medium", resourceCulture);
             }
@@ -2448,7 +2412,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 无危险 的本地化字符串。
         /// </summary>
-        public static string Material_Hazard_None {
+        internal static string Material_Hazard_None {
             get {
                 return ResourceManager.GetString("Material_Hazard_None", resourceCulture);
             }
@@ -2457,7 +2421,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 避光 的本地化字符串。
         /// </summary>
-        public static string Material_Storage_LightProtected {
+        internal static string Material_Storage_LightProtected {
             get {
                 return ResourceManager.GetString("Material_Storage_LightProtected", resourceCulture);
             }
@@ -2466,7 +2430,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 冷藏 的本地化字符串。
         /// </summary>
-        public static string Material_Storage_Refrigerated {
+        internal static string Material_Storage_Refrigerated {
             get {
                 return ResourceManager.GetString("Material_Storage_Refrigerated", resourceCulture);
             }
@@ -2475,7 +2439,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 常温 的本地化字符串。
         /// </summary>
-        public static string Material_Storage_RoomTemperature {
+        internal static string Material_Storage_RoomTemperature {
             get {
                 return ResourceManager.GetString("Material_Storage_RoomTemperature", resourceCulture);
             }
@@ -2484,7 +2448,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 耗材 的本地化字符串。
         /// </summary>
-        public static string Material_Type_Consumable {
+        internal static string Material_Type_Consumable {
             get {
                 return ResourceManager.GetString("Material_Type_Consumable", resourceCulture);
             }
@@ -2493,7 +2457,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 中间产物 的本地化字符串。
         /// </summary>
-        public static string Material_Type_Intermediate {
+        internal static string Material_Type_Intermediate {
             get {
                 return ResourceManager.GetString("Material_Type_Intermediate", resourceCulture);
             }
@@ -2502,7 +2466,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 其他 的本地化字符串。
         /// </summary>
-        public static string Material_Type_Other {
+        internal static string Material_Type_Other {
             get {
                 return ResourceManager.GetString("Material_Type_Other", resourceCulture);
             }
@@ -2511,7 +2475,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 产物 的本地化字符串。
         /// </summary>
-        public static string Material_Type_Product {
+        internal static string Material_Type_Product {
             get {
                 return ResourceManager.GetString("Material_Type_Product", resourceCulture);
             }
@@ -2520,7 +2484,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 原料 的本地化字符串。
         /// </summary>
-        public static string Material_Type_RawMaterial {
+        internal static string Material_Type_RawMaterial {
             get {
                 return ResourceManager.GetString("Material_Type_RawMaterial", resourceCulture);
             }
@@ -2529,7 +2493,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 添加成功 的本地化字符串。
         /// </summary>
-        public static string Msg_AddSuccess {
+        internal static string Msg_AddSuccess {
             get {
                 return ResourceManager.GetString("Msg_AddSuccess", resourceCulture);
             }
@@ -2538,7 +2502,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 无法删除默认项 的本地化字符串。
         /// </summary>
-        public static string Msg_CannotDeleteDefault {
+        internal static string Msg_CannotDeleteDefault {
             get {
                 return ResourceManager.GetString("Msg_CannotDeleteDefault", resourceCulture);
             }
@@ -2547,7 +2511,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认删除？ 的本地化字符串。
         /// </summary>
-        public static string Msg_ConfirmDelete {
+        internal static string Msg_ConfirmDelete {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDelete", resourceCulture);
             }
@@ -2556,7 +2520,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确定删除此权限？ 的本地化字符串。
         /// </summary>
-        public static string Msg_ConfirmDeletePermission {
+        internal static string Msg_ConfirmDeletePermission {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDeletePermission", resourceCulture);
             }
@@ -2565,7 +2529,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确定删除此角色？ 的本地化字符串。
         /// </summary>
-        public static string Msg_ConfirmDeleteRole {
+        internal static string Msg_ConfirmDeleteRole {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDeleteRole", resourceCulture);
             }
@@ -2574,7 +2538,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确认删除该实验模板？ 的本地化字符串。
         /// </summary>
-        public static string Msg_ConfirmDeleteTemplate {
+        internal static string Msg_ConfirmDeleteTemplate {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDeleteTemplate", resourceCulture);
             }
@@ -2583,7 +2547,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 确定删除此用户？ 的本地化字符串。
         /// </summary>
-        public static string Msg_ConfirmDeleteUser {
+        internal static string Msg_ConfirmDeleteUser {
             get {
                 return ResourceManager.GetString("Msg_ConfirmDeleteUser", resourceCulture);
             }
@@ -2592,7 +2556,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除成功 的本地化字符串。
         /// </summary>
-        public static string Msg_DeleteSuccess {
+        internal static string Msg_DeleteSuccess {
             get {
                 return ResourceManager.GetString("Msg_DeleteSuccess", resourceCulture);
             }
@@ -2601,7 +2565,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 错误 的本地化字符串。
         /// </summary>
-        public static string Msg_ErrorTitle {
+        internal static string Msg_ErrorTitle {
             get {
                 return ResourceManager.GetString("Msg_ErrorTitle", resourceCulture);
             }
@@ -2610,7 +2574,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 加载失败 的本地化字符串。
         /// </summary>
-        public static string Msg_LoadFailed {
+        internal static string Msg_LoadFailed {
             get {
                 return ResourceManager.GetString("Msg_LoadFailed", resourceCulture);
             }
@@ -2619,7 +2583,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 暂无日志记录 的本地化字符串。
         /// </summary>
-        public static string Msg_NoLogsAvailable {
+        internal static string Msg_NoLogsAvailable {
             get {
                 return ResourceManager.GetString("Msg_NoLogsAvailable", resourceCulture);
             }
@@ -2628,7 +2592,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 成功 的本地化字符串。
         /// </summary>
-        public static string Msg_SuccessTitle {
+        internal static string Msg_SuccessTitle {
             get {
                 return ResourceManager.GetString("Msg_SuccessTitle", resourceCulture);
             }
@@ -2637,7 +2601,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 更新成功 的本地化字符串。
         /// </summary>
-        public static string Msg_UpdateSuccess {
+        internal static string Msg_UpdateSuccess {
             get {
                 return ResourceManager.GetString("Msg_UpdateSuccess", resourceCulture);
             }
@@ -2646,7 +2610,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 请输入权限名称 的本地化字符串。
         /// </summary>
-        public static string Msg_ValidationPermissionName {
+        internal static string Msg_ValidationPermissionName {
             get {
                 return ResourceManager.GetString("Msg_ValidationPermissionName", resourceCulture);
             }
@@ -2655,7 +2619,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 请输入角色名称 的本地化字符串。
         /// </summary>
-        public static string Msg_ValidationRoleName {
+        internal static string Msg_ValidationRoleName {
             get {
                 return ResourceManager.GetString("Msg_ValidationRoleName", resourceCulture);
             }
@@ -2664,7 +2628,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 验证错误 的本地化字符串。
         /// </summary>
-        public static string Msg_ValidationTitle {
+        internal static string Msg_ValidationTitle {
             get {
                 return ResourceManager.GetString("Msg_ValidationTitle", resourceCulture);
             }
@@ -2673,7 +2637,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 请输入用户名 的本地化字符串。
         /// </summary>
-        public static string Msg_ValidationUserName {
+        internal static string Msg_ValidationUserName {
             get {
                 return ResourceManager.GetString("Msg_ValidationUserName", resourceCulture);
             }
@@ -2682,7 +2646,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 警告 的本地化字符串。
         /// </summary>
-        public static string Msg_WarningTitle {
+        internal static string Msg_WarningTitle {
             get {
                 return ResourceManager.GetString("Msg_WarningTitle", resourceCulture);
             }
@@ -2691,7 +2655,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 告警监控 的本地化字符串。
         /// </summary>
-        public static string Nav_Alarm {
+        internal static string Nav_Alarm {
             get {
                 return ResourceManager.GetString("Nav_Alarm", resourceCulture);
             }
@@ -2700,7 +2664,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 数据管理 的本地化字符串。
         /// </summary>
-        public static string Nav_DataManagement {
+        internal static string Nav_DataManagement {
             get {
                 return ResourceManager.GetString("Nav_DataManagement", resourceCulture);
             }
@@ -2709,7 +2673,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 设备管理 的本地化字符串。
         /// </summary>
-        public static string Nav_DeviceManagement {
+        internal static string Nav_DeviceManagement {
             get {
                 return ResourceManager.GetString("Nav_DeviceManagement", resourceCulture);
             }
@@ -2718,7 +2682,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 设备参数 的本地化字符串。
         /// </summary>
-        public static string Nav_DeviceParams {
+        internal static string Nav_DeviceParams {
             get {
                 return ResourceManager.GetString("Nav_DeviceParams", resourceCulture);
             }
@@ -2727,7 +2691,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验配置 的本地化字符串。
         /// </summary>
-        public static string Nav_ExperimentConfig {
+        internal static string Nav_ExperimentConfig {
             get {
                 return ResourceManager.GetString("Nav_ExperimentConfig", resourceCulture);
             }
@@ -2736,7 +2700,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组配置 的本地化字符串。
         /// </summary>
-        public static string Nav_ExperimentGroupConfig {
+        internal static string Nav_ExperimentGroupConfig {
             get {
                 return ResourceManager.GetString("Nav_ExperimentGroupConfig", resourceCulture);
             }
@@ -2745,7 +2709,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组模板 的本地化字符串。
         /// </summary>
-        public static string Nav_ExperimentGroupTemplates {
+        internal static string Nav_ExperimentGroupTemplates {
             get {
                 return ResourceManager.GetString("Nav_ExperimentGroupTemplates", resourceCulture);
             }
@@ -2754,7 +2718,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验历史 的本地化字符串。
         /// </summary>
-        public static string Nav_ExperimentHistory {
+        internal static string Nav_ExperimentHistory {
             get {
                 return ResourceManager.GetString("Nav_ExperimentHistory", resourceCulture);
             }
@@ -2763,7 +2727,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验管理 的本地化字符串。
         /// </summary>
-        public static string Nav_ExperimentManagement {
+        internal static string Nav_ExperimentManagement {
             get {
                 return ResourceManager.GetString("Nav_ExperimentManagement", resourceCulture);
             }
@@ -2772,7 +2736,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存 的本地化字符串。
         /// </summary>
-        public static string Nav_Inventory {
+        internal static string Nav_Inventory {
             get {
                 return ResourceManager.GetString("Nav_Inventory", resourceCulture);
             }
@@ -2781,7 +2745,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 出入库记录 的本地化字符串。
         /// </summary>
-        public static string Nav_InventoryRecords {
+        internal static string Nav_InventoryRecords {
             get {
                 return ResourceManager.GetString("Nav_InventoryRecords", resourceCulture);
             }
@@ -2790,7 +2754,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 手动调试 的本地化字符串。
         /// </summary>
-        public static string Nav_ManualDebug {
+        internal static string Nav_ManualDebug {
             get {
                 return ResourceManager.GetString("Nav_ManualDebug", resourceCulture);
             }
@@ -2799,7 +2763,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料信息 的本地化字符串。
         /// </summary>
-        public static string Nav_MaterialInfo {
+        internal static string Nav_MaterialInfo {
             get {
                 return ResourceManager.GetString("Nav_MaterialInfo", resourceCulture);
             }
@@ -2808,7 +2772,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料管理 的本地化字符串。
         /// </summary>
-        public static string Nav_MaterialManagement {
+        internal static string Nav_MaterialManagement {
             get {
                 return ResourceManager.GetString("Nav_MaterialManagement", resourceCulture);
             }
@@ -2817,7 +2781,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 操作记录 的本地化字符串。
         /// </summary>
-        public static string Nav_OperationLogs {
+        internal static string Nav_OperationLogs {
             get {
                 return ResourceManager.GetString("Nav_OperationLogs", resourceCulture);
             }
@@ -2826,7 +2790,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 外设调试 的本地化字符串。
         /// </summary>
-        public static string Nav_PeripheralDebug {
+        internal static string Nav_PeripheralDebug {
             get {
                 return ResourceManager.GetString("Nav_PeripheralDebug", resourceCulture);
             }
@@ -2835,7 +2799,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限管理 的本地化字符串。
         /// </summary>
-        public static string Nav_Permissions {
+        internal static string Nav_Permissions {
             get {
                 return ResourceManager.GetString("Nav_Permissions", resourceCulture);
             }
@@ -2844,7 +2808,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实时数据 的本地化字符串。
         /// </summary>
-        public static string Nav_RealtimeData {
+        internal static string Nav_RealtimeData {
             get {
                 return ResourceManager.GetString("Nav_RealtimeData", resourceCulture);
             }
@@ -2853,7 +2817,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色管理 的本地化字符串。
         /// </summary>
-        public static string Nav_Roles {
+        internal static string Nav_Roles {
             get {
                 return ResourceManager.GetString("Nav_Roles", resourceCulture);
             }
@@ -2862,7 +2826,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 运行看板 的本地化字符串。
         /// </summary>
-        public static string Nav_RunDashboard {
+        internal static string Nav_RunDashboard {
             get {
                 return ResourceManager.GetString("Nav_RunDashboard", resourceCulture);
             }
@@ -2871,7 +2835,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 运行实验 的本地化字符串。
         /// </summary>
-        public static string Nav_RunExperiment {
+        internal static string Nav_RunExperiment {
             get {
                 return ResourceManager.GetString("Nav_RunExperiment", resourceCulture);
             }
@@ -2880,7 +2844,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架信息 的本地化字符串。
         /// </summary>
-        public static string Nav_ShelfInfo {
+        internal static string Nav_ShelfInfo {
             get {
                 return ResourceManager.GetString("Nav_ShelfInfo", resourceCulture);
             }
@@ -2889,7 +2853,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 系统管理 的本地化字符串。
         /// </summary>
-        public static string Nav_SystemManagement {
+        internal static string Nav_SystemManagement {
             get {
                 return ResourceManager.GetString("Nav_SystemManagement", resourceCulture);
             }
@@ -2898,7 +2862,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验模板 的本地化字符串。
         /// </summary>
-        public static string Nav_Templates {
+        internal static string Nav_Templates {
             get {
                 return ResourceManager.GetString("Nav_Templates", resourceCulture);
             }
@@ -2907,7 +2871,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 用户管理 的本地化字符串。
         /// </summary>
-        public static string Nav_Users {
+        internal static string Nav_Users {
             get {
                 return ResourceManager.GetString("Nav_Users", resourceCulture);
             }
@@ -2916,7 +2880,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验配置: 工作进行中... 的本地化字符串。
         /// </summary>
-        public static string Page_ExperimentConfig_Title {
+        internal static string Page_ExperimentConfig_Title {
             get {
                 return ResourceManager.GetString("Page_ExperimentConfig_Title", resourceCulture);
             }
@@ -2925,7 +2889,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 维护实验组及其关联实验步骤 的本地化字符串。
         /// </summary>
-        public static string Page_ExperimentGroups_Subtitle {
+        internal static string Page_ExperimentGroups_Subtitle {
             get {
                 return ResourceManager.GetString("Page_ExperimentGroups_Subtitle", resourceCulture);
             }
@@ -2934,7 +2898,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组管理 的本地化字符串。
         /// </summary>
-        public static string Page_ExperimentGroups_Title {
+        internal static string Page_ExperimentGroups_Title {
             get {
                 return ResourceManager.GetString("Page_ExperimentGroups_Title", resourceCulture);
             }
@@ -2943,7 +2907,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验历史 (占位) 的本地化字符串。
         /// </summary>
-        public static string Page_ExperimentHistory_Title {
+        internal static string Page_ExperimentHistory_Title {
             get {
                 return ResourceManager.GetString("Page_ExperimentHistory_Title", resourceCulture);
             }
@@ -2952,7 +2916,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料库存管理 · 入库 / 出库 / 批次追踪 的本地化字符串。
         /// </summary>
-        public static string Page_Inventory_Subtitle {
+        internal static string Page_Inventory_Subtitle {
             get {
                 return ResourceManager.GetString("Page_Inventory_Subtitle", resourceCulture);
             }
@@ -2961,7 +2925,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存管理 的本地化字符串。
         /// </summary>
-        public static string Page_Inventory_Title {
+        internal static string Page_Inventory_Title {
             get {
                 return ResourceManager.GetString("Page_Inventory_Title", resourceCulture);
             }
@@ -2970,7 +2934,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 登录 的本地化字符串。
         /// </summary>
-        public static string Page_Login_Title {
+        internal static string Page_Login_Title {
             get {
                 return ResourceManager.GetString("Page_Login_Title", resourceCulture);
             }
@@ -2979,7 +2943,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料信息管理 的本地化字符串。
         /// </summary>
-        public static string Page_MaterialInfo_Subtitle {
+        internal static string Page_MaterialInfo_Subtitle {
             get {
                 return ResourceManager.GetString("Page_MaterialInfo_Subtitle", resourceCulture);
             }
@@ -2988,7 +2952,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料管理 的本地化字符串。
         /// </summary>
-        public static string Page_MaterialInfo_Title {
+        internal static string Page_MaterialInfo_Title {
             get {
                 return ResourceManager.GetString("Page_MaterialInfo_Title", resourceCulture);
             }
@@ -2997,7 +2961,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架槽位总览 · 点击槽位配置容器与库存 的本地化字符串。
         /// </summary>
-        public static string Page_ShelfInfo_Subtitle {
+        internal static string Page_ShelfInfo_Subtitle {
             get {
                 return ResourceManager.GetString("Page_ShelfInfo_Subtitle", resourceCulture);
             }
@@ -3006,7 +2970,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架管理 的本地化字符串。
         /// </summary>
-        public static string Page_ShelfInfo_Title {
+        internal static string Page_ShelfInfo_Title {
             get {
                 return ResourceManager.GetString("Page_ShelfInfo_Title", resourceCulture);
             }
@@ -3015,7 +2979,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理实验模板与参数配置 的本地化字符串。
         /// </summary>
-        public static string Page_Templates_Subtitle {
+        internal static string Page_Templates_Subtitle {
             get {
                 return ResourceManager.GetString("Page_Templates_Subtitle", resourceCulture);
             }
@@ -3024,7 +2988,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验模板 的本地化字符串。
         /// </summary>
-        public static string Page_Templates_Title {
+        internal static string Page_Templates_Title {
             get {
                 return ResourceManager.GetString("Page_Templates_Title", resourceCulture);
             }
@@ -3033,7 +2997,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑权限 的本地化字符串。
         /// </summary>
-        public static string PermGroup_Edit {
+        internal static string PermGroup_Edit {
             get {
                 return ResourceManager.GetString("PermGroup_Edit", resourceCulture);
             }
@@ -3042,7 +3006,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 其他权限 的本地化字符串。
         /// </summary>
-        public static string PermGroup_Other {
+        internal static string PermGroup_Other {
             get {
                 return ResourceManager.GetString("PermGroup_Other", resourceCulture);
             }
@@ -3051,7 +3015,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 查看权限 的本地化字符串。
         /// </summary>
-        public static string PermGroup_View {
+        internal static string PermGroup_View {
             get {
                 return ResourceManager.GetString("PermGroup_View", resourceCulture);
             }
@@ -3060,7 +3024,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 (当前：) 的本地化字符串。
         /// </summary>
-        public static string Run_Label_Current {
+        internal static string Run_Label_Current {
             get {
                 return ResourceManager.GetString("Run_Label_Current", resourceCulture);
             }
@@ -3069,7 +3033,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 当前实验： 的本地化字符串。
         /// </summary>
-        public static string Run_Label_CurrentExperiment {
+        internal static string Run_Label_CurrentExperiment {
             get {
                 return ResourceManager.GetString("Run_Label_CurrentExperiment", resourceCulture);
             }
@@ -3078,7 +3042,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 进度： 的本地化字符串。
         /// </summary>
-        public static string Run_Label_Progress {
+        internal static string Run_Label_Progress {
             get {
                 return ResourceManager.GetString("Run_Label_Progress", resourceCulture);
             }
@@ -3087,7 +3051,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 状态： 的本地化字符串。
         /// </summary>
-        public static string Run_Label_Status {
+        internal static string Run_Label_Status {
             get {
                 return ResourceManager.GetString("Run_Label_Status", resourceCulture);
             }
@@ -3096,7 +3060,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索权限... 的本地化字符串。
         /// </summary>
-        public static string Search_Permissions {
+        internal static string Search_Permissions {
             get {
                 return ResourceManager.GetString("Search_Permissions", resourceCulture);
             }
@@ -3105,7 +3069,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索角色... 的本地化字符串。
         /// </summary>
-        public static string Search_Roles {
+        internal static string Search_Roles {
             get {
                 return ResourceManager.GetString("Search_Roles", resourceCulture);
             }
@@ -3114,7 +3078,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 搜索用户... 的本地化字符串。
         /// </summary>
-        public static string Search_Users {
+        internal static string Search_Users {
             get {
                 return ResourceManager.GetString("Search_Users", resourceCulture);
             }
@@ -3123,7 +3087,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 添加新权限 的本地化字符串。
         /// </summary>
-        public static string Section_AddNewPermission {
+        internal static string Section_AddNewPermission {
             get {
                 return ResourceManager.GetString("Section_AddNewPermission", resourceCulture);
             }
@@ -3132,7 +3096,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 添加新角色 的本地化字符串。
         /// </summary>
-        public static string Section_AddNewRole {
+        internal static string Section_AddNewRole {
             get {
                 return ResourceManager.GetString("Section_AddNewRole", resourceCulture);
             }
@@ -3141,7 +3105,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 添加新用户 的本地化字符串。
         /// </summary>
-        public static string Section_AddNewUser {
+        internal static string Section_AddNewUser {
             get {
                 return ResourceManager.GetString("Section_AddNewUser", resourceCulture);
             }
@@ -3150,7 +3114,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 基础信息 的本地化字符串。
         /// </summary>
-        public static string Section_BasicInfo {
+        internal static string Section_BasicInfo {
             get {
                 return ResourceManager.GetString("Section_BasicInfo", resourceCulture);
             }
@@ -3159,7 +3123,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 日期与位置 的本地化字符串。
         /// </summary>
-        public static string Section_DateAndLocation {
+        internal static string Section_DateAndLocation {
             get {
                 return ResourceManager.GetString("Section_DateAndLocation", resourceCulture);
             }
@@ -3168,7 +3132,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验组列表 的本地化字符串。
         /// </summary>
-        public static string Section_ExperimentGroupList {
+        internal static string Section_ExperimentGroupList {
             get {
                 return ResourceManager.GetString("Section_ExperimentGroupList", resourceCulture);
             }
@@ -3177,7 +3141,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 实验参数 的本地化字符串。
         /// </summary>
-        public static string Section_ExperimentParameters {
+        internal static string Section_ExperimentParameters {
             get {
                 return ResourceManager.GetString("Section_ExperimentParameters", resourceCulture);
             }
@@ -3186,7 +3150,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存清单 的本地化字符串。
         /// </summary>
-        public static string Section_InventoryList {
+        internal static string Section_InventoryList {
             get {
                 return ResourceManager.GetString("Section_InventoryList", resourceCulture);
             }
@@ -3195,7 +3159,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 库存数量 的本地化字符串。
         /// </summary>
-        public static string Section_InventoryQuantity {
+        internal static string Section_InventoryQuantity {
             get {
                 return ResourceManager.GetString("Section_InventoryQuantity", resourceCulture);
             }
@@ -3204,7 +3168,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料信息 的本地化字符串。
         /// </summary>
-        public static string Section_MaterialInfo {
+        internal static string Section_MaterialInfo {
             get {
                 return ResourceManager.GetString("Section_MaterialInfo", resourceCulture);
             }
@@ -3213,7 +3177,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 物料清单 的本地化字符串。
         /// </summary>
-        public static string Section_MaterialList {
+        internal static string Section_MaterialList {
             get {
                 return ResourceManager.GetString("Section_MaterialList", resourceCulture);
             }
@@ -3222,7 +3186,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限信息 的本地化字符串。
         /// </summary>
-        public static string Section_PermissionInfo {
+        internal static string Section_PermissionInfo {
             get {
                 return ResourceManager.GetString("Section_PermissionInfo", resourceCulture);
             }
@@ -3231,7 +3195,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 权限列表 的本地化字符串。
         /// </summary>
-        public static string Section_PermissionList {
+        internal static string Section_PermissionList {
             get {
                 return ResourceManager.GetString("Section_PermissionList", resourceCulture);
             }
@@ -3240,7 +3204,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 理化信息 的本地化字符串。
         /// </summary>
-        public static string Section_PhysicalChemicalInfo {
+        internal static string Section_PhysicalChemicalInfo {
             get {
                 return ResourceManager.GetString("Section_PhysicalChemicalInfo", resourceCulture);
             }
@@ -3249,7 +3213,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 角色列表 的本地化字符串。
         /// </summary>
-        public static string Section_RoleList {
+        internal static string Section_RoleList {
             get {
                 return ResourceManager.GetString("Section_RoleList", resourceCulture);
             }
@@ -3258,7 +3222,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 安全信息 的本地化字符串。
         /// </summary>
-        public static string Section_SafetyInfo {
+        internal static string Section_SafetyInfo {
             get {
                 return ResourceManager.GetString("Section_SafetyInfo", resourceCulture);
             }
@@ -3267,7 +3231,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 来源信息 的本地化字符串。
         /// </summary>
-        public static string Section_SourceInfo {
+        internal static string Section_SourceInfo {
             get {
                 return ResourceManager.GetString("Section_SourceInfo", resourceCulture);
             }
@@ -3276,7 +3240,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 模板信息 的本地化字符串。
         /// </summary>
-        public static string Section_TemplateInfo {
+        internal static string Section_TemplateInfo {
             get {
                 return ResourceManager.GetString("Section_TemplateInfo", resourceCulture);
             }
@@ -3285,7 +3249,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 模板列表 的本地化字符串。
         /// </summary>
-        public static string Section_TemplateList {
+        internal static string Section_TemplateList {
             get {
                 return ResourceManager.GetString("Section_TemplateList", resourceCulture);
             }
@@ -3294,7 +3258,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 用户列表 的本地化字符串。
         /// </summary>
-        public static string Section_UserList {
+        internal static string Section_UserList {
             get {
                 return ResourceManager.GetString("Section_UserList", resourceCulture);
             }
@@ -3303,7 +3267,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 货架 的本地化字符串。
         /// </summary>
-        public static string Shelf {
+        internal static string Shelf {
             get {
                 return ResourceManager.GetString("Shelf", resourceCulture);
             }
@@ -3312,7 +3276,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 离心瓶 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_CentrifugeBottle {
+        internal static string Shelf_Container_CentrifugeBottle {
             get {
                 return ResourceManager.GetString("Shelf_Container_CentrifugeBottle", resourceCulture);
             }
@@ -3321,7 +3285,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 耗材 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_Consumable {
+        internal static string Shelf_Container_Consumable {
             get {
                 return ResourceManager.GetString("Shelf_Container_Consumable", resourceCulture);
             }
@@ -3330,7 +3294,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 其他 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_Other {
+        internal static string Shelf_Container_Other {
             get {
                 return ResourceManager.GetString("Shelf_Container_Other", resourceCulture);
             }
@@ -3339,7 +3303,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 加粉筒 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_PowderCylinder {
+        internal static string Shelf_Container_PowderCylinder {
             get {
                 return ResourceManager.GetString("Shelf_Container_PowderCylinder", resourceCulture);
             }
@@ -3348,7 +3312,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 试剂盒 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_ReagentKit {
+        internal static string Shelf_Container_ReagentKit {
             get {
                 return ResourceManager.GetString("Shelf_Container_ReagentKit", resourceCulture);
             }
@@ -3357,7 +3321,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 取样瓶 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_SamplingBottle {
+        internal static string Shelf_Container_SamplingBottle {
             get {
                 return ResourceManager.GetString("Shelf_Container_SamplingBottle", resourceCulture);
             }
@@ -3366,7 +3330,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 原液瓶 的本地化字符串。
         /// </summary>
-        public static string Shelf_Container_StockBottle {
+        internal static string Shelf_Container_StockBottle {
             get {
                 return ResourceManager.GetString("Shelf_Container_StockBottle", resourceCulture);
             }
@@ -3375,7 +3339,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 孔位 的本地化字符串。
         /// </summary>
-        public static string Slot {
+        internal static string Slot {
             get {
                 return ResourceManager.GetString("Slot", resourceCulture);
             }
@@ -3384,7 +3348,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 启用 的本地化字符串。
         /// </summary>
-        public static string Status_Active {
+        internal static string Status_Active {
             get {
                 return ResourceManager.GetString("Status_Active", resourceCulture);
             }
@@ -3393,7 +3357,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 禁用 的本地化字符串。
         /// </summary>
-        public static string Status_Inactive {
+        internal static string Status_Inactive {
             get {
                 return ResourceManager.GetString("Status_Inactive", resourceCulture);
             }
@@ -3402,7 +3366,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除权限 的本地化字符串。
         /// </summary>
-        public static string Tooltip_DeletePermission {
+        internal static string Tooltip_DeletePermission {
             get {
                 return ResourceManager.GetString("Tooltip_DeletePermission", resourceCulture);
             }
@@ -3411,7 +3375,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除角色 的本地化字符串。
         /// </summary>
-        public static string Tooltip_DeleteRole {
+        internal static string Tooltip_DeleteRole {
             get {
                 return ResourceManager.GetString("Tooltip_DeleteRole", resourceCulture);
             }
@@ -3420,7 +3384,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除 的本地化字符串。
         /// </summary>
-        public static string Tooltip_DeleteTemplate {
+        internal static string Tooltip_DeleteTemplate {
             get {
                 return ResourceManager.GetString("Tooltip_DeleteTemplate", resourceCulture);
             }
@@ -3429,7 +3393,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 删除用户 的本地化字符串。
         /// </summary>
-        public static string Tooltip_DeleteUser {
+        internal static string Tooltip_DeleteUser {
             get {
                 return ResourceManager.GetString("Tooltip_DeleteUser", resourceCulture);
             }
@@ -3438,7 +3402,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑权限 的本地化字符串。
         /// </summary>
-        public static string Tooltip_EditPermission {
+        internal static string Tooltip_EditPermission {
             get {
                 return ResourceManager.GetString("Tooltip_EditPermission", resourceCulture);
             }
@@ -3447,7 +3411,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑角色 的本地化字符串。
         /// </summary>
-        public static string Tooltip_EditRole {
+        internal static string Tooltip_EditRole {
             get {
                 return ResourceManager.GetString("Tooltip_EditRole", resourceCulture);
             }
@@ -3456,7 +3420,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑 的本地化字符串。
         /// </summary>
-        public static string Tooltip_EditTemplate {
+        internal static string Tooltip_EditTemplate {
             get {
                 return ResourceManager.GetString("Tooltip_EditTemplate", resourceCulture);
             }
@@ -3465,7 +3429,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 编辑用户 的本地化字符串。
         /// </summary>
-        public static string Tooltip_EditUser {
+        internal static string Tooltip_EditUser {
             get {
                 return ResourceManager.GetString("Tooltip_EditUser", resourceCulture);
             }
@@ -3474,7 +3438,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 导出日志 的本地化字符串。
         /// </summary>
-        public static string Tooltip_ExportLogs {
+        internal static string Tooltip_ExportLogs {
             get {
                 return ResourceManager.GetString("Tooltip_ExportLogs", resourceCulture);
             }
@@ -3483,7 +3447,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 首页 的本地化字符串。
         /// </summary>
-        public static string Tooltip_FirstPage {
+        internal static string Tooltip_FirstPage {
             get {
                 return ResourceManager.GetString("Tooltip_FirstPage", resourceCulture);
             }
@@ -3492,7 +3456,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 末页 的本地化字符串。
         /// </summary>
-        public static string Tooltip_LastPage {
+        internal static string Tooltip_LastPage {
             get {
                 return ResourceManager.GetString("Tooltip_LastPage", resourceCulture);
             }
@@ -3501,7 +3465,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理权限 的本地化字符串。
         /// </summary>
-        public static string Tooltip_ManagePermissions {
+        internal static string Tooltip_ManagePermissions {
             get {
                 return ResourceManager.GetString("Tooltip_ManagePermissions", resourceCulture);
             }
@@ -3510,7 +3474,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 重置密码 的本地化字符串。
         /// </summary>
-        public static string Tooltip_ResetPassword {
+        internal static string Tooltip_ResetPassword {
             get {
                 return ResourceManager.GetString("Tooltip_ResetPassword", resourceCulture);
             }
@@ -3519,7 +3483,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 切换汇总视图 的本地化字符串。
         /// </summary>
-        public static string Tooltip_ToggleSummaryView {
+        internal static string Tooltip_ToggleSummaryView {
             get {
                 return ResourceManager.GetString("Tooltip_ToggleSummaryView", resourceCulture);
             }
@@ -3528,7 +3492,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 默认 的本地化字符串。
         /// </summary>
-        public static string Type_Default {
+        internal static string Type_Default {
             get {
                 return ResourceManager.GetString("Type_Default", resourceCulture);
             }
@@ -3537,7 +3501,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理员 的本地化字符串。
         /// </summary>
-        public static string User_AdminName {
+        internal static string User_AdminName {
             get {
                 return ResourceManager.GetString("User_AdminName", resourceCulture);
             }
@@ -3546,7 +3510,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 超级管理员 的本地化字符串。
         /// </summary>
-        public static string User_AdminRole {
+        internal static string User_AdminRole {
             get {
                 return ResourceManager.GetString("User_AdminRole", resourceCulture);
             }
@@ -3555,7 +3519,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 显示名不能为空 的本地化字符串。
         /// </summary>
-        public static string Validation_DisplayNameRequired {
+        internal static string Validation_DisplayNameRequired {
             get {
                 return ResourceManager.GetString("Validation_DisplayNameRequired", resourceCulture);
             }
@@ -3564,7 +3528,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 名称不能为空 的本地化字符串。
         /// </summary>
-        public static string Validation_NameRequired {
+        internal static string Validation_NameRequired {
             get {
                 return ResourceManager.GetString("Validation_NameRequired", resourceCulture);
             }
@@ -3573,7 +3537,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理系统权限 的本地化字符串。
         /// </summary>
-        public static string View_Permissions_Subtitle {
+        internal static string View_Permissions_Subtitle {
             get {
                 return ResourceManager.GetString("View_Permissions_Subtitle", resourceCulture);
             }
@@ -3582,7 +3546,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理用户角色 的本地化字符串。
         /// </summary>
-        public static string View_Roles_Subtitle {
+        internal static string View_Roles_Subtitle {
             get {
                 return ResourceManager.GetString("View_Roles_Subtitle", resourceCulture);
             }
@@ -3591,7 +3555,7 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         /// <summary>
         ///   查找类似 管理系统用户 的本地化字符串。
         /// </summary>
-        public static string View_Users_Subtitle {
+        internal static string View_Users_Subtitle {
             get {
                 return ResourceManager.GetString("View_Users_Subtitle", resourceCulture);
             }

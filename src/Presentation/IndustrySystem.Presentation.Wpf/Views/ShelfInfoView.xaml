@@ -5,7 +5,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="False"
+             prism:ViewModelLocator.AutoWireViewModel="true"
              Background="{DynamicResource MaterialDesignPaper}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />

@@ -36,14 +36,15 @@
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="CogOutline" Width="24" Height="24" Foreground="White" VerticalAlignment="Center" Margin="0,0,12,0"/>
                     <TextBlock FontSize="17" FontWeight="SemiBold" Foreground="White">
-                    <Run Text="槽位配置 — "/>
+                    <Run Text="{Binding [Dialog_SlotConfig_Title], Source={StaticResource Loc},Mode=OneTime}"/>
+                    <Run Text=" — "/>
                     <Run Text="{Binding PositionLabel, Mode=OneWay}"/>
                     </TextBlock>
                 </StackPanel>
             </Border>
 
             <StackPanel Grid.Row="1" Margin="24,20,24,10">
-                <TextBlock Text="鍏佽鐨勫鍣ㄧ被鍨嬶紙涓嶉€?涓嶉檺鍒讹級" FontSize="12" Foreground="#666" Margin="0,0,0,6"/>
+                <TextBlock Text="{Binding [Dialog_SlotConfig_AllowedContainerTypes], Source={StaticResource Loc}}" FontSize="12" Foreground="#666" Margin="0,0,0,6"/>
                 <ItemsControl ItemsSource="{Binding AllowedContainerTypeOptions}" Margin="0,0,0,14">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -65,7 +66,7 @@
                       SelectedItem="{Binding SelectedContainer}"
                       DisplayMemberPath="Name"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      materialDesign:HintAssist.Hint="选择容器"
+                      materialDesign:HintAssist.Hint="{Binding [Hint_SelectContainer], Source={StaticResource Loc}}"
                       materialDesign:HintAssist.IsFloating="True"
                       Margin="0,0,0,14"/>
 
@@ -73,15 +74,15 @@
                       SelectedItem="{Binding SelectedInventory}"
                       DisplayMemberPath="MaterialName"
                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      materialDesign:HintAssist.Hint="绑定库存记录"
+                      materialDesign:HintAssist.Hint="{Binding [Hint_BindInventoryRecord], Source={StaticResource Loc}}"
                       materialDesign:HintAssist.IsFloating="True"
                       Margin="0,0,0,14"/>
 
-                <CheckBox IsChecked="{Binding IsDisabled}" Content="禁用此槽位" Margin="0,0,0,14"/>
+                <CheckBox IsChecked="{Binding IsDisabled}" Content="{Binding [Chk_DisableSlot], Source={StaticResource Loc}}" Margin="0,0,0,14"/>
 
                 <TextBox Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialTextField}"
-                     materialDesign:HintAssist.Hint="备注"
+                     materialDesign:HintAssist.Hint="{Binding [Hint_Remark], Source={StaticResource Loc}}"
                      materialDesign:HintAssist.IsFloating="True"/>
             </StackPanel>
 

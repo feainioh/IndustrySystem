@@ -37,8 +37,8 @@
                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="物料出库" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
-                    <TextBlock Text="选择出库数量" FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding [Dialog_InventoryOutbound_Title], Source={StaticResource Loc}}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock Text="{Binding [Dialog_InventoryOutbound_Subtitle], Source={StaticResource Loc}}" FontSize="12" Foreground="#CCFFFFFF" Margin="0,2,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -63,13 +63,13 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="物料名称" Opacity="0.6" FontSize="13" Width="80"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding [Lbl_Material_Name], Source={StaticResource Loc}}" Opacity="0.6" FontSize="13" Width="80"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MaterialName}" FontWeight="SemiBold" FontSize="13"/>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="批号" Opacity="0.6" FontSize="13"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding [Col_BatchNo], Source={StaticResource Loc}}" Opacity="0.6" FontSize="13"/>
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding BatchNo}" FontSize="13"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="当前库存" Opacity="0.6" FontSize="13"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding [Lbl_Current_Stock], Source={StaticResource Loc}}" Opacity="0.6" FontSize="13"/>
                         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
                             <TextBlock Text="{Binding CurrentStock, StringFormat={}{0:0.##}}" FontWeight="SemiBold" FontSize="14"
                                        Foreground="{StaticResource PrimaryBrush}"/>
@@ -82,7 +82,7 @@
                     <!-- 出库数量输入 -->
                     <TextBox Text="{Binding OutboundQty, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource MaterialTextField}"
-                             materialDesign:HintAssist.Hint="出库数量"
+                             materialDesign:HintAssist.Hint="{Binding [Hint_OutboundQty], Source={StaticResource Loc}}"
                              materialDesign:HintAssist.IsFloating="True"
                              FontSize="16"
                              HorizontalContentAlignment="Center"/>
@@ -98,7 +98,7 @@
                         Command="{Binding CancelCommand}"
                         Width="100" Height="36" Margin="0,0,10,0"/>
                 <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                        Content="确认出库" BorderThickness="0"
+                        Content="{Binding [Dialog_InventoryOutbound_Confirm], Source={StaticResource Loc}}" BorderThickness="0"
                         Command="{Binding SaveCommand}"
                         Background="{StaticResource WarningBrush}"
                         Foreground="White"

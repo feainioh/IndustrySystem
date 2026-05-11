@@ -9,7 +9,6 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public ShelfInfoView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<ShelfInfoViewModel>();
         }
     }
 }
