@@ -9,7 +9,8 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public RealtimeDataView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<RealtimeDataViewModel>();
+            var vm = ContainerLocator.Current.Resolve<RealtimeDataViewModel>();
+            DataContext = vm;
         }
     }
 }

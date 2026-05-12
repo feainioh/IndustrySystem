@@ -4,176 +4,456 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:dto="clr-namespace:IndustrySystem.Application.Contracts.Dtos;assembly=IndustrySystem.Application.Contracts"
              prism:ViewModelLocator.AutoWireViewModel="False"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
-  <Grid Margin="24">
+  <UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+    <!-- 执行状态 Badge 样式 -->
+    <Style x:Key="ExecStatusBadge" TargetType="Border">
+      <Setter Property="CornerRadius" Value="4"/>
+      <Setter Property="Padding" Value="8,3"/>
+    </Style>
+
+    <!-- DataGrid 行样式：选中高亮 -->
+    <Style x:Key="ExecRowStyle" TargetType="DataGridRow">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Style.Triggers>
+        <Trigger Property="IsSelected" Value="True">
+          <Setter Property="Background" Value="#1A0078D4"/>
+          <Setter Property="BorderBrush" Value="#660078D4"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+
+  <Grid Margin="20">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="24"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="24"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="24"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="12"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <!-- Header -->
     <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-      <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="28" 
-                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}" 
-                 VerticalAlignment="Center" Margin="0,0,12,0"/>
-      <TextBlock Text="{x:Static loc:Strings.Nav_RunExperiment}" 
-                 FontSize="24" FontWeight="SemiBold"
-                 VerticalAlignment="Center"/>
+      <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="26"
+                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                 VerticalAlignment="Center" Margin="0,0,10,0"/>
+      <TextBlock Text="{x:Static loc:Strings.Nav_RunExperiment}"
+                 FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center"/>
     </StackPanel>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,12,0,0">
 
-    <!-- Experiment Selection Card -->
-    <Border Grid.Row="2" 
-            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-            CornerRadius="8" Padding="20"
-            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-            BorderThickness="1">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        
-        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-          <Border Width="48" Height="48" CornerRadius="24" 
-                  Background="{DynamicResource SystemControlForegroundAccentBrush}">
-            <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" 
-                       Foreground="White" FontSize="20"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-          </Border>
-          <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
-            <TextBlock Text="{x:Static loc:Strings.Run_Label_CurrentExperiment}" 
-                       FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-            <TextBlock Text="{Binding CurrentExperiment}" FontSize="16" FontWeight="SemiBold"/>
-          </StackPanel>
-        </StackPanel>
-        
-        <ComboBox Grid.Column="2" Width="280" 
-                  ItemsSource="{Binding Experiments}" 
-                  SelectedItem="{Binding SelectedExperiment}" 
-                  DisplayMemberPath="Name"
-                  VerticalAlignment="Center"/>
-      </Grid>
-    </Border>
+                <!-- 实验执行列表卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+               CornerRadius="8" BorderThickness="1"
+               BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-    <!-- Status & Progress Card -->
-    <Border Grid.Row="4" 
-            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-            CornerRadius="8" Padding="20"
-            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-            BorderThickness="1">
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="16"/>
-          <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        
-        <!-- Status -->
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-          <TextBlock Text="{x:Static loc:Strings.Run_Label_Status}" 
-                     FontSize="14" VerticalAlignment="Center"
-                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-          <Border CornerRadius="4" Padding="12,6" Margin="12,0,0,0"
-                  Background="#200078D4">
-            <TextBlock Text="{Binding RunStatus}" FontSize="14" FontWeight="SemiBold"
-                       Foreground="{DynamicResource SystemControlForegroundAccentBrush}"/>
-          </Border>
-        </StackPanel>
-        
-        <!-- Progress -->
-        <Grid Grid.Row="2" Grid.ColumnSpan="2">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-          
-          <TextBlock Grid.Column="0" Text="{x:Static loc:Strings.Run_Label_Progress}" 
-                     FontSize="14" VerticalAlignment="Center"
-                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-          <ProgressBar Grid.Column="1" Height="8" Margin="16,0"
-                       Minimum="0" Maximum="100" Value="{Binding Progress}"
-                       VerticalAlignment="Center"/>
-          <Border Grid.Column="2" CornerRadius="4" Padding="8,4"
-                  Background="{DynamicResource SystemControlForegroundAccentBrush}">
-            <TextBlock Text="{Binding Progress, StringFormat={}{0}%}" 
-                       FontSize="12" FontWeight="SemiBold" Foreground="White"/>
-          </Border>
-        </Grid>
-      </Grid>
-    </Border>
+                        <!-- 标题行 -->
+                        <Grid Grid.Row="0" Margin="16,14,16,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="&#xE9F9;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                          Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                          Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="实验执行列表" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <!-- 切换实验类型 -->
+                            <TextBlock Grid.Column="1" Text="切换实验类型：" FontSize="13"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="3" Width="200" VerticalAlignment="Center"
+                       ItemsSource="{Binding Experiments}"
+                       SelectedItem="{Binding SelectedExperiment}"
+                       DisplayMemberPath="Name"/>
+                        </Grid>
 
-    <!-- Control Buttons Card -->
-    <Border Grid.Row="6" 
-            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-            CornerRadius="8" Padding="20"
-            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-            BorderThickness="1">
-      <Grid>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="16"/>
-          <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-          <Button Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}"
-                  Style="{DynamicResource AccentButtonStyle}" Padding="24,12" MinWidth="100">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
-              <TextBlock Text="{x:Static loc:Strings.Btn_Start}" VerticalAlignment="Center"/>
+                        <!-- DataGrid -->
+                        <DataGrid Grid.Row="1" Margin="8,0,8,0"
+                     ItemsSource="{Binding Executions}"
+                     SelectedItem="{Binding SelectedExecution}"
+                     AutoGenerateColumns="False"
+                     IsReadOnly="True"
+                     SelectionMode="Single"
+                     GridLinesVisibility="Horizontal"
+                     HorizontalGridLinesBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                     RowStyle="{StaticResource ExecRowStyle}"
+                     ColumnHeaderHeight="36"
+                     RowHeight="40"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     MaxHeight="280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="执行ID" Binding="{Binding ExecId}" Width="110"
+                                  ElementStyle="{StaticResource {x:Type TextBlock}}"/>
+                                <DataGridTextColumn Header="实验名称" Binding="{Binding ExperimentName}" Width="*"/>
+                                <DataGridTemplateColumn Header="状态" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type dto:ExperimentExecutionDto}">
+                                            <Border CornerRadius="4" Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#22888888"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Running}">
+                                                                <Setter Property="Background" Value="#220078D4"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Paused}">
+                                                                <Setter Property="Background" Value="#22FFB900"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Completed}">
+                                                                <Setter Property="Background" Value="#2210893E"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock VerticalAlignment="Center" FontSize="13">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="排队中"/>
+                                                            <Setter Property="Foreground" Value="#FF888888"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Running}">
+                                                                    <Setter Property="Text" Value="运行中"/>
+                                                                    <Setter Property="Foreground" Value="#FF0078D4"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Paused}">
+                                                                    <Setter Property="Text" Value="已暂停"/>
+                                                                    <Setter Property="Foreground" Value="#FFCB8400"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Completed}">
+                                                                    <Setter Property="Text" Value="已完成"/>
+                                                                    <Setter Property="Foreground" Value="#FF10893E"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding State}" Value="{x:Static dto:RunState.Stopped}">
+                                                                    <Setter Property="Text" Value="已停止"/>
+                                                                    <Setter Property="Foreground" Value="#FFDC3545"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="步骤进度" Binding="{Binding StepProgress}" Width="90"/>
+                                <DataGridTextColumn Header="运行时长" Binding="{Binding Elapsed, StringFormat=hh\\:mm\\:ss}" Width="100"/>
+                                <DataGridTemplateColumn Header="开始时间" Width="110">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type dto:ExperimentExecutionDto}">
+                                            <TextBlock VerticalAlignment="Center" Padding="4,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding StartTime, StringFormat=HH\\:mm\\:ss}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding StartTime}" Value="{x:Null}">
+                                                                <Setter Property="Text" Value="-"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- 底部提示 -->
+                        <TextBlock Grid.Row="2" Margin="16,8,16,12" FontSize="12"
+                      Text="共 5 条执行记录，点击行切换当前监控对象"
+                      Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    </Grid>
+                </Border>
+
+                <Rectangle Height="12"/>
+
+                <!-- 当前监控卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+               CornerRadius="8" BorderThickness="1" Padding="16,14"
+               BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="14"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="14"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- 标题行 -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <TextBlock Text="&#x1F680;" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="当前监控：" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentExperiment}" FontSize="14" FontWeight="SemiBold"
+                        Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                        VerticalAlignment="Center" Margin="4,0"/>
+                            <Border CornerRadius="4" Padding="8,3" Margin="8,0,0,0" Background="#220078D4" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding RunStatus}" FontSize="12" Foreground="#FF0078D4"/>
+                            </Border>
+                            <TextBlock Text="{Binding SelectedExecution.ExecId}" FontSize="13"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        VerticalAlignment="Center" Margin="12,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- 步骤流程 -->
+                        <ItemsControl Grid.Row="2" ItemsSource="{Binding Steps}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:ExperimentStepDto}">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border CornerRadius="14" Padding="14,6" VerticalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#22888888"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Completed}">
+                                                            <Setter Property="Background" Value="#2210893E"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Running}">
+                                                            <Setter Property="Background" Value="#FF0078D4"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Name}" FontSize="13" VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#FF888888"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Completed}">
+                                                                <Setter Property="Foreground" Value="#FF10893E"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Running}">
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                        <!-- 箭头分隔符（最后一个不显示）-->
+                                        <TextBlock Text=" → " FontSize="13" VerticalAlignment="Center"
+                              Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- 时间 + 进度条 -->
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding ElapsedTime}" FontSize="24" FontWeight="Bold"
+                        VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <ProgressBar Grid.Column="1" Height="10" VerticalAlignment="Center"
+                          Minimum="0" Maximum="100" Value="{Binding Progress}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding CurrentStepProgress}" FontSize="13"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        VerticalAlignment="Center" Margin="16,0,0,0"/>
+                        </Grid>
+
+                        <!-- 控制按钮 -->
+                        <StackPanel Grid.Row="6" Orientation="Horizontal">
+                            <Button Command="{Binding StartCommand}" IsEnabled="{Binding CanStart}"
+                     Style="{DynamicResource AccentButtonStyle}" Padding="18,9" MinWidth="80">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="启动" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding PauseCommand}" IsEnabled="{Binding CanPause}"
+                     Padding="18,9" MinWidth="80" Margin="10,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE769;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="暂停" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}"
+                     Padding="18,9" MinWidth="80" Margin="10,0,0,0"
+                     Background="#FFDC3545">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0"
+                            VerticalAlignment="Center" Foreground="White"/>
+                                    <TextBlock Text="终止" VerticalAlignment="Center" Foreground="White"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Command="{Binding ResetCommand}" IsEnabled="{Binding CanReset}"
+                     Padding="18,9" MinWidth="80" Margin="10,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE777;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="重置" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="13"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        Text="执行中...">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CanStop}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Rectangle Height="12"/>
+
+                <!-- 底部两列：关键指标 + 最近报警 -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 关键指标 -->
+                    <Border Grid.Column="0"
+                 Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                 CornerRadius="8" BorderThickness="1" Padding="16,14"
+                 BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock Text="&#xE9D2;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                          Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                          Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="关键指标" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <ItemsControl Grid.Row="2" ItemsSource="{Binding Metrics}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" IsItemsHost="True"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type dto:KeyMetricDto}">
+                                        <StackPanel Margin="0,8,16,8">
+                                            <TextBlock Text="{Binding Label}" FontSize="13"
+                                Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Value}" FontSize="20" FontWeight="Bold" Margin="0,2,4,0"/>
+                                                <TextBlock Text="{Binding Unit}" FontSize="14" VerticalAlignment="Bottom" Margin="0,0,0,2"
+                                  Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+
+                    <!-- 最近报警 -->
+                    <Border Grid.Column="2"
+                 Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                 CornerRadius="8" BorderThickness="1" Padding="16,14"
+                 BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                          Foreground="#FFDC3545" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="最近报警" FontSize="15" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <ItemsControl Grid.Row="2" ItemsSource="{Binding RecentAlarms}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type dto:AlarmDto}">
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                            <Border CornerRadius="3" Padding="6,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#22DC3545"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Acknowledged}" Value="True">
+                                                                <Setter Property="Background" Value="#22FFB900"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock FontSize="11" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="error"/>
+                                                            <Setter Property="Foreground" Value="#FFDC3545"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Acknowledged}" Value="True">
+                                                                    <Setter Property="Text" Value="warn"/>
+                                                                    <Setter Property="Foreground" Value="#FFCB8400"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                            <TextBlock Text="{Binding Message}" FontSize="13" VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis" MaxWidth="240"/>
+                                            <TextBlock Text="{Binding Time, StringFormat=HH\\:mm\\:ss}" FontSize="12"
+                                Margin="8,0,0,0" VerticalAlignment="Center"
+                                Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <!-- 无报警提示 -->
+                            <TextBlock Grid.Row="2" Text="暂无报警信息" FontSize="13"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,16,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RecentAlarms.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Rectangle Height="16"/>
             </StackPanel>
-          </Button>
-          <Button Command="{Binding PauseCommand}" IsEnabled="{Binding CanPause}"
-                  Padding="24,12" MinWidth="100" Margin="16,0,0,0">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="&#xE769;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
-              <TextBlock Text="{x:Static loc:Strings.Btn_Pause}" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Button>
-          <Button Command="{Binding ResumeCommand}" IsEnabled="{Binding CanResume}"
-                  Padding="24,12" MinWidth="100" Margin="16,0,0,0">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" VerticalAlignment="Center"/>
-              <TextBlock Text="{x:Static loc:Strings.Btn_Resume}" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Button>
-          <Button Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}"
-                  Padding="24,12" MinWidth="100" Margin="16,0,0,0"
-                  Background="#20DC3545">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" Margin="0,0,8,0" 
-                         VerticalAlignment="Center" Foreground="#FFDC3545"/>
-              <TextBlock Text="{x:Static loc:Strings.Btn_Stop}" VerticalAlignment="Center" Foreground="#FFDC3545"/>
-            </StackPanel>
-          </Button>
-        </StackPanel>
-        
-        <!-- Status Message -->
-        <Border Grid.Row="2" CornerRadius="4" Padding="16,12"
-                Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                Visibility="{Binding StatusMessage}">
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" 
-                       VerticalAlignment="Center" Margin="0,0,12,0"
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-          </StackPanel>
-        </Border>
-      </Grid>
-    </Border>
-  </Grid>
+        </ScrollViewer>
+
+    </Grid>
 </UserControl>
