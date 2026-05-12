@@ -393,6 +393,12 @@
   <data name="Login_Quick" xml:space="preserve">
     <value>快速登录</value>
   </data>
+  <data name="Login_Failed" xml:space="preserve">
+    <value>登录失败</value>
+  </data>
+  <data name="Login_Failed_CheckCredentials" xml:space="preserve">
+    <value>登录失败，请检查账号或密码</value>
+  </data>
   <data name="Field_User_Password" xml:space="preserve">
     <value>密码</value>
   </data>

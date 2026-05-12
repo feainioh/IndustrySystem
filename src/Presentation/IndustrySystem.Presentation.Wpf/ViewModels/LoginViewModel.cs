@@ -4,6 +4,7 @@ using Prism.Dialogs;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using IndustrySystem.Presentation.Wpf.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System;
@@ -16,6 +17,9 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels;
 /// </summary>
 public class LoginViewModel : BindableBase, IDialogAware
 {
+    private const string LoginFailedFallback = "\u767B\u5F55\u5931\u8D25";
+    private const string LoginFailedCheckCredentialsFallback = "\u767B\u5F55\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u8D26\u53F7\u6216\u5BC6\u7801";
+
     private readonly IAuthService _auth;
     private readonly IAuthState _state;
 
@@ -33,7 +37,7 @@ public class LoginViewModel : BindableBase, IDialogAware
 
     #region IDialogAware Implementation
 
-    public string Title => "µÇÂ¼";
+    public string Title => Strings.Page_Login_Title;
 
     public DialogCloseListener RequestClose { get; set; }
 
@@ -57,7 +61,7 @@ public class LoginViewModel : BindableBase, IDialogAware
     public bool Remember { get => _remember; set => SetProperty(ref _remember, value); }
 
     private string? _errorMessage;
-    /// <summary>µÇÂ¼Ê§°Ü»ò´íÎóÌáÊ¾</summary>
+    /// <summary>Login failure or error message.</summary>
     public string? ErrorMessage
     {
         get => _errorMessage;
@@ -70,11 +74,11 @@ public class LoginViewModel : BindableBase, IDialogAware
         }
     }
 
-    /// <summary>ÊÇ·ñ´æÔÚ´íÎó</summary>
+    /// <summary>Whether an error message exists.</summary>
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
     private bool _isBusy;
-    /// <summary>µÇÂ¼Ã¦Âµ×´Ì¬</summary>
+    /// <summary>Busy state during sign-in.</summary>
     public bool IsBusy { get => _isBusy; private set => SetProperty(ref _isBusy, value); }
 
     public ICommand LoginCommand { get; }
@@ -85,7 +89,8 @@ public class LoginViewModel : BindableBase, IDialogAware
 
     private async Task LoginAsync()
     {
-        ErrorMessage = null; IsBusy = true;
+        ErrorMessage = null;
+        IsBusy = true;
         ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged();
         try
         {
@@ -96,14 +101,22 @@ public class LoginViewModel : BindableBase, IDialogAware
                 _state.SetAuthenticated(UserName, identity.RoleIds, identity.Permissions);
                 CloseDialog(ButtonResult.OK);
             }
-            else { ErrorMessage = "µÇÂ¼Ê§°Ü£¬Çë¼ì²éÕËºÅ»òÃÜÂë"; }
+            else
+            {
+                ErrorMessage = GetString("Login_Failed_CheckCredentials", LoginFailedCheckCredentialsFallback);
+            }
         }
-        finally { IsBusy = false; ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged(); }
+        finally
+        {
+            IsBusy = false;
+            ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged();
+        }
     }
 
     private async Task QuickLoginAsync()
     {
-        ErrorMessage = null; IsBusy = true;
+        ErrorMessage = null;
+        IsBusy = true;
         ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged();
         try
         {
@@ -115,12 +128,25 @@ public class LoginViewModel : BindableBase, IDialogAware
                 _state.SetAuthenticated(u, identity.RoleIds, identity.Permissions);
                 CloseDialog(ButtonResult.OK);
             }
-            else { ErrorMessage = "µÇÂ¼Ê§°Ü"; }
+            else
+            {
+                ErrorMessage = GetString("Login_Failed", LoginFailedFallback);
+            }
         }
-        finally { IsBusy = false; ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged(); }
+        finally
+        {
+            IsBusy = false;
+            ((DelegateCommand)LoginCommand).RaiseCanExecuteChanged();
+        }
     }
 
-    private void Cancel() { UserName = string.Empty; Password = string.Empty; ErrorMessage = null; CloseDialog(ButtonResult.Cancel); }
+    private void Cancel()
+    {
+        UserName = string.Empty;
+        Password = string.Empty;
+        ErrorMessage = null;
+        CloseDialog(ButtonResult.Cancel);
+    }
 
     private void LoadRemembered()
     {
@@ -131,9 +157,17 @@ public class LoginViewModel : BindableBase, IDialogAware
             {
                 using var s = new IsolatedStorageFileStream("login.cache", FileMode.Open, store);
                 using var sr = new StreamReader(s);
-                var user = sr.ReadLine(); var pass = sr.ReadLine();
-                if (!string.IsNullOrWhiteSpace(user)) { UserName = user; Remember = true; }
-                if (!string.IsNullOrEmpty(pass)) { Password = pass; }
+                var user = sr.ReadLine();
+                var pass = sr.ReadLine();
+                if (!string.IsNullOrWhiteSpace(user))
+                {
+                    UserName = user;
+                    Remember = true;
+                }
+                if (!string.IsNullOrEmpty(pass))
+                {
+                    Password = pass;
+                }
             }
         }
         catch { }
@@ -146,7 +180,8 @@ public class LoginViewModel : BindableBase, IDialogAware
             using var store = IsolatedStorageFile.GetUserStoreForAssembly();
             using var s = new IsolatedStorageFileStream("login.cache", FileMode.Create, store);
             using var sw = new StreamWriter(s);
-            sw.WriteLine(UserName); sw.WriteLine(Password);
+            sw.WriteLine(UserName);
+            sw.WriteLine(Password);
         }
         catch { }
     }
@@ -156,8 +191,14 @@ public class LoginViewModel : BindableBase, IDialogAware
         try
         {
             using var store = IsolatedStorageFile.GetUserStoreForAssembly();
-            if (store.FileExists("login.cache")) store.DeleteFile("login.cache");
+            if (store.FileExists("login.cache"))
+            {
+                store.DeleteFile("login.cache");
+            }
         }
         catch { }
     }
+
+    private static string GetString(string key, string fallback)
+        => Strings.ResourceManager.GetString(key, Strings.Culture) ?? fallback;
 }
