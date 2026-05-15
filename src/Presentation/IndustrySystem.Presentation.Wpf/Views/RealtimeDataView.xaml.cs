@@ -1,6 +1,4 @@
 using System.Windows.Controls;
-using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.ViewModels;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
@@ -9,8 +7,6 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public RealtimeDataView()
         {
             InitializeComponent();
-            var vm = ContainerLocator.Current.Resolve<RealtimeDataViewModel>();
-            DataContext = vm;
         }
     }
 }

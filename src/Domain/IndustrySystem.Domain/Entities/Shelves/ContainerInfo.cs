@@ -5,6 +5,7 @@ namespace IndustrySystem.Domain.Entities.Shelves;
 /// <summary>容器信息（可放入货架槽位的容器模板）</summary>
 public class ContainerInfo
 {
+    /// <summary>容器主键</summary>
     [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -23,9 +24,11 @@ public class ContainerInfo
     /// <summary>描述</summary>
     public string Description { get; set; } = string.Empty;
 
+    /// <summary>创建时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>更新时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime? UpdatedAt { get; set; }
 }

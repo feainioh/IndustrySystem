@@ -6,12 +6,12 @@
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="true"
-             Background="{DynamicResource MaterialDesignPaper}">
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
     </UserControl.Resources>
 
-    <Grid Margin="20">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -28,34 +28,33 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Width="48" Height="48" CornerRadius="24"
-                    Background="{StaticResource DeviceGradientBrush}" VerticalAlignment="Center" Margin="0,0,16,0">
-                <materialDesign:PackIcon Kind="ViewGrid" Width="28" Height="28"
-                                         Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Border Grid.Column="0" Style="{StaticResource PageHeaderIconBorder}"
+                    Background="{StaticResource DeviceGradientBrush}">
+                <materialDesign:PackIcon Kind="ViewGrid" Style="{StaticResource PageHeaderPackIcon}"/>
             </Border>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <TextBlock Text="{x:Static loc:Strings.Nav_ShelfInfo}" FontSize="22" FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ShelfInfo_Subtitle]}" FontSize="13" Opacity="0.6" Margin="0,2,0,0"/>
+                <TextBlock Text="{x:Static loc:Strings.Nav_ShelfInfo}" Style="{StaticResource PageHeaderTitle}"/>
+                <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ShelfInfo_Subtitle]}" Style="{StaticResource PageHeaderSubtitle}"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Command="{Binding RefreshCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
+            <StackPanel Grid.Column="2" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                        Command="{Binding RefreshCommand}" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Command="{Binding OpenContainerListCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                        Command="{Binding OpenContainerListCommand}" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="PackageVariant" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_ContainerConfig]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Command="{Binding OpenShelfListCommand}" Height="36" Padding="12,0">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                        Command="{Binding OpenShelfListCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ViewGrid" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_ShelfConfig]}" VerticalAlignment="Center"/>
@@ -65,8 +64,7 @@
         </Grid>
 
         <!-- ═══════════════ Shelf Selector Bar ═══════════════ -->
-        <materialDesign:Card Grid.Row="2" Padding="14,10"
-                             materialDesign:ElevationAssist.Elevation="Dp1" UniformCornerRadius="8">
+        <Border Grid.Row="2" Style="{StaticResource FormCard}" Padding="14,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -82,7 +80,7 @@
                           ItemsSource="{Binding Shelves}"
                           SelectedItem="{Binding SelectedShelf}"
                           DisplayMemberPath="Name"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Style="{StaticResource AppInteractiveComboBox}"
                           Width="200"
                           materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_SelectShelf]}"/>
 
@@ -114,11 +112,10 @@
                     <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Legend_Disabled]}" FontSize="11" Opacity="0.6"/>
                 </StackPanel>
             </Grid>
-        </materialDesign:Card>
+        </Border>
 
         <!-- ═══════════════ Slot Grid ═══════════════ -->
-        <materialDesign:Card Grid.Row="4" Padding="12"
-                             materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
+        <Border Grid.Row="4" Style="{StaticResource FormCard}" Padding="12">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Slots}">
                     <ItemsControl.ItemsPanel>
@@ -144,7 +141,7 @@
                                     </StackPanel>
                                 </Button.ToolTip>
                                 <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}">
                                         <Setter Property="BorderBrush" Value="#25000000"/>
                                         <Setter Property="Background" Value="Transparent"/>
                                         <Style.Triggers>
@@ -289,6 +286,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-        </materialDesign:Card>
+        </Border>
     </Grid>
 </UserControl>
+

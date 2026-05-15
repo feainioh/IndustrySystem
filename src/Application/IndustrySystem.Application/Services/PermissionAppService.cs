@@ -6,17 +6,23 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 权限应用服务。
+/// </summary>
 public class PermissionAppService : IPermissionAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<Permission> _repo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public PermissionAppService(IRepository<Permission> repo, IMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     /// <summary>
     /// 根据Id查询单个权限。
     /// </summary>
@@ -35,6 +41,7 @@ public class PermissionAppService : IPermissionAppService
         return list.Select(_mapper.Map<PermissionDto>).ToList();
     }
 
+    // ===== Commands =====
     /// <summary>
     /// 创建权限，若输入Id为空则自动生成新Id。
     /// </summary>

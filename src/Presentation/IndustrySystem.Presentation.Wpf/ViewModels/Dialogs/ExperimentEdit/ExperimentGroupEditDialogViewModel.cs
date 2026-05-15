@@ -1,5 +1,6 @@
 ﻿using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.Services;
 using Prism.Dialogs;
 using Prism.Mvvm;
@@ -12,6 +13,8 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class ExperimentGroupEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IExperimentGroupAppService _svc;
     private readonly IAuthState _authState;
 
@@ -62,9 +65,9 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
         get
         {
             var selected = ExperimentOptions.Where(x => x.IsSelected).ToList();
-            if (selected.Count == 0) return "未选择步骤";
+            if (selected.Count == 0) return T("Summary_NoStepsSelected");
             if (selected.Count <= 3) return string.Join(" → ", selected.Select(x => x.Name));
-            return $"已选择 {selected.Count} 个实验步骤";
+            return string.Format(T("Summary_SelectedStepsFormat"), selected.Count);
         }
     }
 
@@ -72,7 +75,7 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         _authState = authState;
-        Title = "实验组编辑";
+        Title = T("Dialog_ExperimentGroupEdit_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)
@@ -106,7 +109,7 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
             Name = string.Empty;
             Description = string.Empty;
             IsEnabled = true;
-            CreatedBy = _authState.UserName ?? "系统";
+            CreatedBy = _authState.UserName ?? T("User_System");
             CreatedAt = DateTime.Now;
             UpdatedAt = null;
             RaisePropertyChanged(nameof(StepSummary));
@@ -145,7 +148,7 @@ public class ExperimentGroupEditDialogViewModel : DialogViewModel
             Description?.Trim() ?? string.Empty,
             ExperimentOptions.Where(x => x.IsSelected).Select(x => x.Id).ToList(),
             IsEnabled,
-            string.IsNullOrWhiteSpace(CreatedBy) ? (_authState.UserName ?? "系统") : CreatedBy.Trim(),
+            string.IsNullOrWhiteSpace(CreatedBy) ? (_authState.UserName ?? T("User_System")) : CreatedBy.Trim(),
             CreatedAt == default ? DateTime.Now : CreatedAt,
             DateTime.Now);
 

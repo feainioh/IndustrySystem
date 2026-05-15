@@ -1,4 +1,3 @@
-using Prism.Mvvm;
 using Prism.Commands;
 using Prism.Dialogs;
 using System.Windows.Input;
@@ -13,9 +12,8 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
 /// <summary>
 /// Login view model with remember and quick-login support.
-/// Implements IDialogAware for Prism DialogService.
 /// </summary>
-public class LoginViewModel : BindableBase, IDialogAware
+public class LoginViewModel : DialogViewModel
 {
     private const string LoginFailedFallback = "\u767B\u5F55\u5931\u8D25";
     private const string LoginFailedCheckCredentialsFallback = "\u767B\u5F55\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u8D26\u53F7\u6216\u5BC6\u7801";
@@ -27,29 +25,16 @@ public class LoginViewModel : BindableBase, IDialogAware
     {
         _auth = auth;
         _state = state;
+        Title = Strings.Page_Login_Title;
+
         LoginCommand = new DelegateCommand(async () => await LoginAsync(), CanLogin)
             .ObservesProperty(() => UserName)
             .ObservesProperty(() => Password);
-        CancelCommand = new DelegateCommand(Cancel);
         QuickLoginCommand = new DelegateCommand(async () => await QuickLoginAsync());
         LoadRemembered();
     }
 
-    #region IDialogAware Implementation
-
-    public string Title => Strings.Page_Login_Title;
-
-    public DialogCloseListener RequestClose { get; set; }
-
-    public bool CanCloseDialog() => true;
-
-    public void OnDialogClosed() { }
-
-    public void OnDialogOpened(IDialogParameters parameters) { }
-
     private void CloseDialog(ButtonResult result) => RequestClose.Invoke(result);
-
-    #endregion
 
     private string _userName = string.Empty;
     public string UserName { get => _userName; set => SetProperty(ref _userName, value); }
@@ -77,12 +62,7 @@ public class LoginViewModel : BindableBase, IDialogAware
     /// <summary>Whether an error message exists.</summary>
     public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
 
-    private bool _isBusy;
-    /// <summary>Busy state during sign-in.</summary>
-    public bool IsBusy { get => _isBusy; private set => SetProperty(ref _isBusy, value); }
-
     public ICommand LoginCommand { get; }
-    public ICommand CancelCommand { get; }
     public ICommand QuickLoginCommand { get; }
 
     private bool CanLogin() => !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password) && !IsBusy;
@@ -140,12 +120,12 @@ public class LoginViewModel : BindableBase, IDialogAware
         }
     }
 
-    private void Cancel()
+    protected override void OnCancel()
     {
         UserName = string.Empty;
         Password = string.Empty;
         ErrorMessage = null;
-        CloseDialog(ButtonResult.Cancel);
+        base.OnCancel();
     }
 
     private void LoadRemembered()

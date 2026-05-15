@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.InventoryOutboundDialog"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,15 +10,15 @@
         <StaticResource ResourceKey="DialogHostWindowStyle" />
     </prism:Dialog.WindowStyle>
     <UserControl.Resources>
-        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="#FFFDFDFE" />
-        <SolidColorBrush x:Key="DialogFooterBrush" Color="#FFF8F9FC" />
+        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="{DynamicResource DialogSurfaceColor}" />
+        <SolidColorBrush x:Key="DialogFooterBrush" Color="{DynamicResource DialogFooterColor}" />
         <loc:LocalizationProvider x:Key="Loc" />
     </UserControl.Resources>
          <Border Background="Transparent" Padding="24">
         <Border Background="{StaticResource DialogSurfaceBrush}"
                 CornerRadius="18">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.22" Color="#000000" Direction="270"/>
+                <StaticResource ResourceKey="DialogSurfaceShadow" />
             </Border.Effect>
     <Grid >
         <Grid.RowDefinitions>
@@ -81,7 +81,7 @@
 
                     <!-- 出库数量输入 -->
                     <TextBox Text="{Binding OutboundQty, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource MaterialTextField}"
+                             Style="{StaticResource DialogTextField}"
                              materialDesign:HintAssist.Hint="{Binding [Hint_OutboundQty], Source={StaticResource Loc}}"
                              materialDesign:HintAssist.IsFloating="True"
                              FontSize="16"
@@ -93,11 +93,11 @@
         <!-- Footer -->
         <Border Grid.Row="2" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="24,14">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                <Button Style="{StaticResource AppInteractiveButtonNeutral}"
                         Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}"
                         Command="{Binding CancelCommand}"
                         Width="100" Height="36" Margin="0,0,10,0"/>
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                <Button Style="{StaticResource AppInteractiveButtonPrimary}"
                         Content="{Binding [Dialog_InventoryOutbound_Confirm], Source={StaticResource Loc}}" BorderThickness="0"
                         Command="{Binding SaveCommand}"
                         Background="{StaticResource WarningBrush}"
@@ -109,4 +109,6 @@
     </Border>
     </Border>
 </UserControl>
+
+
 

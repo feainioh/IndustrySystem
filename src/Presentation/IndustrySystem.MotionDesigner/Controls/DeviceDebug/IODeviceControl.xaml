@@ -82,8 +82,7 @@
                                  CanUserAddRows="False" 
                                  CanUserDeleteRows="False" 
                                  IsReadOnly="True"
-                                 MaxHeight="250"
-                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                                 MaxHeight="250">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50"/>
                                 <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*"/>
@@ -108,8 +107,7 @@
                                  CanUserAddRows="False" 
                                  CanUserDeleteRows="False" 
                                  IsReadOnly="True"
-                                 MaxHeight="200"
-                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                                 MaxHeight="200">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50"/>
                                 <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*"/>
@@ -148,8 +146,7 @@
                                  AutoGenerateColumns="False" 
                                  CanUserAddRows="False" 
                                  CanUserDeleteRows="False"
-                                 MaxHeight="280"
-                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                                 MaxHeight="280">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*" IsReadOnly="True"/>
@@ -177,8 +174,7 @@
                                  AutoGenerateColumns="False" 
                                  CanUserAddRows="False" 
                                  CanUserDeleteRows="False"
-                                 MaxHeight="200"
-                                 materialDesign:DataGridAssist.CellPadding="8 4">
+                                 MaxHeight="200">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="通道" Binding="{Binding ChannelNumber}" Width="50" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="名称" Binding="{Binding ChannelName}" Width="*" IsReadOnly="True"/>

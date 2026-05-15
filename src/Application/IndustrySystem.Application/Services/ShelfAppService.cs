@@ -7,14 +7,19 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 货架与容器布局应用服务。
+/// </summary>
 public class ShelfAppService : IShelfAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<ContainerInfo> _containerRepo;
     private readonly IRepository<ShelfConfig> _shelfRepo;
     private readonly IRepository<ShelfSlot> _slotRepo;
     private readonly IRepository<InventoryRecord> _invRepo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public ShelfAppService(
         IRepository<ContainerInfo> containerRepo,
         IRepository<ShelfConfig> shelfRepo,
@@ -29,7 +34,7 @@ public class ShelfAppService : IShelfAppService
         _mapper = mapper;
     }
 
-    // ── 容器 ──
+    // ===== Container APIs =====
 
     public async Task<IReadOnlyList<ContainerInfoDto>> GetContainerListAsync()
     {
@@ -63,7 +68,7 @@ public class ShelfAppService : IShelfAppService
     public async Task DeleteContainerAsync(Guid id)
         => await _containerRepo.DeleteAsync(id);
 
-    // ── 货架 ──
+    // ===== Shelf APIs =====
 
     public async Task<IReadOnlyList<ShelfConfigDto>> GetShelfListAsync()
     {
@@ -109,7 +114,7 @@ public class ShelfAppService : IShelfAppService
         await _shelfRepo.DeleteAsync(id);
     }
 
-    // ── 槽位 ──
+    // ===== Slot APIs =====
 
     public async Task<IReadOnlyList<ShelfSlotDto>> GetSlotsByShelfAsync(Guid shelfId)
     {

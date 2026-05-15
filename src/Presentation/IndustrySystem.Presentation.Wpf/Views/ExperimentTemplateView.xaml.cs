@@ -2,19 +2,17 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using Prism.Dialogs;
-using IndustrySystem.Presentation.Wpf.ViewModels;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
     public partial class ExperimentTemplateView : UserControl
     {
         private readonly IDialogService _dialogService;
-        private ExperimentTemplateViewModel ViewModel => (ExperimentTemplateViewModel)DataContext;
+        private ViewModels.ExperimentTemplateViewModel ViewModel => (ViewModels.ExperimentTemplateViewModel)DataContext;
 
-        public ExperimentTemplateView(ExperimentTemplateViewModel viewModel, IDialogService dialogService)
+        public ExperimentTemplateView(IDialogService dialogService)
         {
             InitializeComponent();
-            DataContext = viewModel;
             _dialogService = dialogService;
             Loaded += OnViewLoaded;
         }
@@ -41,7 +39,12 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
         private void OpenTemplateDialog(Guid? id)
         {
-            var parameters = new DialogParameters { { "id", id } };
+            var parameters = new DialogParameters();
+            if (id.HasValue)
+            {
+                parameters.Add("id", id.Value);
+            }
+
             _dialogService.ShowDialog(nameof(Dialogs.ExperimentTemplateEditDialog), parameters, async result =>
             {
                 if (result.Result == ButtonResult.OK)

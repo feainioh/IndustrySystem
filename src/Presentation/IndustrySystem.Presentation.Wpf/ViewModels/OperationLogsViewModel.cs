@@ -1,22 +1,39 @@
+using Microsoft.Win32;
+using NLog;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class OperationLogsViewModel : NagetiveCurdVeiwModel<OperationLog>
+public class OperationLogsViewModel : NagetiveViewModel
 {
-    #region Properties
-    
-    private ObservableCollection<OperationLog> _logs = new();
-    public ObservableCollection<OperationLog> Logs
-    {
-        get => _logs;
-        set => SetProperty(ref _logs, value);
-    }
+    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private static readonly Regex IpAddressRegex = new(@"(?<!\d)(?:\d{1,3}\.){3}\d{1,3}(?!\d)", RegexOptions.Compiled);
+    private static readonly Regex OperatorRegex = new(@"\b(?:user|operator|account|username)\s*[:=]\s*(?<name>[a-zA-Z0-9._@-]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private const int MaxArchiveFilesToRead = 20;
+
+    private static readonly string AllTypesOption = Resources.Strings.Hint_AllTypes;
+    private static readonly string AllLevelsOption = Resources.Strings.Hint_AllLevels;
+
+    private readonly List<OperationLog> _allLogs = new();
+    private readonly List<OperationLog> _filteredLogs = new();
+
+    private readonly DelegateCommand _firstPageCommand;
+    private readonly DelegateCommand _previousPageCommand;
+    private readonly DelegateCommand _nextPageCommand;
+    private readonly DelegateCommand _lastPageCommand;
+
+    public ObservableCollection<OperationLog> Logs { get; } = new();
 
     private DateTime? _startDate = DateTime.Today.AddDays(-7);
     public DateTime? StartDate
@@ -39,29 +56,25 @@ public class OperationLogsViewModel : NagetiveCurdVeiwModel<OperationLog>
         set => SetProperty(ref _operatorFilter, value);
     }
 
-    private string? _selectedOperationType;
+    private string? _selectedOperationType = AllTypesOption;
     public string? SelectedOperationType
     {
         get => _selectedOperationType;
         set => SetProperty(ref _selectedOperationType, value);
     }
 
-    private string? _selectedLogLevel;
+    private string? _selectedLogLevel = AllLevelsOption;
     public string? SelectedLogLevel
     {
         get => _selectedLogLevel;
         set => SetProperty(ref _selectedLogLevel, value);
     }
 
-    public ObservableCollection<string> OperationTypes { get; } = new()
-    {
-        "全部", "登录", "登出", "创建", "修改", "删除", "查询", "导出", "导入"
-    };
+    public ObservableCollection<string> OperationTypes { get; } = new();
 
-    public ObservableCollection<string> LogLevels { get; } = new()
-    {
-        "全部", "Info", "Warning", "Error", "Success"
-    };
+    public ObservableCollection<string> LogLevels { get; } = new();
+
+    public ObservableCollection<int> PageSizes { get; } = new() { 10, 20, 50, 100 };
 
     private int _currentPage = 1;
     public int CurrentPage
@@ -90,162 +103,496 @@ public class OperationLogsViewModel : NagetiveCurdVeiwModel<OperationLog>
         get => _pageSize;
         set
         {
-            if (SetProperty(ref _pageSize, value))
+            var normalized = value <= 0 ? 20 : value;
+            if (SetProperty(ref _pageSize, normalized))
             {
-                LoadLogs();
+                CurrentPage = 1;
+                UpdatePagedLogs();
             }
         }
     }
 
     public bool HasNoLogs => Logs.Count == 0;
 
-    #endregion
-
-    #region Commands
-
-    public ICommand RefreshCommand { get; }
     public ICommand SearchCommand { get; }
     public ICommand ExportCommand { get; }
     public ICommand ViewDetailsCommand { get; }
-    public ICommand FirstPageCommand { get; }
-    public ICommand PreviousPageCommand { get; }
-    public ICommand NextPageCommand { get; }
-    public ICommand LastPageCommand { get; }
-
-    #endregion
+    public ICommand FirstPageCommand => _firstPageCommand;
+    public ICommand PreviousPageCommand => _previousPageCommand;
+    public ICommand NextPageCommand => _nextPageCommand;
+    public ICommand LastPageCommand => _lastPageCommand;
 
     public OperationLogsViewModel()
     {
-        RefreshCommand = new DelegateCommand(LoadLogs);
-        SearchCommand = new DelegateCommand(Search);
-        ExportCommand = new DelegateCommand(Export);
-        ViewDetailsCommand = new DelegateCommand<OperationLog>(ViewDetails);
-        FirstPageCommand = new DelegateCommand(GoToFirstPage, CanGoToFirstPage).ObservesProperty(() => CurrentPage);
-        PreviousPageCommand = new DelegateCommand(GoToPreviousPage, CanGoToPreviousPage).ObservesProperty(() => CurrentPage);
-        NextPageCommand = new DelegateCommand(GoToNextPage, CanGoToNextPage).ObservesProperty(() => CurrentPage).ObservesProperty(() => TotalPages);
-        LastPageCommand = new DelegateCommand(GoToLastPage, CanGoToLastPage).ObservesProperty(() => CurrentPage).ObservesProperty(() => TotalPages);
+        InitializeFilterOptions();
 
-        // 初始化示例数据
-        LoadLogs();
+        SearchCommand = new DelegateCommand(OnSearch);
+        ExportCommand = new DelegateCommand(Export);
+        ViewDetailsCommand = new DelegateCommand<OperationLog?>(ViewDetails);
+
+        _firstPageCommand = new DelegateCommand(() => ChangePage(1), () => CurrentPage > 1)
+            .ObservesProperty(() => CurrentPage);
+        _previousPageCommand = new DelegateCommand(() => ChangePage(CurrentPage - 1), () => CurrentPage > 1)
+            .ObservesProperty(() => CurrentPage);
+        _nextPageCommand = new DelegateCommand(() => ChangePage(CurrentPage + 1), () => CurrentPage < TotalPages)
+            .ObservesProperty(() => CurrentPage)
+            .ObservesProperty(() => TotalPages);
+        _lastPageCommand = new DelegateCommand(() => ChangePage(TotalPages), () => CurrentPage < TotalPages)
+            .ObservesProperty(() => CurrentPage)
+            .ObservesProperty(() => TotalPages);
+
+        RefreshCommand.Execute(null);
     }
 
-    private void LoadLogs()
+    protected override async Task OnRefreshAsync()
     {
-        // TODO: 从数据库或服务加载真实数据
-        // 这里使用示例数据
-        var sampleLogs = GenerateSampleLogs();
-        
-        TotalCount = sampleLogs.Count;
-        TotalPages = (int)Math.Ceiling((double)TotalCount / PageSize);
-        
-        var pagedLogs = sampleLogs
-            .Skip((CurrentPage - 1) * PageSize)
-            .Take(PageSize)
-            .ToList();
-        
-        Logs = new ObservableCollection<OperationLog>(pagedLogs);
+        await ReloadLogsAsync();
+        CurrentPage = 1;
+        UpdatePagedLogs();
+    }
+
+    private async Task ReloadLogsAsync()
+    {
+        var logs = await Task.Run(ReadLogsFromDisk);
+        _allLogs.Clear();
+        _allLogs.AddRange(logs.OrderByDescending(x => x.Timestamp));
+        UpdateFilterOptionsFromData(_allLogs);
+        Logger.Info("Operation logs reloaded. Count={0}", _allLogs.Count);
+    }
+
+    private void OnSearch()
+    {
+        CurrentPage = 1;
+        UpdatePagedLogs();
+    }
+
+    private void ChangePage(int page)
+    {
+        if (TotalPages <= 0)
+        {
+            return;
+        }
+
+        var bounded = Math.Max(1, Math.Min(page, TotalPages));
+        if (bounded == CurrentPage)
+        {
+            return;
+        }
+
+        CurrentPage = bounded;
+        UpdatePagedLogs();
+    }
+
+    private void UpdatePagedLogs()
+    {
+        ApplyFilters();
+
+        TotalCount = _filteredLogs.Count;
+        TotalPages = Math.Max(1, (int)Math.Ceiling(TotalCount / (double)PageSize));
+        if (CurrentPage > TotalPages)
+        {
+            CurrentPage = TotalPages;
+        }
+        if (CurrentPage < 1)
+        {
+            CurrentPage = 1;
+        }
+
+        Logs.Clear();
+        var skip = (CurrentPage - 1) * PageSize;
+        foreach (var log in _filteredLogs.Skip(skip).Take(PageSize))
+        {
+            Logs.Add(log);
+        }
+
         RaisePropertyChanged(nameof(HasNoLogs));
     }
 
-    private void Search()
+    private void ApplyFilters()
     {
-        CurrentPage = 1;
-        LoadLogs();
+        IEnumerable<OperationLog> query = _allLogs;
+
+        if (StartDate.HasValue)
+        {
+            var start = StartDate.Value.Date;
+            query = query.Where(x => x.Timestamp >= start);
+        }
+
+        if (EndDate.HasValue)
+        {
+            var endExclusive = EndDate.Value.Date.AddDays(1);
+            query = query.Where(x => x.Timestamp < endExclusive);
+        }
+
+        if (!string.IsNullOrWhiteSpace(SelectedOperationType) && !string.Equals(SelectedOperationType, AllTypesOption, StringComparison.Ordinal))
+        {
+            query = query.Where(x => string.Equals(x.OperationType, SelectedOperationType, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(SelectedLogLevel) && !string.Equals(SelectedLogLevel, AllLevelsOption, StringComparison.Ordinal))
+        {
+            query = query.Where(x => string.Equals(x.Level, SelectedLogLevel, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(OperatorFilter))
+        {
+            var filter = OperatorFilter.Trim();
+            query = query.Where(x =>
+                x.Operator.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+                x.Description.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+                x.Logger.Contains(filter, StringComparison.OrdinalIgnoreCase));
+        }
+
+        _filteredLogs.Clear();
+        _filteredLogs.AddRange(query.OrderByDescending(x => x.Timestamp));
     }
 
     private void Export()
     {
-        // TODO: 实现导出功能
-        System.Windows.MessageBox.Show("导出功能开发中...", "提示");
+        if (_filteredLogs.Count == 0)
+        {
+            MessageBox.Show(Resources.Strings.Msg_NoLogsAvailable, Resources.Strings.Msg_WarningTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var dialog = new SaveFileDialog
+        {
+            Filter = "CSV (*.csv)|*.csv|Text (*.txt)|*.txt",
+            FileName = $"operation-logs-{DateTime.Now:yyyyMMdd-HHmmss}.csv",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        try
+        {
+            var csv = BuildCsv(_filteredLogs);
+            File.WriteAllText(dialog.FileName, csv, new UTF8Encoding(true));
+            MessageBox.Show($"{Resources.Strings.Btn_Export}{Resources.Strings.Msg_SuccessTitle}{Environment.NewLine}{dialog.FileName}", Resources.Strings.Msg_SuccessTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Failed to export operation logs.");
+            MessageBox.Show($"{Resources.Strings.Btn_Export}{Resources.Strings.Msg_ErrorTitle}{Environment.NewLine}{ex.Message}", Resources.Strings.Msg_ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void ViewDetails(OperationLog? log)
     {
-        if (log == null) return;
-        // TODO: 显示详情对话框
-        System.Windows.MessageBox.Show($"操作详情:\n\n{log.Description}\n\n时间: {log.Timestamp}\n操作人: {log.Operator}", "操作日志详情");
-    }
-
-    #region Pagination
-
-    private void GoToFirstPage()
-    {
-        CurrentPage = 1;
-        LoadLogs();
-    }
-
-    private bool CanGoToFirstPage() => CurrentPage > 1;
-
-    private void GoToPreviousPage()
-    {
-        CurrentPage--;
-        LoadLogs();
-    }
-
-    private bool CanGoToPreviousPage() => CurrentPage > 1;
-
-    private void GoToNextPage()
-    {
-        CurrentPage++;
-        LoadLogs();
-    }
-
-    private bool CanGoToNextPage() => CurrentPage < TotalPages;
-
-    private void GoToLastPage()
-    {
-        CurrentPage = TotalPages;
-        LoadLogs();
-    }
-
-    private bool CanGoToLastPage() => CurrentPage < TotalPages;
-
-    #endregion
-
-    #region Sample Data
-
-    private System.Collections.Generic.List<OperationLog> GenerateSampleLogs()
-    {
-        var logs = new System.Collections.Generic.List<OperationLog>();
-        var random = new Random();
-        var operators = new[] { "admin", "user001", "user002", "operator1", "operator2" };
-        var operations = new[] { "登录", "登出", "创建用户", "修改角色", "删除权限", "查询数据", "导出报表", "运行实验", "修改配置" };
-        var levels = new[] { "Info", "Warning", "Error", "Success" };
-        var ips = new[] { "192.168.1.100", "192.168.1.101", "192.168.1.102", "10.0.0.50" };
-
-        for (int i = 0; i < 86; i++)
+        if (log == null)
         {
-            logs.Add(new OperationLog
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTime.Now.AddHours(-random.Next(0, 168)),
-                Level = levels[random.Next(levels.Length)],
-                OperationType = operations[random.Next(operations.Length)],
-                Operator = operators[random.Next(operators.Length)],
-                Description = $"执行了 {operations[random.Next(operations.Length)]} 操作，涉及模块: {new[] { "用户管理", "实验管理", "设备管理", "数据管理" }[random.Next(4)]}",
-                IPAddress = ips[random.Next(ips.Length)]
-            });
+            return;
         }
 
-        return logs.OrderByDescending(x => x.Timestamp).ToList();
+        var detail = new StringBuilder();
+        detail.AppendLine($"{Resources.Strings.Col_Timestamp}: {log.Timestamp:yyyy-MM-dd HH:mm:ss.fff}");
+        detail.AppendLine($"{Resources.Strings.Col_Level}: {log.Level}");
+        detail.AppendLine($"{Resources.Strings.Col_OperationType}: {log.OperationType}");
+        detail.AppendLine($"{Resources.Strings.Lbl_Operator}: {log.Operator}");
+        detail.AppendLine($"{Resources.Strings.Col_IPAddress}: {log.IPAddress}");
+        detail.AppendLine($"Logger: {log.Logger}");
+        detail.AppendLine();
+        detail.AppendLine($"{Resources.Strings.Col_OperationDesc}:");
+        detail.AppendLine(log.Description);
+
+        MessageBox.Show(detail.ToString(), Resources.Strings.Btn_Details, MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    #endregion
+    private static string BuildCsv(IEnumerable<OperationLog> logs)
+    {
+        var lines = new List<string>
+        {
+            string.Join(",",
+                EscapeCsv(Resources.Strings.Col_Timestamp),
+                EscapeCsv(Resources.Strings.Col_Level),
+                EscapeCsv(Resources.Strings.Col_OperationType),
+                EscapeCsv(Resources.Strings.Lbl_Operator),
+                EscapeCsv(Resources.Strings.Col_IPAddress),
+                EscapeCsv("Logger"),
+                EscapeCsv(Resources.Strings.Col_OperationDesc))
+        };
 
-    protected override Task<IReadOnlyList<OperationLog>> LoadItemsAsync()
-        => Task.FromResult<IReadOnlyList<OperationLog>>(GenerateSampleLogs());
+        foreach (var log in logs)
+        {
+            lines.Add(string.Join(",",
+                EscapeCsv(log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)),
+                EscapeCsv(log.Level),
+                EscapeCsv(log.OperationType),
+                EscapeCsv(log.Operator),
+                EscapeCsv(log.IPAddress),
+                EscapeCsv(log.Logger),
+                EscapeCsv(log.Description)));
+        }
+
+        return string.Join(Environment.NewLine, lines);
+    }
+
+    private static string EscapeCsv(string value)
+    {
+        var safe = value.Replace("\"", "\"\"");
+        return $"\"{safe}\"";
+    }
+
+    private static List<OperationLog> ReadLogsFromDisk()
+    {
+        var logs = new List<OperationLog>();
+
+        foreach (var file in EnumerateLogFiles())
+        {
+            ReadSingleLogFile(file, logs);
+        }
+
+        return logs;
+    }
+
+    private static IEnumerable<string> EnumerateLogFiles()
+    {
+        var result = new List<string>();
+        var logsDirectory = Path.Combine(AppContext.BaseDirectory, "logs");
+        if (!Directory.Exists(logsDirectory))
+        {
+            return result;
+        }
+
+        var currentLog = Path.Combine(logsDirectory, "app.log");
+        if (File.Exists(currentLog))
+        {
+            result.Add(currentLog);
+        }
+
+        var archiveDirectory = Path.Combine(logsDirectory, "archives");
+        if (Directory.Exists(archiveDirectory))
+        {
+            var archiveLogs = Directory
+                .EnumerateFiles(archiveDirectory, "app.*.log")
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .Take(MaxArchiveFilesToRead);
+            result.AddRange(archiveLogs);
+        }
+
+        return result.Distinct(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static void ReadSingleLogFile(string filePath, List<OperationLog> sink)
+    {
+        try
+        {
+            OperationLog? current = null;
+            foreach (var line in File.ReadLines(filePath, Encoding.UTF8))
+            {
+                if (TryParseLogLine(line, out var parsed))
+                {
+                    if (current != null)
+                    {
+                        sink.Add(current);
+                    }
+                    current = parsed;
+                    continue;
+                }
+
+                if (current != null && !string.IsNullOrWhiteSpace(line))
+                {
+                    current.Description = string.Concat(current.Description, Environment.NewLine, line.Trim());
+                }
+            }
+
+            if (current != null)
+            {
+                sink.Add(current);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn(ex, "Failed to read log file: {0}", filePath);
+        }
+    }
+
+    private static bool TryParseLogLine(string line, out OperationLog parsed)
+    {
+        parsed = default!;
+        if (string.IsNullOrWhiteSpace(line))
+        {
+            return false;
+        }
+
+        var p1 = line.IndexOf('|');
+        if (p1 <= 0)
+        {
+            return false;
+        }
+
+        var p2 = line.IndexOf('|', p1 + 1);
+        if (p2 <= p1 + 1)
+        {
+            return false;
+        }
+
+        var p3 = line.IndexOf('|', p2 + 1);
+        if (p3 <= p2 + 1)
+        {
+            return false;
+        }
+
+        var timestampText = line.Substring(0, p1).Trim();
+        if (!TryParseTimestamp(timestampText, out var timestamp))
+        {
+            return false;
+        }
+
+        var level = NormalizeLevel(line.Substring(p1 + 1, p2 - p1 - 1).Trim());
+        var logger = line.Substring(p2 + 1, p3 - p2 - 1).Trim();
+        var message = line[(p3 + 1)..].Trim();
+
+        parsed = new OperationLog
+        {
+            Id = Guid.NewGuid(),
+            Timestamp = timestamp,
+            Level = level,
+            OperationType = InferOperationType(message, logger),
+            Operator = InferOperator(message),
+            Description = string.IsNullOrWhiteSpace(message) ? logger : message,
+            IPAddress = InferIpAddress(message),
+            Logger = logger
+        };
+
+        return true;
+    }
+
+    private static bool TryParseTimestamp(string value, out DateTime timestamp)
+    {
+        if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out timestamp))
+        {
+            return true;
+        }
+
+        return DateTime.TryParse(value, CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out timestamp);
+    }
+
+    private static string NormalizeLevel(string level)
+    {
+        return level.ToUpperInvariant() switch
+        {
+            "TRACE" => "Trace",
+            "DEBUG" => "Debug",
+            "INFO" => "Info",
+            "WARN" => "Warning",
+            "WARNING" => "Warning",
+            "ERROR" => "Error",
+            "FATAL" => "Fatal",
+            _ => "Info"
+        };
+    }
+
+    private static string InferOperationType(string message, string logger)
+    {
+        var text = string.Concat(logger, " ", message).ToLowerInvariant();
+        if (text.Contains("login") || text.Contains("signin")) return "Login";
+        if (text.Contains("logout") || text.Contains("signout")) return "Logout";
+        if (text.Contains("create") || text.Contains("add") || text.Contains("insert")) return "Create";
+        if (text.Contains("update") || text.Contains("edit") || text.Contains("modify")) return "Update";
+        if (text.Contains("delete") || text.Contains("remove")) return "Delete";
+        if (text.Contains("query") || text.Contains("search") || text.Contains("load") || text.Contains("get")) return "Query";
+        if (text.Contains("export")) return "Export";
+        if (text.Contains("import")) return "Import";
+        if (text.Contains("run") || text.Contains("execute") || text.Contains("start")) return "Execute";
+        if (text.Contains("alarm") || text.Contains("warn")) return "Alarm";
+        return "System";
+    }
+
+    private static string InferOperator(string message)
+    {
+        var match = OperatorRegex.Match(message);
+        if (match.Success)
+        {
+            return match.Groups["name"].Value;
+        }
+
+        var quickMatch = Regex.Match(message, @"\b(admin|root|system|user\d+|operator\d+)\b", RegexOptions.IgnoreCase);
+        if (quickMatch.Success)
+        {
+            return quickMatch.Value;
+        }
+
+        return "system";
+    }
+
+    private static string InferIpAddress(string message)
+    {
+        var match = IpAddressRegex.Match(message);
+        return match.Success ? match.Value : "-";
+    }
+
+    private void InitializeFilterOptions()
+    {
+        OperationTypes.Clear();
+        OperationTypes.Add(AllTypesOption);
+        SelectedOperationType = AllTypesOption;
+
+        LogLevels.Clear();
+        LogLevels.Add(AllLevelsOption);
+        LogLevels.Add("Info");
+        LogLevels.Add("Warning");
+        LogLevels.Add("Error");
+        LogLevels.Add("Debug");
+        LogLevels.Add("Trace");
+        LogLevels.Add("Fatal");
+        SelectedLogLevel = AllLevelsOption;
+    }
+
+    private void UpdateFilterOptionsFromData(IEnumerable<OperationLog> logs)
+    {
+        var currentType = SelectedOperationType;
+        var currentLevel = SelectedLogLevel;
+
+        var opTypes = logs
+            .Select(x => x.OperationType)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(x => x)
+            .ToList();
+
+        OperationTypes.Clear();
+        OperationTypes.Add(AllTypesOption);
+        foreach (var type in opTypes)
+        {
+            OperationTypes.Add(type);
+        }
+
+        var levels = logs
+            .Select(x => x.Level)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(x => x)
+            .ToList();
+
+        LogLevels.Clear();
+        LogLevels.Add(AllLevelsOption);
+        foreach (var level in levels)
+        {
+            LogLevels.Add(level);
+        }
+
+        SelectedOperationType = !string.IsNullOrWhiteSpace(currentType) && OperationTypes.Contains(currentType)
+            ? currentType
+            : AllTypesOption;
+
+        SelectedLogLevel = !string.IsNullOrWhiteSpace(currentLevel) && LogLevels.Contains(currentLevel)
+            ? currentLevel
+            : AllLevelsOption;
+    }
 }
 
-/// <summary>
-/// 操作日志模型
-/// </summary>
 public class OperationLog
 {
     public Guid Id { get; set; }
     public DateTime Timestamp { get; set; }
     public string Level { get; set; } = "Info";
-    public string OperationType { get; set; } = string.Empty;
-    public string Operator { get; set; } = string.Empty;
+    public string OperationType { get; set; } = "System";
+    public string Operator { get; set; } = "system";
     public string Description { get; set; } = string.Empty;
-    public string IPAddress { get; set; } = string.Empty;
+    public string IPAddress { get; set; } = "-";
+    public string Logger { get; set; } = string.Empty;
 }

@@ -5,7 +5,6 @@ using System.Windows.Data;
 namespace IndustrySystem.Presentation.Wpf.Converters
 {
     /// <summary>
-    /// 将字符串转换为首字母的转换器，用于显示用户头像
     /// </summary>
     public class InitialConverter : IValueConverter
     {

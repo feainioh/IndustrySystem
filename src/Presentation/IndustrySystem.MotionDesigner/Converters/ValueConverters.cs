@@ -6,7 +6,6 @@ using System.Windows.Media;
 namespace IndustrySystem.MotionDesigner.Converters;
 
 /// <summary>
-/// 反向布尔值到可见性转换器
 /// </summary>
 public class InverseBooleanToVisibilityConverter : IValueConverter
 {
@@ -30,7 +29,6 @@ public class InverseBooleanToVisibilityConverter : IValueConverter
 }
 
 /// <summary>
-/// 空值到可见性转换器
 /// </summary>
 public class NullToVisibilityConverter : IValueConverter
 {
@@ -53,7 +51,6 @@ public class NullToVisibilityConverter : IValueConverter
 }
 
 /// <summary>
-/// 布尔值到画刷转换器
 /// </summary>
 public class BooleanToBrushConverter : IValueConverter
 {
@@ -76,7 +73,6 @@ public class BooleanToBrushConverter : IValueConverter
 }
 
 /// <summary>
-/// 非零值判断转换器
 /// </summary>
 public class IsNotZeroConverter : IValueConverter
 {
@@ -100,7 +96,6 @@ public class IsNotZeroConverter : IValueConverter
 }
 
 /// <summary>
-/// 字符串非空判断转换器
 /// </summary>
 public class StringNotEmptyConverter : IValueConverter
 {

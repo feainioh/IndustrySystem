@@ -34,6 +34,9 @@
             <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FF0078D4" Opacity="0.72"/>
             <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="#FF0078D4" Opacity="0.75"/>
 
+            <!-- Page background override: avoid gray cast in main content area -->
+            <SolidColorBrush x:Key="SystemControlPageBackgroundAltHighBrush" Color="#FFFFFFFF"/>
+
             <!-- Global localization provider -->
             <loc:LocalizationProvider x:Key="Loc" />
 

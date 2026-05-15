@@ -95,6 +95,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("App_Title", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 © 2024 Industry System 的本地化字符串。
+        /// </summary>
+        public static string App_FooterCopyright {
+            get {
+                return ResourceManager.GetString("App_FooterCopyright", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 v1.0 的本地化字符串。
+        /// </summary>
+        public static string App_Version {
+            get {
+                return ResourceManager.GetString("App_Version", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 确认 的本地化字符串。
@@ -176,6 +194,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Btn_Close", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 连接 的本地化字符串。
+        /// </summary>
+        public static string Btn_Connect {
+            get {
+                return ResourceManager.GetString("Btn_Connect", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 容器配置 的本地化字符串。
@@ -192,6 +219,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Btn_Delete {
             get {
                 return ResourceManager.GetString("Btn_Delete", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 断开 的本地化字符串。
+        /// </summary>
+        public static string Btn_Disconnect {
+            get {
+                return ResourceManager.GetString("Btn_Disconnect", resourceCulture);
             }
         }
         
@@ -320,6 +356,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Btn_Prev", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 读取 的本地化字符串。
+        /// </summary>
+        public static string Btn_Read {
+            get {
+                return ResourceManager.GetString("Btn_Read", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 刷新 的本地化字符串。
@@ -327,6 +372,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Btn_Refresh {
             get {
                 return ResourceManager.GetString("Btn_Refresh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 重置 的本地化字符串。
+        /// </summary>
+        public static string Btn_Reset {
+            get {
+                return ResourceManager.GetString("Btn_Reset", resourceCulture);
             }
         }
         
@@ -381,6 +435,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Btn_Stop {
             get {
                 return ResourceManager.GetString("Btn_Stop", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 终止 的本地化字符串。
+        /// </summary>
+        public static string Btn_Terminate {
+            get {
+                return ResourceManager.GetString("Btn_Terminate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 写入 的本地化字符串。
+        /// </summary>
+        public static string Btn_Write {
+            get {
+                return ResourceManager.GetString("Btn_Write", resourceCulture);
             }
         }
         
@@ -516,6 +588,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Col_EnabledStatus {
             get {
                 return ResourceManager.GetString("Col_EnabledStatus", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 运行时长 的本地化字符串。
+        /// </summary>
+        public static string Col_ElapsedTime {
+            get {
+                return ResourceManager.GetString("Col_ElapsedTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 执行ID 的本地化字符串。
+        /// </summary>
+        public static string Col_ExecutionId {
+            get {
+                return ResourceManager.GetString("Col_ExecutionId", resourceCulture);
             }
         }
         
@@ -723,6 +813,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Col_Status {
             get {
                 return ResourceManager.GetString("Col_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 开始时间 的本地化字符串。
+        /// </summary>
+        public static string Col_StartTime {
+            get {
+                return ResourceManager.GetString("Col_StartTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 步骤进度 的本地化字符串。
+        /// </summary>
+        public static string Col_StepProgress {
+            get {
+                return ResourceManager.GetString("Col_StepProgress", resourceCulture);
             }
         }
         
@@ -1274,6 +1382,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Field_User_UserName", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 例: 127.0.0.1:502 的本地化字符串。
+        /// </summary>
+        public static string Hint_EndpointExample {
+            get {
+                return ResourceManager.GetString("Hint_EndpointExample", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 全部级别 的本地化字符串。
@@ -1751,6 +1868,33 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Label_CurrentShelf", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 值(逗号分隔): 的本地化字符串。
+        /// </summary>
+        public static string Label_CommaSeparatedValues {
+            get {
+                return ResourceManager.GetString("Label_CommaSeparatedValues", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 启用:{0} 的本地化字符串。
+        /// </summary>
+        public static string Label_EnabledFormat {
+            get {
+                return ResourceManager.GetString("Label_EnabledFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 数量: 的本地化字符串。
+        /// </summary>
+        public static string Label_Count {
+            get {
+                return ResourceManager.GetString("Label_Count", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 启用状态 的本地化字符串。
@@ -1778,6 +1922,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Label_Rows", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 结果: 的本地化字符串。
+        /// </summary>
+        public static string Label_Result {
+            get {
+                return ResourceManager.GetString("Label_Result", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 起始地址: 的本地化字符串。
+        /// </summary>
+        public static string Label_StartAddress {
+            get {
+                return ResourceManager.GetString("Label_StartAddress", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 汇总视图 的本地化字符串。
@@ -1785,6 +1947,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Label_SummaryView {
             get {
                 return ResourceManager.GetString("Label_SummaryView", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 切换实验类型： 的本地化字符串。
+        /// </summary>
+        public static string Label_SwitchExperimentType {
+            get {
+                return ResourceManager.GetString("Label_SwitchExperimentType", resourceCulture);
             }
         }
         
@@ -2624,6 +2795,96 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Msg_NoLogsAvailable", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 暂无报警信息 的本地化字符串。
+        /// </summary>
+        public static string Msg_NoRecentAlarms {
+            get {
+                return ResourceManager.GetString("Msg_NoRecentAlarms", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 暂无实时传感器数据 的本地化字符串。
+        /// </summary>
+        public static string Msg_NoRealtimeSensors {
+            get {
+                return ResourceManager.GetString("Msg_NoRealtimeSensors", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 PCR 扩增 的本地化字符串。
+        /// </summary>
+        public static string Mock_Experiment_PcrAmplification {
+            get {
+                return ResourceManager.GetString("Mock_Experiment_PcrAmplification", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 细胞培养 的本地化字符串。
+        /// </summary>
+        public static string Mock_Experiment_CellCulture {
+            get {
+                return ResourceManager.GetString("Mock_Experiment_CellCulture", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 发酵过程监控 的本地化字符串。
+        /// </summary>
+        public static string Mock_Experiment_FermentationMonitoring {
+            get {
+                return ResourceManager.GetString("Mock_Experiment_FermentationMonitoring", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 过滤工艺验证 的本地化字符串。
+        /// </summary>
+        public static string Mock_Experiment_FilterValidation {
+            get {
+                return ResourceManager.GetString("Mock_Experiment_FilterValidation", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 电导率仪 的本地化字符串。
+        /// </summary>
+        public static string Metric_ConductivityMeter {
+            get {
+                return ResourceManager.GetString("Metric_ConductivityMeter", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 流量计 F1 的本地化字符串。
+        /// </summary>
+        public static string Metric_FlowMeterF1 {
+            get {
+                return ResourceManager.GetString("Metric_FlowMeterF1", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 压力传感器 A 的本地化字符串。
+        /// </summary>
+        public static string Metric_PressureSensorA {
+            get {
+                return ResourceManager.GetString("Metric_PressureSensorA", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 温度探头 T1 的本地化字符串。
+        /// </summary>
+        public static string Metric_TemperatureProbeT1 {
+            get {
+                return ResourceManager.GetString("Metric_TemperatureProbeT1", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 成功 的本地化字符串。
@@ -2948,6 +3209,33 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Page_ExperimentHistory_Title", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 实验管理 (模板/组/实验) 占位 的本地化字符串。
+        /// </summary>
+        public static string Page_ExperimentsPlaceholder_Title {
+            get {
+                return ResourceManager.GetString("Page_ExperimentsPlaceholder_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 连接设备并读写保持寄存器 的本地化字符串。
+        /// </summary>
+        public static string Page_HardwareDebug_Subtitle {
+            get {
+                return ResourceManager.GetString("Page_HardwareDebug_Subtitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 手动调试 的本地化字符串。
+        /// </summary>
+        public static string Page_HardwareDebug_Title {
+            get {
+                return ResourceManager.GetString("Page_HardwareDebug_Title", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 物料库存管理 · 入库 / 出库 / 批次追踪 的本地化字符串。
@@ -2991,6 +3279,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Page_MaterialInfo_Title {
             get {
                 return ResourceManager.GetString("Page_MaterialInfo_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 实时数据与趋势 的本地化字符串。
+        /// </summary>
+        public static string Page_RealtimeData_Title {
+            get {
+                return ResourceManager.GetString("Page_RealtimeData_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 角色管理 (占位) 的本地化字符串。
+        /// </summary>
+        public static string Page_RolesPlaceholder_Title {
+            get {
+                return ResourceManager.GetString("Page_RolesPlaceholder_Title", resourceCulture);
             }
         }
         
@@ -3074,6 +3380,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Run_Label_CurrentExperiment", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 当前监控： 的本地化字符串。
+        /// </summary>
+        public static string Run_Label_CurrentMonitor {
+            get {
+                return ResourceManager.GetString("Run_Label_CurrentMonitor", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 进度： 的本地化字符串。
@@ -3090,6 +3405,105 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Run_Label_Status {
             get {
                 return ResourceManager.GetString("Run_Label_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 共 5 条执行记录，点击行切换当前监控对象 的本地化字符串。
+        /// </summary>
+        public static string Run_ExecutionListHint {
+            get {
+                return ResourceManager.GetString("Run_ExecutionListHint", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 步骤 {0}/{1} 的本地化字符串。
+        /// </summary>
+        public static string Run_StepProgressFormat {
+            get {
+                return ResourceManager.GetString("Run_StepProgressFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 已完成 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Completed {
+            get {
+                return ResourceManager.GetString("Run_State_Completed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 已暂停 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Paused {
+            get {
+                return ResourceManager.GetString("Run_State_Paused", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 排队中 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Queued {
+            get {
+                return ResourceManager.GetString("Run_State_Queued", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 空闲 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Idle {
+            get {
+                return ResourceManager.GetString("Run_State_Idle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 运行中 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Running {
+            get {
+                return ResourceManager.GetString("Run_State_Running", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 已停止 的本地化字符串。
+        /// </summary>
+        public static string Run_State_Stopped {
+            get {
+                return ResourceManager.GetString("Run_State_Stopped", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 （当前监控:  的本地化字符串。
+        /// </summary>
+        public static string Realtime_CurrentMonitorPrefix {
+            get {
+                return ResourceManager.GetString("Realtime_CurrentMonitorPrefix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 ） 的本地化字符串。
+        /// </summary>
+        public static string Realtime_CurrentMonitorSuffix {
+            get {
+                return ResourceManager.GetString("Realtime_CurrentMonitorSuffix", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 趋势图待接入数据源 的本地化字符串。
+        /// </summary>
+        public static string Realtime_TrendPlaceholder {
+            get {
+                return ResourceManager.GetString("Realtime_TrendPlaceholder", resourceCulture);
             }
         }
         
@@ -3173,6 +3587,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Section_ExperimentGroupList", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 实验执行列表 的本地化字符串。
+        /// </summary>
+        public static string Section_ExecutionList {
+            get {
+                return ResourceManager.GetString("Section_ExecutionList", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 实验参数 的本地化字符串。
@@ -3200,6 +3623,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Section_InventoryQuantity", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 关键指标 的本地化字符串。
+        /// </summary>
+        public static string Section_KeyMetrics {
+            get {
+                return ResourceManager.GetString("Section_KeyMetrics", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 物料信息 的本地化字符串。
@@ -3225,6 +3657,51 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Section_PermissionInfo {
             get {
                 return ResourceManager.GetString("Section_PermissionInfo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 最近报警 的本地化字符串。
+        /// </summary>
+        public static string Section_RecentAlarms {
+            get {
+                return ResourceManager.GetString("Section_RecentAlarms", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 连接 的本地化字符串。
+        /// </summary>
+        public static string Section_HardwareConnection {
+            get {
+                return ResourceManager.GetString("Section_HardwareConnection", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 读取保持寄存器 的本地化字符串。
+        /// </summary>
+        public static string Section_ReadHoldingRegisters {
+            get {
+                return ResourceManager.GetString("Section_ReadHoldingRegisters", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 传感器指标 的本地化字符串。
+        /// </summary>
+        public static string Section_SensorMetrics {
+            get {
+                return ResourceManager.GetString("Section_SensorMetrics", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 状态 的本地化字符串。
+        /// </summary>
+        public static string Section_Status {
+            get {
+                return ResourceManager.GetString("Section_Status", resourceCulture);
             }
         }
         
@@ -3290,6 +3767,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Section_TemplateList", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 温度趋势曲线 的本地化字符串。
+        /// </summary>
+        public static string Section_TemperatureTrend {
+            get {
+                return ResourceManager.GetString("Section_TemperatureTrend", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 用户列表 的本地化字符串。
@@ -3297,6 +3783,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Section_UserList {
             get {
                 return ResourceManager.GetString("Section_UserList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 写入保持寄存器 的本地化字符串。
+        /// </summary>
+        public static string Section_WriteHoldingRegisters {
+            get {
+                return ResourceManager.GetString("Section_WriteHoldingRegisters", resourceCulture);
             }
         }
         
@@ -3398,6 +3893,69 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Status_Inactive", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 执行中... 的本地化字符串。
+        /// </summary>
+        public static string Status_Executing {
+            get {
+                return ResourceManager.GetString("Status_Executing", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 未选择 的本地化字符串。
+        /// </summary>
+        public static string Status_NotSelected {
+            get {
+                return ResourceManager.GetString("Status_NotSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 清洗与完成 的本地化字符串。
+        /// </summary>
+        public static string Step_CleanAndFinish {
+            get {
+                return ResourceManager.GetString("Step_CleanAndFinish", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 抽液3min 的本地化字符串。
+        /// </summary>
+        public static string Step_Pump3Min {
+            get {
+                return ResourceManager.GetString("Step_Pump3Min", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 密封阀关闭 的本地化字符串。
+        /// </summary>
+        public static string Step_SealValveClose {
+            get {
+                return ResourceManager.GetString("Step_SealValveClose", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 开启抽液泵 的本地化字符串。
+        /// </summary>
+        public static string Step_StartPump {
+            get {
+                return ResourceManager.GetString("Step_StartPump", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 停止抽液 的本地化字符串。
+        /// </summary>
+        public static string Step_StopPump {
+            get {
+                return ResourceManager.GetString("Step_StopPump", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 删除权限 的本地化字符串。
@@ -3432,6 +3990,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Tooltip_DeleteUser {
             get {
                 return ResourceManager.GetString("Tooltip_DeleteUser", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 关闭 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_CloseWindow {
+            get {
+                return ResourceManager.GetString("Tooltip_CloseWindow", resourceCulture);
             }
         }
         
@@ -3497,6 +4064,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
                 return ResourceManager.GetString("Tooltip_LastPage", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   查找类似 登出 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_Logout {
+            get {
+                return ResourceManager.GetString("Tooltip_Logout", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 管理权限 的本地化字符串。
@@ -3504,6 +4080,24 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Tooltip_ManagePermissions {
             get {
                 return ResourceManager.GetString("Tooltip_ManagePermissions", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 最大化 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_Maximize {
+            get {
+                return ResourceManager.GetString("Tooltip_Maximize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 最小化 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_Minimize {
+            get {
+                return ResourceManager.GetString("Tooltip_Minimize", resourceCulture);
             }
         }
         
@@ -3522,6 +4116,15 @@ namespace IndustrySystem.Presentation.Wpf.Resources {
         public static string Tooltip_ToggleSummaryView {
             get {
                 return ResourceManager.GetString("Tooltip_ToggleSummaryView", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   查找类似 切换主题 的本地化字符串。
+        /// </summary>
+        public static string Tooltip_ThemeToggle {
+            get {
+                return ResourceManager.GetString("Tooltip_ThemeToggle", resourceCulture);
             }
         }
         

@@ -11,9 +11,9 @@ xmlns:prism="http://prismlibrary.com/"
     </prism:Dialog.WindowStyle>
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
-        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="#FFFDFDFE" />
-        <SolidColorBrush x:Key="DialogFooterBrush" Color="#FFF8F9FC" />
-        <Style x:Key="FormField" TargetType="TextBox" BasedOn="{StaticResource MaterialTextField}">
+        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="{DynamicResource DialogSurfaceColor}" />
+        <SolidColorBrush x:Key="DialogFooterBrush" Color="{DynamicResource DialogFooterColor}" />
+        <Style x:Key="FormField" TargetType="TextBox" BasedOn="{StaticResource DialogTextField}">
             <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
             <Setter Property="Margin" Value="0,0,0,14"/>
             <Setter Property="FontSize" Value="13"/>
@@ -24,12 +24,13 @@ xmlns:prism="http://prismlibrary.com/"
         <Border Background="{StaticResource DialogSurfaceBrush}"
              CornerRadius="18">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.22" Color="#000000" Direction="270"/>
+                <StaticResource ResourceKey="DialogSurfaceShadow" />
             </Border.Effect>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -37,30 +38,25 @@ xmlns:prism="http://prismlibrary.com/"
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ViewGrid" Width="24" Height="24" Foreground="White" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                            <TextBlock Text="货架配置" FontSize="17" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="{x:Static loc:Strings.Dialog_ShelfEdit_Title}" FontSize="17" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
                         <Button HorizontalAlignment="Right" VerticalAlignment="Center"
 							Style="{StaticResource MaterialDesignFlatButton}"
 							Command="{Binding AddShelfCommand}" Foreground="White" Padding="8,4">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                                <TextBlock Text="新增" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Static loc:Strings.Btn_Add}" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </Grid>
                 </Border>
 
-                <ListView Grid.Row="1" ItemsSource="{Binding Shelves}" Margin="8" Style="{StaticResource ModernListView}">
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Width="110" Header="编码" DisplayMemberBinding="{Binding ShelfCode}"/>
-                            <GridViewColumn Width="130" Header="名称" DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Width="70" Header="行×列">
-                                <GridViewColumn.CellTemplate>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding PagedShelves}" Margin="8" Style="{StaticResource ListViewLikeDataGrid}">
+                    <DataGrid.Columns>
+                            <DataGridTextColumn Width="110" Header="{x:Static loc:Strings.Col_Common_Id}" Binding="{Binding ShelfCode}"/>
+                            <DataGridTextColumn Width="130" Header="{x:Static loc:Strings.Col_Common_Name}" Binding="{Binding Name}"/>
+                            <DataGridTemplateColumn Width="70" Header="{x:Static loc:Strings.Lbl_GridSize}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock FontSize="12">
 										<Run Text="{Binding Rows, Mode=OneWay}"/>
@@ -68,35 +64,79 @@ xmlns:prism="http://prismlibrary.com/"
 										<Run Text="{Binding Columns, Mode=OneWay}"/>
                                         </TextBlock>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="120" Header="描述" DisplayMemberBinding="{Binding Description}"/>
-                            <GridViewColumn Width="80" Header="操作">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="120" Header="{x:Static loc:Strings.Col_Common_Description}" Binding="{Binding Description}"/>
+                            <DataGridTemplateColumn Width="80" Header="{x:Static loc:Strings.Col_Common_Actions}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Style="{StaticResource MaterialDesignIconButton}" Width="28" Height="28"
-												Command="{Binding DataContext.EditShelfCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-												CommandParameter="{Binding Id}" ToolTip="编辑">
-                                                <materialDesign:PackIcon Kind="Pencil" Width="16" Height="16"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
+												Command="{Binding DataContext.EditShelfCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding Id}" ToolTip="{x:Static loc:Strings.Btn_Edit}">
+                                                <materialDesign:PackIcon Kind="Pencil" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
-                                            <Button Style="{StaticResource MaterialDesignIconButton}" Width="28" Height="28"
-												Command="{Binding DataContext.DeleteShelfCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-												CommandParameter="{Binding Id}" ToolTip="删除" Foreground="{StaticResource ErrorBrush}">
-                                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
+												Command="{Binding DataContext.DeleteShelfCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding Id}" ToolTip="{x:Static loc:Strings.Btn_Delete}" Foreground="{StaticResource ErrorBrush}">
+                                                <materialDesign:PackIcon Kind="Delete" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-                <Border Grid.Row="2" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="16,10">
+                <Border Grid.Row="2" Style="{StaticResource PaginationCard}" Margin="8,0,8,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
+                            <TextBlock Text="{Binding ShelfTotalCount}" FontWeight="SemiBold" Foreground="{StaticResource HeaderGradient}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Records}" Opacity="0.7"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Style="{StaticResource PaginationButtonPanel}">
+                            <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding ShelfFirstPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding ShelfPreviousPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Prev}" Style="{StaticResource PaginationButton}"/>
+
+                            <Border Style="{StaticResource CurrentPageBorder}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding ShelfCurrentPage}" FontWeight="SemiBold"/>
+                                    <TextBlock Text=" / " Opacity="0.7" Margin="4,0"/>
+                                    <TextBlock Text="{Binding ShelfTotalPages}" Opacity="0.7"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding ShelfNextPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Next}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding ShelfLastPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Style="{StaticResource PaginationButton}"/>
+
+                            <ComboBox SelectedItem="{Binding ShelfPageSize, Mode=TwoWay}"
+                                      ItemsSource="{Binding ShelfPageSizes}"
+                                      Width="80" Margin="12,0,0,0" Style="{StaticResource PaginationComboBox}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_PerPage}" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="3" BorderBrush="{StaticResource DialogFooterBrush}" BorderThickness="0,1,0,0" Padding="16,10">
                     <Button HorizontalAlignment="Right"
-						Style="{StaticResource MaterialDesignOutlinedButton}"
-						Content="关闭" Width="90" Height="34"
+						Style="{StaticResource AppInteractiveButtonNeutral}"
+                        Content="{x:Static loc:Strings.Btn_Close}" Width="90" Height="34"
 						Click="CloseButton_Click"/>
                 </Border>
             </Grid>
@@ -104,3 +144,5 @@ xmlns:prism="http://prismlibrary.com/"
     </Border>
 
 </UserControl>
+
+

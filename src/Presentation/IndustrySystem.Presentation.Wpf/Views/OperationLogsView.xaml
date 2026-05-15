@@ -27,7 +27,7 @@
         <SolidColorBrush x:Key="SuccessBrush" Color="#10893E"/>
     </UserControl.Resources>
     
-    <Grid Margin="24">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -47,12 +47,8 @@
             
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <!-- 渐变图标背景 -->
-                <Border Width="40" Height="40" CornerRadius="8"
-                        Background="{StaticResource HeaderGradient}"
-                        VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
-                    </Border.Effect>
+                <Border Style="{StaticResource PageHeaderIconBorder}"
+                        Background="{StaticResource HeaderGradient}">
                     <ui:FontIcon Glyph="&#xE8BC;" FontSize="20" 
                                 Foreground="White"
                                 HorizontalAlignment="Center" 
@@ -60,17 +56,15 @@
                 </Border>
                 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{x:Static loc:Strings.Nav_OperationLogs}" 
-                              FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="{x:Static loc:Strings.Desc_OperationLogs}" 
-                              FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Nav_OperationLogs}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{x:Static loc:Strings.Desc_OperationLogs}" Style="{StaticResource PageHeaderSubtitle}"/>
                 </StackPanel>
             </StackPanel>
             
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
                 <!-- 导出按钮 -->
                 <Button Command="{Binding ExportCommand}"
-                        ToolTip="{x:Static loc:Strings.Tooltip_ExportLogs}" Margin="0,0,12,0">
+                    ToolTip="{x:Static loc:Strings.Tooltip_ExportLogs}" Margin="0,0,12,0" Style="{StaticResource HeaderActionOutlinedButton}">
                     <StackPanel Orientation="Horizontal">
                         <ui:FontIcon Glyph="&#xE896;" Margin="0,0,8,0"/>
                         <TextBlock Text="{x:Static loc:Strings.Btn_Export}"/>
@@ -79,8 +73,7 @@
                 
                 <!-- 刷新按钮 -->
                 <Button Command="{Binding RefreshCommand}"
-                        Style="{DynamicResource AccentButtonStyle}"
-                        Padding="16,8">
+                    Style="{StaticResource HeaderActionAccentButton}">
                     <StackPanel Orientation="Horizontal">
                         <ui:FontIcon Glyph="&#xE72C;" Margin="0,0,8,0"/>
                         <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}"/>
@@ -90,14 +83,7 @@
         </Grid>
 
         <!-- Filter Card -->
-        <Border Grid.Row="2" 
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="20"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="2" Style="{StaticResource FormCard}">
             
             <Grid>
                 <Grid.RowDefinitions>
@@ -172,8 +158,7 @@
                     <!-- 搜索按钮 -->
                     <Button Grid.Column="6" 
                            Command="{Binding SearchCommand}"
-                           Style="{DynamicResource AccentButtonStyle}"
-                           Padding="20,8" MinWidth="100">
+                           Style="{StaticResource PrimaryCommandButton}" MinWidth="100">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon Glyph="&#xE721;" Margin="0,0,8,0"/>
                             <TextBlock Text="{x:Static loc:Strings.Btn_Search}"/>
@@ -184,27 +169,11 @@
         </Border>
 
         <!-- Logs DataGrid Card -->
-        <Border Grid.Row="4" 
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="4" Style="{StaticResource ListCard}">
             
             <Grid>
                 <DataGrid ItemsSource="{Binding Logs}"
-                         AutoGenerateColumns="False"
-                         IsReadOnly="True"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         RowHeight="48"
-                         HeadersVisibility="Column"
-                         GridLinesVisibility="Horizontal"
-                         HorizontalGridLinesBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                         AlternatingRowBackground="{DynamicResource SystemControlAltMediumLowBrush}"
-                         ui:ScrollViewerHelper.AutoHideScrollBars="True">
+                         Style="{StaticResource ListViewLikeDataGrid}">
                     
                     <DataGrid.Columns>
                         <!-- 时间 -->
@@ -293,7 +262,7 @@
                                     <Button Content="{x:Static loc:Strings.Btn_Details}" 
                                            Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                            CommandParameter="{Binding}"
-                                           Style="{DynamicResource AccentButtonStyle}"
+                                           Style="{StaticResource AppInteractiveButtonPrimary}"
                                            Padding="12,4" FontSize="12"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -315,11 +284,7 @@
         </Border>
 
         <!-- Pagination -->
-        <Border Grid.Row="6" 
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="16"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
+        <Border Grid.Row="6" Style="{StaticResource PaginationCard}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -328,7 +293,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <!-- 统计信息 -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                  <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
                     <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
                     <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" 
                               Foreground="{StaticResource HeaderGradient}"/>
@@ -336,16 +301,15 @@
                 </StackPanel>
                 
                 <!-- 分页控件 -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                  <StackPanel Grid.Column="2" Style="{StaticResource PaginationButtonPanel}">
                     <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding FirstPageCommand}"
-                           ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Width="36" Height="36" Margin="0,0,8,0"/>
+                          ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Style="{StaticResource PaginationButton}"/>
                     <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding PreviousPageCommand}"
-                           ToolTip="{x:Static loc:Strings.Btn_Prev}" Width="36" Height="36" Margin="0,0,8,0"/>
+                          ToolTip="{x:Static loc:Strings.Btn_Prev}" Style="{StaticResource PaginationButton}"/>
                     
-                    <Border Background="{DynamicResource SystemControlAltMediumLowBrush}"
-                           CornerRadius="4" Padding="12,6">
+                      <Border Style="{StaticResource CurrentPageBorder}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding CurrentPage}" FontWeight="SemiBold"/>
                             <TextBlock Text=" / " Opacity="0.7" Margin="4,0"/>
@@ -355,18 +319,14 @@
                     
                     <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding NextPageCommand}"
-                           ToolTip="{x:Static loc:Strings.Btn_Next}" Width="36" Height="36" Margin="8,0,0,0"/>
+                          ToolTip="{x:Static loc:Strings.Btn_Next}" Style="{StaticResource PaginationButton}"/>
                     <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
                            Command="{Binding LastPageCommand}"
-                           ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Width="36" Height="36" Margin="8,0,0,0"/>
+                          ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Style="{StaticResource PaginationButton}"/>
                     
                     <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
-                             Width="80" Margin="12,0,0,0">
-                        <ComboBoxItem Content="10"/>
-                        <ComboBoxItem Content="20" IsSelected="True"/>
-                        <ComboBoxItem Content="50"/>
-                        <ComboBoxItem Content="100"/>
-                    </ComboBox>
+                             ItemsSource="{Binding PageSizes}"
+                             Width="80" Margin="12,0,0,0" Style="{StaticResource PaginationComboBox}"/>
                     <TextBlock Text="{x:Static loc:Strings.Lbl_PerPage}" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>

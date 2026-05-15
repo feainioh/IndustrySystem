@@ -13,7 +13,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理节点选中事件
     /// </summary>
     private void OnNodeSelected(object? sender, ActionNodeViewModel node)
     {
@@ -25,7 +24,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理清除选择事件
     /// </summary>
     private void OnSelectionCleared(object? sender, EventArgs e)
     {
@@ -37,7 +35,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理连接创建事件
     /// </summary>
     private void OnConnectionCreated(object? sender, (Guid SourceId, Guid TargetId, ActionNodeControl.PortDirection SourceDir, ActionNodeControl.PortDirection TargetDir) args)
     {
@@ -58,7 +55,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理项目拖放事件
     /// </summary>
     private void OnItemDropped(object? sender, (IDataObject Data, Point Position) args)
     {
@@ -70,7 +66,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理连接路径更新请求事件
     /// </summary>
     private void OnConnectionPathsUpdateRequested(object? sender, EventArgs e)
     {
@@ -81,7 +76,6 @@ public partial class DesignerView : UserControl
     }
 
     /// <summary>
-    /// 处理连接删除事件
     /// </summary>
     private void OnConnectionDeleted(object? sender, Guid connectionId)
     {

@@ -1,6 +1,6 @@
 using System.Windows.Controls;
-using Prism.Ioc;
 using IndustrySystem.Presentation.Wpf.ViewModels;
+using IndustrySystem.Presentation.Wpf.Services;
 using System.Windows;
 
 namespace IndustrySystem.Presentation.Wpf.Views
@@ -12,12 +12,13 @@ namespace IndustrySystem.Presentation.Wpf.Views
         public LoginView()
         {
             InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<LoginViewModel>();
             Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            UpdateVisualThemeButton(AppVisualThemeService.Current);
+
             if (DataContext is not LoginViewModel vm)
             {
                 return;
@@ -40,6 +41,21 @@ namespace IndustrySystem.Presentation.Wpf.Views
 
             pb.PasswordChanged += (s, _) => vm.Password = pb.Password;
             _passwordHooked = true;
+        }
+
+        private void LoginVisualThemeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var theme = AppVisualThemeService.Toggle();
+            UpdateVisualThemeButton(theme);
+        }
+
+        private void UpdateVisualThemeButton(AppVisualTheme theme)
+        {
+            LoginVisualThemeIcon.Text = theme == AppVisualTheme.LiquidGlass ? "\uE790" : "\uE771";
+            LoginVisualThemeText.Text = theme == AppVisualTheme.LiquidGlass ? "液态玻璃" : "经典主题";
+            LoginVisualThemeButton.ToolTip = theme == AppVisualTheme.LiquidGlass
+                ? "当前：液态玻璃，点击切换到经典主题"
+                : "当前：经典主题，点击切换到液态玻璃";
         }
     }
 }

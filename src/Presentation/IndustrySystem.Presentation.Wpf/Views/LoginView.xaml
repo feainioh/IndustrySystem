@@ -5,6 +5,7 @@
              xmlns:conv="clr-namespace:IndustrySystem.Presentation.Wpf.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Width="530" >
 
     <prism:Dialog.WindowStyle>
@@ -20,13 +21,9 @@
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
         <conv:BooleanNegationConverter x:Key="Not" />
-        <LinearGradientBrush x:Key="LoginBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#667eea" Offset="0"/>
-            <GradientStop Color="#764ba2" Offset="1"/>
-        </LinearGradientBrush>
     </UserControl.Resources>
 
-    <Border CornerRadius="5" Background="{StaticResource LoginBackgroundBrush}">
+    <Border CornerRadius="{DynamicResource LoginRootCornerRadius}" Background="{DynamicResource LoginBackgroundBrush}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -34,33 +31,58 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Canvas Grid.RowSpan="3">
-                <Ellipse Width="400" Height="400" Canvas.Left="-150" Canvas.Top="-150" Fill="#20FFFFFF" Opacity="0.3"/>
-                <Ellipse Width="300" Height="300" Canvas.Right="-100" Canvas.Bottom="-100" Fill="#20FFFFFF" Opacity="0.3"/>
-                <Ellipse Width="200" Height="200" Canvas.Right="100" Canvas.Top="50" Fill="#20FFFFFF" Opacity="0.2"/>
+                <Ellipse Width="400" Height="400" Canvas.Left="-150" Canvas.Top="-150" Fill="{DynamicResource LoginDecorationBrush}" Opacity="0.45"/>
+                <Ellipse Width="300" Height="300" Canvas.Right="-100" Canvas.Bottom="-100" Fill="{DynamicResource LoginDecorationBrush}" Opacity="0.34"/>
+                <Ellipse Width="200" Height="200" Canvas.Right="100" Canvas.Top="50" Fill="{DynamicResource LoginDecorationBrush}" Opacity="0.24"/>
             </Canvas>
             <Border Grid.Row="0" Padding="22,32">
-                <!--<Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#0078D4" Offset="0"/>
-                        <GradientStop Color="#00BCF2" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>-->
-                <StackPanel HorizontalAlignment="Center">
-                    <Border Width="64" Height="64" Background="White" CornerRadius="32" Margin="0,0,0,16">
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
-                        </Border.Effect>
-                        <materialDesign:PackIcon Kind="Account" Width="40" Height="40" Foreground="#0078D4"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <TextBlock Text="{Binding [Page_Login_Title], Source={StaticResource Loc}}" 
-                    FontSize="28" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Industrial Management System" FontSize="14" Foreground="#E0FFFFFF"
-                    HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                </StackPanel>
+                <Grid>
+                    <Button x:Name="LoginVisualThemeButton"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Padding="10,5"
+                            Margin="0,-10,0,0"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource LoginThemeToggleBorderBrush}"
+                            Background="{DynamicResource LoginThemeToggleBackgroundBrush}"
+                            Foreground="{DynamicResource LoginThemeToggleForegroundBrush}"
+                            ToolTip="{Binding [Tooltip_ThemeToggle], Source={StaticResource Loc}}"
+                            Click="LoginVisualThemeButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="LoginVisualThemeIcon"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Text="&#xE771;"
+                                       Margin="0,0,6,0"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock x:Name="LoginVisualThemeText"
+                                       Text="经典主题"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"/>
+                        </StackPanel>
+                    </Button>
+
+                    <StackPanel HorizontalAlignment="Center">
+                        <Border Width="64" Height="64" Background="{DynamicResource LoginAvatarBackgroundBrush}" CornerRadius="32" Margin="0,0,0,16">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+                            </Border.Effect>
+                            <materialDesign:PackIcon Kind="Account" Width="40" Height="40" Foreground="{DynamicResource LoginAvatarIconBrush}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{Binding [Page_Login_Title], Source={StaticResource Loc}}" 
+                        FontSize="28" FontWeight="Bold" Foreground="{DynamicResource LoginTitleForegroundBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Industrial Management System" FontSize="14" Foreground="{DynamicResource LoginSubtitleForegroundBrush}"
+                        HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
             </Border>
             <materialDesign:Card Grid.Row="1"  Width="450" VerticalAlignment="Center" HorizontalAlignment="Center"
-                            UniformCornerRadius="16" materialDesign:ElevationAssist.Elevation="Dp8">
+                            UniformCornerRadius="16"
+                            materialDesign:ElevationAssist.Elevation="Dp8"
+                            Background="{DynamicResource LoginCardBackgroundBrush}"
+                            BorderBrush="{DynamicResource LoginCardBorderBrush}"
+                            BorderThickness="1"
+                            Effect="{DynamicResource LoginCardShadowEffect}">
 
                 <StackPanel   Margin="24">
                     <TextBox materialDesign:HintAssist.Hint="{Binding [Field_User_UserName], Source={StaticResource Loc}}"
@@ -75,7 +97,7 @@
                                 Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
                                  Margin="0,0,0,8"/>
 
-                    <TextBlock Foreground="#E74856" Text="{Binding ErrorMessage}" FontSize="12"
+                    <TextBlock Foreground="{DynamicResource LoginErrorForegroundBrush}" Text="{Binding ErrorMessage}" FontSize="12"
                               Margin="0,4,0,8" TextWrapping="Wrap"
                               Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
@@ -85,17 +107,11 @@
 
                     <Button Content="{Binding [Btn_Login], Source={StaticResource Loc}}" 
                            Command="{Binding LoginCommand}" BorderBrush="Transparent"
-                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Style="{StaticResource AppInteractiveButtonPrimary}"
                            Height="48" FontSize="22" 
                            IsEnabled="{Binding IsBusy, Converter={StaticResource Not}}"
-                           Margin="0,0,0,12">
-                        <Button.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#667eea" Offset="0"/>
-                                <GradientStop Color="#764ba2" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                    </Button>
+                           Margin="0,0,0,12"
+                           Background="{DynamicResource LoginPrimaryButtonBrush}"/>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -104,6 +120,7 @@
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="{Binding [Login_Quick], Source={StaticResource Loc}}" 
                                Command="{Binding QuickLoginCommand}"
+                               AutomationProperties.AutomationId="QuickLoginButton"
                                Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Left"/>
                         <Button Grid.Column="1" Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}" 
                                Command="{Binding CancelCommand}"
@@ -118,9 +135,10 @@
             </materialDesign:Card>
 
             <TextBlock Grid.Row="2" Text="Copyright 2024 Industry System. All rights reserved." 
-                  FontSize="12" Foreground="White" Opacity="0.8"
+                  FontSize="12" Foreground="{DynamicResource LoginFooterForegroundBrush}" Opacity="0.88"
                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,20,0,24"/>
 
         </Grid>
     </Border>
 </UserControl>
+

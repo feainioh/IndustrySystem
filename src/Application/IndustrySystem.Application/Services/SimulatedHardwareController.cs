@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 namespace IndustrySystem.Application.Services;
 
 /// <summary>
-/// 硬件控制器模拟实现 - 用于开发测试
 /// </summary>
 public class SimulatedHardwareController : IHardwareController
 {
@@ -20,7 +19,6 @@ public class SimulatedHardwareController : IHardwareController
     {
         _logger = logger;
         
-        // 初始化一些默认设备
         _motorPositions["Motor1"] = 0;
         _motorPositions["Motor2"] = 0;
         _motorPositions["Motor3"] = 0;
@@ -167,7 +165,6 @@ public class SimulatedHardwareController : IHardwareController
         
         var startTime = DateTime.Now;
         
-        // 模拟：一段时间后信号变为期望值
         await Task.Delay(Math.Min(timeoutMs / 2, 500), ct);
         
         if (!_ioInputs.ContainsKey(moduleId))

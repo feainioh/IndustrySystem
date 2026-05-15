@@ -39,5 +39,8 @@ public class AuthState : IAuthState
         AuthChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public bool HasPermission(string permission) => IsAuthenticated && _permissions.Contains(permission);
+    public bool HasPermission(string? permission)
+        => IsAuthenticated
+           && !string.IsNullOrWhiteSpace(permission)
+           && _permissions.Contains(permission);
 }

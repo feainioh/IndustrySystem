@@ -7,6 +7,9 @@ using IndustrySystem.Infrastructure.SqlSugar.Implementations;
 
 namespace IndustrySystem.Infrastructure.SqlSugar.AbpModules;
 
+/// <summary>
+/// SqlSugar 基础设施模块。
+/// </summary>
 public class IndustrySystemInfrastructureSqlSugarModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -15,7 +18,7 @@ public class IndustrySystemInfrastructureSqlSugarModule : AbpModule
         var options = new SqlSugarOptions();
         configuration.GetSection("SqlSugar").Bind(options);
 
-        // bind options for other services
+        // Bind options for downstream services.
         context.Services.AddSingleton(options);
 
         context.Services.AddSingleton<ISqlSugarClient>(_ =>
@@ -29,10 +32,10 @@ public class IndustrySystemInfrastructureSqlSugarModule : AbpModule
             return db;
         });
 
-        // DB initializer
+        // Database initializer.
         context.Services.AddSingleton<IDatabaseInitializer, SqlSugarDatabaseInitializer>();
 
-    // register generic repository
-    context.Services.AddScoped(typeof(IndustrySystem.Domain.Repositories.IRepository<>), typeof(IndustrySystem.Infrastructure.SqlSugar.Repositories.SqlSugarRepository<>));
+        // Generic repository registration.
+        context.Services.AddScoped(typeof(IndustrySystem.Domain.Repositories.IRepository<>), typeof(IndustrySystem.Infrastructure.SqlSugar.Repositories.SqlSugarRepository<>));
     }
 }

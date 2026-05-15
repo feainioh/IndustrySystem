@@ -7,12 +7,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IRoleAppService _svc;
     private readonly IPermissionAppService _permSvc;
 
@@ -20,7 +23,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
     {
         _svc = svc;
         _permSvc = permSvc;
-        Title = "编辑角色";
+        Title = T("Dialog_RoleEdit_Title");
     }
 
     private Guid _id;
@@ -36,7 +39,7 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
         {
             if (SetProperty(ref _name, value))
             {
-                ValidateRequired(nameof(Name), _name, "名称不能为空");
+                ValidateRequired(nameof(Name), _name, T("Validation_NameRequired"));
             }
         }
     }
@@ -57,9 +60,9 @@ public class RoleEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
         ClearErrors();
         PermissionGroups.Clear();
 
-        var viewGroup = new RolePermissionGroup("查看权限");
-        var editGroup = new RolePermissionGroup("编辑权限");
-        var otherGroup = new RolePermissionGroup("其他权限");
+        var viewGroup = new RolePermissionGroup(T("PermGroup_View"));
+        var editGroup = new RolePermissionGroup(T("PermGroup_Edit"));
+        var otherGroup = new RolePermissionGroup(T("PermGroup_Other"));
 
         var perms = await _permSvc.GetListAsync();
         foreach (var p in perms.OrderBy(x => x.DisplayName))

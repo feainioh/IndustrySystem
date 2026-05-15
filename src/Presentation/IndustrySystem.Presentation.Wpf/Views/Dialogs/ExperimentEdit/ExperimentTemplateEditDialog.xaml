@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.ExperimentTemplateEditDialog"
+<UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.Dialogs.ExperimentTemplateEditDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -8,14 +8,14 @@
         <StaticResource ResourceKey="DialogHostWindowStyle" />
     </prism:Dialog.WindowStyle>
     <UserControl.Resources>
-        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="#FFFDFDFE" />
-        <SolidColorBrush x:Key="DialogFooterBrush" Color="#FFF8F9FC" />
+        <SolidColorBrush x:Key="DialogSurfaceBrush" Color="{DynamicResource DialogSurfaceColor}" />
+        <SolidColorBrush x:Key="DialogFooterBrush" Color="{DynamicResource DialogFooterColor}" />
 
     </UserControl.Resources>
     <Border Background="{StaticResource DialogSurfaceBrush}"
             CornerRadius="18">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="32" ShadowDepth="6" Opacity="0.22" Color="#000000" Direction="270"/>
+            <StaticResource ResourceKey="DialogSurfaceShadow" />
         </Border.Effect>
         <Grid Margin="24">
             <Grid.RowDefinitions>
@@ -31,14 +31,14 @@
             <StackPanel Grid.Row="2">
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     materialDesign:HintAssist.Hint="模板名称"
+                     materialDesign:HintAssist.Hint="{Binding [Hint_Template_Name], Source={StaticResource Loc}}"
                      materialDesign:HintAssist.IsFloating="True"
                      Margin="0,0,0,12"/>
 
                 <ComboBox ItemsSource="{Binding ExperimentTypes}"
                       SelectedItem="{Binding SelectedType}"
-                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      materialDesign:HintAssist.Hint="实验类型"
+                      Style="{StaticResource DialogComboBox}"
+                      materialDesign:HintAssist.Hint="{Binding [Field_ExperimentType], Source={StaticResource Loc}}"
                       materialDesign:HintAssist.IsFloating="True"
                       Margin="0,0,0,12">
                     <ComboBox.ItemTemplate>
@@ -50,21 +50,24 @@
 
                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     materialDesign:HintAssist.Hint="描述（可选）"
+                     materialDesign:HintAssist.Hint="{Binding [Hint_OptionalDescription], Source={StaticResource Loc}}"
                      materialDesign:HintAssist.IsFloating="True"
                      AcceptsReturn="True" TextWrapping="Wrap"
                      MinHeight="60" MaxHeight="120"/>
             </StackPanel>
 
             <StackPanel  Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Content="取消" Margin="0,0,12,0" Height="36" Width="90"
+                <Button Style="{StaticResource AppInteractiveButtonNeutral}"
+                    Content="{Binding [Btn_Cancel], Source={StaticResource Loc}}" Margin="0,0,12,0" Height="36" Width="90"
                     Command="{Binding CancelCommand}"/>
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                    Content="保存" Height="36" Width="90"
+                <Button Style="{StaticResource AppInteractiveButtonPrimary}"
+                    Content="{Binding [Btn_Save], Source={StaticResource Loc}}" Height="36" Width="90"
                     Command="{Binding SaveCommand}"/>
             </StackPanel>
         </Grid>
     </Border>
 </UserControl>
+
+
+
 

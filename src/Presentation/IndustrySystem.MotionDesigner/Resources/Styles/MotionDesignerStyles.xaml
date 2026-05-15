@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <SolidColorBrush x:Key="MotionDesignerBorderBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="MotionDesignerHeaderBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="MotionDesignerRowHoverBrush" Color="#EEF5FF"/>
+    <SolidColorBrush x:Key="MotionDesignerRowSelectedBrush" Color="#DDEBFF"/>
+    <SolidColorBrush x:Key="MotionDesignerRowAlternateBrush" Color="#FBFCFE"/>
+
+    <Style x:Key="MotionDesignerDataGrid" TargetType="DataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#EEF2F7"/>
+        <Setter Property="RowHeight" Value="42"/>
+        <Setter Property="MinRowHeight" Value="42"/>
+        <Setter Property="ColumnHeaderHeight" Value="38"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource MotionDesignerRowAlternateBrush}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="14,6"/>
+        <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="14,4"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+    </Style>
+
+    <Style TargetType="DataGrid" BasedOn="{StaticResource MotionDesignerDataGrid}"/>
+
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#475467"/>
+        <Setter Property="Background" Value="{StaticResource MotionDesignerHeaderBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MotionDesignerBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="DataGridRow">
+        <Setter Property="MinHeight" Value="42"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource MotionDesignerRowHoverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource MotionDesignerRowSelectedBrush}"/>
+                <Setter Property="BorderBrush" Value="#4A7EFF"/>
+                <Setter Property="BorderThickness" Value="3,0,0,0"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <Style x:Key="MotionDesignerTreeViewItem" TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+        <Setter Property="MinHeight" Value="34"/>
+        <Setter Property="Padding" Value="8,5"/>
+        <Setter Property="Margin" Value="0,1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="TreeViewItem" BasedOn="{StaticResource MotionDesignerTreeViewItem}"/>
+
+    <Style x:Key="MotionDesignerToolboxButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Margin" Value="0,3"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    </Style>
+
+</ResourceDictionary>

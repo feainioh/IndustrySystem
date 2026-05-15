@@ -6,17 +6,23 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 物料应用服务。
+/// </summary>
 public class MaterialAppService : IMaterialAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<Material> _repo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public MaterialAppService(IRepository<Material> repo, IMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     public async Task<IReadOnlyList<MaterialDto>> GetListAsync()
     {
         var list = await _repo.GetListAsync();
@@ -31,6 +37,7 @@ public class MaterialAppService : IMaterialAppService
         return entity is null ? null : _mapper.Map<MaterialDto>(entity);
     }
 
+    // ===== Commands =====
     public async Task<MaterialDto> CreateAsync(MaterialDto input)
     {
         var entity = _mapper.Map<Material>(input);

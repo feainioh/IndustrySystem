@@ -7,18 +7,26 @@ using IndustrySystem.Infrastructure.Communication.Abstractions;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 通信应用服务，封装 Modbus TCP 连接与寄存器读写。
+/// </summary>
 public class CommunicationAppService : ICommunicationAppService
 {
+    // ===== Dependencies =====
     private readonly Func<IModbusTcpClient> _modbusFactory;
+
+    // ===== State =====
     private IModbusTcpClient? _modbus;
     private string? _host;
     private int _port;
 
+    // ===== Construction =====
     public CommunicationAppService(Func<IModbusTcpClient> modbusFactory)
     {
         _modbusFactory = modbusFactory;
     }
 
+    // ===== Connection =====
     public async Task ConnectModbusAsync(string host, int port, CancellationToken ct = default)
     {
         _host = host; _port = port;
@@ -37,6 +45,7 @@ public class CommunicationAppService : ICommunicationAppService
         }
     }
 
+    // ===== Register Operations =====
     public Task<ushort[]> ReadHoldingRegistersAsync(ushort startAddress, ushort numberOfPoints, CancellationToken ct = default)
     {
         if (_modbus == null) throw new InvalidOperationException("Modbus 未连接");

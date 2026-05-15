@@ -41,7 +41,6 @@ public class DesignerViewModel : BindableBase
     private bool _isRunning;
     private bool _hasSelectedNode;
 
-    // 缩放相关
     private double _zoomLevel = 1.0;
     private const double MinZoom = 0.25;
     private const double MaxZoom = 3.0;
@@ -122,7 +121,6 @@ public class DesignerViewModel : BindableBase
     public double ExecutionProgress { get => _executionProgress; set => SetProperty(ref _executionProgress, value); }
     public bool IsRunning { get => _isRunning; set => SetProperty(ref _isRunning, value); }
 
-    // 缩放属性
     public double ZoomLevel
     {
         get => _zoomLevel;
@@ -148,9 +146,8 @@ public class DesignerViewModel : BindableBase
     public ICommand PauseCommand { get; }
     public ICommand StopCommand { get; }
     public ICommand StepCommand { get; }
-    public ICommand ImportConfigCommand { get; } // 新增
+    public ICommand ImportConfigCommand { get; } // 瀵煎叆閰嶇疆
 
-    // 缩放命令
     public ICommand ZoomInCommand { get; }
     public ICommand ZoomOutCommand { get; }
     public ICommand ZoomResetCommand { get; }
@@ -178,9 +175,8 @@ public class DesignerViewModel : BindableBase
         PauseCommand = new DelegateCommand(async () => await _executor.PauseAsync());
         StopCommand = new DelegateCommand(async () => await _executor.StopAsync());
         StepCommand = new DelegateCommand(async () => await _executor.StepAsync());
-        ImportConfigCommand = new DelegateCommand(ImportConfig); // 新增
+        ImportConfigCommand = new DelegateCommand(ImportConfig); // 瀵煎叆閰嶇疆
 
-        // 初始化缩放命令
         ZoomInCommand = new DelegateCommand(() => ZoomLevel += ZoomStep);
         ZoomOutCommand = new DelegateCommand(() => ZoomLevel -= ZoomStep);
         ZoomResetCommand = new DelegateCommand(() => ZoomLevel = 1.0);
@@ -192,7 +188,6 @@ public class DesignerViewModel : BindableBase
         _executor.NodeExecuted += OnNodeExecuted;
         _executor.ProgramCompleted += OnProgramCompleted;
         
-        // 订阅事件
         _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Subscribe(OnConfigImported);
         _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Subscribe(OnConfigCreated);
         _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Subscribe(OnConfigLoaded);
@@ -307,7 +302,6 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 检查添加连接是否会创建环路
     /// </summary>
     private bool WouldCreateCycle(Guid sourceNodeId, Guid targetNodeId)
     {
@@ -336,11 +330,9 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 更新所有连接线路径
     /// </summary>
     public void UpdateConnectionPaths()
     {
-        // 更新执行顺序
         UpdateExecutionOrders();
 
         foreach (var connection in Connections)
@@ -350,14 +342,12 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 更新执行顺序编号
     /// </summary>
     private void UpdateExecutionOrders()
     {
         int order = 1;
         var processed = new HashSet<Guid>();
 
-        // 找到起始节点（没有入边的节点）
         var startNodes = Nodes.Where(n => !Connections.Any(c => c.TargetNodeId == n.Id)).ToList();
 
         foreach (var startNode in startNodes)
@@ -373,7 +363,6 @@ public class DesignerViewModel : BindableBase
 
         processed.Add(nodeId);
 
-        // 为从该节点出发的所有连接分配顺序
         foreach (var conn in Connections.Where(c => c.SourceNodeId == nodeId))
         {
             conn.ExecutionOrder = order++;
@@ -382,7 +371,6 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 更新单个连接线路径（带箭头）
     /// </summary>
     /// <param name="connection"></param>
     private void UpdateConnectionPath(ConnectionViewModel connection)
@@ -489,7 +477,6 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 删除节点之间的连接
     /// </summary>
     public void RemoveConnection(Guid connectionId)
     {
@@ -501,7 +488,6 @@ public class DesignerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 自动缩放以适应所有节点
     /// </summary>
     private void FitToPage()
     {
@@ -511,13 +497,11 @@ public class DesignerViewModel : BindableBase
             return;
         }
 
-        // 计算所有节点的边界
         var minX = Nodes.Min(n => n.X);
         var minY = Nodes.Min(n => n.Y);
         var maxX = Nodes.Max(n => n.X + n.Width);
         var maxY = Nodes.Max(n => n.Y + n.Height);
 
-        // 假设可视区域为 800x600（实际应该从 View 获取）
         var viewWidth = 800.0;
         var viewHeight = 600.0;
         var padding = 50.0;

@@ -6,8 +6,17 @@ using IndustrySystem.Application.Contracts.Services;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 实验运行模拟服务。
+/// 用于在未接入真实执行器前提供可观测的运行状态。
+/// </summary>
 public class RunExperimentAppService : IRunExperimentAppService
 {
+    // ===== Configuration =====
+    private const int ProgressIncrementPerTick = 2;
+    private static readonly TimeSpan ProgressTickInterval = TimeSpan.FromMilliseconds(100);
+
+    // ===== State =====
     private readonly object _lock = new();
     private RunState _state = RunState.Idle;
     private int _progress = 0;
@@ -15,9 +24,11 @@ public class RunExperimentAppService : IRunExperimentAppService
     private CancellationTokenSource? _cts;
     private Task? _runner;
 
+    // ===== Queries =====
     public Task<RunStatusDto> GetStatusAsync()
         => Task.FromResult(new RunStatusDto(_state, _progress, _message));
 
+    // ===== Commands =====
     public Task PauseAsync()
     {
         lock (_lock)
@@ -60,18 +71,19 @@ public class RunExperimentAppService : IRunExperimentAppService
         return Task.CompletedTask;
     }
 
+    // ===== Execution Loop =====
     private async Task RunLoop(CancellationToken ct)
     {
         try
         {
             while (_progress < 100 && !ct.IsCancellationRequested)
             {
-                await Task.Delay(100, ct);
+                await Task.Delay(ProgressTickInterval, ct);
                 lock (_lock)
                 {
                     if (_state == RunState.Paused) continue;
                     if (_state != RunState.Running) break;
-                    _progress += 2;
+                    _progress += ProgressIncrementPerTick;
                 }
             }
             lock (_lock)

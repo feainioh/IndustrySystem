@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Services;
 using Prism.Commands;
-using Prism.Mvvm;
 using NLog;
 using System;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class HardwareDebugViewModel : BindableBase
+public class HardwareDebugViewModel : NagetiveViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly ICommunicationAppService _comm;

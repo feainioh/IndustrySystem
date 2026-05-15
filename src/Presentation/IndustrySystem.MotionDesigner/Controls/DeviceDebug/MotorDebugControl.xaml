@@ -128,8 +128,7 @@
                                      CanUserAddRows="False" 
                                      CanUserDeleteRows="False" 
                                      IsReadOnly="True" 
-                                     MaxHeight="180"
-                                     materialDesign:DataGridAssist.CellPadding="8 4">
+                                     MaxHeight="180">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="名称" Binding="{Binding Name}" Width="*"/>
                                     <DataGridTextColumn Header="位置" Binding="{Binding Position}" Width="80"/>

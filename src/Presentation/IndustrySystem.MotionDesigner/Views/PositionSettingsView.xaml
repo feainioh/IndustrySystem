@@ -115,7 +115,7 @@
         </materialDesign:ColorZone>
 
         <!-- 统计信息栏 -->
-        <materialDesign:Card Grid.Row="1" Margin="8,8,8,0" Padding="12,8" materialDesign:ElevationAssist.Elevation="Dp1">
+        <materialDesign:Card Grid.Row="1" Margin="12,12,12,0" Padding="12,8" materialDesign:ElevationAssist.Elevation="Dp1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -164,14 +164,14 @@
         </materialDesign:Card>
 
         <!-- 主内容区域 -->
-        <Grid Grid.Row="2" Margin="8">
+        <Grid Grid.Row="2" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="320"/>
             </Grid.ColumnDefinitions>
 
             <!-- 位置列表 -->
-            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" materialDesign:ElevationAssist.Elevation="Dp2">
+            <materialDesign:Card Grid.Column="0" Margin="0,0,12,0" materialDesign:ElevationAssist.Elevation="Dp2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -187,7 +187,7 @@
                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                             materialDesign:HintAssist.Hint="搜索位置..."
                             materialDesign:TextFieldAssist.HasClearButton="True"
-                            Margin="8"/>
+                            Margin="12,10"/>
 
                     <DataGrid Grid.Row="2" 
                              ItemsSource="{Binding FilteredPositions}"
@@ -222,7 +222,7 @@
                     </Border>
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="16">
+                        <StackPanel Margin="18">
                             <!-- 未选择提示 -->
                             <StackPanel Style="{StaticResource NullVisibleStyle}"
                                        HorizontalAlignment="Center" Margin="0,50,0,0">

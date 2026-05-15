@@ -8,6 +8,7 @@ using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -15,8 +16,10 @@ using Prism.Navigation;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTemplateDto>
+public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTemplateDto>, IParameterEditorHost
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     public const string ParameterEditorRegionName = "ExperimentTemplateParameterRegion";
 
     private readonly IExperimentTemplateAppService _svc;
@@ -100,7 +103,6 @@ public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTempl
         set => SetProperty(ref _currentParameterDetail, value);
     }
 
-    public ICommand RefreshCommand { get; }
     public ICommand NewCommand { get; }
     public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -119,7 +121,6 @@ public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTempl
         _parameterSvc = parameterSvc;
         _regionManager = regionManager;
 
-        RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         NewCommand = new DelegateCommand(NewTemplate);
         SaveCommand = new DelegateCommand(async () => await SaveAsync());
         DeleteCommand = new DelegateCommand<Guid?>(async id =>
@@ -161,7 +162,7 @@ public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTempl
             {
                 Id = Guid.NewGuid(),
                 Type = SelectedType,
-                Name = $"{GetTypeDisplayName(SelectedType)}-默认参数",
+                Name = string.Format(T("DefaultParameterNameFormat"), GetTypeDisplayName(SelectedType)),
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             });
@@ -282,12 +283,12 @@ public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTempl
         await LoadAsync();
         SelectedTemplate = Templates.FirstOrDefault(x => x.Id == saved.Id);
 
-        MessageBox.Show("保存成功", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(T("Msg_SaveSuccess"), T("Msg_InfoTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private async Task DeleteAsync(Guid id)
     {
-        var r = MessageBox.Show("确认删除该实验模板？", "警告", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        var r = MessageBox.Show(T("Msg_ConfirmDeleteTemplate"), T("Msg_WarningTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (r != MessageBoxResult.Yes) return;
 
         await _svc.DeleteAsync(id);
@@ -307,21 +308,26 @@ public class ExperimentTemplateViewModel : NagetiveCurdVeiwModel<ExperimentTempl
 
     private static string GetTypeDisplayName(ExperimentType type) => type switch
     {
-        ExperimentType.Reaction => "反应",
-        ExperimentType.RotaryEvaporation => "旋蒸",
-        ExperimentType.Detection => "检测",
-        ExperimentType.Filtration => "过滤",
-        ExperimentType.Drying => "干燥",
-        ExperimentType.Quenching => "淬灭",
-        ExperimentType.Extraction => "萃取",
-        ExperimentType.Sampling => "取样",
-        ExperimentType.Centrifugation => "离心",
-        ExperimentType.CustomDetection => "自定义检测",
+        ExperimentType.Reaction => T("ExperimentType_Reaction"),
+        ExperimentType.RotaryEvaporation => T("ExperimentType_RotaryEvaporation"),
+        ExperimentType.Detection => T("ExperimentType_Detection"),
+        ExperimentType.Filtration => T("ExperimentType_Filtration"),
+        ExperimentType.Drying => T("ExperimentType_Drying"),
+        ExperimentType.Quenching => T("ExperimentType_Quenching"),
+        ExperimentType.Extraction => T("ExperimentType_Extraction"),
+        ExperimentType.Sampling => T("ExperimentType_Sampling"),
+        ExperimentType.Centrifugation => T("ExperimentType_Centrifugation"),
+        ExperimentType.CustomDetection => T("ExperimentType_CustomDetection"),
         _ => type.ToString()
     };
 
     protected override async Task<IReadOnlyList<ExperimentTemplateDto>> LoadItemsAsync()
         => await _svc.GetListAsync();
+
+    protected override async Task OnRefreshAsync()
+    {
+        await LoadAsync();
+    }
 }
 
 static class CollectionExtensions

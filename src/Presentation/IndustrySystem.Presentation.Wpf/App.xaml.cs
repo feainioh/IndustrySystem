@@ -25,7 +25,9 @@ using Prism.Mvvm;
 using SqlSugar;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -36,6 +38,9 @@ namespace IndustrySystem.Presentation.Wpf;
 public partial class App : PrismApplication
 {
     private bool _shellInitialized;
+    private Mutex? _singleInstanceMutex;
+    private bool _ownsSingleInstanceMutex;
+    private const string SingleInstanceMutexName = @"Global\IndustrySystem.Presentation.Wpf.SingleInstance";
 
     protected override Window CreateShell()
     {
@@ -58,6 +63,10 @@ public partial class App : PrismApplication
             .AddJsonFile("appsettings.json", optional: true)
             .Build();
         containerRegistry.RegisterInstance<IConfiguration>(config);
+
+        var externalSyncOptions = new ExternalSyncOptions();
+        config.GetSection("ExternalSync").Bind(externalSyncOptions);
+        containerRegistry.RegisterInstance(externalSyncOptions);
 
         var options = new SqlSugarOptions();
         config.GetSection("SqlSugar").Bind(options);
@@ -108,8 +117,13 @@ public partial class App : PrismApplication
         containerRegistry.Register<IMaterialAppService, MaterialAppService>();
         containerRegistry.Register<IShelfAppService, ShelfAppService>();
         containerRegistry.Register<IRunExperimentAppService, RunExperimentAppService>();
+        // 注册实验组执行模拟服务
+        containerRegistry.Register<IExperimentExecutionService, MockExperimentExecutionService>();
         containerRegistry.Register<ICommunicationAppService, CommunicationAppService>();
+        containerRegistry.RegisterSingleton<IExternalDataSyncAppService, ExternalDataSyncAppService>();
+        containerRegistry.Register<IHttpClient, SimpleHttpClient>();
         containerRegistry.Register<IModbusTcpClient, ModbusTcpClient>();
+        containerRegistry.Register<IExternalSyncChannelFactory, ExternalSyncChannelFactory>();
 
         containerRegistry.RegisterSingleton<IDatabaseInitializer, SqlSugarDatabaseInitializer>();
 
@@ -119,26 +133,30 @@ public partial class App : PrismApplication
         // Register auth services before dialog (LoginViewModel depends on these)
         containerRegistry.RegisterSingleton<IAuthService, AuthService>();
         containerRegistry.RegisterSingleton<IAuthState, AuthState>();
+        containerRegistry.RegisterSingleton<IAppSessionService, AppSessionService>();
+        containerRegistry.RegisterSingleton<IMainWindowService, MainWindowService>();
+        containerRegistry.Register<ShellViewModel>();
 
         // Register ViewModels
-        containerRegistry.RegisterForNavigation<RoleManageView, RoleManageViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
-        containerRegistry.RegisterForNavigation<Views.PermissionsView, PermissionsViewModel>();
-        containerRegistry.RegisterForNavigation<Views.UsersView, UsersViewModel>();
-        containerRegistry.RegisterForNavigation<Views.AlarmView, AlarmViewModel>();
-        containerRegistry.RegisterForNavigation<Views.RunExperimentView, RunExperimentViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ExperimentsView, ExperimentsViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ExperimentHistoryView, ExperimentHistoryViewModel>();
-        containerRegistry.RegisterForNavigation<Views.InventoryView, InventoryViewModel>();
-        containerRegistry.RegisterForNavigation<Views.HardwareDebugView, HardwareDebugViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ExperimentGroupsView, ExperimentGroupsViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ExperimentConfigView, ExperimentConfigViewModel>();
-        containerRegistry.RegisterForNavigation<Views.MaterialInfoView, MaterialInfoViewModel>();
-        containerRegistry.RegisterForNavigation<Views.ShelfInfoView, ShelfInfoViewModel>();
-        containerRegistry.RegisterForNavigation<Views.OperationLogsView, OperationLogsViewModel>();
-        containerRegistry.RegisterForNavigation<Views.RealtimeDataView, RealtimeDataViewModel>();
-        containerRegistry.RegisterForNavigation<Views.PeripheralDebugView, PeripheralDebugViewModel>();
-        containerRegistry.RegisterForNavigation<Views.DeviceParamsView, DeviceParamsViewModel>();
+        containerRegistry.RegisterForNavigation<RoleManageView, RoleManageViewModel>(nameof(RoleManageView));
+        containerRegistry.RegisterForNavigation<Views.ExperimentTemplateView, ExperimentTemplateViewModel>(nameof(Views.ExperimentTemplateView));
+        containerRegistry.RegisterForNavigation<Views.PermissionsView, PermissionsViewModel>(nameof(Views.PermissionsView));
+        containerRegistry.RegisterForNavigation<Views.UsersView, UsersViewModel>(nameof(Views.UsersView));
+        containerRegistry.RegisterForNavigation<Views.AlarmView, AlarmViewModel>(nameof(Views.AlarmView));
+        containerRegistry.RegisterForNavigation<Views.RunExperimentView, RunExperimentViewModel>(nameof(Views.RunExperimentView));
+        containerRegistry.RegisterForNavigation<Views.ExperimentsView, ExperimentsViewModel>(nameof(Views.ExperimentsView));
+        containerRegistry.RegisterForNavigation<Views.ExperimentHistoryView, ExperimentHistoryViewModel>(nameof(Views.ExperimentHistoryView));
+        containerRegistry.RegisterForNavigation<Views.InventoryView, InventoryViewModel>(nameof(Views.InventoryView));
+        containerRegistry.RegisterForNavigation<Views.HardwareDebugView, HardwareDebugViewModel>(nameof(Views.HardwareDebugView));
+        containerRegistry.RegisterForNavigation<Views.ExperimentGroupsView, ExperimentGroupsViewModel>(nameof(Views.ExperimentGroupsView));
+        containerRegistry.RegisterForNavigation<Views.ExperimentConfigView, ExperimentConfigViewModel>(nameof(Views.ExperimentConfigView));
+        containerRegistry.RegisterForNavigation<Views.MaterialInfoView, MaterialInfoViewModel>(nameof(Views.MaterialInfoView));
+        containerRegistry.RegisterForNavigation<Views.ShelfInfoView, ShelfInfoViewModel>(nameof(Views.ShelfInfoView));
+        containerRegistry.RegisterForNavigation<Views.OperationLogsView, OperationLogsViewModel>(nameof(Views.OperationLogsView));
+        containerRegistry.RegisterForNavigation<Views.RealtimeDataView, RealtimeDataViewModel>(nameof(Views.RealtimeDataView));
+        containerRegistry.RegisterForNavigation<Views.PeripheralDebugView, PeripheralDebugViewModel>(nameof(Views.PeripheralDebugView));
+        containerRegistry.RegisterForNavigation<Views.DeviceParamsView, DeviceParamsViewModel>(nameof(Views.DeviceParamsView));
+        containerRegistry.RegisterForNavigation<Views.MotionProgramRunView, MotionProgramRunViewModel>(nameof(Views.MotionProgramRunView));
         //ViewModelLocationProvider.Register<Views.RoleManageView, RoleManageViewModel>();
         //ViewModelLocationProvider.Register<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
         //ViewModelLocationProvider.Register<Views.PermissionsView, PermissionsViewModel>();
@@ -178,33 +196,41 @@ public partial class App : PrismApplication
         containerRegistry.RegisterDialog<Views.Dialogs.ExperimentEditDialog, ViewModels.Dialogs.ExperimentEditDialogViewModel>();
         containerRegistry.RegisterDialog<Views.Dialogs.ConfirmDialog, ViewModels.Dialogs.ConfirmDialogViewModel>();
 
-        // Register type-specific parameter edit views for region navigation
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog, ViewModels.Dialogs.ExperimentParameterEditorViewModel>();
+        // Register type-specific parameter edit views for region navigation.
+        // Keep one dedicated ViewModel per View to avoid shared editor state across types.
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog, ViewModels.Dialogs.ReactionParameterEditDialogViewModel>(nameof(Views.Dialogs.ReactionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog, ViewModels.Dialogs.RotaryEvaporationParameterEditDialogViewModel>(nameof(Views.Dialogs.RotaryEvaporationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog, ViewModels.Dialogs.DetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.DetectionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog, ViewModels.Dialogs.FiltrationParameterEditDialogViewModel>(nameof(Views.Dialogs.FiltrationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog, ViewModels.Dialogs.DryingParameterEditDialogViewModel>(nameof(Views.Dialogs.DryingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog, ViewModels.Dialogs.QuenchingParameterEditDialogViewModel>(nameof(Views.Dialogs.QuenchingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog, ViewModels.Dialogs.ExtractionParameterEditDialogViewModel>(nameof(Views.Dialogs.ExtractionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog, ViewModels.Dialogs.SamplingParameterEditDialogViewModel>(nameof(Views.Dialogs.SamplingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog, ViewModels.Dialogs.CentrifugationParameterEditDialogViewModel>(nameof(Views.Dialogs.CentrifugationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog, ViewModels.Dialogs.CustomDetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.CustomDetectionParameterEditDialog));
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         var logger = LogManager.GetCurrentClassLogger();
-        ThemeManager.Current.ApplicationTheme = ApplicationTheme.Light;
+        AppVisualThemeService.Apply(AppVisualTheme.Classic);
 
         var zh = CultureInfo.GetCultureInfo("zh-CN");
         CultureInfo.DefaultThreadCurrentCulture = zh;
         CultureInfo.DefaultThreadCurrentUICulture = zh;
         Strings.Culture = zh;
 
+        if (!TryAcquireSingleInstanceMutex())
+        {
+            MessageBox.Show(LocalizationProvider.Instance["Msg_AppAlreadyRunning"], Strings.Msg_WarningTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+            Shutdown();
+            return;
+        }
+
         DispatcherUnhandledException += (s, ex) =>
         {
             logger.Error(ex.Exception, "[UI Thread] Unhandled exception");
-            MessageBox.Show($"发生未处理异常: {ex.Exception.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(LocalizationProvider.Instance["Msg_UnhandledExceptionFormat"], ex.Exception.Message), Strings.Msg_ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             ex.Handled = true;
         };
         AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
@@ -244,6 +270,40 @@ public partial class App : PrismApplication
         }), DispatcherPriority.ApplicationIdle);
     }
 
+    protected override void OnExit(ExitEventArgs e)
+    {
+        try
+        {
+            if (_singleInstanceMutex is not null)
+            {
+                if (_ownsSingleInstanceMutex)
+                {
+                    try
+                    {
+                        _singleInstanceMutex.ReleaseMutex();
+                    }
+                    catch (ApplicationException)
+                    {
+                    }
+                }
+
+                _singleInstanceMutex.Dispose();
+                _singleInstanceMutex = null;
+            }
+        }
+        finally
+        {
+            base.OnExit(e);
+        }
+    }
+
+    private bool TryAcquireSingleInstanceMutex()
+    {
+        _singleInstanceMutex = new Mutex(true, SingleInstanceMutexName, out var createdNew);
+        _ownsSingleInstanceMutex = createdNew;
+        return createdNew;
+    }
+
     public void ShowLoginDialog()
     {
         var dialogService = Container.Resolve<IDialogService>();
@@ -264,9 +324,39 @@ public partial class App : PrismApplication
 
     private void ShowShellWindow()
     {
-        var shell = new Shell(Container);
+        var shell = new Shell()
+        {
+            DataContext = Container.Resolve<ShellViewModel>(),
+            WindowState = WindowState.Maximized
+        };
+
+        var regionManager = Container.Resolve<IRegionManager>();
+
+        // User logout/login can reuse the same RegionManager instance.
+        // Ensure the previous Shell main region is removed before creating a new one.
+        RemoveShellMainRegionIfExists(regionManager);
+
+        RegionManager.SetRegionManager(shell, regionManager);
         InitializeShell(shell);
         shell.Show();
+    }
+
+    private static void RemoveShellMainRegionIfExists(IRegionManager regionManager)
+    {
+        const string regionName = ShellViewModel.MainRegionName;
+        if (!regionManager.Regions.ContainsRegionWithName(regionName))
+        {
+            return;
+        }
+
+        var region = regionManager.Regions[regionName];
+        var views = region.Views.Cast<object>().ToList();
+        foreach (var view in views)
+        {
+            region.Remove(view);
+        }
+
+        regionManager.Regions.Remove(regionName);
     }
 }
 

@@ -14,7 +14,6 @@ using PositionPointViewModel = IndustrySystem.MotionDesigner.Services.PositionPo
 namespace IndustrySystem.MotionDesigner.ViewModels;
 
 /// <summary>
-/// Î»ÖÃµãÎ»ÉèÖÃ ViewModel
 /// </summary>
 public class PositionSettingsViewModel : BindableBase
 {
@@ -25,10 +24,10 @@ public class PositionSettingsViewModel : BindableBase
     private readonly IEventAggregator _eventAggregator;
 
     private DeviceConfigDto? _currentConfig;
-    private string _statusMessage = "¾ÍÐ÷";
+    private string _statusMessage = "ï¿½ï¿½ï¿½ï¿½";
     private string _searchText = string.Empty;
     private PositionPointViewModel? _selectedPosition;
-    private string _selectedDeviceFilter = "È«²¿";
+    private string _selectedDeviceFilter = "È«ï¿½ï¿½";
 
     public DeviceConfigDto? CurrentConfig
     {
@@ -72,14 +71,11 @@ public class PositionSettingsViewModel : BindableBase
         }
     }
 
-    // Î»ÖÃµãÁÐ±í
     public ObservableCollection<PositionPointViewModel> AllPositions { get; } = new();
     public ObservableCollection<PositionPointViewModel> FilteredPositions { get; } = new();
 
-    // Éè±¸É¸Ñ¡ÁÐ±í
-    public ObservableCollection<string> DeviceFilters { get; } = new() { "È«²¿" };
+    public ObservableCollection<string> DeviceFilters { get; } = new() { "È«ï¿½ï¿½" };
 
-    // Í³¼ÆÐÅÏ¢
     private int _totalPositionCount;
     private int _motorPositionCount;
     private int _robotPositionCount;
@@ -109,7 +105,6 @@ public class PositionSettingsViewModel : BindableBase
         set => SetProperty(ref _modifiedCount, value);
     }
 
-    // ÃüÁî
     public ICommand ImportConfigCommand { get; }
     public ICommand SaveConfigCommand { get; }
     public ICommand ExportConfigCommand { get; }
@@ -126,7 +121,6 @@ public class PositionSettingsViewModel : BindableBase
         _hardwareController = hardwareController;
         _eventAggregator = eventAggregator;
 
-        // ¶©ÔÄÅäÖÃµ¼ÈëÊÂ¼þ£¨´Ó DeviceDebugView Í¬²½µ½ÕâÀï£©
         _eventAggregator.GetEvent<DeviceConfigImportedEvent>().Subscribe(OnConfigImported, ThreadOption.UIThread);
         _eventAggregator.GetEvent<DeviceConfigLoadedEvent>().Subscribe(OnConfigLoaded, ThreadOption.UIThread);
         _eventAggregator.GetEvent<DeviceConfigCreatedEvent>().Subscribe(OnConfigCreated, ThreadOption.UIThread);
@@ -161,7 +155,7 @@ public class PositionSettingsViewModel : BindableBase
                 pos.PositionName.ToLower().Contains(search) ||
                 pos.DeviceId.ToLower().Contains(search);
 
-            var matchesFilter = SelectedDeviceFilter == "È«²¿" ||
+            var matchesFilter = SelectedDeviceFilter == "È«ï¿½ï¿½" ||
                 pos.DeviceName == SelectedDeviceFilter ||
                 pos.DeviceType == SelectedDeviceFilter;
 
@@ -175,8 +169,8 @@ public class PositionSettingsViewModel : BindableBase
     private void UpdateStatistics()
     {
         TotalPositionCount = AllPositions.Count;
-        MotorPositionCount = AllPositions.Count(p => p.DeviceType.Contains("µç»ú"));
-        RobotPositionCount = AllPositions.Count(p => p.DeviceType.Contains("»úÆ÷ÈË"));
+        MotorPositionCount = AllPositions.Count(p => p.DeviceType.Contains("ï¿½ï¿½ï¿½"));
+        RobotPositionCount = AllPositions.Count(p => p.DeviceType.Contains("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
         ModifiedCount = AllPositions.Count(p => p.IsModified);
     }
 
@@ -184,25 +178,23 @@ public class PositionSettingsViewModel : BindableBase
     {
         var dialog = new OpenFileDialog
         {
-            Filter = "JSON ÎÄ¼þ (*.json)|*.json|ËùÓÐÎÄ¼þ (*.*)|*.*",
-            Title = "µ¼ÈëÉè±¸ÅäÖÃÎÄ¼þ"
+            Filter = "JSON ï¿½Ä¼ï¿½ (*.json)|*.json|ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ (*.*)|*.*",
+            Title = "ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½"
         };
 
         if (dialog.ShowDialog() != true) return;
 
         try
         {
-            StatusMessage = "ÕýÔÚµ¼ÈëÅäÖÃ...";
+            StatusMessage = "ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...";
             var config = await _configService.ImportFromFileAsync(dialog.FileName);
             CurrentConfig = config;
 
-            // Çå¿ÕÁÐ±í
             AllPositions.Clear();
             FilteredPositions.Clear();
             DeviceFilters.Clear();
-            DeviceFilters.Add("È«²¿");
+            DeviceFilters.Add("È«ï¿½ï¿½");
 
-            // µ¼Èë CAN µç»úÎ»ÖÃ
             foreach (var motor in config.Motors)
             {
                 DeviceFilters.Add(motor.Name);
@@ -212,7 +204,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "CANµç»ú",
+                        DeviceType = "CANï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -221,7 +213,6 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // µ¼Èë EtherCAT µç»úÎ»ÖÃ
             foreach (var motor in config.EtherCATMotors)
             {
                 DeviceFilters.Add(motor.Name);
@@ -231,7 +222,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "EtherCATµç»ú",
+                        DeviceType = "EtherCATï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -240,7 +231,6 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // µ¼ÈëÀëÐÄ»úÎ»ÖÃ
             foreach (var cent in config.CentrifugalDevices)
             {
                 DeviceFilters.Add(cent.Name);
@@ -250,7 +240,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = cent.DeviceId,
                         DeviceName = cent.Name,
-                        DeviceType = "ÀëÐÄ»ú",
+                        DeviceType = "ï¿½ï¿½ï¿½Ä»ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -259,16 +249,15 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // ¸üÐÂÉ¸Ñ¡ºÍÍ³¼Æ
             FilterPositions();
             UpdateStatistics();
 
-            StatusMessage = $"³É¹¦µ¼ÈëÅäÖÃ£¬¹² {AllPositions.Count} ¸öÎ»ÖÃµã";
+            StatusMessage = $"ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ {AllPositions.Count} ï¿½ï¿½Î»ï¿½Ãµï¿½";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "µ¼ÈëÉè±¸ÅäÖÃÊ§°Ü");
-            StatusMessage = $"µ¼ÈëÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -276,18 +265,16 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (CurrentConfig == null)
         {
-            StatusMessage = "Ã»ÓÐ¿É±£´æµÄÅäÖÃ";
+            StatusMessage = "Ã»ï¿½Ð¿É±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
             return;
         }
 
         try
         {
-            StatusMessage = "ÕýÔÚ±£´æÅäÖÃ...";
+            StatusMessage = "ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...";
 
-            // ¸üÐÂÅäÖÃÖÐµÄÎ»ÖÃµã
             foreach (var pos in AllPositions.Where(p => p.IsModified))
             {
-                // ¸üÐÂ CAN µç»ú
                 var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == pos.DeviceId);
                 if (motor != null)
                 {
@@ -297,7 +284,6 @@ public class PositionSettingsViewModel : BindableBase
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
 
-                        // ·¢²¼Î»ÖÃ¸üÐÂÊÂ¼þ£¬Í¨Öª DeviceDebugView
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
                             DeviceId = pos.DeviceId,
@@ -308,7 +294,6 @@ public class PositionSettingsViewModel : BindableBase
                     }
                 }
 
-                // ¸üÐÂ EtherCAT µç»ú
                 var ecatMotor = CurrentConfig.EtherCATMotors.FirstOrDefault(m => m.DeviceId == pos.DeviceId);
                 if (ecatMotor != null)
                 {
@@ -318,7 +303,6 @@ public class PositionSettingsViewModel : BindableBase
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
 
-                        // ·¢²¼Î»ÖÃ¸üÐÂÊÂ¼þ
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
                             DeviceId = pos.DeviceId,
@@ -329,7 +313,6 @@ public class PositionSettingsViewModel : BindableBase
                     }
                 }
 
-                // ¸üÐÂÀëÐÄ»ú
                 var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == pos.DeviceId);
                 if (cent != null)
                 {
@@ -339,7 +322,6 @@ public class PositionSettingsViewModel : BindableBase
                         workPos.Position = pos.Position;
                         workPos.Speed = pos.Speed;
 
-                        // ·¢²¼Î»ÖÃ¸üÐÂÊÂ¼þ
                         _eventAggregator.GetEvent<PositionUpdatedEvent>().Publish(new PositionUpdatedEventArgs
                         {
                             DeviceId = pos.DeviceId,
@@ -356,12 +338,12 @@ public class PositionSettingsViewModel : BindableBase
             await _configService.SaveConfigAsync(CurrentConfig);
 
             UpdateStatistics();
-            StatusMessage = "ÅäÖÃ±£´æ³É¹¦";
+            StatusMessage = "ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½É¹ï¿½";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "±£´æÅäÖÃÊ§°Ü");
-            StatusMessage = $"±£´æÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -369,14 +351,14 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (CurrentConfig == null)
         {
-            StatusMessage = "Ã»ÓÐ¿Éµ¼³öµÄÅäÖÃ";
+            StatusMessage = "Ã»ï¿½Ð¿Éµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
             return;
         }
 
         var dialog = new SaveFileDialog
         {
-            Filter = "JSON ÎÄ¼þ (*.json)|*.json|ËùÓÐÎÄ¼þ (*.*)|*.*",
-            Title = "µ¼³öÉè±¸ÅäÖÃÎÄ¼þ",
+            Filter = "JSON ï¿½Ä¼ï¿½ (*.json)|*.json|ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ (*.*)|*.*",
+            Title = "ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½",
             FileName = "deviceconfig_export.json"
         };
 
@@ -384,14 +366,14 @@ public class PositionSettingsViewModel : BindableBase
 
         try
         {
-            StatusMessage = "ÕýÔÚµ¼³öÅäÖÃ...";
+            StatusMessage = "ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...";
             await _configService.ExportToFileAsync(CurrentConfig, dialog.FileName);
-            StatusMessage = $"ÅäÖÃÒÑµ¼³öµ½ {dialog.FileName}";
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ {dialog.FileName}";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "µ¼³öÅäÖÃÊ§°Ü");
-            StatusMessage = $"µ¼³öÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -401,19 +383,19 @@ public class PositionSettingsViewModel : BindableBase
 
         try
         {
-            StatusMessage = $"ÕýÔÚÒÆ¶¯µ½ {SelectedPosition.PositionName}...";
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ {SelectedPosition.PositionName}...";
             await _hardwareController.MoveMotorAsync(
                 SelectedPosition.DeviceId,
                 SelectedPosition.Position,
                 SelectedPosition.Speed,
                 false,
                 true);
-            StatusMessage = $"ÒÑÒÆ¶¯µ½ {SelectedPosition.PositionName}";
+            StatusMessage = $"ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ {SelectedPosition.PositionName}";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "ÒÆ¶¯µ½Î»ÖÃÊ§°Ü");
-            StatusMessage = $"ÒÆ¶¯Ê§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½Æ¶ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½Æ¶ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -423,17 +405,17 @@ public class PositionSettingsViewModel : BindableBase
 
         try
         {
-            StatusMessage = $"ÕýÔÚÊ¾½Ì {SelectedPosition.PositionName}...";
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ {SelectedPosition.PositionName}...";
             var currentPos = await _hardwareController.GetMotorPositionAsync(SelectedPosition.DeviceId);
             SelectedPosition.Position = currentPos;
             SelectedPosition.IsModified = true;
             UpdateStatistics();
-            StatusMessage = $"ÒÑÊ¾½Ì {SelectedPosition.PositionName} = {currentPos}";
+            StatusMessage = $"ï¿½ï¿½Ê¾ï¿½ï¿½ {SelectedPosition.PositionName} = {currentPos}";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Ê¾½ÌÎ»ÖÃÊ§°Ü");
-            StatusMessage = $"Ê¾½ÌÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "Ê¾ï¿½ï¿½Î»ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"Ê¾ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -441,7 +423,6 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (SelectedPosition == null) return;
 
-        // ´ÓÔ­Ê¼ÅäÖÃ»Ö¸´Î»ÖÃ
         if (CurrentConfig == null) return;
 
         var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == SelectedPosition.DeviceId);
@@ -454,7 +435,7 @@ public class PositionSettingsViewModel : BindableBase
                 SelectedPosition.Speed = workPos.Speed;
                 SelectedPosition.IsModified = false;
                 UpdateStatistics();
-                StatusMessage = $"ÒÑÖØÖÃ {SelectedPosition.PositionName}";
+                StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {SelectedPosition.PositionName}";
                 return;
             }
         }
@@ -469,7 +450,7 @@ public class PositionSettingsViewModel : BindableBase
                 SelectedPosition.Speed = workPos.Speed;
                 SelectedPosition.IsModified = false;
                 UpdateStatistics();
-                StatusMessage = $"ÒÑÖØÖÃ {SelectedPosition.PositionName}";
+                StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {SelectedPosition.PositionName}";
             }
         }
     }
@@ -478,19 +459,17 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (CurrentConfig == null)
         {
-            StatusMessage = "ÇëÏÈµ¼ÈëÅäÖÃÎÄ¼þ";
+            StatusMessage = "ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½";
             return;
         }
 
         try
         {
-            // ´ò¿ªÌí¼ÓÎ»ÖÃ¶Ô»°¿ò
             var dialog = new AddPositionDialog(CurrentConfig)
             {
                 Owner = System.Windows.Application.Current.MainWindow
             };
 
-            // Ñ­»·Ìí¼Ó£¨Ö§³ÖÁ¬ÐøÌí¼Ó£©
             while (dialog.ShowDialog() == true)
             {
                 var newPosition = new PositionPointViewModel
@@ -509,15 +488,12 @@ public class PositionSettingsViewModel : BindableBase
                 UpdateStatistics();
                 SelectedPosition = newPosition;
 
-                // Í¬Ê±Ìí¼Óµ½ÅäÖÃÖÐ
                 AddPositionToConfig(newPosition);
 
-                // ·¢²¼Î»ÖÃÌí¼ÓÊÂ¼þ£¬Í¨Öª DeviceDebugView
                 _eventAggregator.GetEvent<PositionAddedEvent>().Publish(newPosition);
 
-                StatusMessage = $"ÒÑÌí¼ÓÎ»ÖÃµã: {newPosition.PositionName} µ½ {newPosition.DeviceName}";
+                StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ãµï¿½: {newPosition.PositionName} ï¿½ï¿½ {newPosition.DeviceName}";
 
-                // Èç¹û²»¼ÌÐøÌí¼Ó£¬ÍË³öÑ­»·
                 if (!dialog.ContinueAdding)
                 {
                     break;
@@ -526,8 +502,8 @@ public class PositionSettingsViewModel : BindableBase
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Ìí¼ÓÎ»ÖÃµãÊ§°Ü");
-            StatusMessage = $"Ìí¼ÓÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ãµï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -535,7 +511,6 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (CurrentConfig == null) return;
 
-        // ¸ù¾ÝÉè±¸ÀàÐÍÌí¼Óµ½¶ÔÓ¦µÄÅäÖÃÖÐ
         if (position.DeviceType.Contains("CAN"))
         {
             var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
@@ -562,7 +537,7 @@ public class PositionSettingsViewModel : BindableBase
                 });
             }
         }
-        else if (position.DeviceType.Contains("ÀëÐÄ»ú"))
+        else if (position.DeviceType.Contains("ï¿½ï¿½ï¿½Ä»ï¿½"))
         {
             var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
             if (cent != null)
@@ -581,14 +556,13 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (SelectedPosition == null)
         {
-            StatusMessage = "ÇëÏÈÑ¡ÔñÒªÉ¾³ýµÄÎ»ÖÃµã";
+            StatusMessage = "ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ÒªÉ¾ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ãµï¿½";
             return;
         }
 
-        // È·ÈÏÉ¾³ý
         var result = System.Windows.MessageBox.Show(
-            $"È·¶¨ÒªÉ¾³ýÎ»ÖÃµã '{SelectedPosition.PositionName}' Âð£¿",
-            "È·ÈÏÉ¾³ý",
+            $"È·ï¿½ï¿½ÒªÉ¾ï¿½ï¿½Î»ï¿½Ãµï¿½ '{SelectedPosition.PositionName}' ï¿½ï¿½",
+            "È·ï¿½ï¿½É¾ï¿½ï¿½",
             System.Windows.MessageBoxButton.YesNo,
             System.Windows.MessageBoxImage.Question);
 
@@ -596,25 +570,22 @@ public class PositionSettingsViewModel : BindableBase
 
         try
         {
-            // ´ÓÅäÖÃÖÐÉ¾³ý
             RemovePositionFromConfig(SelectedPosition);
 
-            // ´ÓÁÐ±íÖÐÉ¾³ý
             var posToDelete = SelectedPosition;
             SelectedPosition = null;
             AllPositions.Remove(posToDelete);
             FilterPositions();
             UpdateStatistics();
 
-            // ·¢²¼Î»ÖÃÉ¾³ýÊÂ¼þ£¬Í¨Öª DeviceDebugView
             _eventAggregator.GetEvent<PositionDeletedEvent>().Publish(posToDelete);
 
-            StatusMessage = $"ÒÑÉ¾³ýÎ»ÖÃµã: {posToDelete.PositionName}";
+            StatusMessage = $"ï¿½ï¿½É¾ï¿½ï¿½Î»ï¿½Ãµï¿½: {posToDelete.PositionName}";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "É¾³ýÎ»ÖÃµãÊ§°Ü");
-            StatusMessage = $"É¾³ýÊ§°Ü: {ex.Message}";
+            _logger.Error(ex, "É¾ï¿½ï¿½Î»ï¿½Ãµï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"É¾ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -622,7 +593,6 @@ public class PositionSettingsViewModel : BindableBase
     {
         if (CurrentConfig == null) return;
 
-        // ¸ù¾ÝÉè±¸ÀàÐÍ´Ó¶ÔÓ¦µÄÅäÖÃÖÐÉ¾³ý
         if (position.DeviceType.Contains("CAN"))
         {
             var motor = CurrentConfig.Motors.FirstOrDefault(m => m.DeviceId == position.DeviceId);
@@ -647,7 +617,7 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
         }
-        else if (position.DeviceType.Contains("ÀëÐÄ»ú"))
+        else if (position.DeviceType.Contains("ï¿½ï¿½ï¿½Ä»ï¿½"))
         {
             var cent = CurrentConfig.CentrifugalDevices.FirstOrDefault(c => c.DeviceId == position.DeviceId);
             if (cent != null)
@@ -661,20 +631,17 @@ public class PositionSettingsViewModel : BindableBase
         }
     }
 
-    // ÊÂ¼þ´¦Àí - ´Ó DeviceDebugView Í¬²½ÅäÖÃ
     private void OnConfigImported(DeviceConfigDto config)
     {
         try
         {
             CurrentConfig = config;
 
-            // Çå¿ÕÁÐ±í
             AllPositions.Clear();
             FilteredPositions.Clear();
             DeviceFilters.Clear();
-            DeviceFilters.Add("È«²¿");
+            DeviceFilters.Add("È«ï¿½ï¿½");
 
-            // ¼ÓÔØ CAN µç»úÎ»ÖÃ
             foreach (var motor in config.Motors)
             {
                 DeviceFilters.Add(motor.Name);
@@ -684,7 +651,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "CANµç»ú",
+                        DeviceType = "CANï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -693,7 +660,6 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // ¼ÓÔØ EtherCAT µç»úÎ»ÖÃ
             foreach (var motor in config.EtherCATMotors)
             {
                 DeviceFilters.Add(motor.Name);
@@ -703,7 +669,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "EtherCATµç»ú",
+                        DeviceType = "EtherCATï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -712,7 +678,6 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // ¼ÓÔØÀëÐÄ»úÎ»ÖÃ
             foreach (var cent in config.CentrifugalDevices)
             {
                 DeviceFilters.Add(cent.Name);
@@ -722,7 +687,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = cent.DeviceId,
                         DeviceName = cent.Name,
-                        DeviceType = "ÀëÐÄ»ú",
+                        DeviceType = "ï¿½ï¿½ï¿½Ä»ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -731,16 +696,15 @@ public class PositionSettingsViewModel : BindableBase
                 }
             }
 
-            // ¸üÐÂÉ¸Ñ¡ºÍÍ³¼Æ
             FilterPositions();
             UpdateStatistics();
 
-            StatusMessage = $"ÒÑ´Óµ÷ÊÔ½çÃæÍ¬²½ÅäÖÃ£¬¹² {AllPositions.Count} ¸öÎ»ÖÃµã";
+            StatusMessage = $"ï¿½Ñ´Óµï¿½ï¿½Ô½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ {AllPositions.Count} ï¿½ï¿½Î»ï¿½Ãµï¿½";
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Í¬²½ÅäÖÃÊ§°Ü");
-            StatusMessage = $"Í¬²½Ê§°Ü: {ex.Message}";
+            _logger.Error(ex, "Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+            StatusMessage = $"Í¬ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
@@ -757,7 +721,7 @@ public class PositionSettingsViewModel : BindableBase
             AllPositions.Clear();
             FilteredPositions.Clear();
             DeviceFilters.Clear();
-            DeviceFilters.Add("È«²¿");
+            DeviceFilters.Add("È«ï¿½ï¿½");
 
             // Load positions from CAN motors
             foreach (var motor in args.Config.Motors)
@@ -769,7 +733,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "CANµç»ú",
+                        DeviceType = "CANï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -788,7 +752,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = motor.DeviceId,
                         DeviceName = motor.Name,
-                        DeviceType = "EtherCATµç»ú",
+                        DeviceType = "EtherCATï¿½ï¿½ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -807,7 +771,7 @@ public class PositionSettingsViewModel : BindableBase
                     {
                         DeviceId = cent.DeviceId,
                         DeviceName = cent.Name,
-                        DeviceType = "ÀëÐÄ»ú",
+                        DeviceType = "ï¿½ï¿½ï¿½Ä»ï¿½",
                         PositionName = pos.Name,
                         Position = pos.Position,
                         Speed = pos.Speed,
@@ -820,22 +784,21 @@ public class PositionSettingsViewModel : BindableBase
             FilterPositions();
             UpdateStatistics();
 
-            StatusMessage = $"ÅäÖÃÒÑ¼ÓÔØ (À´Ô´: {args.Source})£¬¹² {AllPositions.Count} ¸öÎ»ÖÃµã";
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¼ï¿½ï¿½ï¿½ (ï¿½ï¿½Ô´: {args.Source})ï¿½ï¿½ï¿½ï¿½ {AllPositions.Count} ï¿½ï¿½Î»ï¿½Ãµï¿½";
             _logger.Info($"Configuration loaded from {args.Source}: {AllPositions.Count} positions");
         }
         catch (Exception ex)
         {
             _logger.Error(ex, "Failed to load configuration");
-            StatusMessage = $"¼ÓÔØÅäÖÃÊ§°Ü: {ex.Message}";
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
-    // Ìí¼ÓÐÂÉè±¸
     private void AddDevice()
     {
         if (CurrentConfig == null)
         {
-            StatusMessage = "ÇëÏÈµ¼ÈëÅäÖÃÎÄ¼þ";
+            StatusMessage = "ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½";
             return;
         }
 
@@ -853,80 +816,75 @@ public class PositionSettingsViewModel : BindableBase
                 var deviceName = dialog.DeviceName;
                 var description = dialog.Description;
 
-                // ¼ì²éÉè±¸ ID ÊÇ·ñÒÑ´æÔÚ
                 if (IsDeviceIdExists(deviceId))
                 {
-                    StatusMessage = $"Éè±¸ ID '{deviceId}' ÒÑ´æÔÚ";
+                    StatusMessage = $"ï¿½è±¸ ID '{deviceId}' ï¿½Ñ´ï¿½ï¿½ï¿½";
                     System.Windows.MessageBox.Show(
-                        $"Éè±¸ ID '{deviceId}' ÒÑ´æÔÚ£¬ÇëÊ¹ÓÃÆäËû ID¡£",
-                        "Éè±¸ ID ³åÍ»",
+                        $"ï¿½è±¸ ID '{deviceId}' ï¿½Ñ´ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ IDï¿½ï¿½",
+                        "ï¿½è±¸ ID ï¿½ï¿½Í»",
                         System.Windows.MessageBoxButton.OK,
                         System.Windows.MessageBoxImage.Warning);
                     return;
                 }
 
-                // ¸ù¾ÝÉè±¸ÀàÐÍ´´½¨Éè±¸
                 switch (deviceType)
                 {
-                    case "CAN µç»ú":
+                    case "CAN ï¿½ï¿½ï¿½":
                         AddCanMotor(deviceId, deviceName, description, dialog.CanNodeId ?? 1);
                         break;
-                    case "EtherCAT µç»ú":
+                    case "EtherCAT ï¿½ï¿½ï¿½":
                         AddEtherCATMotor(deviceId, deviceName, description, dialog.SlaveId ?? 1);
                         break;
-                    case "×¢Éä±Ã":
+                    case "×¢ï¿½ï¿½ï¿½":
                         AddSyringePump(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "Èä¶¯±Ã":
+                    case "ï¿½ä¶¯ï¿½ï¿½":
                         AddPeristalticPump(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "×Ô¶¨Òå±Ã":
+                    case "ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½":
                         AddDiyPump(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "ÀëÐÄ»ú":
+                    case "ï¿½ï¿½ï¿½Ä»ï¿½":
                         AddCentrifugalDevice(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "TCU ÎÂ¿Ø":
+                    case "TCU ï¿½Â¿ï¿½":
                         AddTcuDevice(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "ÀäË®»ú":
+                    case "ï¿½ï¿½Ë®ï¿½ï¿½":
                         AddChillerDevice(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "³ÆÖØ´«¸ÐÆ÷":
+                    case "ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½":
                         AddWeighingSensor(deviceId, deviceName, description, dialog.PortName);
                         break;
-                    case "É¨ÂëÇ¹":
+                    case "É¨ï¿½ï¿½Ç¹":
                         AddScanner(deviceId, deviceName, description, dialog.IpAddress, dialog.Port ?? 9000);
                         break;
-                    case "Jaka »úÆ÷ÈË":
+                    case "Jaka ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½":
                         AddJakaRobot(deviceId, deviceName, description, dialog.IpAddress, dialog.Port ?? 10000);
                         break;
-                    case "IO Éè±¸":
+                    case "IO ï¿½è±¸":
                         AddEcatIODevice(deviceId, deviceName, description, dialog.SlaveId ?? 1);
                         break;
                 }
 
-                // Ë¢ÐÂÉè±¸É¸Ñ¡ÁÐ±í
                 if (!DeviceFilters.Contains(deviceName))
                 {
                     DeviceFilters.Add(deviceName);
                 }
 
                 UpdateStatistics();
-                StatusMessage = $"ÒÑÌí¼ÓÉè±¸: {deviceName} ({deviceType})";
+                StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸: {deviceName} ({deviceType})";
 
-                // ·¢²¼Éè±¸Ìí¼ÓÊÂ¼þ£¨Èç¹ûÐèÒª£©
                 // _eventAggregator.GetEvent<DeviceAddedEvent>().Publish(newDevice);
             }
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Ìí¼ÓÉè±¸Ê§°Ü");
-            StatusMessage = $"Ìí¼ÓÉè±¸Ê§°Ü: {ex.Message}";
+            _logger.Error(ex, "ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ê§ï¿½ï¿½");
+            StatusMessage = $"ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ê§ï¿½ï¿½: {ex.Message}";
         }
     }
 
-    // ¼ì²éÉè±¸ ID ÊÇ·ñÒÑ´æÔÚ
     private bool IsDeviceIdExists(string deviceId)
     {
         if (CurrentConfig == null) return false;
@@ -945,7 +903,6 @@ public class PositionSettingsViewModel : BindableBase
                CurrentConfig.EcatIODevices.Any(io => io.DeviceId == deviceId);
     }
 
-    // Ìí¼Ó CAN µç»ú
     private void AddCanMotor(string deviceId, string deviceName, string description, int nodeId)
     {
         var motor = new MotorDto
@@ -968,7 +925,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.Motors.Add(motor);
     }
 
-    // Ìí¼Ó EtherCAT µç»ú
     private void AddEtherCATMotor(string deviceId, string deviceName, string description, int slaveId)
     {
         var motor = new EtherCATMotorDto
@@ -989,7 +945,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.EtherCATMotors.Add(motor);
     }
 
-    // Ìí¼Ó×¢Éä±Ã
     private void AddSyringePump(string deviceId, string deviceName, string description, string? portName)
     {
         var pump = new SyringePumpDto
@@ -1008,7 +963,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.SyringePumps.Add(pump);
     }
 
-    // Ìí¼ÓÈä¶¯±Ã
     private void AddPeristalticPump(string deviceId, string deviceName, string description, string? portName)
     {
         var pump = new PeristalticPumpDto
@@ -1035,7 +989,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.PeristalticPumps.Add(pump);
     }
 
-    // Ìí¼Ó×Ô¶¨Òå±Ã
     private void AddDiyPump(string deviceId, string deviceName, string description, string? portName)
     {
         var pump = new DiyPumpDto
@@ -1054,7 +1007,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.DiyPumps.Add(pump);
     }
 
-    // Ìí¼ÓÀëÐÄ»ú
     private void AddCentrifugalDevice(string deviceId, string deviceName, string description, string? portName)
     {
         var centrifugal = new CentrifugalDeviceDto
@@ -1070,7 +1022,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.CentrifugalDevices.Add(centrifugal);
     }
 
-    // Ìí¼Ó TCU Éè±¸
     private void AddTcuDevice(string deviceId, string deviceName, string description, string? portName)
     {
         var tcu = new TcuDeviceDto
@@ -1084,7 +1035,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.TcuDevices.Add(tcu);
     }
 
-    // Ìí¼ÓÀäË®»ú
     private void AddChillerDevice(string deviceId, string deviceName, string description, string? portName)
     {
         var chiller = new ChillerDeviceDto
@@ -1098,7 +1048,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.ChillerDevices.Add(chiller);
     }
 
-    // Ìí¼Ó³ÆÖØ´«¸ÐÆ÷
     private void AddWeighingSensor(string deviceId, string deviceName, string description, string? portName)
     {
         var sensor = new WeighingSensorDto
@@ -1114,7 +1063,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.WeighingSensors.Add(sensor);
     }
 
-    // Ìí¼ÓÉ¨ÂëÇ¹
     private void AddScanner(string deviceId, string deviceName, string description, string? ipAddress, int port)
     {
         var scanner = new ScannerDto
@@ -1128,7 +1076,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.Scanners.Add(scanner);
     }
 
-    // Ìí¼Ó Jaka »úÆ÷ÈË
     private void AddJakaRobot(string deviceId, string deviceName, string description, string? ipAddress, int port)
     {
         var robot = new JakaRobotDto
@@ -1142,7 +1089,6 @@ public class PositionSettingsViewModel : BindableBase
         CurrentConfig.JakaRobots.Add(robot);
     }
 
-    // Ìí¼Ó IO Éè±¸
     private void AddEcatIODevice(string deviceId, string deviceName, string description, int slaveId)
     {
         var ioDevice = new EcatIODeviceDto

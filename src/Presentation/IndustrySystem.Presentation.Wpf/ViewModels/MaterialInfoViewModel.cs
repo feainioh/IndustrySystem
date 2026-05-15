@@ -23,23 +23,11 @@ public class MaterialInfoViewModel : NagetiveCurdVeiwModel<MaterialDto>
     private readonly IMaterialAppService _svc;
     private readonly IDialogService _dialogService;
 
-    private string _searchText = string.Empty;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (SetProperty(ref _searchText, value))
-            {
-                MaterialsView.Refresh();
-            }
-        }
-    }
-
     public ObservableCollection<MaterialDto> Materials { get; } = new();
+    public ObservableCollection<MaterialDto> PagedMaterials { get; } = new();
     public ICollectionView MaterialsView { get; }
 
-    public ICommand RefreshCommand { get; }
+    public new ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -92,11 +80,18 @@ public class MaterialInfoViewModel : NagetiveCurdVeiwModel<MaterialDto>
         {
             Materials.Add(item);
         }
+
+        ApplyMaterialPaging(resetToFirstPage: true);
     }
 
     private void OpenMaterialDialogAsync(Guid? id)
     {
-        var parameters = new DialogParameters { { "id", id } };
+        var parameters = new DialogParameters();
+        if (id.HasValue)
+        {
+            parameters.Add("id", id.Value);
+        }
+
         _dialogService.ShowDialog(nameof(Views.Dialogs.MaterialEditDialog), parameters, async result =>
         {
             if (result.Result == ButtonResult.OK)
@@ -118,4 +113,63 @@ public class MaterialInfoViewModel : NagetiveCurdVeiwModel<MaterialDto>
 
     protected override async Task<IReadOnlyList<MaterialDto>> LoadItemsAsync()
         => await _svc.GetListAsync();
+
+    protected override void OnSearchTextChanged()
+    {
+        ApplyMaterialPaging(resetToFirstPage: true);
+    }
+
+    protected override void OnPagingParametersChanged(bool resetToFirstPage)
+    {
+        ApplyMaterialPaging(resetToFirstPage);
+    }
+
+    private IEnumerable<MaterialDto> BuildFilteredMaterials()
+    {
+        var query = Materials.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var key = SearchText.Trim();
+            query = query.Where(material =>
+                (material.MaterialCode?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.Name?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.FullName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.MolecularFormula?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.CasNo?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.Supplier?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (material.Brand?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || material.Category.ToString().Contains(key, StringComparison.OrdinalIgnoreCase)
+                || material.MaterialType.ToString().Contains(key, StringComparison.OrdinalIgnoreCase)
+                || material.HazardLevel.ToString().Contains(key, StringComparison.OrdinalIgnoreCase)
+                || material.StorageCondition.ToString().Contains(key, StringComparison.OrdinalIgnoreCase));
+        }
+
+        return query;
+    }
+
+    private void ApplyMaterialPaging(bool resetToFirstPage = false)
+    {
+        var filtered = BuildFilteredMaterials().ToList();
+        TotalCount = filtered.Count;
+
+        if (resetToFirstPage)
+        {
+            PageIndex = 0;
+        }
+
+        var maxPageIndex = Math.Max(0, TotalPages - 1);
+        if (PageIndex > maxPageIndex)
+        {
+            PageIndex = maxPageIndex;
+        }
+
+        PagedMaterials.Clear();
+        foreach (var material in filtered.Skip(PageIndex * PageSize).Take(PageSize))
+        {
+            PagedMaterials.Add(material);
+        }
+
+        RaisePagingCommandStates();
+    }
 }

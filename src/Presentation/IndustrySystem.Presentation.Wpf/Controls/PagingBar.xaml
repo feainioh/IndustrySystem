@@ -5,14 +5,14 @@
  <UserControl.Resources>
   <loc:LocalizationProvider x:Key="Loc" />
  </UserControl.Resources>
- <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+ <StackPanel Style="{StaticResource PaginationButtonPanel}">
   <TextBlock Text="{Binding PagingText, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
   <TextBlock Text="{Binding [Lbl_PageSize], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-  <ComboBox Width="72" ItemsSource="{Binding PageSizes, RelativeSource={RelativeSource AncestorType=UserControl}}" SelectedItem="{Binding PageSize, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
+  <ComboBox Width="72" Style="{StaticResource PaginationComboBox}" ItemsSource="{Binding PageSizes, RelativeSource={RelativeSource AncestorType=UserControl}}" SelectedItem="{Binding PageSize, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
   <TextBlock Text="{Binding [Lbl_JumpTo], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-  <TextBox Width="64" Text="{Binding GoToText, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0"/>
-  <Button Content="{Binding [Btn_Go], Source={StaticResource Loc}}" Command="{Binding GoToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
-  <Button Content="{Binding [Btn_Prev], Source={StaticResource Loc}}" Command="{Binding PrevCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,8,0"/>
-  <Button Content="{Binding [Btn_Next], Source={StaticResource Loc}}" Command="{Binding NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+  <TextBox Width="64" Style="{StaticResource PaginationInputTextBox}" Text="{Binding GoToText, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"/>
+  <Button Content="{Binding [Btn_Go], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Command="{Binding GoToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+  <Button Content="{Binding [Btn_Prev], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Command="{Binding PrevCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+  <Button Content="{Binding [Btn_Next], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Command="{Binding NextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
  </StackPanel>
 </UserControl>

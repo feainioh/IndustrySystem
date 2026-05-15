@@ -3,9 +3,14 @@ using SqlSugar;
 
 namespace IndustrySystem.Infrastructure.SqlSugar.Repositories;
 
+/// <summary>
+/// 基于 SqlSugar 的通用仓储实现。
+/// </summary>
+/// <typeparam name="TEntity">实体类型。</typeparam>
 public class SqlSugarRepository<TEntity> : IRepository<TEntity> where TEntity : class, new()
 {
     private readonly ISqlSugarClient _db;
+
     public SqlSugarRepository(ISqlSugarClient db) => _db = db;
 
     public async Task<TEntity?> GetAsync(Guid id)
@@ -16,16 +21,8 @@ public class SqlSugarRepository<TEntity> : IRepository<TEntity> where TEntity : 
 
     public async Task<TEntity> InsertAsync(TEntity entity)
     {
-        try
-        {
-            var res = await _db.Insertable(entity).ExecuteCommandAsync();
-            return entity;
-        }catch(Exception e)
-        {
-            Console.WriteLine(e.Message);
-            //e.Message;
-            return entity;
-        }
+        await _db.Insertable(entity).ExecuteCommandAsync();
+        return entity;
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)

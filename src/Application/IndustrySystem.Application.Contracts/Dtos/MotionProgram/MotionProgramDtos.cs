@@ -1,7 +1,6 @@
 namespace IndustrySystem.Application.Contracts.Dtos.MotionProgram;
 
 /// <summary>
-/// ¶¯×÷ÀàĞÍÃ¶¾Ù
 /// </summary>
 public enum ActionType
 {
@@ -31,28 +30,27 @@ public enum ActionType
     Alarm,
     
     // Flow Control - Logic
-    IfStart,        // if Óï¾ä¿ªÊ¼
-    ElseIf,         // else if ·ÖÖ§
-    Else,           // else ·ÖÖ§
-    IfEnd,          // if Óï¾ä½áÊø
-    WhileStart,     // while Ñ­»·¿ªÊ¼
-    WhileEnd,       // while Ñ­»·½áÊø
-    Break,          // Ìø³öÑ­»·
-    Continue,       // ¼ÌĞøÏÂÒ»´ÎÑ­»·
-    Return,         // ·µ»Ø/½áÊø³ÌĞò
-    Switch,         // switch Óï¾ä
-    Case,           // case ·ÖÖ§
-    Default,        // default ·ÖÖ§
-    SwitchEnd,      // switch Óï¾ä½áÊø
+    IfStart,        // if å—å¼€å§‹
+    ElseIf,         // else if åˆ†æ”¯
+    Else,           // else åˆ†æ”¯
+    IfEnd,          // if å—ç»“æŸ
+    WhileStart,     // while å¾ªç¯å¼€å§‹
+    WhileEnd,       // while å¾ªç¯ç»“æŸ
+    Break,          // è·³å‡ºå¾ªç¯
+    Continue,       // è¿›å…¥ä¸‹ä¸€æ¬¡å¾ªç¯
+    Return,         // è¿”å›/ç»“æŸæµç¨‹
+    Switch,         // switch åˆ†æ”¯
+    Case,           // case åˆ†æ”¯
+    Default,        // default åˆ†æ”¯
+    SwitchEnd,      // switch å—ç»“æŸ
     
     // Parallel
-    ParallelStart,  // ²¢ĞĞÖ´ĞĞ¿ªÊ¼
-    ParallelEnd,    // ²¢ĞĞÖ´ĞĞ½áÊø
-    ParallelBranch  // ²¢ĞĞ·ÖÖ§
+    ParallelStart,  // å¹¶è¡Œæ‰§è¡Œå¼€å§‹
+    ParallelEnd,    // å¹¶è¡Œæ‰§è¡Œç»“æŸ
+    ParallelBranch  // å¹¶è¡Œåˆ†æ”¯
 }
 
 /// <summary>
-/// ´íÎó´¦Àí·½Ê½
 /// </summary>
 public enum ErrorHandling
 {
@@ -63,7 +61,6 @@ public enum ErrorHandling
 }
 
 /// <summary>
-/// ¶¯×÷³ÌĞòDTO
 /// </summary>
 public record MotionProgramDto(
     Guid Id,
@@ -81,7 +78,6 @@ public record MotionProgramDto(
 );
 
 /// <summary>
-/// ¶¯×÷½ÚµãDTO
 /// </summary>
 public record ActionNodeDto(
     Guid Id,
@@ -100,7 +96,6 @@ public record ActionNodeDto(
 );
 
 /// <summary>
-/// ½ÚµãÁ¬½ÓDTO
 /// </summary>
 public record NodeConnectionDto(
     Guid Id,
@@ -113,7 +108,6 @@ public record NodeConnectionDto(
 );
 
 /// <summary>
-/// ´´½¨/¸üĞÂ¶¯×÷³ÌĞòÇëÇó
 /// </summary>
 public record SaveMotionProgramRequest(
     Guid? Id,
@@ -127,7 +121,6 @@ public record SaveMotionProgramRequest(
 );
 
 /// <summary>
-/// ³ÌĞòÁĞ±íÏîDTO
 /// </summary>
 public record MotionProgramListItemDto(
     Guid Id,

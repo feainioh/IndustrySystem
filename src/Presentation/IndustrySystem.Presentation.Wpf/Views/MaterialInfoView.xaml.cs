@@ -1,14 +1,12 @@
 using System.Windows.Controls;
-using IndustrySystem.Presentation.Wpf.ViewModels;
 
 namespace IndustrySystem.Presentation.Wpf.Views
 {
  public partial class MaterialInfoView : UserControl
  {
- public MaterialInfoView(MaterialInfoViewModel viewModel)
+ public MaterialInfoView()
  {
  InitializeComponent();
- DataContext = viewModel;
  }
  }
 }

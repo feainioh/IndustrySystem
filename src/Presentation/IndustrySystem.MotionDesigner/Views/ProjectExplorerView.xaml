@@ -19,9 +19,8 @@
         </Style>
 
         <!-- 树节点样式 -->
-        <Style x:Key="TreeItemStyle" TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+        <Style x:Key="TreeItemStyle" TargetType="TreeViewItem" BasedOn="{StaticResource MotionDesignerTreeViewItem}">
             <Setter Property="IsExpanded" Value="True"/>
-            <Setter Property="Padding" Value="4,2"/>
         </Style>
     </UserControl.Resources>
 
@@ -220,10 +219,9 @@
             </TreeView.Resources>
 
             <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MotionDesignerTreeViewItem}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-                    <Setter Property="Padding" Value="4,2"/>
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>

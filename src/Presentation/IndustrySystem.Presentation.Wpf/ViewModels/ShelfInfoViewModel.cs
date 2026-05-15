@@ -23,6 +23,8 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels;
 /// <summary>单个槽位的显示模型</summary>
 public class SlotDisplayItem : BindableBase
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     public Guid Id { get; set; }
     public Guid ShelfId { get; set; }
     public int Row { get; set; }
@@ -146,9 +148,9 @@ public class SlotDisplayItem : BindableBase
     {
         get
         {
-            if (IsDisabled) return "已禁用";
+            if (IsDisabled) return T("Legend_Disabled");
             if (ContainerName is not null) return ContainerName;
-            return "空位";
+            return T("Legend_EmptySlot");
         }
     }
 
@@ -167,7 +169,7 @@ public class SlotDisplayItem : BindableBase
         {
             if (!Quantity.HasValue) return string.Empty;
             var text = $"{Quantity:0.##} {Unit}";
-            if (InventoryRecordCount > 1) text += $" ({InventoryRecordCount}条)";
+            if (InventoryRecordCount > 1) text += string.Format(T("ShelfSlot_RecordCountSuffixFormat"), InventoryRecordCount);
             return text;
         }
     }
@@ -224,10 +226,10 @@ public class WellDisplayItem : BindableBase
 
     public string TooltipText => IsOccupied
         ? $"{Label}: {MaterialName} ({Quantity:0.##}{Unit})"
-        : $"{Label}: 空";
+        : string.Format(LocalizationProvider.Instance["ShelfSlot_EmptyValueFormat"], Label);
 }
 
-public class ShelfInfoViewModel : BindableBase
+public class ShelfInfoViewModel : NagetiveViewModel
 {
     private readonly IShelfAppService _svc;
     private readonly IDialogService _dialogService;
@@ -241,17 +243,115 @@ public class ShelfInfoViewModel : BindableBase
 
     // ── 容器管理 ──
     public ObservableCollection<ContainerInfoDto> Containers { get; } = new();
+    public ObservableCollection<ContainerInfoDto> PagedContainers { get; } = new();
+
+    public ObservableCollection<int> ContainerPageSizes { get; } = new() { 10, 20, 50, 100 };
+
+    private int _containerCurrentPage = 1;
+    public int ContainerCurrentPage
+    {
+        get => _containerCurrentPage;
+        set
+        {
+            if (SetProperty(ref _containerCurrentPage, value))
+            {
+                ApplyContainerPaging();
+            }
+        }
+    }
+
+    private int _containerPageSize = 20;
+    public int ContainerPageSize
+    {
+        get => _containerPageSize;
+        set
+        {
+            if (SetProperty(ref _containerPageSize, value))
+            {
+                ApplyContainerPaging(resetToFirstPage: true);
+            }
+        }
+    }
+
+    private int _containerTotalCount;
+    public int ContainerTotalCount
+    {
+        get => _containerTotalCount;
+        private set
+        {
+            if (SetProperty(ref _containerTotalCount, value))
+            {
+                RaisePropertyChanged(nameof(ContainerTotalPages));
+            }
+        }
+    }
+
+    public int ContainerTotalPages => Math.Max(1, (int)Math.Ceiling(ContainerTotalCount / (double)ContainerPageSize));
+
     public ICommand AddContainerCommand { get; }
     public ICommand EditContainerCommand { get; }
     public ICommand DeleteContainerCommand { get; }
     public ICommand OpenContainerListCommand { get; }
+    public ICommand ContainerFirstPageCommand { get; }
+    public ICommand ContainerPreviousPageCommand { get; }
+    public ICommand ContainerNextPageCommand { get; }
+    public ICommand ContainerLastPageCommand { get; }
 
     // ── 货架配置 ──
     public ObservableCollection<ShelfConfigDto> Shelves { get; } = new();
+    public ObservableCollection<ShelfConfigDto> PagedShelves { get; } = new();
+
+    public ObservableCollection<int> ShelfPageSizes { get; } = new() { 10, 20, 50, 100 };
+
+    private int _shelfCurrentPage = 1;
+    public int ShelfCurrentPage
+    {
+        get => _shelfCurrentPage;
+        set
+        {
+            if (SetProperty(ref _shelfCurrentPage, value))
+            {
+                ApplyShelfPaging();
+            }
+        }
+    }
+
+    private int _shelfPageSize = 20;
+    public int ShelfPageSize
+    {
+        get => _shelfPageSize;
+        set
+        {
+            if (SetProperty(ref _shelfPageSize, value))
+            {
+                ApplyShelfPaging(resetToFirstPage: true);
+            }
+        }
+    }
+
+    private int _shelfTotalCount;
+    public int ShelfTotalCount
+    {
+        get => _shelfTotalCount;
+        private set
+        {
+            if (SetProperty(ref _shelfTotalCount, value))
+            {
+                RaisePropertyChanged(nameof(ShelfTotalPages));
+            }
+        }
+    }
+
+    public int ShelfTotalPages => Math.Max(1, (int)Math.Ceiling(ShelfTotalCount / (double)ShelfPageSize));
+
     public ICommand AddShelfCommand { get; }
     public ICommand EditShelfCommand { get; }
     public ICommand DeleteShelfCommand { get; }
     public ICommand OpenShelfListCommand { get; }
+    public ICommand ShelfFirstPageCommand { get; }
+    public ICommand ShelfPreviousPageCommand { get; }
+    public ICommand ShelfNextPageCommand { get; }
+    public ICommand ShelfLastPageCommand { get; }
 
     // ── 货架显示 ──
     private ShelfConfigDto? _selectedShelf;
@@ -273,7 +373,6 @@ public class ShelfInfoViewModel : BindableBase
 
     public ObservableCollection<SlotDisplayItem> Slots { get; } = new();
 
-    public ICommand RefreshCommand { get; }
     public ICommand ConfigureSlotCommand { get; }
 
     public ShelfInfoViewModel(IShelfAppService svc, IDialogService dialogService)
@@ -281,17 +380,25 @@ public class ShelfInfoViewModel : BindableBase
         _svc = svc;
         _dialogService = dialogService;
 
-        RefreshCommand = new DelegateCommand(async () => await LoadAllAsync());
-
         AddContainerCommand = new DelegateCommand(async () => await OpenContainerDialogAsync(null));
         EditContainerCommand = new DelegateCommand<Guid?>(async id => { if (id.HasValue) await OpenContainerDialogAsync(id.Value); });
         DeleteContainerCommand = new DelegateCommand<Guid?>(async id => { if (id.HasValue) await DeleteContainerAsync(id.Value); });
         OpenContainerListCommand = new DelegateCommand(async () => await OpenContainerListDialogAsync());
 
+        ContainerFirstPageCommand = new DelegateCommand(() => SetContainerPage(1), () => ContainerCurrentPage > 1);
+        ContainerPreviousPageCommand = new DelegateCommand(() => SetContainerPage(ContainerCurrentPage - 1), () => ContainerCurrentPage > 1);
+        ContainerNextPageCommand = new DelegateCommand(() => SetContainerPage(ContainerCurrentPage + 1), () => ContainerCurrentPage < ContainerTotalPages);
+        ContainerLastPageCommand = new DelegateCommand(() => SetContainerPage(ContainerTotalPages), () => ContainerCurrentPage < ContainerTotalPages);
+
         AddShelfCommand = new DelegateCommand(async () => await OpenShelfDialogAsync(null));
         EditShelfCommand = new DelegateCommand<Guid?>(async id => { if (id.HasValue) await OpenShelfDialogAsync(id.Value); });
         DeleteShelfCommand = new DelegateCommand<Guid?>(async id => { if (id.HasValue) await DeleteShelfAsync(id.Value); });
         OpenShelfListCommand = new DelegateCommand(async () => await OpenShelfListDialogAsync());
+
+        ShelfFirstPageCommand = new DelegateCommand(() => SetShelfPage(1), () => ShelfCurrentPage > 1);
+        ShelfPreviousPageCommand = new DelegateCommand(() => SetShelfPage(ShelfCurrentPage - 1), () => ShelfCurrentPage > 1);
+        ShelfNextPageCommand = new DelegateCommand(() => SetShelfPage(ShelfCurrentPage + 1), () => ShelfCurrentPage < ShelfTotalPages);
+        ShelfLastPageCommand = new DelegateCommand(() => SetShelfPage(ShelfTotalPages), () => ShelfCurrentPage < ShelfTotalPages);
 
         ConfigureSlotCommand = new DelegateCommand<SlotDisplayItem>(slot => { if (slot is not null) OpenSlotConfigAsync(slot); });
 
@@ -300,7 +407,12 @@ public class ShelfInfoViewModel : BindableBase
         _autoRefreshTimer.Tick += async (_, _) => await RefreshSlotsQuietAsync();
         _autoRefreshTimer.Start();
 
-        _ = LoadAllAsync();
+        _ = OnRefreshAsync();
+    }
+
+    protected override async Task OnRefreshAsync()
+    {
+        await LoadAllAsync();
     }
 
     private async Task LoadAllAsync()
@@ -314,6 +426,8 @@ public class ShelfInfoViewModel : BindableBase
         var list = await _svc.GetContainerListAsync();
         Containers.Clear();
         foreach (var c in list) Containers.Add(c);
+
+        ApplyContainerPaging();
     }
 
     private async Task LoadShelvesAsync()
@@ -322,6 +436,8 @@ public class ShelfInfoViewModel : BindableBase
         var list = await _svc.GetShelfListAsync();
         Shelves.Clear();
         foreach (var s in list) Shelves.Add(s);
+
+        ApplyShelfPaging();
 
         // Try to re-select previously selected, or first
         var toSelect = prevSelectedId.HasValue ? Shelves.FirstOrDefault(s => s.Id == prevSelectedId.Value) : null;
@@ -429,7 +545,9 @@ public class ShelfInfoViewModel : BindableBase
         // Small delay to allow the dialog host to finish closing
         if (wasListOpen) await Task.Delay(50);
 
-        var parameters = new DialogParameters { { "id", id } };
+        var parameters = new DialogParameters();
+        if (id.HasValue)
+            parameters.Add("id", id.Value);
         _dialogService.ShowDialog(nameof(Views.Dialogs.ContainerEditDialog), parameters, async result =>
         {
             if (result.Result == ButtonResult.OK)
@@ -471,7 +589,9 @@ public class ShelfInfoViewModel : BindableBase
 
         if (wasListOpen) await Task.Delay(50);
 
-        var parameters = new DialogParameters { { "id", id } };
+        var parameters = new DialogParameters();
+        if (id.HasValue)
+            parameters.Add("id", id.Value);
         _dialogService.ShowDialog(nameof(Views.Dialogs.ShelfEditDialog), parameters, async result =>
         {
             if (result.Result == ButtonResult.OK)
@@ -514,5 +634,123 @@ public class ShelfInfoViewModel : BindableBase
             if (result.Result == ButtonResult.OK)
                 await LoadSlotsAsync();
         });
+    }
+
+    private void ApplyContainerPaging(bool resetToFirstPage = false)
+    {
+        if (ContainerPageSize <= 0)
+        {
+            ContainerPageSize = 1;
+        }
+
+        ContainerTotalCount = Containers.Count;
+
+        if (resetToFirstPage)
+        {
+            _containerCurrentPage = 1;
+            RaisePropertyChanged(nameof(ContainerCurrentPage));
+        }
+
+        var totalPages = ContainerTotalPages;
+        if (_containerCurrentPage > totalPages)
+        {
+            _containerCurrentPage = totalPages;
+            RaisePropertyChanged(nameof(ContainerCurrentPage));
+        }
+        if (_containerCurrentPage < 1)
+        {
+            _containerCurrentPage = 1;
+            RaisePropertyChanged(nameof(ContainerCurrentPage));
+        }
+
+        PagedContainers.Clear();
+        foreach (var container in Containers.Skip((_containerCurrentPage - 1) * ContainerPageSize).Take(ContainerPageSize))
+        {
+            PagedContainers.Add(container);
+        }
+
+        RaiseContainerPagingCommandStates();
+    }
+
+    private void RaiseContainerPagingCommandStates()
+    {
+        (ContainerFirstPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ContainerPreviousPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ContainerNextPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ContainerLastPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+    }
+
+    private void SetContainerPage(int page)
+    {
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        if (page > ContainerTotalPages)
+        {
+            page = ContainerTotalPages;
+        }
+
+        ContainerCurrentPage = page;
+    }
+
+    private void ApplyShelfPaging(bool resetToFirstPage = false)
+    {
+        if (ShelfPageSize <= 0)
+        {
+            ShelfPageSize = 1;
+        }
+
+        ShelfTotalCount = Shelves.Count;
+
+        if (resetToFirstPage)
+        {
+            _shelfCurrentPage = 1;
+            RaisePropertyChanged(nameof(ShelfCurrentPage));
+        }
+
+        var totalPages = ShelfTotalPages;
+        if (_shelfCurrentPage > totalPages)
+        {
+            _shelfCurrentPage = totalPages;
+            RaisePropertyChanged(nameof(ShelfCurrentPage));
+        }
+        if (_shelfCurrentPage < 1)
+        {
+            _shelfCurrentPage = 1;
+            RaisePropertyChanged(nameof(ShelfCurrentPage));
+        }
+
+        PagedShelves.Clear();
+        foreach (var shelf in Shelves.Skip((_shelfCurrentPage - 1) * ShelfPageSize).Take(ShelfPageSize))
+        {
+            PagedShelves.Add(shelf);
+        }
+
+        RaiseShelfPagingCommandStates();
+    }
+
+    private void RaiseShelfPagingCommandStates()
+    {
+        (ShelfFirstPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ShelfPreviousPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ShelfNextPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+        (ShelfLastPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+    }
+
+    private void SetShelfPage(int page)
+    {
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        if (page > ShelfTotalPages)
+        {
+            page = ShelfTotalPages;
+        }
+
+        ShelfCurrentPage = page;
     }
 }

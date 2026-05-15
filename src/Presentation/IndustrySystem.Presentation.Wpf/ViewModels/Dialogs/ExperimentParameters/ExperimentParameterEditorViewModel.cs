@@ -8,16 +8,21 @@ using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
-public class ExperimentParameterEditorViewModel :NagetiveViewModel
+/// <summary>
+/// 参数编辑公共基类：封装参数加载、编辑与保存逻辑，供各类型参数页复用。
+/// </summary>
+public abstract class ExperimentParameterEditorViewModelBase : NagetiveViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IExperimentParameterAppService _svc;
-    private ExperimentTemplateViewModel? _parentVm;
+    private IParameterEditorHost? _parentVm;
 
     public ExperimentType Type { get; private set; }
 
@@ -173,30 +178,29 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
     public int SpeedRpm { get => _speedRpm; set => SetProperty(ref _speedRpm, value); }
 
     // --- Commands ---
-    public ICommand RefreshCommand { get; }
     public ICommand NewCommand { get; }
-    public new ICommand SaveCommand { get; }
+    public ICommand SaveCommand { get; }
     public ICommand DeleteCommand { get; }
 
-    public ExperimentParameterEditorViewModel(IExperimentParameterAppService svc)
+    protected ExperimentParameterEditorViewModelBase(IExperimentParameterAppService svc, ExperimentType fixedType)
     {
         _svc = svc;
+        Type = fixedType;
+        TypeName = GetTypeName(fixedType);
 
-        RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         NewCommand = new DelegateCommand(NewItem);
         SaveCommand = new DelegateCommand(async () => await SaveAsync());
         DeleteCommand = new DelegateCommand(async () => await DeleteAsync());
     }
 
-    /// <summary>Prism region 导航到此 VM 时调用，接收实验类型和父 VM</summary>
-    public void OnNavigatedTo(NavigationContext navigationContext)
+    protected override async Task OnRefreshAsync()
     {
-        if (navigationContext.Parameters.TryGetValue<ExperimentType>("ExperimentType", out var type))
-        {
-            Type = type;
-            TypeName = GetTypeName(type);
-        }
+        await LoadAsync();
+    }
 
+    /// <summary>Prism region 导航到参数编辑区时同步父VM状态。</summary>
+    public override void OnNavigatedTo(NavigationContext navigationContext)
+    {
         // 取消旧的父 VM 订阅
         if (_parentVm is not null)
             _parentVm.PropertyChanged -= OnParentPropertyChanged;
@@ -204,7 +208,7 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
         NewItem();
         _ = LoadAsync();
 
-        if (navigationContext.Parameters.TryGetValue<ExperimentTemplateViewModel>("ParentVm", out var parentVm))
+        if (navigationContext.Parameters.TryGetValue<IParameterEditorHost>("ParentVm", out var parentVm))
         {
             _parentVm = parentVm;
             _parentVm.PropertyChanged += OnParentPropertyChanged;
@@ -213,19 +217,21 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
             if (_parentVm.CurrentParameterDetail is { } detail && detail.Type == Type)
                 LoadParameterDetail(detail);
         }
+
+        base.OnNavigatedTo(navigationContext);
     }
 
-    public bool IsNavigationTarget(NavigationContext navigationContext) => true;
-
-    public void OnNavigatedFrom(NavigationContext navigationContext)
+    public override void OnNavigatedFrom(NavigationContext navigationContext)
     {
         if (_parentVm is not null)
             _parentVm.PropertyChanged -= OnParentPropertyChanged;
+
+        base.OnNavigatedFrom(navigationContext);
     }
 
     private void OnParentPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ExperimentTemplateViewModel.CurrentParameterDetail))
+        if (e.PropertyName == nameof(IParameterEditorHost.CurrentParameterDetail))
         {
             var detail = _parentVm?.CurrentParameterDetail;
             if (detail is not null && detail.Type == Type)
@@ -338,7 +344,7 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            MessageBox.Show("参数名称不能为空", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(T("Msg_ParameterNameRequired"), T("Msg_InfoTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
@@ -411,7 +417,7 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
     {
         if (Id == Guid.Empty) return;
 
-        var r = MessageBox.Show("确认删除参数？", "警告", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        var r = MessageBox.Show(T("Msg_ConfirmDeleteParameter"), T("Msg_WarningTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (r != MessageBoxResult.Yes) return;
 
         await _svc.DeleteAsync(Type, Id);
@@ -421,16 +427,16 @@ public class ExperimentParameterEditorViewModel :NagetiveViewModel
 
     private static string GetTypeName(ExperimentType type) => type switch
     {
-        ExperimentType.Reaction => "反应实验参数",
-        ExperimentType.RotaryEvaporation => "旋蒸参数",
-        ExperimentType.Detection => "检测参数",
-        ExperimentType.Filtration => "过滤参数",
-        ExperimentType.Drying => "干燥参数",
-        ExperimentType.Quenching => "淬灭参数",
-        ExperimentType.Extraction => "萃取参数",
-        ExperimentType.Sampling => "取样参数",
-        ExperimentType.Centrifugation => "离心参数",
-        ExperimentType.CustomDetection => "自定义检测参数",
+        ExperimentType.Reaction => T("ParameterTitle_Reaction"),
+        ExperimentType.RotaryEvaporation => T("ParameterTitle_RotaryEvaporation"),
+        ExperimentType.Detection => T("ParameterTitle_Detection"),
+        ExperimentType.Filtration => T("ParameterTitle_Filtration"),
+        ExperimentType.Drying => T("ParameterTitle_Drying"),
+        ExperimentType.Quenching => T("ParameterTitle_Quenching"),
+        ExperimentType.Extraction => T("ParameterTitle_Extraction"),
+        ExperimentType.Sampling => T("ParameterTitle_Sampling"),
+        ExperimentType.Centrifugation => T("ParameterTitle_Centrifugation"),
+        ExperimentType.CustomDetection => T("ParameterTitle_CustomDetection"),
         _ => type.ToString()
     };
 }

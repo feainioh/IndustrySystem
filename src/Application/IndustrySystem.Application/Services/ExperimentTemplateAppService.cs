@@ -7,17 +7,23 @@ using IndustrySystem.Domain.Shared.Enums;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 实验模板应用服务实现。
+/// </summary>
 public class ExperimentTemplateAppService : IExperimentTemplateAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<Experiment> _repo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public ExperimentTemplateAppService(IRepository<Experiment> repo, IMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     public async Task<ExperimentTemplateDto?> GetAsync(Guid id)
     {
         var entity = await _repo.GetAsync(id);
@@ -32,6 +38,7 @@ public class ExperimentTemplateAppService : IExperimentTemplateAppService
             .Select(_mapper.Map<ExperimentTemplateDto>)
             .ToList();
 
+    // ===== Commands =====
     public async Task<ExperimentTemplateDto> CreateAsync(ExperimentTemplateDto input)
     {
         var entity = _mapper.Map<Experiment>(input);
@@ -65,6 +72,8 @@ public class ExperimentTemplateAppService : IExperimentTemplateAppService
 
     public Task DeleteAsync(Guid id) => _repo.DeleteAsync(id);
 
+    // ===== Helpers =====
+    // 统一模板自动命名规则，便于 UI 未提供名称时回填。
     private static string BuildAutoName(ExperimentType type)
         => $"{GetTypeDisplayName(type)}-{DateTime.Now:yyyyMMddHHmmss}";
 

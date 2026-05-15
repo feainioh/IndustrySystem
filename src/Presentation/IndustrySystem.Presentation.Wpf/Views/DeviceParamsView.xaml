@@ -2,8 +2,31 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.DeviceParamsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/" >
-    <Grid Margin="16">
-        <TextBlock Text="Device Params: Feature in progress..." FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+    <Grid Style="{StaticResource PageRootGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <Border Style="{StaticResource PageHeaderIconBorder}" Background="{DynamicResource DeviceGradientBrush}">
+                <TextBlock Text="&#xE713;" Style="{StaticResource PageHeaderMdl2Icon}"/>
+            </Border>
+            <TextBlock Text="{x:Static loc:Strings.Nav_DeviceParams}" Style="{StaticResource PageHeaderTitle}"/>
+        </StackPanel>
+
+        <Border Grid.Row="2" Style="{StaticResource FormCard}">
+            <Grid>
+                <TextBlock Text="设备参数功能正在建设中。"
+                           FontSize="16"
+                           Foreground="{DynamicResource AppMutedTextBrush}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

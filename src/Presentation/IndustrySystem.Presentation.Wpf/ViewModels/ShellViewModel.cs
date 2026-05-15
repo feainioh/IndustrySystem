@@ -1,9 +1,9 @@
 using Prism.Mvvm;
 using Prism.Commands;
-using Prism.Ioc;
+using Prism.Navigation;
+using NLog;
 using System.Windows.Input;
 using ModernWpf.Controls;
-using IndustrySystem.Presentation.Wpf.Views;
 using IndustrySystem.Presentation.Wpf.Services;
 using IndustrySystem.Presentation.Wpf.Resources;
 
@@ -11,46 +11,66 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
 public class ShellViewModel : BindableBase
 {
-    private readonly IContainerProvider _container;
+    public const string MainRegionName = "ShellMainRegion";
+    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
+    private readonly IRegionManager _regionManager;
     private readonly IAuthState _authState;
-    private object? _currentContent;
+    private readonly IAppSessionService _appSessionService;
+    private readonly IMainWindowService _mainWindowService;
+
     private string _currentUserName = Strings.Lbl_NotLoggedIn;
-    private string _currentUserRole = string.Empty;
+    private string _visualThemeGlyph = "\uE771";
+    private string _visualThemeText = "经典主题";
+    private string _visualThemeToolTip = "当前：经典主题，点击切换到液态玻璃";
 
-    public object? CurrentContent
-    {
-        get => _currentContent;
-        private set => SetProperty(ref _currentContent, value);
-    }
-
-    /// <summary>��ǰ��¼�û���</summary>
     public string CurrentUserName
     {
         get => _currentUserName;
         private set => SetProperty(ref _currentUserName, value);
     }
 
-    /// <summary>��ǰ��¼�û���ɫ��ʾ����</summary>
-    public string CurrentUserRole
+    public string VisualThemeGlyph
     {
-        get => _currentUserRole;
-        private set => SetProperty(ref _currentUserRole, value);
+        get => _visualThemeGlyph;
+        private set => SetProperty(ref _visualThemeGlyph, value);
+    }
+
+    public string VisualThemeText
+    {
+        get => _visualThemeText;
+        private set => SetProperty(ref _visualThemeText, value);
+    }
+
+    public string VisualThemeToolTip
+    {
+        get => _visualThemeToolTip;
+        private set => SetProperty(ref _visualThemeToolTip, value);
     }
 
     /// <summary>
-    /// ȫ����֤״̬���� XAML ��Ȩ�޿ɼ���ʹ��
     /// </summary>
     public IAuthState AuthState => _authState;
 
     public ICommand OnLoadedCommand { get; }
     public ICommand NavSelectionChangedCommand { get; }
+    public ICommand ToggleVisualThemeCommand { get; }
+    public ICommand LogoutCommand { get; }
+    public ICommand MinimizeWindowCommand { get; }
+    public ICommand ToggleWindowStateCommand { get; }
+    public ICommand CloseWindowCommand { get; }
 
-    public DialogCloseListener RequestClose => throw new NotImplementedException();
-
-    public ShellViewModel(IContainerProvider container)
+    public ShellViewModel(
+        IAuthState authState,
+        IRegionManager regionManager,
+        IAppSessionService appSessionService,
+        IMainWindowService mainWindowService)
     {
-        _container = container;
-        _authState = container.Resolve<IAuthState>();
+        _authState = authState;
+        _regionManager = regionManager;
+        _appSessionService = appSessionService;
+        _mainWindowService = mainWindowService;
+
         CurrentUserName = _authState.UserName ?? Strings.Lbl_NotLoggedIn;
         _authState.AuthChanged += (s, e) =>
         {
@@ -60,12 +80,19 @@ public class ShellViewModel : BindableBase
 
         OnLoadedCommand = new DelegateCommand<object?>(OnLoaded);
         NavSelectionChangedCommand = new DelegateCommand<object?>(OnSelectionChanged);
+        ToggleVisualThemeCommand = new DelegateCommand(OnToggleVisualTheme);
+        LogoutCommand = new DelegateCommand(OnLogout);
+        MinimizeWindowCommand = new DelegateCommand(() => _mainWindowService.Minimize());
+        ToggleWindowStateCommand = new DelegateCommand(() => _mainWindowService.ToggleMaximizeRestore());
+        CloseWindowCommand = new DelegateCommand(() => _mainWindowService.Close());
+
+        UpdateVisualThemeMetadata(AppVisualThemeService.Current);
     }
 
     private void OnLoaded(object? _)
     {
         // Default -> Users page
-        Navigate("Users");
+        Navigate("UsersView");
     }
 
     private void OnSelectionChanged(object? args)
@@ -79,37 +106,71 @@ public class ShellViewModel : BindableBase
     /// <summary>
     /// Public navigation API for code-behind to navigate after login.
     /// </summary>
-    public void NavigateTo(string tag) => Navigate(tag);
+    public void NavigateTo(string viewName) => Navigate(viewName);
 
-    private void Navigate(string tag)
+    private void OnToggleVisualTheme()
     {
-        object? next = tag switch
+        var theme = AppVisualThemeService.Toggle();
+        UpdateVisualThemeMetadata(theme);
+    }
+
+    private void OnLogout()
+    {
+        _appSessionService.LogoutAndShowLoginDialog();
+    }
+
+    private void UpdateVisualThemeMetadata(AppVisualTheme theme)
+    {
+        if (theme == AppVisualTheme.LiquidGlass)
         {
-            "Users" => _container.Resolve<UsersView>(),
-            "Roles" => _container.Resolve<RoleManageView>(),
-            "Permissions" => _container.Resolve<PermissionsView>(),
-            "Templates" => _container.Resolve<ExperimentTemplateView>(),
-            "ExperimentConfig" => _container.Resolve<ExperimentConfigView>(),
-            "ExperimentGroupConfig" => _container.Resolve<ExperimentGroupsView>(),
-            "ExperimentGroupTemplates" => _container.Resolve<ExperimentGroupsView>(),
-            "RunExperiment" => _container.Resolve<RunExperimentView>(),
-            "RealtimeData" => _container.Resolve<RealtimeDataView>(),
-            "Alarm" => _container.Resolve<AlarmView>(),
-            "ExperimentHistory" => _container.Resolve<ExperimentHistoryView>(),
-            "InventoryRecords" => _container.Resolve<InventoryView>(),
-            "OperationLogs" => _container.Resolve<OperationLogsView>(),
-            "MaterialInfo" => _container.Resolve<MaterialInfoView>(),
-            "ShelfInfo" => _container.Resolve<ShelfInfoView>(),
-            "Inventory" => _container.Resolve<InventoryView>(),
-            "ManualDebug" => _container.Resolve<HardwareDebugView>(),
-            "DeviceParams" => _container.Resolve<DeviceParamsView>(),
-            "PeripheralDebug" => _container.Resolve<PeripheralDebugView>(),
-            "MotionProgram" => _container.Resolve<MotionProgramRunView>(),
-            _ => null
-        };
-        if (next != null)
+            VisualThemeGlyph = "\uE790";
+            VisualThemeText = "液态玻璃";
+            VisualThemeToolTip = "当前：液态玻璃，点击切换到经典主题";
+            return;
+        }
+
+        VisualThemeGlyph = "\uE771";
+        VisualThemeText = "经典主题";
+        VisualThemeToolTip = "当前：经典主题，点击切换到液态玻璃";
+    }
+
+    private void Navigate(string viewName)
+    {
+        if (string.IsNullOrWhiteSpace(viewName))
         {
-            CurrentContent = next;
+            Logger.Warn("[Shell Navigation] Ignored empty view name.");
+            return;
+        }
+
+        try
+        {
+            _regionManager.RequestNavigate(MainRegionName, viewName, result =>
+            {
+                if (result.Success)
+                {
+                    Logger.Debug($"[Shell Navigation] Success: {viewName} -> {MainRegionName}");
+                    return;
+                }
+
+                if (result.Cancelled)
+                {
+                    Logger.Warn($"[Shell Navigation] Cancelled: {viewName} -> {MainRegionName}");
+                    return;
+                }
+
+                if (result.Exception is not null)
+                {
+                    Logger.Error(result.Exception, $"[Shell Navigation] Failed: {viewName} -> {MainRegionName}");
+                }
+                else
+                {
+                    Logger.Warn($"[Shell Navigation] Failed without exception: {viewName} -> {MainRegionName}");
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, $"[Shell Navigation] RequestNavigate threw: {viewName} -> {MainRegionName}");
         }
     } 
 }

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 namespace IndustrySystem.Application.Services;
 
 /// <summary>
-/// 动作程序执行引擎实现
 /// </summary>
 public class MotionProgramExecutor : IMotionProgramExecutor
 {
@@ -179,7 +178,6 @@ public class MotionProgramExecutor : IMotionProgramExecutor
         
         _logger.LogInformation("Stepping program");
         
-        // 找到下一个要执行的节点
         var nextNode = GetNextNode(_currentNodeId);
         if (nextNode == null)
         {
@@ -231,7 +229,6 @@ public class MotionProgramExecutor : IMotionProgramExecutor
     {
         if (_currentProgram == null) return;
         
-        // 找到起始节点（没有入边的节点）
         var startNodes = GetStartNodes();
         if (!startNodes.Any())
         {
@@ -253,24 +250,20 @@ public class MotionProgramExecutor : IMotionProgramExecutor
         
         while (_currentNodeId.HasValue && !ct.IsCancellationRequested)
         {
-            // 检查暂停
             _pauseEvent.Wait(ct);
             ct.ThrowIfCancellationRequested();
             
             var currentNode = _currentProgram!.Nodes.FirstOrDefault(n => n.Id == _currentNodeId);
             if (currentNode == null) break;
             
-            // 跳过禁用的节点
             if (!currentNode.IsEnabled)
             {
                 _currentNodeId = GetNextNode(_currentNodeId)?.Id;
                 continue;
             }
             
-            // 执行节点
             await ExecuteNodeAsync(currentNode, ct);
             
-            // 获取下一个节点
             var nextNode = GetNextNode(_currentNodeId);
             _currentNodeId = nextNode?.Id;
         }
@@ -297,7 +290,6 @@ public class MotionProgramExecutor : IMotionProgramExecutor
         {
             message = ex.Message;
             
-            // 错误处理
             switch (node.ErrorHandling)
             {
                 case ErrorHandling.Skip:

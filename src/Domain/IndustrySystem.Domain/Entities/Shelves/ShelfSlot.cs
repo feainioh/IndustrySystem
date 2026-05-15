@@ -5,6 +5,7 @@ using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
 /// <summary>货架槽位（每个货架中每个位置的容器/库存绑定）</summary>
 public class ShelfSlot
 {
+    /// <summary>槽位主键</summary>
     [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 

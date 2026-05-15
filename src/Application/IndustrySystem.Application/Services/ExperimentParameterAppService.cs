@@ -6,8 +6,13 @@ using IndustrySystem.Domain.Shared.Enums;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 实验参数应用服务。
+/// 按实验类型路由到不同参数实体仓储。
+/// </summary>
 public class ExperimentParameterAppService : IExperimentParameterAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<ReactionParameter> _reactionRepo;
     private readonly IRepository<RotaryEvaporationParameter> _rotaryRepo;
     private readonly IRepository<DetectionParameter> _detectionRepo;
@@ -19,6 +24,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
     private readonly IRepository<CentrifugationParameter> _centrifugationRepo;
     private readonly IRepository<CustomDetectionParameter> _customDetectionRepo;
 
+    // ===== Construction =====
     public ExperimentParameterAppService(
         IRepository<ReactionParameter> reactionRepo,
         IRepository<RotaryEvaporationParameter> rotaryRepo,
@@ -43,6 +49,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
         _customDetectionRepo = customDetectionRepo;
     }
 
+    // ===== Queries =====
     public async Task<IReadOnlyList<ExperimentParameterOptionDto>> GetOptionsAsync(ExperimentType type)
         => (await GetListAsync(type)).Select(x => new ExperimentParameterOptionDto(x.Id, x.Name, x.Type)).ToList();
 
@@ -82,6 +89,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
         };
     }
 
+    // ===== Commands =====
     public async Task<ExperimentParameterItemDto> CreateAsync(ExperimentParameterItemDto input)
     {
         var id = input.Id == Guid.Empty ? Guid.NewGuid() : input.Id;
@@ -283,7 +291,7 @@ public class ExperimentParameterAppService : IExperimentParameterAppService
         }
     }
 
-    // ========== Map methods ==========
+    // ===== Mapping =====
 
     private static ExperimentParameterItemDto Map(ReactionParameter x) => new()
     {

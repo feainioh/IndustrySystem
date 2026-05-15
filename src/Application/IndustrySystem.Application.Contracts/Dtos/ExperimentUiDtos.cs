@@ -4,7 +4,33 @@ using IndustrySystem.Domain.Shared.Enums;
 namespace IndustrySystem.Application.Contracts.Dtos;
 
 public record ExperimentSummaryDto(Guid Id, string Name, string Status);
-public record ExperimentHistoryDto(DateTime Time, string Name, string Result);
+
+public record ExperimentConfigItemDto(
+    Guid Id,
+    string Name,
+    ExperimentType Type,
+    Guid? ParameterId,
+    DateTime CreatedAt,
+    DateTime? UpdatedAt);
+
+public record ExperimentConfigUpsertDto(
+    Guid Id,
+    string Name,
+    ExperimentType Type,
+    Guid? ParameterId);
+
+public record ExperimentHistoryDto(
+    Guid Id,
+    string ExperimentId,
+    string Name,
+    RunState Status,
+    string Result,
+    DateTime StartTime,
+    DateTime? EndTime,
+    TimeSpan? Duration,
+    string Operator,
+    bool IsOnline,
+    string? ErrorMessage = null);
 public record AlarmDto(Guid Id, string Message, DateTime Time, bool Acknowledged);
 
 public record ExperimentOptionDto(Guid Id, string Name);

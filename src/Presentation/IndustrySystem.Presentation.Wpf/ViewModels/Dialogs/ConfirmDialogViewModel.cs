@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Dialogs;
+using IndustrySystem.Presentation.Wpf.Resources;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
@@ -13,13 +14,16 @@ public class ConfirmDialogViewModel : DialogViewModel
 
     public ConfirmDialogViewModel()
     {
-        Title = "确认";
+        Title = LocalizationProvider.Instance["Dialog_Confirm_Title"];
         OkCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.OK)));
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)
     {
+        if (parameters.TryGetValue<string>("title", out var title) && !string.IsNullOrWhiteSpace(title))
+            Title = title;
+
         if (parameters.TryGetValue<string>("message", out var msg))
             Message = msg;
     }

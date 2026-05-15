@@ -5,22 +5,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:vm="clr-namespace:IndustrySystem.Presentation.Wpf.ViewModels"
-             prism:ViewModelLocator.AutoWireViewModel="False"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <!-- 模板列表项容器样式 -->
         <Style x:Key="TemplateListBoxItem" TargetType="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <Border x:Name="RootBorder"
                     Background="Transparent"
-                    CornerRadius="8"
-                    Padding="12,10"
+                    CornerRadius="6"
+                    Padding="12,9"
                     BorderThickness="1"
                     BorderBrush="Transparent"
                     SnapsToDevicePixels="True">
@@ -28,13 +28,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="RootBorder" Property="Background" Value="#F0F6FF"/>
-                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="#D0E0F0"/>
+                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource AppListRowHoverBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="RootBorder" Property="Background" Value="#E3EFFD"/>
-                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1.5"/>
+                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource AppListRowSelectedBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -43,7 +43,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -58,33 +58,25 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Width="40" Height="40" CornerRadius="8"
-                Background="{StaticResource ExperimentGradientBrush}"
-                VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#0078D4" BlurRadius="12" ShadowDepth="0" Opacity="0.4"/>
-                    </Border.Effect>
-                    <materialDesign:PackIcon Kind="FlaskOutline" Width="20" Height="20"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                <Border Style="{StaticResource PageHeaderIconBorder}" Background="{DynamicResource ExperimentGradientBrush}">
+                    <materialDesign:PackIcon Kind="FlaskOutline" Style="{StaticResource PageHeaderPackIcon}"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Title]}" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Subtitle]}" FontSize="12" Opacity="0.6" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Title]}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Subtitle]}" Style="{StaticResource PageHeaderSubtitle}"/>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
-                Command="{Binding RefreshCommand}" Height="36" Padding="12,0" Margin="0,0,8,0">
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                Command="{Binding RefreshCommand}" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_Refresh]}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
-                Click="OnAdd" Height="36" Padding="12,0">
+                <Button Style="{StaticResource HeaderActionAccentButton}"
+                Click="OnAdd">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_NewTemplate]}" VerticalAlignment="Center"/>
@@ -102,11 +94,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- 左：模板列表 -->
-            <Border Grid.Column="0"
-              Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-              CornerRadius="8" Padding="12"
-              BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-              BorderThickness="1">
+                        <Border Grid.Column="0" Style="{StaticResource FormCard}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -114,7 +102,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateList]}" FontSize="15" FontWeight="SemiBold" Margin="4,0,0,0"/>
+                    <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateList]}" Style="{StaticResource ManagementSectionTitle}" Margin="2,0,0,0"/>
 
                     <ListBox Grid.Row="2"
                    ItemsSource="{Binding Templates}"
@@ -122,6 +110,7 @@
                    ItemContainerStyle="{StaticResource TemplateListBoxItem}"
                    BorderThickness="0"
                    Background="Transparent"
+                   Foreground="{DynamicResource AppPrimaryTextBrush}"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                    VirtualizingPanel.IsVirtualizing="True">
                         <ListBox.ItemTemplate>
@@ -136,22 +125,22 @@
 
                                     <!-- 类型色块指示器 -->
                                     <Border Grid.Column="0" Width="4" CornerRadius="2"
-                          Background="{StaticResource ExperimentGradientBrush}"
+                          Background="{DynamicResource ExperimentGradientBrush}"
                           VerticalAlignment="Stretch" Margin="0,2"/>
 
                                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"
-                               TextTrimming="CharacterEllipsis" MaxWidth="180"/>
-                                            <TextBlock Text="{Binding Description}" FontSize="12" Margin="5 3"/>
+                               TextTrimming="CharacterEllipsis" MaxWidth="180" Foreground="{DynamicResource AppPrimaryTextBrush}"/>
+                                            <TextBlock Text="{Binding Description}" FontSize="12" Margin="5 3" Foreground="{DynamicResource AppMutedTextBrush}"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                            <Border Background="#E8F0FE" CornerRadius="4" Padding="6,2" Margin="0,0,6,0">
+                                                                                        <Border Background="{DynamicResource AppChipBackgroundBrush}" CornerRadius="6" Padding="6,2" Margin="0,0,6,0">
                                                 <TextBlock Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}"
-                                   FontSize="11" Foreground="{StaticResource PrimaryBrush}"/>
+                                                                     FontSize="11" Foreground="{DynamicResource AppChipForegroundBrush}"/>
                                             </Border>
                                             <TextBlock Text="{Binding UpdatedAt, StringFormat=MM-dd HH:mm}"
-                                 Opacity="0.5" FontSize="11" VerticalAlignment="Center"/>
+                                                                 Foreground="{DynamicResource AppMutedTextBrush}" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </StackPanel>
 
@@ -178,11 +167,7 @@
             </Border>
 
             <!-- 右：模板详情与参数编辑 -->
-            <Border Grid.Column="2"
-              Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-              CornerRadius="8" Padding="16"
-              BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-              BorderThickness="1">
+                        <Border Grid.Column="2" Style="{StaticResource FormCard}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -196,7 +181,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- 模板基本信息 -->
-                        <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateInfo]}" FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_TemplateInfo]}" Style="{StaticResource ManagementSectionTitle}"/>
 
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
@@ -221,7 +206,7 @@
                             <ComboBox Grid.Row="0" Grid.Column="2"
                         ItemsSource="{Binding ExperimentTypes}"
                         SelectedItem="{Binding SelectedType}"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        Style="{StaticResource MaterialComboBox}"
                         materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentType]}"
                         materialDesign:HintAssist.IsFloating="True">
                                 <ComboBox.ItemTemplate>
@@ -235,12 +220,12 @@
                         ItemsSource="{Binding ParameterOptions}"
                         SelectedItem="{Binding SelectedParameter, Mode=TwoWay}"
                         DisplayMemberPath="Name"
-                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                        Style="{StaticResource MaterialComboBox}"
                         materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_LinkedParameter]}"
                         materialDesign:HintAssist.IsFloating="True"/>
 
                             <StackPanel Visibility="Collapsed" Grid.Row="2" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,0">
-                                <TextBlock Text="是否模板" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Field_IsTemplate]}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                 <ToggleButton IsChecked="{Binding IsTemplate}" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
                             </StackPanel>
 
@@ -260,14 +245,14 @@
                         </Grid>
 
                         <!-- 参数编辑区域 -->
-                        <TextBlock Grid.Row="4" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentParameters]}" FontSize="15" FontWeight="SemiBold" Margin="0,16,0,8"/>
+                        <TextBlock Grid.Row="4" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentParameters]}" Style="{StaticResource ManagementSectionTitle}" Margin="0,16,0,8"/>
 
                         <Border Grid.Row="5"
-                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="1"
-                    CornerRadius="6" Padding="4" MinHeight="200">
+                    BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1"
+                    CornerRadius="{DynamicResource AppInnerCornerRadius}" Padding="8" MinHeight="260" Background="{DynamicResource AppParameterSurfaceBrush}">
                             <ContentControl prism:RegionManager.RegionName="{x:Static vm:ExperimentTemplateViewModel.ParameterEditorRegionName}"/>
                         </Border>
-                        <Button Command="{Binding SaveCommand}" Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Grid.Row="6" HorizontalAlignment="Right" Margin="5"
+                        <Button Command="{Binding SaveCommand}" Style="{StaticResource AppInteractiveButtonPrimary}" Grid.Row="6" HorizontalAlignment="Right" Margin="5"
                                 Content="{Binding Source={StaticResource Loc},Path=[Btn_Save]}"/>
                     </Grid>
                 </ScrollViewer>
@@ -275,3 +260,4 @@
         </Grid>
     </Grid>
 </UserControl>
+

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Mvvm;
@@ -16,6 +17,8 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 /// <summary>货架编辑对话框中单个槽位的编辑模型</summary>
 public class SlotEditItem : BindableBase
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     public Guid SlotId { get; set; }
     public int Row { get; set; }
     public int Column { get; set; }
@@ -33,7 +36,7 @@ public class SlotEditItem : BindableBase
         => AllowedContainerTypeOptions.Where(o => o.IsSelected).Select(o => o.ContainerType).ToList();
 
     /// <summary>显示标签：不限制 或 逗号分隔的类型名</summary>
-    private string _allowedTypesLabel = "不限制";
+    private string _allowedTypesLabel = T("Label_Unlimited");
     public string AllowedTypesLabel { get => _allowedTypesLabel; set => SetProperty(ref _allowedTypesLabel, value); }
 
     public string PositionLabel => $"R{Row}C{Column}";
@@ -71,12 +74,14 @@ public class SlotEditItem : BindableBase
     private void UpdateLabel()
     {
         var selected = SelectedContainerTypes;
-        AllowedTypesLabel = selected.Count == 0 ? "不限制" : string.Join(",", selected.Select(ct => ct.ToString()[..2]));
+        AllowedTypesLabel = selected.Count == 0 ? T("Label_Unlimited") : string.Join(",", selected.Select(ct => ct.ToString()[..2]));
     }
 }
 
 public class ShelfEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IShelfAppService _svc;
 
     public Guid Id { get; set; }
@@ -135,7 +140,7 @@ public class ShelfEditDialogViewModel : DialogViewModel
     public ShelfEditDialogViewModel(IShelfAppService svc)
     {
         _svc = svc;
-        Title = "货架配置";
+        Title = T("Dialog_ShelfEdit_Title");
 
         ToggleSlotEnabledCommand = new DelegateCommand<SlotEditItem>(slot => slot?.ToggleEnabled());
         ToggleContainerTypeCommand = new DelegateCommand<object>(param =>

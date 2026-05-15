@@ -5,66 +5,27 @@
  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
  xmlns:local="clr-namespace:IndustrySystem.Presentation.Wpf"
  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+ xmlns:behaviors="clr-namespace:IndustrySystem.Presentation.Wpf.Behaviors"
  xmlns:res="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
  xmlns:conv="clr-namespace:IndustrySystem.Presentation.Wpf.Converters"
+ xmlns:vm="clr-namespace:IndustrySystem.Presentation.Wpf.ViewModels"
  xmlns:prism="http://prismlibrary.com/"
  xmlns:s="clr-namespace:IndustrySystem.Presentation.Wpf.Services"
+ xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
  ui:WindowHelper.UseModernWindowStyle="True"
  ui:TitleBar.ExtendViewIntoTitleBar="True"
  ui:TitleBar.IsBackButtonVisible="False"
  Title="{x:Static res:Strings.App_Title}"
  Height="800" Width="1280"
+ WindowState="Maximized"
         WindowStyle="None"
  WindowStartupLocation="CenterScreen"
  MinHeight="600" MinWidth="900"
- Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+ Background="{DynamicResource AppPageBackgroundBrush}">
 
     <Window.Resources>
         <conv:PermissionToVisibilityConverter x:Key="PermissionToVisibility"/>
-        <!-- 标题栏渐变背景 -->
-        <LinearGradientBrush x:Key="TitleBarGradientBrush" StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#0D1117" Offset="0"/>
-            <GradientStop Color="#161B22" Offset="0.5"/>
-            <GradientStop Color="#0D1117" Offset="1"/>
-        </LinearGradientBrush>
-
-        <!-- 标题栏前景色 -->
-        <SolidColorBrush x:Key="TitleBarForegroundBrush" Color="#E6F3FF"/>
-
-        <!-- 科技感渐变背景 -->
-        <LinearGradientBrush x:Key="TechGradientBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#0F1419" Offset="0"/>
-            <GradientStop Color="#1A2332" Offset="0.5"/>
-            <GradientStop Color="#0F1419" Offset="1"/>
-        </LinearGradientBrush>
-     
-
-        <!-- Accent 渐变 -->
-        <LinearGradientBrush x:Key="AccentGradientBrush" StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#0078D4" Offset="0"/>
-            <GradientStop Color="#00BCF2" Offset="1"/>
-        </LinearGradientBrush>
-
-        <!-- 发光效果 -->
-        <DropShadowEffect x:Key="GlowEffect" 
-                          Color="#0078D4" 
-                          BlurRadius="20" 
-                          ShadowDepth="0" 
-                          Opacity="0.6"/>
-
-        <!-- 标题阴影 -->
-        <DropShadowEffect x:Key="HeaderShadow" 
-                          Color="Black" 
-                          BlurRadius="4" 
-                          ShadowDepth="1" 
-                          Opacity="0.5"/>
-
-        <!-- 卡片阴影 -->
-        <DropShadowEffect x:Key="CardShadow" 
-                          Color="Black" 
-                          BlurRadius="10" 
-                          ShadowDepth="2" 
-                          Opacity="0.3"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
 
         <!-- 动画样式 -->
         <Style x:Key="FadeInAnimation" TargetType="FrameworkElement">
@@ -81,87 +42,40 @@
             </Style.Triggers>
         </Style>
 
-        <!-- 窗口控制按钮样式 -->
-        <Style x:Key="WindowControlButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="46"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#B3D9FF"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#20FFFFFF"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#30FFFFFF"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- 关闭按钮样式 -->
-        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowControlButtonStyle}">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E81123"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#C50F1F"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
 
     <Grid>
         <!-- 自定义标题栏区域 -->
         <Grid Height="40" VerticalAlignment="Top" 
-              Background="{StaticResource TitleBarGradientBrush}"
-              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                            Background="{DynamicResource ShellTitleBarBrush}">
+                        <i:Interaction.Behaviors>
+                                <behaviors:WindowTitleBarDragBehavior/>
+                        </i:Interaction.Behaviors>
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
             <!-- 底部发光线条 -->
-            <Rectangle Grid.ColumnSpan="4" Height="1" VerticalAlignment="Bottom">
-                <Rectangle.Fill>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="Transparent" Offset="0"/>
-                        <GradientStop Color="#0078D4" Offset="0.3"/>
-                        <GradientStop Color="#00BCF2" Offset="0.7"/>
-                        <GradientStop Color="Transparent" Offset="1"/>
-                    </LinearGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
+            <Rectangle Grid.ColumnSpan="3" Height="1" VerticalAlignment="Bottom"
+                       Fill="{DynamicResource ShellAccentLineBrush}"/>
 
             <!-- Logo 和标题 -->
             <StackPanel Grid.Column="0" Orientation="Horizontal" 
                        Margin="16,0,0,0" VerticalAlignment="Center">
                 <!-- Logo with gradient border -->
                 <Border Width="28" Height="28" CornerRadius="6"
-                        Background="{StaticResource AccentGradientBrush}"
+                    Background="{DynamicResource ShellAccentBrush}"
                         Padding="1">
                     <Border.Effect>
                         <DropShadowEffect Color="#0078D4" BlurRadius="8" 
                                         ShadowDepth="0" Opacity="0.6"/>
                     </Border.Effect>
-                    <Border Background="#1A1F2E" CornerRadius="5">
+                    <Border Background="{DynamicResource ShellLogoInnerBrush}" CornerRadius="5">
                         <ui:FontIcon Glyph="&#xE950;" FontSize="14" 
-                                   Foreground="{StaticResource AccentGradientBrush}"
+                                   Foreground="{DynamicResource ShellAccentBrush}"
                                    HorizontalAlignment="Center" 
                                    VerticalAlignment="Center"/>
                     </Border>
@@ -170,19 +84,19 @@
                 <!-- 标题文字 -->
                 <TextBlock Text="{x:Static res:Strings.App_Title}" 
                           FontSize="13" FontWeight="SemiBold"
-                          Foreground="{StaticResource TitleBarForegroundBrush}"
+                          Foreground="{DynamicResource ShellTitleForegroundBrush}"
                           VerticalAlignment="Center" 
                           Margin="12,0,0,0"/>
                 
                 <!-- 版本信息 -->
-                <Border Background="#152030" 
+                  <Border Background="{DynamicResource ShellChromeSurfaceBrush}" 
                        CornerRadius="3" 
                        Padding="6,2"
                        Margin="8,0,0,0"
                        VerticalAlignment="Center">
-                    <TextBlock Text="v1.0" 
+                    <TextBlock Text="{x:Static res:Strings.App_Version}" 
                               FontSize="9" 
-                              Foreground="#6B8CAE"
+                              Foreground="{DynamicResource ShellMutedForegroundBrush}"
                               FontWeight="Medium"/>
                 </Border>
             </StackPanel>
@@ -190,22 +104,39 @@
             <!-- 中间工具栏 -->
             <StackPanel Grid.Column="2" Orientation="Horizontal" 
                        VerticalAlignment="Center"
-                       Margin="0,0,8,0">
+                       shell:WindowChrome.IsHitTestVisibleInChrome="True"
+                       Margin="0,0,138,0">
                 
                 <!-- 主题切换按钮 -->
-                <Button Width="32" Height="32" 
-                       Background="Transparent"
-                       BorderThickness="0"
-                       ToolTip="切换主题"
-                       Margin="4,0">
-                    <ui:FontIcon Glyph="&#xE771;" FontSize="12" Foreground="#B3D9FF"/>
+                <Button x:Name="VisualThemeButton"
+                        Width="118" Height="30"
+                        Background="{DynamicResource ShellChromeSurfaceBrush}"
+                        BorderBrush="{DynamicResource ShellContentBorderBrush}"
+                        BorderThickness="1"
+                        Padding="10,0"
+                        ToolTip="{Binding VisualThemeToolTip}"
+                        Command="{Binding ToggleVisualThemeCommand}"
+                        Margin="4,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ui:FontIcon Glyph="{Binding VisualThemeGlyph}"
+                                     FontSize="12"
+                                     Foreground="{DynamicResource ShellButtonForegroundBrush}"
+                                     Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding VisualThemeText}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource ShellTitleForegroundBrush}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
                                         <Border Background="{TemplateBinding Background}" 
-                                               CornerRadius="4">
+                                               BorderBrush="{TemplateBinding BorderBrush}"
+                                               BorderThickness="{TemplateBinding BorderThickness}"
+                                               CornerRadius="15">
                                             <ContentPresenter HorizontalAlignment="Center" 
                                                             VerticalAlignment="Center"/>
                                         </Border>
@@ -225,13 +156,13 @@
                 </Button>
 
                 <!-- 用户信息卡片 -->
-                <Border Background="#152030" 
+                  <Border Background="{DynamicResource ShellChromeSurfaceBrush}" 
                        CornerRadius="16" 
                        Padding="8,4"
                        Margin="4,0">
                     <StackPanel Orientation="Horizontal">
                         <Border Width="24" Height="24" CornerRadius="12"
-                               Background="{StaticResource AccentGradientBrush}"
+                               Background="{DynamicResource ShellAccentBrush}"
                                Margin="0,0,6,0">
                             <ui:FontIcon Glyph="&#xE77B;" 
                                        FontSize="11" 
@@ -240,7 +171,7 @@
                                        VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{Binding CurrentUserName}" 
-                                  Foreground="#E6F3FF" 
+                                  Foreground="{DynamicResource ShellTitleForegroundBrush}" 
                                   FontSize="11"
                                   FontWeight="Medium"
                                   VerticalAlignment="Center"/>
@@ -248,15 +179,15 @@
                 </Border>
 
                 <!-- 登出按钮 -->
-                <Button Click="OnLogoutClick" 
+                  <Button Command="{Binding LogoutCommand}" 
                        Width="32" Height="32"
                        Background="Transparent"
                        BorderThickness="0"
-                       ToolTip="登出"
+                       ToolTip="{x:Static res:Strings.Tooltip_Logout}"
                        Margin="4,0">
                     <ui:FontIcon Glyph="&#xF3B1;" 
                                FontSize="12" 
-                               Foreground="#B3D9FF"/>
+                               Foreground="{DynamicResource ShellButtonForegroundBrush}"/>
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -283,45 +214,140 @@
                 </Button>
             </StackPanel>
 
-            <!-- 窗口控制按钮 -->
-            <StackPanel Grid.Column="3" Orientation="Horizontal" 
-                       VerticalAlignment="Center">
-                <!-- 最小化 -->
-                <Button Content="&#xE921;" 
-                       Style="{StaticResource WindowControlButtonStyle}"
-                       Click="MinimizeWindow_Click"
-                       ToolTip="最小化"/>
-                
-                <!-- 最大化/还原 -->
-                <Button x:Name="MaximizeRestoreButton"
-                       Content="&#xE922;" 
-                       Style="{StaticResource WindowControlButtonStyle}"
-                       Click="MaximizeRestoreWindow_Click"
-                       ToolTip="最大化"/>
-                
-                <!-- 关闭 -->
-                <Button Content="&#xE8BB;" 
-                       Style="{StaticResource CloseButtonStyle}"
-                       Click="CloseWindow_Click"
-                       ToolTip="关闭"/>
+            <StackPanel Grid.Column="2"
+                       Orientation="Horizontal"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Tag" Value="{DynamicResource IsLiquidGlassTheme}"/>
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <Button Width="46" Height="30"
+                        Background="Transparent"
+                        BorderThickness="0"
+                    Command="{Binding MinimizeWindowCommand}"
+                        ToolTip="最小化">
+                    <ui:FontIcon Glyph="&#xE921;" FontSize="10" Foreground="{DynamicResource ShellTitleForegroundBrush}"/>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1FFFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#30FFFFFF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Width="46" Height="30"
+                        Background="Transparent"
+                        BorderThickness="0"
+                    Command="{Binding ToggleWindowStateCommand}"
+                        ToolTip="最大化/还原">
+                    <ui:FontIcon x:Name="WindowStateIcon" Glyph="&#xE922;" FontSize="10" Foreground="{DynamicResource ShellTitleForegroundBrush}"/>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1FFFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#30FFFFFF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Width="46" Height="30"
+                        Background="Transparent"
+                        BorderThickness="0"
+                    Command="{Binding CloseWindowCommand}"
+                        ToolTip="关闭">
+                    <ui:FontIcon Glyph="&#xE8BB;" FontSize="10" Foreground="{DynamicResource ShellTitleForegroundBrush}"/>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E81123"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#C50F1F"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
+
         </Grid>
+
+        <Border HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            Width="{DynamicResource ShellNavigationPaneWidth}"
+            Margin="{DynamicResource ShellNavigationPaneMargin}"
+            CornerRadius="{DynamicResource ShellNavigationPaneCornerRadius}"
+            Background="{DynamicResource ShellNavigationPaneBackgroundBrush}"
+            BorderBrush="{DynamicResource ShellNavigationPaneBorderBrush}"
+            BorderThickness="{DynamicResource ShellNavigationPaneBorderThickness}"
+            Effect="{DynamicResource ShellNavigationPaneShadow}"
+            IsHitTestVisible="False"
+            Visibility="{Binding ElementName=NavView, Path=IsPaneOpen, Converter={StaticResource BoolToVisibility}}"/>
 
         <!-- 主内容区域 -->
         <ui:NavigationView x:Name="NavView" 
-                          Margin="0,56,0,0"
+                  Margin="0,40,0,0"
                           IsSettingsVisible="False"
                           PaneDisplayMode="Left"
                           IsPaneOpen="True"
-                          OpenPaneLength="240"
+                  OpenPaneLength="{DynamicResource ShellNavigationPaneWidth}"
                           CompactPaneLength="56"
                           IsBackButtonVisible="Collapsed"
                           Background="Transparent">
 
             <ui:NavigationView.PaneFooter>
-                <TextBlock Text="© 2024 Industry System" 
+                <TextBlock Text="{x:Static res:Strings.App_FooterCopyright}" 
                           FontSize="11" 
-                          Foreground="#6B8CAE"
+                          Foreground="{DynamicResource ShellMutedForegroundBrush}"
                           Opacity="0.8"
                           Margin="16,8"
                           TextAlignment="Center"/>
@@ -340,22 +366,22 @@
                 <!-- 运行看板 -->
                 <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RunDashboard}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE80F;" Foreground="#00BCF2"/>
+                        <ui:FontIcon Glyph="&#xE80F;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RunExperiment}" Tag="RunExperiment">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RunExperiment}" Tag="RunExperimentView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE768;" Foreground="#0078D4"/>
+                                <ui:FontIcon Glyph="&#xE768;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RealtimeData}" Tag="RealtimeData">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_RealtimeData}" Tag="RealtimeDataView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE9D2;" Foreground="#00BCF2"/>
+                                <ui:FontIcon Glyph="&#xE9D2;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="告警监控" Tag="Alarm">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Alarm}" Tag="AlarmView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE7BA;" Foreground="#FF4444"/>
+                                <ui:FontIcon Glyph="&#xE7BA;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -364,9 +390,10 @@
                 <ui:NavigationViewItemSeparator/>
 
                 <!-- 实验管理 -->
-                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentManagement}">
+                <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentManagement}"
+                                       AutomationProperties.AutomationId="NavExperimentManagementGroup">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE8F1;" Foreground="#10893E"/>
+                        <ui:FontIcon Glyph="&#xE8F1;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
@@ -383,19 +410,20 @@
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Templates}" Tag="Templates">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Templates}" Tag="ExperimentTemplateView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE8A5;" Foreground="#107C10"/>
+                                <ui:FontIcon Glyph="&#xE8A5;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentConfig}" Tag="ExperimentConfig">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentConfig}" Tag="ExperimentConfigView"
+                                               AutomationProperties.AutomationId="NavExperimentConfigItem">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE9E9;" Foreground="#10893E"/>
+                                <ui:FontIcon Glyph="&#xE9E9;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentGroupConfig}" Tag="ExperimentGroupConfig">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentGroupConfig}" Tag="ExperimentGroupsView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE71D;" Foreground="#107C10"/>
+                                <ui:FontIcon Glyph="&#xE71D;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -404,7 +432,7 @@
                 <!-- 物料管理 -->
                 <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_MaterialManagement}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE7B8;" Foreground="#FF8C00"/>
+                        <ui:FontIcon Glyph="&#xE7B8;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
@@ -418,19 +446,19 @@
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_MaterialInfo}" Tag="MaterialInfo">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_MaterialInfo}" Tag="MaterialInfoView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE8EC;" Foreground="#FF8C00"/>
+                                <ui:FontIcon Glyph="&#xE8EC;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ShelfInfo}" Tag="ShelfInfo">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ShelfInfo}" Tag="ShelfInfoView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE81E;" Foreground="#CA5010"/>
+                                <ui:FontIcon Glyph="&#xE81E;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Inventory}" Tag="Inventory">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Inventory}" Tag="InventoryView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE8B7;" Foreground="#FF8C00"/>
+                                <ui:FontIcon Glyph="&#xE8B7;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -441,28 +469,20 @@
                 <!-- 数据管理 -->
                 <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DataManagement}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE8B7;" Foreground="#8764B8"/>
+                        <ui:FontIcon Glyph="&#xE8B7;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
-                        <MultiBinding Converter="{StaticResource PermissionToVisibility}">
-                            <Binding Path="AuthState"/>
-                            <Binding>
-                                <Binding.Source>Admin</Binding.Source>
-                            </Binding>
-                            <Binding>
-                                <Binding.Source>SuperAdmin</Binding.Source>
-                            </Binding>
-                        </MultiBinding>
+                        <Binding Path="AuthState.IsAuthenticated" Converter="{StaticResource BoolToVisibility}"/>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentHistory}" Tag="ExperimentHistory">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ExperimentHistory}" Tag="ExperimentHistoryView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE81C;" Foreground="#8764B8"/>
+                                <ui:FontIcon Glyph="&#xE81C;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_OperationLogs}" Tag="OperationLogs">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_OperationLogs}" Tag="OperationLogsView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE8BC;" Foreground="#8764B8"/>
+                                <ui:FontIcon Glyph="&#xE8BC;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -471,7 +491,7 @@
                 <!-- 设备管理 -->
                 <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DeviceManagement}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xECAA;" Foreground="#E74856"/>
+                        <ui:FontIcon Glyph="&#xECAA;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
@@ -485,14 +505,14 @@
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ManualDebug}" Tag="ManualDebug">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_ManualDebug}" Tag="HardwareDebugView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE9D9;" Foreground="#E74856"/>
+                                <ui:FontIcon Glyph="&#xE9D9;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DeviceParams}" Tag="DeviceParams">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_DeviceParams}" Tag="DeviceParamsView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE713;" Foreground="#C50F1F"/>
+                                <ui:FontIcon Glyph="&#xE713;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -503,7 +523,7 @@
                 <!-- 系统管理 -->
                 <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_SystemManagement}">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE115;" Foreground="#FFB900"/>
+                        <ui:FontIcon Glyph="&#xE115;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.Visibility>
                         <MultiBinding Converter="{StaticResource PermissionToVisibility}">
@@ -517,19 +537,19 @@
                         </MultiBinding>
                     </ui:NavigationViewItem.Visibility>
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Users}" Tag="Users">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Users}" Tag="UsersView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE77B;" Foreground="#FFB900"/>
+                                <ui:FontIcon Glyph="&#xE77B;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Roles}" Tag="Roles">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Roles}" Tag="RoleManageView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE716;" Foreground="#FFB900"/>
+                                <ui:FontIcon Glyph="&#xE716;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
-                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Permissions}" Tag="Permissions">
+                        <ui:NavigationViewItem Content="{x:Static res:Strings.Nav_Permissions}" Tag="PermissionsView">
                             <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Glyph="&#xE72E;" Foreground="#FFB900"/>
+                                <ui:FontIcon Glyph="&#xE72E;" Foreground="{DynamicResource ShellNavigationIconBrush}"/>
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
                     </ui:NavigationViewItem.MenuItems>
@@ -537,18 +557,19 @@
             </ui:NavigationView.MenuItems>
 
             <!-- 内容区域带卡片效果 -->
-            <Border CornerRadius="8" 
-                    Margin="8"
-                    Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="Black"/>
-                </Border.Effect>
+            <Border x:Name="ShellContentBorder"
+                    CornerRadius="{DynamicResource ShellContentCornerRadius}" 
+                    Margin="4"
+                    Background="{DynamicResource ShellContentBackgroundBrush}"
+                    BorderBrush="{DynamicResource ShellContentBorderBrush}"
+                    BorderThickness="1"
+                    Effect="{DynamicResource ShellContentShadow}">
 
-                <Grid>
+                <Grid x:Name="ShellContentClipHost" SizeChanged="ShellContentClipHost_SizeChanged">
                     <materialDesign:DialogHost Identifier="RootDialogHost">
                         <ContentControl x:Name="MainRegionHost" 
-                                       Margin="16" 
-                                       Content="{Binding CurrentContent}"
+                                       Margin="{DynamicResource ShellMainRegionMargin}" 
+                                       prism:RegionManager.RegionName="{x:Static vm:ShellViewModel.MainRegionName}"
                                        Style="{StaticResource FadeInAnimation}"/>
                     </materialDesign:DialogHost>
                 </Grid>

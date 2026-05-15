@@ -21,7 +21,7 @@
         </StackPanel>
         
         <materialDesign:Card Grid.Row="1" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
-            <controls:MotionProgramViewer DataContext="{Binding}"/>
+            <controls:MotionProgramViewer DataContext="{Binding Viewer}"/>
         </materialDesign:Card>
     </Grid>
 </UserControl>

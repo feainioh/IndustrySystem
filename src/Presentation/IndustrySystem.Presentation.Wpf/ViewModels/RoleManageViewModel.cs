@@ -25,45 +25,17 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
     private readonly IRoleAppService _svc;
     private readonly IDialogService _dialogService;
 
-    /// <summary>
-    /// 新增角色名称输入。
-    /// </summary>
     private string _newRoleName = string.Empty;
     public string NewRoleName { get => _newRoleName; set => SetProperty(ref _newRoleName, value); }
 
-    /// <summary>
-    /// 新增角色描述输入。
-    /// </summary>
     private string _newRoleDescription = string.Empty;
     public string NewRoleDescription { get => _newRoleDescription; set => SetProperty(ref _newRoleDescription, value); }
 
-    /// <summary>
-    /// 角色列表搜索关键字。
-    /// </summary>
-    private string _searchText = string.Empty;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (SetProperty(ref _searchText, value))
-            {
-                RolesView.Refresh();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 原始角色集合。
-    /// </summary>
     public ObservableCollection<RoleDto> Roles { get; } = new();
-
-    /// <summary>
-    /// 过滤后的角色视图（用于搜索）。
-    /// </summary>
+    public ObservableCollection<RoleDto> PagedRoles { get; } = new();
     public ICollectionView RolesView { get; }
 
-    public ICommand RefreshCommand { get; }
+    public new ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -76,7 +48,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         RolesView = CollectionViewSource.GetDefaultView(Roles);
         RolesView.Filter = FilterRoles;
 
-        // 页面命令：刷新、新增、编辑、删除、权限管理
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
         EditCommand = new DelegateCommand<Guid?>(id =>
@@ -94,7 +65,7 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
 
         _logger.Info("RoleManageViewModel initialized");
 
-        // 延迟加载，避免首屏阻塞。
+        // Delay initial load to ensure the view is fully initialized.
         System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
         {
             await Task.Delay(100);
@@ -102,9 +73,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         });
     }
 
-    /// <summary>
-    /// 角色过滤逻辑：按名称、描述模糊匹配。
-    /// </summary>
     private bool FilterRoles(object item)
     {
         if (item is not RoleDto role) return false;
@@ -115,9 +83,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
                || (role.Description?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false);
     }
 
-    /// <summary>
-    /// 执行新增并清空输入框。
-    /// </summary>
     private async Task AddCurrentAsync()
     {
         await AddAsync(NewRoleName, NewRoleDescription);
@@ -125,9 +90,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         NewRoleDescription = string.Empty;
     }
 
-    /// <summary>
-    /// 打开角色编辑弹窗，保存后刷新列表。
-    /// </summary>
     private void OpenRoleDialogAsync(Guid id)
     {
         var parameters = new DialogParameters { { "id", (Guid?)id } };
@@ -140,9 +102,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         });
     }
 
-    /// <summary>
-    /// 加载角色列表并刷新UI。
-    /// </summary>
     public async Task LoadAsync()
     {
         try
@@ -162,6 +121,8 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
                         Roles.Add(r);
                     }
                 }
+
+                ApplyRolePaging(resetToFirstPage: true);
             });
 
             _logger.Info($"UI updated with {Roles.Count} roles");
@@ -174,9 +135,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         }
     }
 
-    /// <summary>
-    /// 新增角色。
-    /// </summary>
     public async Task AddAsync(string name, string? description)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -194,6 +152,7 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Roles.Add(dto);
+                ApplyRolePaging();
             });
 
             _logger.Info($"Role '{name}' added successfully");
@@ -206,9 +165,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         }
     }
 
-    /// <summary>
-    /// 管理角色权限：打开角色编辑弹窗进行权限配置。
-    /// </summary>
     public Task ManagePermissionsAsync(Guid id)
     {
         _logger.Info($"Managing permissions for role {id}");
@@ -216,9 +172,6 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
         return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// 删除角色（带默认角色保护与确认）。
-    /// </summary>
     public async Task DeleteAsync(Guid id)
     {
         var role = Roles.FirstOrDefault(r => r.Id == id);
@@ -242,6 +195,7 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 if (role != null) Roles.Remove(role);
+                ApplyRolePaging();
             });
 
             _logger.Info($"Role '{name}' deleted successfully");
@@ -256,5 +210,55 @@ public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
 
     protected override async Task<IReadOnlyList<RoleDto>> LoadItemsAsync()
         => await _svc.GetListAsync();
+
+    protected override void OnSearchTextChanged()
+    {
+        ApplyRolePaging(resetToFirstPage: true);
+    }
+
+    protected override void OnPagingParametersChanged(bool resetToFirstPage)
+    {
+        ApplyRolePaging(resetToFirstPage);
+    }
+
+    private IEnumerable<RoleDto> BuildFilteredRoles()
+    {
+        var query = Roles.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var key = SearchText.Trim();
+            query = query.Where(role =>
+                (role.Name?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (role.Description?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+
+        return query;
+    }
+
+    private void ApplyRolePaging(bool resetToFirstPage = false)
+    {
+        var filtered = BuildFilteredRoles().ToList();
+        TotalCount = filtered.Count;
+
+        if (resetToFirstPage)
+        {
+            PageIndex = 0;
+        }
+
+        var maxPageIndex = Math.Max(0, TotalPages - 1);
+        if (PageIndex > maxPageIndex)
+        {
+            PageIndex = maxPageIndex;
+        }
+
+        PagedRoles.Clear();
+        foreach (var role in filtered.Skip(PageIndex * PageSize).Take(PageSize))
+        {
+            PagedRoles.Add(role);
+        }
+
+        RaisePagingCommandStates();
+    }
 }
 

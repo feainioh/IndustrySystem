@@ -3,8 +3,12 @@ using SqlSugar;
 
 namespace IndustrySystem.Domain.Entities.Experiments;
 
+/// <summary>
+/// 实验实体。
+/// </summary>
 public class Experiment
 {
+    /// <summary>实验主键</summary>
     [SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -25,8 +29,10 @@ public class Experiment
     [SugarColumn(IsNullable = true)]
     public Guid? GroupId { get; set; }
 
+    /// <summary>创建时间（UTC）</summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>更新时间（UTC）</summary>
     [SugarColumn(IsNullable = true)]
     public DateTime? UpdatedAt { get; set; }
 }

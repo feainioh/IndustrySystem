@@ -2,12 +2,15 @@ using System;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class InventoryOutboundDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IInventoryAppService _svc;
     private Guid _recordId;
 
@@ -37,7 +40,7 @@ public class InventoryOutboundDialogViewModel : DialogViewModel
     public InventoryOutboundDialogViewModel(IInventoryAppService svc)
     {
         _svc = svc;
-        Title = "出库";
+        Title = T("Dialog_InventoryOutbound_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)

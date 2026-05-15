@@ -5,38 +5,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="False"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
-        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="MinHeight" Value="44"/>
-            <Setter Property="Padding" Value="10,2,10,2"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="CaretBrush" Value="Black"/>
-        </Style>
-        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="AlternationCount" Value="2"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
-        </Style>
-        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
-            <Style.Triggers>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource ManagementSearchTextBox}"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -51,29 +27,19 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Width="40" Height="40" CornerRadius="8"
-                        Background="{StaticResource ExperimentGradientBrush}"
-                        VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
-                    </Border.Effect>
-                    <materialDesign:PackIcon Kind="Warehouse"
-                                             Width="20" Height="20"
-                                             Foreground="White"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"/>
+                <Border Style="{StaticResource PageHeaderIconBorder}" Background="{StaticResource ExperimentGradientBrush}">
+                    <materialDesign:PackIcon Kind="Warehouse" Style="{StaticResource PageHeaderPackIcon}"/>
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{x:Static loc:Strings.Nav_Inventory}" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Inventory_Subtitle]}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Nav_Inventory}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Inventory_Subtitle]}" Style="{StaticResource PageHeaderSubtitle}"/>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
                         Command="{Binding RefreshCommand}"
-                        Height="36" Padding="12,0"
                         Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
@@ -81,9 +47,8 @@
                     </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                <Button Style="{StaticResource HeaderActionAccentButton}"
                         Command="{Binding InboundCommand}"
-                        Height="36" Padding="12,0"
                         Background="{StaticResource SuccessBrush}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" VerticalAlignment="Center" Margin="0,0,6,0"/>
@@ -94,19 +59,14 @@
         </Grid>
 
         <!-- Inventory List Card -->
-        <Border Grid.Row="2"
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="16"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="2" Style="{StaticResource FormCard}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="12"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Section header + search + toggle -->
@@ -137,34 +97,26 @@
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
 
-                <!-- Detail ListView (ShowSummary=False) -->
-                <ListView Grid.Row="2" ItemsSource="{Binding InventoryView}">
-                    <ListView.Style>
-                        <Style TargetType="ListView" BasedOn="{StaticResource OperationLikeListView}">
+                <!-- Detail DataGrid (ShowSummary=False) -->
+                <DataGrid Grid.Row="2" ItemsSource="{Binding PagedItems}">
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid" BasedOn="{StaticResource ListViewLikeDataGrid}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowSummary}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </ListView.Style>
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False">
+                    </DataGrid.Style>
+                    <DataGrid.Columns>
 
                             <!-- 物料 -->
-                            <GridViewColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
-                                            <Border Width="30" Height="30" CornerRadius="15"
-                                                    Background="{StaticResource ExperimentGradientBrush}" Margin="0,0,10,0">
-                                                <materialDesign:PackIcon Kind="PackageVariant" Width="16" Height="16"
-                                                                         Foreground="White"
-                                                                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border Style="{StaticResource DataGridLeadingIconBadge}" Background="{StaticResource ExperimentGradientBrush}">
+                                                <materialDesign:PackIcon Kind="PackageVariant" Style="{StaticResource DataGridLeadingPackIcon}" Foreground="White"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding MaterialName}" FontWeight="SemiBold" FontSize="13"/>
@@ -172,15 +124,15 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <!-- 批号 -->
-                            <GridViewColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" DisplayMemberBinding="{Binding BatchNo}"/>
+                            <DataGridTextColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" Binding="{Binding BatchNo}"/>
 
                             <!-- 库存 / 安全库存 -->
-                            <GridViewColumn Width="130" Header="{Binding Source={StaticResource Loc}, Path=[Col_Inventory_SafetyStock]}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="130" Header="{Binding Source={StaticResource Loc}, Path=[Col_Inventory_SafetyStock]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontSize="13" FontWeight="SemiBold">
@@ -207,24 +159,24 @@
                                             <TextBlock Text="{Binding SafetyStock, StringFormat={}{0:0.##}}" FontSize="12" Opacity="0.6"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <!-- 单位 -->
-                            <GridViewColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" DisplayMemberBinding="{Binding Unit}"/>
+                            <DataGridTextColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" Binding="{Binding Unit}"/>
 
                             <!-- 入库日期 -->
-                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_LastInboundDate]}" DisplayMemberBinding="{Binding InboundDate, StringFormat=yyyy-MM-dd}"/>
+                            <DataGridTextColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_LastInboundDate]}" Binding="{Binding InboundDate, StringFormat=yyyy-MM-dd}"/>
 
                             <!-- 过期日期 -->
-                            <GridViewColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_ExpiryDate]}" DisplayMemberBinding="{Binding ExpiryDate, StringFormat=yyyy-MM-dd}"/>
+                            <DataGridTextColumn Width="110" Header="{Binding Source={StaticResource Loc}, Path=[Col_ExpiryDate]}" Binding="{Binding ExpiryDate, StringFormat=yyyy-MM-dd}"/>
 
                             <!-- 位置 -->
-                            <GridViewColumn Width="100" Header="{Binding Source={StaticResource Loc}, Path=[Col_Location]}" DisplayMemberBinding="{Binding Location}"/>
+                            <DataGridTextColumn Width="100" Header="{Binding Source={StaticResource Loc}, Path=[Col_Location]}" Binding="{Binding Location}"/>
 
                             <!-- 孔位 -->
-                            <GridViewColumn Width="80" Header="{Binding Source={StaticResource Loc}, Path=[Slot]}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="80" Header="{Binding Source={StaticResource Loc}, Path=[Slot]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock FontSize="12" Opacity="0.75">
                                             <TextBlock.Text>
@@ -235,52 +187,48 @@
                                             </TextBlock.Text>
                                         </TextBlock>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <!-- 操作 -->
-                            <GridViewColumn Width="160" Header="{x:Static loc:Strings.Col_Actions}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="160" Header="{x:Static loc:Strings.Col_Actions}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="6,0">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,0">
                                             <!-- 出库 -->
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                     Command="{Binding DataContext.OutboundCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
                                                     ToolTip="{Binding Source={StaticResource Loc}, Path=[Btn_Outbound]}"
-                                                    Width="32" Height="32" Margin="0,0,2,0"
                                                     Foreground="{StaticResource WarningBrush}">
-                                                <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" Width="18" Height="18"/>
+                                                <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                             <!-- 编辑 -->
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                     Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
-                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}"
-                                                    Width="32" Height="32" Margin="0,0,2,0">
-                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}">
+                                                <materialDesign:PackIcon Kind="Pencil" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                             <!-- 删除 -->
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
                                                     ToolTip="{x:Static loc:Strings.Btn_Delete}"
-                                                    Width="32" Height="32"
                                                     Foreground="{StaticResource ErrorBrush}">
-                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                                <materialDesign:PackIcon Kind="Delete" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-                <!-- Summary ListView (ShowSummary=True) -->
-                <ListView Grid.Row="2" ItemsSource="{Binding SummaryView}">
-                    <ListView.Style>
-                        <Style TargetType="ListView" BasedOn="{StaticResource OperationLikeListView}">
+                <!-- Summary DataGrid (ShowSummary=True) -->
+                <DataGrid Grid.Row="2" ItemsSource="{Binding PagedSummaryItems}">
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid" BasedOn="{StaticResource ListViewLikeDataGrid}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowSummary}" Value="True">
@@ -288,17 +236,12 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </ListView.Style>
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False">
+                    </DataGrid.Style>
+                    <DataGrid.Columns>
 
                             <!-- 物料 -->
-                            <GridViewColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="200" Header="{Binding Source={StaticResource Loc}, Path=[Col_Material]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
                                             <Border Width="30" Height="30" CornerRadius="15"
@@ -313,21 +256,21 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <!-- 批号 -->
-                            <GridViewColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" DisplayMemberBinding="{Binding BatchNo}"/>
+                            <DataGridTextColumn Width="140" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchNo]}" Binding="{Binding BatchNo}"/>
 
                             <!-- 总库存 / 安全库存 -->
-                            <GridViewColumn Width="150">
-                                <GridViewColumn.Header>
+                            <DataGridTemplateColumn Width="150">
+                                <DataGridTemplateColumn.Header>
                                     <MultiBinding StringFormat="{}{0} / {1}">
                                         <Binding Source="{StaticResource Loc}" Path="[Col_TotalQuantity]"/>
                                         <Binding Source="{StaticResource Loc}" Path="[Hint_SafetyStock]"/>
                                     </MultiBinding>
-                                </GridViewColumn.Header>
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontSize="14" FontWeight="Bold">
@@ -354,15 +297,15 @@
                                             <TextBlock Text="{Binding SafetyStock, StringFormat={}{0:0.##}}" FontSize="12" Opacity="0.6"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
                             <!-- 单位 -->
-                            <GridViewColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" DisplayMemberBinding="{Binding Unit}"/>
+                            <DataGridTextColumn Width="70" Header="{Binding Source={StaticResource Loc}, Path=[Col_Unit]}" Binding="{Binding Unit}"/>
 
                             <!-- 记录数 -->
-                            <GridViewColumn Width="90" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchCount]}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="90" Header="{Binding Source={StaticResource Loc}, Path=[Col_BatchCount]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Background="{StaticResource PrimaryBrush}" CornerRadius="10"
                                                 Padding="8,2" HorizontalAlignment="Left">
@@ -371,11 +314,56 @@
                                                        HorizontalAlignment="Center"/>
                                         </Border>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Pagination -->
+                <Border Grid.Row="4" Style="{StaticResource PaginationCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
+                            <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" Foreground="{StaticResource HeaderGradient}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Records}" Opacity="0.7"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Style="{StaticResource PaginationButtonPanel}">
+                            <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding FirstPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding PreviousPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Prev}" Style="{StaticResource PaginationButton}"/>
+
+                            <Border Style="{StaticResource CurrentPageBorder}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CurrentPage}" FontWeight="SemiBold"/>
+                                    <TextBlock Text=" / " Opacity="0.7" Margin="4,0"/>
+                                    <TextBlock Text="{Binding TotalPages}" Opacity="0.7"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding NextPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Next}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding LastPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Style="{StaticResource PaginationButton}"/>
+
+                            <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
+                                      ItemsSource="{Binding PageSizes}"
+                                      Width="80" Margin="12,0,0,0" Style="{StaticResource PaginationComboBox}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_PerPage}" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
         </Border>
     </Grid>

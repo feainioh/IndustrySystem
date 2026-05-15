@@ -1,7 +1,11 @@
 namespace IndustrySystem.Domain.Entities.Experiments;
 
+/// <summary>
+/// 实验组实体。
+/// </summary>
 public class ExperimentGroup
 {
+    /// <summary>实验组主键</summary>
     [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -23,9 +27,13 @@ public class ExperimentGroup
     /// <summary>创建人</summary>
     public string CreatedBy { get; set; } = string.Empty;
 
+    /// <summary>创建时间（UTC）</summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>更新时间（UTC）</summary>
     public DateTime? UpdatedAt { get; set; }
 
+    /// <summary>步骤实验ID列表（运行时解析，不落库）</summary>
     [SqlSugar.SugarColumn(IsIgnore = true)]
     public List<Guid> StepExperimentIdList
     {

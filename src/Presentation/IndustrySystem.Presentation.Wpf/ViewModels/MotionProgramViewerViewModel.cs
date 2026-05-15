@@ -13,7 +13,6 @@ using Prism.Mvvm;
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
 /// <summary>
-/// 程序查看器中的节点显示模型
 /// </summary>
 public class ProgramNodeDisplayModel : BindableBase
 {
@@ -73,7 +72,6 @@ public class ProgramNodeDisplayModel : BindableBase
 }
 
 /// <summary>
-/// 程序查看器/执行器视图模型 - 用于在主应用中加载和执行动作程序
 /// </summary>
 public class MotionProgramViewerViewModel : BindableBase
 {
@@ -126,7 +124,6 @@ public class MotionProgramViewerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 从文件加载程序
     /// </summary>
     public async Task LoadProgramAsync()
     {
@@ -142,7 +139,6 @@ public class MotionProgramViewerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 从指定文件路径加载程序
     /// </summary>
     public async Task LoadProgramFromFileAsync(string filePath)
     {
@@ -168,7 +164,6 @@ public class MotionProgramViewerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 加载程序DTO
     /// </summary>
     public async Task LoadProgramAsync(MotionProgramDto program)
     {
@@ -204,7 +199,6 @@ public class MotionProgramViewerViewModel : BindableBase
     }
 
     /// <summary>
-    /// 运行程序
     /// </summary>
     public async Task RunProgramAsync()
     {
@@ -216,7 +210,6 @@ public class MotionProgramViewerViewModel : BindableBase
         
         try
         {
-            // 重置状态
             foreach (var node in Nodes)
             {
                 node.IsExecuting = false;
@@ -251,7 +244,6 @@ public class MotionProgramViewerViewModel : BindableBase
             Progress = e.ProgressPercent;
             ExecutedCount = e.ExecutedCount;
             
-            // 更新当前执行节点
             foreach (var node in Nodes)
             {
                 if (node.Id == e.CurrentNodeId)
@@ -266,7 +258,6 @@ public class MotionProgramViewerViewModel : BindableBase
                 }
             }
             
-            // 更新变量
             UpdateVariablesAsync();
         });
     }
@@ -323,7 +314,6 @@ public class MotionProgramViewerViewModel : BindableBase
         var timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
         ExecutionLogs.Insert(0, $"[{timestamp}] {message}");
         
-        // 限制日志数量
         while (ExecutionLogs.Count > 100)
         {
             ExecutionLogs.RemoveAt(ExecutionLogs.Count - 1);

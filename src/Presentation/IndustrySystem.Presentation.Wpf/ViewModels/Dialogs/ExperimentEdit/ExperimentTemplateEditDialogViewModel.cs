@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class ExperimentTemplateEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IExperimentTemplateAppService _svc;
     private Guid _id;
     private string _name = string.Empty;
@@ -43,7 +46,7 @@ public class ExperimentTemplateEditDialogViewModel : DialogViewModel
     public ExperimentTemplateEditDialogViewModel(IExperimentTemplateAppService svc)
     {
         _svc = svc;
-        Title = "新建实验模板";
+        Title = T("Dialog_ExperimentTemplateCreate_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)
@@ -56,7 +59,7 @@ public class ExperimentTemplateEditDialogViewModel : DialogViewModel
     {
         if (id is { } v)
         {
-            Title = "编辑实验模板";
+            Title = T("Dialog_ExperimentTemplateEdit_Title2");
             var dto = await _svc.GetAsync(v);
             if (dto != null)
             {
@@ -68,7 +71,7 @@ public class ExperimentTemplateEditDialogViewModel : DialogViewModel
         }
         else
         {
-            Title = "新建实验模板";
+            Title = T("Dialog_ExperimentTemplateCreate_Title");
             Id = Guid.Empty;
             Name = string.Empty;
             SelectedType = ExperimentType.Reaction;

@@ -8,17 +8,17 @@
     <res:LocalizationProvider x:Key="Loc" />
     <ctrls:PageInfoMultiConverter x:Key="PageInfoMultiConverter" />
   </UserControl.Resources>
-  <Border Padding="8" BorderThickness="1,0,0,0" BorderBrush="#15000000">
+    <Border Style="{StaticResource PaginationCard}">
     <DockPanel>
-      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <Button Content="{Binding [Btn_First], Source={StaticResource Loc}}" Width="60" Click="First_Click" Margin="0,0,4,0" IsEnabled="{Binding CanPrev, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-        <Button Content="{Binding [Btn_Prev], Source={StaticResource Loc}}" Width="60"
-                Command="{Binding PrevPageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,4,0" IsEnabled="{Binding CanPrev, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-        <Button Content="{Binding [Btn_Next], Source={StaticResource Loc}}" Width="60"
-                Command="{Binding NextPageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,4,0" IsEnabled="{Binding CanNext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-        <Button Content="{Binding [Btn_Last], Source={StaticResource Loc}}" Width="60" Click="Last_Click" Margin="0,0,12,0" IsEnabled="{Binding CanNext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <StackPanel Style="{StaticResource PaginationButtonPanel}">
+    <Button Content="{Binding [Btn_First], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Click="First_Click" IsEnabled="{Binding CanPrev, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    <Button Content="{Binding [Btn_Prev], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}"
+      Command="{Binding PrevPageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" IsEnabled="{Binding CanPrev, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    <Button Content="{Binding [Btn_Next], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}"
+      Command="{Binding NextPageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" IsEnabled="{Binding CanNext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    <Button Content="{Binding [Btn_Last], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Click="Last_Click" IsEnabled="{Binding CanNext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <TextBlock Text="{Binding [Lbl_PageSize], Source={StaticResource Loc}}" VerticalAlignment="Center"/>
-        <TextBox Width="50" Text="{Binding PageSize, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="8,0,12,0"/>
+    <TextBox Width="50" Style="{StaticResource PaginationInputTextBox}" Text="{Binding PageSize, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="8,0,12,0"/>
         <TextBlock VerticalAlignment="Center" Margin="0,0,12,0">
           <TextBlock.Text>
             <MultiBinding Converter="{StaticResource PageInfoMultiConverter}">
@@ -29,8 +29,8 @@
           </TextBlock.Text>
         </TextBlock>
         <TextBlock Text="{Binding [Lbl_JumpTo], Source={StaticResource Loc}}" VerticalAlignment="Center"/>
-        <TextBox Width="50" Loaded="JumpBox_Loaded" Margin="4,0,4,0"/>
-        <Button Content="{Binding [Btn_Go], Source={StaticResource Loc}}" Width="50" Click="Go_Click"/>
+        <TextBox Width="50" Style="{StaticResource PaginationInputTextBox}" Loaded="JumpBox_Loaded" Margin="4,0,4,0"/>
+        <Button Content="{Binding [Btn_Go], Source={StaticResource Loc}}" Style="{StaticResource PaginationTextButton}" Click="Go_Click"/>
       </StackPanel>
     </DockPanel>
   </Border>

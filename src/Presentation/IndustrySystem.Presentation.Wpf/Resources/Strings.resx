@@ -291,17 +291,11 @@
   <data name="Hint_Role_Name" xml:space="preserve">
     <value>角色名称</value>
   </data>
-  <data name="Page_Inventory_Title" xml:space="preserve">
-    <value>库存 (占位)</value>
-  </data>
   <data name="Page_ExperimentHistory_Title" xml:space="preserve">
-    <value>实验历史 (占位)</value>
+    <value>实验历史记录</value>
   </data>
   <data name="Page_ExperimentConfig_Title" xml:space="preserve">
     <value>实验配置: 工作进行中...</value>
-  </data>
-  <data name="Page_ExperimentGroups_Title" xml:space="preserve">
-    <value>实验组: 工作进行中...</value>
   </data>
   <data name="Run_Label_CurrentExperiment" xml:space="preserve">
     <value>当前实验：</value>
@@ -329,12 +323,6 @@
   </data>
   <data name="Dialog_ExperimentTemplateEdit_Title" xml:space="preserve">
     <value>实验模板编辑</value>
-  </data>
-  <data name="Dialog_ExperimentGroupEdit_Title" xml:space="preserve">
-    <value>实验组编辑</value>
-  </data>
-  <data name="Dialog_MaterialEdit_Title" xml:space="preserve">
-    <value>物料编辑</value>
   </data>
   <data name="Field_Common_Name" xml:space="preserve">
     <value>名称</value>
@@ -1313,5 +1301,569 @@
   </data>
   <data name="Section_PermissionInfo" xml:space="preserve">
     <value>权限信息</value>
+  </data>
+  <data name="App_Version" xml:space="preserve">
+    <value>v1.0</value>
+  </data>
+  <data name="App_FooterCopyright" xml:space="preserve">
+    <value>© 2024 Industry System</value>
+  </data>
+  <data name="Tooltip_ThemeToggle" xml:space="preserve">
+    <value>切换主题</value>
+  </data>
+  <data name="Tooltip_Logout" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="Tooltip_Minimize" xml:space="preserve">
+    <value>最小化</value>
+  </data>
+  <data name="Tooltip_Maximize" xml:space="preserve">
+    <value>最大化</value>
+  </data>
+  <data name="Tooltip_CloseWindow" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Section_ExecutionList" xml:space="preserve">
+    <value>实验执行列表</value>
+  </data>
+  <data name="Label_SwitchExperimentType" xml:space="preserve">
+    <value>切换实验类型：</value>
+  </data>
+  <data name="Col_ExecutionId" xml:space="preserve">
+    <value>执行ID</value>
+  </data>
+  <data name="Col_StepProgress" xml:space="preserve">
+    <value>步骤进度</value>
+  </data>
+  <data name="Col_ElapsedTime" xml:space="preserve">
+    <value>运行时长</value>
+  </data>
+  <data name="Col_StartTime" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="Run_ExecutionListHint" xml:space="preserve">
+    <value>共 5 条执行记录，点击行切换当前监控对象</value>
+  </data>
+  <data name="Run_Label_CurrentMonitor" xml:space="preserve">
+    <value>当前监控：</value>
+  </data>
+  <data name="Run_State_Queued" xml:space="preserve">
+    <value>排队中</value>
+  </data>
+  <data name="Run_State_Idle" xml:space="preserve">
+    <value>空闲</value>
+  </data>
+  <data name="Run_State_Running" xml:space="preserve">
+    <value>运行中</value>
+  </data>
+  <data name="Run_State_Paused" xml:space="preserve">
+    <value>已暂停</value>
+  </data>
+  <data name="Run_State_Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="Run_State_Stopped" xml:space="preserve">
+    <value>已停止</value>
+  </data>
+  <data name="Btn_Terminate" xml:space="preserve">
+    <value>终止</value>
+  </data>
+  <data name="Btn_Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Status_Executing" xml:space="preserve">
+    <value>执行中...</value>
+  </data>
+  <data name="Section_KeyMetrics" xml:space="preserve">
+    <value>关键指标</value>
+  </data>
+  <data name="Section_RecentAlarms" xml:space="preserve">
+    <value>最近报警</value>
+  </data>
+  <data name="Msg_NoRecentAlarms" xml:space="preserve">
+    <value>暂无报警信息</value>
+  </data>
+  <data name="Status_NotSelected" xml:space="preserve">
+    <value>未选择</value>
+  </data>
+  <data name="Run_StepProgressFormat" xml:space="preserve">
+    <value>步骤 {0}/{1}</value>
+  </data>
+  <data name="Mock_Experiment_FilterValidation" xml:space="preserve">
+    <value>过滤工艺验证</value>
+  </data>
+  <data name="Mock_Experiment_FermentationMonitoring" xml:space="preserve">
+    <value>发酵过程监控</value>
+  </data>
+  <data name="Mock_Experiment_CellCulture" xml:space="preserve">
+    <value>细胞培养</value>
+  </data>
+  <data name="Mock_Experiment_PcrAmplification" xml:space="preserve">
+    <value>PCR 扩增</value>
+  </data>
+  <data name="Metric_PressureSensorA" xml:space="preserve">
+    <value>压力传感器 A</value>
+  </data>
+  <data name="Metric_TemperatureProbeT1" xml:space="preserve">
+    <value>温度探头 T1</value>
+  </data>
+  <data name="Metric_FlowMeterF1" xml:space="preserve">
+    <value>流量计 F1</value>
+  </data>
+  <data name="Metric_ConductivityMeter" xml:space="preserve">
+    <value>电导率仪</value>
+  </data>
+  <data name="Step_SealValveClose" xml:space="preserve">
+    <value>密封阀关闭</value>
+  </data>
+  <data name="Step_StartPump" xml:space="preserve">
+    <value>开启抽液泵</value>
+  </data>
+  <data name="Step_Pump3Min" xml:space="preserve">
+    <value>抽液3min</value>
+  </data>
+  <data name="Step_StopPump" xml:space="preserve">
+    <value>停止抽液</value>
+  </data>
+  <data name="Step_CleanAndFinish" xml:space="preserve">
+    <value>清洗与完成</value>
+  </data>
+  <data name="Page_RealtimeData_Title" xml:space="preserve">
+    <value>实时数据与趋势</value>
+  </data>
+  <data name="Realtime_CurrentMonitorPrefix" xml:space="preserve">
+    <value>（当前监控: </value>
+  </data>
+  <data name="Realtime_CurrentMonitorSuffix" xml:space="preserve">
+    <value>）</value>
+  </data>
+  <data name="Section_TemperatureTrend" xml:space="preserve">
+    <value>温度趋势曲线</value>
+  </data>
+  <data name="Realtime_TrendPlaceholder" xml:space="preserve">
+    <value>趋势图待接入数据源</value>
+  </data>
+  <data name="Section_SensorMetrics" xml:space="preserve">
+    <value>传感器指标</value>
+  </data>
+  <data name="Msg_NoRealtimeSensors" xml:space="preserve">
+    <value>暂无实时传感器数据</value>
+  </data>
+  <data name="Page_HardwareDebug_Title" xml:space="preserve">
+    <value>手动调试</value>
+  </data>
+  <data name="Page_HardwareDebug_Subtitle" xml:space="preserve">
+    <value>连接设备并读写保持寄存器</value>
+  </data>
+  <data name="Section_HardwareConnection" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="Hint_EndpointExample" xml:space="preserve">
+    <value>例: 127.0.0.1:502</value>
+  </data>
+  <data name="Btn_Connect" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="Btn_Disconnect" xml:space="preserve">
+    <value>断开</value>
+  </data>
+  <data name="Section_ReadHoldingRegisters" xml:space="preserve">
+    <value>读取保持寄存器</value>
+  </data>
+  <data name="Section_WriteHoldingRegisters" xml:space="preserve">
+    <value>写入保持寄存器</value>
+  </data>
+  <data name="Label_StartAddress" xml:space="preserve">
+    <value>起始地址:</value>
+  </data>
+  <data name="Label_Count" xml:space="preserve">
+    <value>数量:</value>
+  </data>
+  <data name="Btn_Read" xml:space="preserve">
+    <value>读取</value>
+  </data>
+  <data name="Label_Result" xml:space="preserve">
+    <value>结果:</value>
+  </data>
+  <data name="Label_CommaSeparatedValues" xml:space="preserve">
+    <value>值(逗号分隔):</value>
+  </data>
+  <data name="Btn_Write" xml:space="preserve">
+    <value>写入</value>
+  </data>
+  <data name="Section_Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Page_RolesPlaceholder_Title" xml:space="preserve">
+    <value>角色管理 (占位)</value>
+  </data>
+  <data name="Page_ExperimentsPlaceholder_Title" xml:space="preserve">
+    <value>实验管理 (模板/组/实验) 占位</value>
+  </data>
+  <data name="Btn_NewParameter" xml:space="preserve">
+    <value>新建参数</value>
+  </data>
+  <data name="Btn_SaveParameters" xml:space="preserve">
+    <value>保存参数</value>
+  </data>
+  <data name="Field_ParameterName" xml:space="preserve">
+    <value>参数名称</value>
+  </data>
+  <data name="Hint_OptionalDescription" xml:space="preserve">
+    <value>描述（可选）</value>
+  </data>
+  <data name="Hint_ContainerName" xml:space="preserve">
+    <value>容器名称 *</value>
+  </data>
+  <data name="Hint_ContainerType" xml:space="preserve">
+    <value>容器类型</value>
+  </data>
+  <data name="Label_EnabledFormat" xml:space="preserve">
+    <value>启用:{0}</value>
+  </data>
+  <data name="Label_AddQuenchingAgentFirst" xml:space="preserve">
+    <value>先加淬灭剂</value>
+  </data>
+  <data name="Label_CollectCondensate" xml:space="preserve">
+    <value>收集冷凝液</value>
+  </data>
+  <data name="Label_ContinuousFeed" xml:space="preserve">
+    <value>连续进样</value>
+  </data>
+  <data name="Hint_DryingAgentId" xml:space="preserve">
+    <value>干燥剂ID</value>
+  </data>
+  <data name="Hint_DryingAgentVolumeMl" xml:space="preserve">
+    <value>干燥剂用量(mL)</value>
+  </data>
+  <data name="Hint_ShakingSpeedRpm" xml:space="preserve">
+    <value>震荡速度(rpm)</value>
+  </data>
+  <data name="Hint_ShakingDurationMinutes" xml:space="preserve">
+    <value>震荡时间(min)</value>
+  </data>
+  <data name="Hint_DetectionMethod" xml:space="preserve">
+    <value>检测方法</value>
+  </data>
+  <data name="Hint_WavelengthNm" xml:space="preserve">
+    <value>波长(nm)</value>
+  </data>
+  <data name="Hint_DurationMinutes" xml:space="preserve">
+    <value>时长(min)</value>
+  </data>
+  <data name="Hint_Notes" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="Hint_SamplingVolumeMl" xml:space="preserve">
+    <value>取样体积(mL)</value>
+  </data>
+  <data name="Hint_CleaningAgent" xml:space="preserve">
+    <value>清洗剂</value>
+  </data>
+  <data name="Hint_CleaningAgentVolumeMl" xml:space="preserve">
+    <value>清洗剂用量(mL)</value>
+  </data>
+  <data name="Hint_CentrifugeSpeedRpm" xml:space="preserve">
+    <value>离心速度(rpm)</value>
+  </data>
+  <data name="Hint_TemperatureC" xml:space="preserve">
+    <value>温度(℃)</value>
+  </data>
+  <data name="Hint_CentrifugeDurationMinutes" xml:space="preserve">
+    <value>离心时间(min)</value>
+  </data>
+  <data name="Hint_BathTemperatureC" xml:space="preserve">
+    <value>加热浴温度(℃)</value>
+  </data>
+  <data name="Hint_VaporTemperatureC" xml:space="preserve">
+    <value>蒸汽温度(℃)</value>
+  </data>
+  <data name="Hint_VacuumKpa" xml:space="preserve">
+    <value>真空度(kPa)</value>
+  </data>
+  <data name="Hint_RotationRpm" xml:space="preserve">
+    <value>旋转速度(rpm)</value>
+  </data>
+  <data name="Hint_LiftStrokeMm" xml:space="preserve">
+    <value>升降行程(mm)</value>
+  </data>
+  <data name="Hint_CoolantTemperatureC" xml:space="preserve">
+    <value>冷却介质温度(℃)</value>
+  </data>
+  <data name="Hint_FilterDurationMinutes" xml:space="preserve">
+    <value>过滤时间(min)</value>
+  </data>
+  <data name="Hint_CleaningVolumeMl" xml:space="preserve">
+    <value>清洗用量(mL)</value>
+  </data>
+  <data name="Hint_ReactionRawMaterial" xml:space="preserve">
+    <value>反应原料</value>
+  </data>
+  <data name="Hint_ReactionStockSolution" xml:space="preserve">
+    <value>反应原液</value>
+  </data>
+  <data name="Hint_ReactionTemperatureC" xml:space="preserve">
+    <value>反应温度(℃)</value>
+  </data>
+  <data name="Hint_ReactionPressureKpa" xml:space="preserve">
+    <value>反应压力(kPa)</value>
+  </data>
+  <data name="Hint_ReactionDurationMinutes" xml:space="preserve">
+    <value>反应时间(min)</value>
+  </data>
+  <data name="Hint_StirringSpeedRpm" xml:space="preserve">
+    <value>搅拌速度(rpm)</value>
+  </data>
+  <data name="Hint_LiquidFeedSpeedMlMin" xml:space="preserve">
+    <value>加液速度(mL/min)</value>
+  </data>
+  <data name="Hint_PowderFeedSpeedGMin" xml:space="preserve">
+    <value>加粉速度(g/min)</value>
+  </data>
+  <data name="Hint_DetectionParametersJson" xml:space="preserve">
+    <value>参数JSON</value>
+  </data>
+  <data name="Hint_Extractant" xml:space="preserve">
+    <value>萃取剂</value>
+  </data>
+  <data name="Hint_ExtractantVolumeMl" xml:space="preserve">
+    <value>萃取剂用量(mL)</value>
+  </data>
+  <data name="Hint_StirringDurationMinutes" xml:space="preserve">
+    <value>搅拌时长(min)</value>
+  </data>
+  <data name="Hint_StandingTimeMinutes" xml:space="preserve">
+    <value>静置时间(min)</value>
+  </data>
+  <data name="Hint_QuenchingAgent" xml:space="preserve">
+    <value>淬灭剂</value>
+  </data>
+  <data name="Hint_QuenchingAgentVolumeMl" xml:space="preserve">
+    <value>淬灭剂用量(mL)</value>
+  </data>
+  <data name="Hint_QuenchingAgentDripSpeedMlMin" xml:space="preserve">
+    <value>淬灭剂滴加速度(mL/min)</value>
+  </data>
+  <data name="Hint_PreTemperatureC" xml:space="preserve">
+    <value>开始前温度(℃)</value>
+  </data>
+  <data name="Hint_MaxQuenchingTemperatureC" xml:space="preserve">
+    <value>淬灭过程最大温度(℃)</value>
+  </data>
+  <data name="Hint_TotalProductVolumeMl" xml:space="preserve">
+    <value>产物总体积(mL)</value>
+  </data>
+  <data name="Msg_UnhandledExceptionFormat" xml:space="preserve">
+    <value>发生未处理异常: {0}</value>
+  </data>
+  <data name="Msg_InfoTitle" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="Msg_AppAlreadyRunning" xml:space="preserve">
+    <value>程序已在运行，请勿重复启动。</value>
+  </data>
+  <data name="Msg_SaveSuccess" xml:space="preserve">
+    <value>保存成功</value>
+  </data>
+  <data name="Msg_ParameterNameRequired" xml:space="preserve">
+    <value>参数名称不能为空</value>
+  </data>
+  <data name="Msg_ConfirmDeleteParameter" xml:space="preserve">
+    <value>确认删除参数？</value>
+  </data>
+  <data name="DefaultParameterNameFormat" xml:space="preserve">
+    <value>{0}-默认参数</value>
+  </data>
+  <data name="ExperimentType_Reaction" xml:space="preserve">
+    <value>反应</value>
+  </data>
+  <data name="ExperimentType_RotaryEvaporation" xml:space="preserve">
+    <value>旋蒸</value>
+  </data>
+  <data name="ExperimentType_Detection" xml:space="preserve">
+    <value>检测</value>
+  </data>
+  <data name="ExperimentType_Filtration" xml:space="preserve">
+    <value>过滤</value>
+  </data>
+  <data name="ExperimentType_Drying" xml:space="preserve">
+    <value>干燥</value>
+  </data>
+  <data name="ExperimentType_Quenching" xml:space="preserve">
+    <value>淬灭</value>
+  </data>
+  <data name="ExperimentType_Extraction" xml:space="preserve">
+    <value>萃取</value>
+  </data>
+  <data name="ExperimentType_Sampling" xml:space="preserve">
+    <value>取样</value>
+  </data>
+  <data name="ExperimentType_Centrifugation" xml:space="preserve">
+    <value>离心</value>
+  </data>
+  <data name="ExperimentType_CustomDetection" xml:space="preserve">
+    <value>自定义检测</value>
+  </data>
+  <data name="ParameterTitle_Reaction" xml:space="preserve">
+    <value>反应实验参数</value>
+  </data>
+  <data name="ParameterTitle_RotaryEvaporation" xml:space="preserve">
+    <value>旋蒸参数</value>
+  </data>
+  <data name="ParameterTitle_Detection" xml:space="preserve">
+    <value>检测参数</value>
+  </data>
+  <data name="ParameterTitle_Filtration" xml:space="preserve">
+    <value>过滤参数</value>
+  </data>
+  <data name="ParameterTitle_Drying" xml:space="preserve">
+    <value>干燥参数</value>
+  </data>
+  <data name="ParameterTitle_Quenching" xml:space="preserve">
+    <value>淬灭参数</value>
+  </data>
+  <data name="ParameterTitle_Extraction" xml:space="preserve">
+    <value>萃取参数</value>
+  </data>
+  <data name="ParameterTitle_Sampling" xml:space="preserve">
+    <value>取样参数</value>
+  </data>
+  <data name="ParameterTitle_Centrifugation" xml:space="preserve">
+    <value>离心参数</value>
+  </data>
+  <data name="ParameterTitle_CustomDetection" xml:space="preserve">
+    <value>自定义检测参数</value>
+  </data>
+  <data name="Dialog_ExperimentTemplateCreate_Title" xml:space="preserve">
+    <value>新建实验模板</value>
+  </data>
+  <data name="Dialog_ExperimentTemplateEdit_Title2" xml:space="preserve">
+    <value>编辑实验模板</value>
+  </data>
+  <data name="Summary_NoStepsSelected" xml:space="preserve">
+    <value>未选择步骤</value>
+  </data>
+  <data name="Summary_SelectedStepsFormat" xml:space="preserve">
+    <value>已选择 {0} 个实验步骤</value>
+  </data>
+  <data name="User_System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="Label_Unlimited" xml:space="preserve">
+    <value>不限制</value>
+  </data>
+  <data name="ShelfSlot_RecordCountSuffixFormat" xml:space="preserve">
+    <value> ({0}条)</value>
+  </data>
+  <data name="ShelfSlot_EmptyValueFormat" xml:space="preserve">
+    <value>{0}: 空</value>
+  </data>
+  <data name="Page_ExperimentHistory_Subtitle" xml:space="preserve">
+    <value>筛选、查看、导出实验执行记录</value>
+  </data>
+  <data name="Section_HistoryFilters" xml:space="preserve">
+    <value>筛选条件</value>
+  </data>
+  <data name="Section_HistoryRecords" xml:space="preserve">
+    <value>历史记录</value>
+  </data>
+  <data name="Hint_Search_ExperimentHistory" xml:space="preserve">
+    <value>搜索实验名称 / 实验ID / 操作员 / 结果</value>
+  </data>
+  <data name="Btn_Clear" xml:space="preserve">
+    <value>清空</value>
+  </data>
+  <data name="History_Status_All" xml:space="preserve">
+    <value>全部状态</value>
+  </data>
+  <data name="History_RunMode_All" xml:space="preserve">
+    <value>全部模式</value>
+  </data>
+  <data name="History_RunMode_Online" xml:space="preserve">
+    <value>在线模式</value>
+  </data>
+  <data name="History_RunMode_Offline" xml:space="preserve">
+    <value>单机模式</value>
+  </data>
+  <data name="Col_Result" xml:space="preserve">
+    <value>结果</value>
+  </data>
+  <data name="Col_RunMode" xml:space="preserve">
+    <value>运行模式</value>
+  </data>
+  <data name="Col_EndTime" xml:space="preserve">
+    <value>结束时间</value>
+  </data>
+  <data name="Col_Duration" xml:space="preserve">
+    <value>执行时长</value>
+  </data>
+  <data name="History_Stat_Total" xml:space="preserve">
+    <value>总实验数</value>
+  </data>
+  <data name="History_Stat_Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="History_Stat_Failed" xml:space="preserve">
+    <value>失败数</value>
+  </data>
+  <data name="History_Stat_SuccessRate" xml:space="preserve">
+    <value>成功率</value>
+  </data>
+  <data name="History_Result_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="History_Result_Failed" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="History_Details_Title" xml:space="preserve">
+    <value>实验详情</value>
+  </data>
+  <data name="History_Export_FileNamePrefix" xml:space="preserve">
+    <value>实验历史记录</value>
+  </data>
+  <data name="Msg_NoHistoryRecords" xml:space="preserve">
+    <value>暂无实验历史记录</value>
+  </data>
+  <data name="Msg_HistoryNoDataToExport" xml:space="preserve">
+    <value>当前筛选条件下没有可导出的记录</value>
+  </data>
+  <data name="Msg_ConfirmDeleteHistoryRecord" xml:space="preserve">
+    <value>确定要删除实验记录“{0}”吗？</value>
+  </data>
+  <data name="Msg_DeleteHistorySuccess" xml:space="preserve">
+    <value>实验记录已删除</value>
+  </data>
+  <data name="Msg_HistoryDeleteFailedFormat" xml:space="preserve">
+    <value>删除实验历史失败：{0}</value>
+  </data>
+  <data name="Msg_HistoryExportFailedFormat" xml:space="preserve">
+    <value>导出实验历史失败：{0}</value>
+  </data>
+  <data name="Msg_HistoryExportSuccessFormat" xml:space="preserve">
+    <value>实验历史已导出：{0}</value>
+  </data>
+  <data name="Page_ExperimentConfig_Subtitle" xml:space="preserve">
+    <value>选择实验并完成参数配置，支持从模板快速创建</value>
+  </data>
+  <data name="Btn_NewExperiment" xml:space="preserve">
+    <value>新建实验</value>
+  </data>
+  <data name="Section_ExperimentList" xml:space="preserve">
+    <value>实验列表</value>
+  </data>
+  <data name="Section_ExperimentInfo" xml:space="preserve">
+    <value>实验信息</value>
+  </data>
+  <data name="Hint_ApplyTemplateOptional" xml:space="preserve">
+    <value>套用模板（可选）</value>
+  </data>
+  <data name="Field_UpdatedAt" xml:space="preserve">
+    <value>更新时间</value>
+  </data>
+  <data name="Msg_ExperimentNameRequired" xml:space="preserve">
+    <value>实验名称不能为空</value>
+  </data>
+  <data name="ExperimentConfig_NewExperimentNameFromTemplateFormat" xml:space="preserve">
+    <value>{0}-实验</value>
   </data>
 </root>

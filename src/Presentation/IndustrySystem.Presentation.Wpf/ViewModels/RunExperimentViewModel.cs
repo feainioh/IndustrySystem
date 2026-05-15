@@ -1,26 +1,26 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Contracts.Dtos;
-using Prism.Mvvm;
 using Prism.Commands;
 using System.Collections.ObjectModel;
 using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class RunExperimentViewModel : BindableBase
+public class RunExperimentViewModel : NagetiveCurdVeiwModel<ExperimentExecutionDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IRunExperimentAppService _svc;
     private readonly IExperimentAppService _experimentSvc;
     private readonly IAlarmAppService _alarmSvc;
     private RunState _state = RunState.Idle;
-    private string _currentExperiment = "未选择";
+    private string _currentExperiment = Resources.Strings.Status_NotSelected;
     public ObservableCollection<ExperimentSummaryDto> Experiments { get; } = new();
-    public ObservableCollection<ExperimentExecutionDto> Executions { get; } = new();
+    public ObservableCollection<ExperimentExecutionDto> Executions => Items;
     public ObservableCollection<ExperimentStepDto> Steps { get; } = new();
     public ObservableCollection<KeyMetricDto> Metrics { get; } = new();
     public ObservableCollection<AlarmDto> RecentAlarms { get; } = new();
@@ -33,7 +33,7 @@ public class RunExperimentViewModel : BindableBase
         {
             if (SetProperty(ref _selectedExperiment, value))
             {
-                CurrentExperiment = value?.Name ?? "未选择";
+                CurrentExperiment = value?.Name ?? Resources.Strings.Status_NotSelected;
                 RaisePropertyChanged(nameof(CanStart));
                 RefreshSteps();
             }
@@ -54,7 +54,7 @@ public class RunExperimentViewModel : BindableBase
         }
     }
 
-    private string _runStatus = "Idle";
+    private string _runStatus = Resources.Strings.Run_State_Idle;
     private string? _statusMessage;
     private int _progress = 0;
     private string _elapsedTime = "00:00:00";
@@ -103,32 +103,32 @@ public class RunExperimentViewModel : BindableBase
     private void LoadMockExecutions()
     {
         Executions.Clear();
-        Executions.Add(new ExperimentExecutionDto("exec-001", "过滤工艺验证", RunState.Running, "2/5", TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(12)), DateTime.Today.AddHours(9).AddMinutes(15).AddSeconds(30)));
-        Executions.Add(new ExperimentExecutionDto("exec-002", "发酵过程监控", RunState.Running, "1/5", TimeSpan.FromMinutes(39).Add(TimeSpan.FromSeconds(27)), DateTime.Today.AddHours(8).AddMinutes(42).AddSeconds(10)));
-        Executions.Add(new ExperimentExecutionDto("exec-003", "细胞培养", RunState.Paused, "2/5", TimeSpan.FromMinutes(90), DateTime.Today.AddHours(7).AddMinutes(30)));
-        Executions.Add(new ExperimentExecutionDto("exec-004", "过滤工艺验证", RunState.Completed, "5/5", TimeSpan.FromMinutes(3), DateTime.Today.AddHours(9)));
-        Executions.Add(new ExperimentExecutionDto("exec-005", "PCR 扩增", RunState.Idle, "0/6", TimeSpan.Zero, null));
+        Executions.Add(new ExperimentExecutionDto("exec-001", Resources.Strings.Mock_Experiment_FilterValidation, RunState.Running, "2/5", TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(12)), DateTime.Today.AddHours(9).AddMinutes(15).AddSeconds(30)));
+        Executions.Add(new ExperimentExecutionDto("exec-002", Resources.Strings.Mock_Experiment_FermentationMonitoring, RunState.Running, "1/5", TimeSpan.FromMinutes(39).Add(TimeSpan.FromSeconds(27)), DateTime.Today.AddHours(8).AddMinutes(42).AddSeconds(10)));
+        Executions.Add(new ExperimentExecutionDto("exec-003", Resources.Strings.Mock_Experiment_CellCulture, RunState.Paused, "2/5", TimeSpan.FromMinutes(90), DateTime.Today.AddHours(7).AddMinutes(30)));
+        Executions.Add(new ExperimentExecutionDto("exec-004", Resources.Strings.Mock_Experiment_FilterValidation, RunState.Completed, "5/5", TimeSpan.FromMinutes(3), DateTime.Today.AddHours(9)));
+        Executions.Add(new ExperimentExecutionDto("exec-005", Resources.Strings.Mock_Experiment_PcrAmplification, RunState.Idle, "0/6", TimeSpan.Zero, null));
         SelectedExecution = Executions[0];
     }
 
     private void LoadMockMetrics()
     {
         Metrics.Clear();
-        Metrics.Add(new KeyMetricDto("压力传感器 A", "0.82", "MPa"));
-        Metrics.Add(new KeyMetricDto("温度探头 T1", "24.60", "°C"));
-        Metrics.Add(new KeyMetricDto("流量计 F1", "1.22", "L/min"));
-        Metrics.Add(new KeyMetricDto("电导率仪", "12.23", "μS/cm"));
+        Metrics.Add(new KeyMetricDto(Resources.Strings.Metric_PressureSensorA, "0.82", "MPa"));
+        Metrics.Add(new KeyMetricDto(Resources.Strings.Metric_TemperatureProbeT1, "24.60", "°C"));
+        Metrics.Add(new KeyMetricDto(Resources.Strings.Metric_FlowMeterF1, "1.22", "L/min"));
+        Metrics.Add(new KeyMetricDto(Resources.Strings.Metric_ConductivityMeter, "12.23", "μS/cm"));
     }
 
     private void RefreshSteps()
     {
         Steps.Clear();
-        Steps.Add(new ExperimentStepDto(0, "密封阀关闭", StepState.Completed));
-        Steps.Add(new ExperimentStepDto(1, "开启抽液泵", StepState.Completed));
-        Steps.Add(new ExperimentStepDto(2, "抽液3min", StepState.Running));
-        Steps.Add(new ExperimentStepDto(3, "停止抽液", StepState.Pending));
-        Steps.Add(new ExperimentStepDto(4, "清洗与完成", StepState.Pending));
-        CurrentStepProgress = $"步骤 3/{Steps.Count}";
+        Steps.Add(new ExperimentStepDto(0, Resources.Strings.Step_SealValveClose, StepState.Completed));
+        Steps.Add(new ExperimentStepDto(1, Resources.Strings.Step_StartPump, StepState.Completed));
+        Steps.Add(new ExperimentStepDto(2, Resources.Strings.Step_Pump3Min, StepState.Running));
+        Steps.Add(new ExperimentStepDto(3, Resources.Strings.Step_StopPump, StepState.Pending));
+        Steps.Add(new ExperimentStepDto(4, Resources.Strings.Step_CleanAndFinish, StepState.Pending));
+        CurrentStepProgress = string.Format(Resources.Strings.Run_StepProgressFormat, 3, Steps.Count);
     }
 
     private async Task StartAsync()
@@ -160,7 +160,7 @@ public class RunExperimentViewModel : BindableBase
     {
         Progress = 0;
         _state = RunState.Idle;
-        RunStatus = "Idle";
+        RunStatus = Resources.Strings.Run_State_Idle;
         StatusMessage = null;
         ElapsedTime = "00:00:00";
         RaisePropertyChanged(nameof(CanStart));
@@ -181,7 +181,7 @@ public class RunExperimentViewModel : BindableBase
         {
             var s = await _svc.GetStatusAsync();
             _state = s.State;
-            RunStatus = s.State.ToString();
+            RunStatus = ToLocalizedRunState(s.State);
             Progress = s.Progress;
             StatusMessage = s.Message;
             // 更新运行时长
@@ -218,4 +218,16 @@ public class RunExperimentViewModel : BindableBase
             SelectedExperiment = Experiments[0];
         }
     }
+
+    private static string ToLocalizedRunState(RunState state) => state switch
+    {
+        RunState.Running => Resources.Strings.Run_State_Running,
+        RunState.Paused => Resources.Strings.Run_State_Paused,
+        RunState.Stopped => Resources.Strings.Run_State_Stopped,
+        RunState.Completed => Resources.Strings.Run_State_Completed,
+        _ => Resources.Strings.Run_State_Idle
+    };
+
+    protected override Task<IReadOnlyList<ExperimentExecutionDto>> LoadItemsAsync()
+        => Task.FromResult<IReadOnlyList<ExperimentExecutionDto>>(Executions.ToList());
 }

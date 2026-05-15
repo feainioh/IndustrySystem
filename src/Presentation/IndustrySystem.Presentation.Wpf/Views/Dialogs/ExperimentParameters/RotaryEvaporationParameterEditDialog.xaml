@@ -10,8 +10,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding RefreshCommand}" Margin="0,0,8,0">刷新</Button>
-            <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding NewCommand}">新建参数</Button>
+            <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding RefreshCommand}" Margin="0,0,8,0" Content="{Binding [Btn_Refresh], Source={StaticResource Loc}}"/>
+            <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding NewCommand}" Content="{Binding [Btn_NewParameter], Source={StaticResource Loc}}"/>
         </StackPanel>
 
         <Grid Grid.Row="2">
@@ -31,8 +31,8 @@
                 <StackPanel>
                     <TextBlock Text="{Binding TypeName}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,12"/>
 
-                    <TextBox Style="{StaticResource MaterialTextField}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="参数名称" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                    <TextBox Style="{StaticResource DialogTextField}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="{Binding [Field_ParameterName], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -47,37 +47,39 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource MaterialTextField}" Text="{Binding BathTemperatureC}"
-                                 materialDesign:HintAssist.Hint="加热浴温度(℃)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
-                        <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource MaterialTextField}" Text="{Binding VaporTemperatureC}"
-                                 materialDesign:HintAssist.Hint="蒸汽温度(℃)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTextField}" Text="{Binding BathTemperatureC}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_BathTemperatureC], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource DialogTextField}" Text="{Binding VaporTemperatureC}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_VaporTemperatureC], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
-                        <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource MaterialTextField}" Text="{Binding VacuumKpa}"
-                                 materialDesign:HintAssist.Hint="真空度(kPa)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
-                        <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource MaterialTextField}" Text="{Binding RotationRpm}"
-                                 materialDesign:HintAssist.Hint="旋转速度(rpm)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource DialogTextField}" Text="{Binding VacuumKpa}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_VacuumKpa], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="1" Grid.Column="2" Style="{StaticResource DialogTextField}" Text="{Binding RotationRpm}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_RotationRpm], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
-                        <TextBox Grid.Row="2" Grid.Column="0" Style="{StaticResource MaterialTextField}" Text="{Binding LiftStrokeMm}"
-                                 materialDesign:HintAssist.Hint="升降行程(mm)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
-                        <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource MaterialTextField}" Text="{Binding CoolantTemperatureC}"
-                                 materialDesign:HintAssist.Hint="冷却介质温度(℃)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="2" Grid.Column="0" Style="{StaticResource DialogTextField}" Text="{Binding LiftStrokeMm}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_LiftStrokeMm], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Style="{StaticResource DialogTextField}" Text="{Binding CoolantTemperatureC}"
+                                 materialDesign:HintAssist.Hint="{Binding [Hint_CoolantTemperatureC], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,10">
-                            <TextBlock Text="收集冷凝液" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding [Label_CollectCondensate], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <ToggleButton IsChecked="{Binding CollectCondensate}" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,10">
-                            <TextBlock Text="连续进样" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding [Label_ContinuousFeed], Source={StaticResource Loc}}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <ToggleButton IsChecked="{Binding ContinuousFeed}" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
                         </StackPanel>
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding DeleteCommand}" Margin="0,0,8,0">删除</Button>
-                        <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding SaveCommand}">保存参数</Button>
+                        <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding DeleteCommand}" Margin="0,0,8,0" Content="{Binding [Btn_Delete], Source={StaticResource Loc}}"/>
+                        <Button Style="{StaticResource AppInteractiveButtonPrimary}" Command="{Binding SaveCommand}" Content="{Binding [Btn_SaveParameters], Source={StaticResource Loc}}"/>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>
+
+

@@ -3,6 +3,7 @@ namespace IndustrySystem.Domain.Entities.Shelves;
 /// <summary>货架配置</summary>
 public class ShelfConfig
 {
+    /// <summary>货架主键</summary>
     [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -21,9 +22,11 @@ public class ShelfConfig
     /// <summary>描述</summary>
     public string Description { get; set; } = string.Empty;
 
+    /// <summary>创建时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>更新时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime? UpdatedAt { get; set; }
 }

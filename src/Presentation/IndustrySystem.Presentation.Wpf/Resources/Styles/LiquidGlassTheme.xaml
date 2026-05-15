@@ -1,0 +1,349 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <LinearGradientBrush x:Key="AppPageBackgroundBrush" StartPoint="0,0" EndPoint="0.98,1">
+        <GradientStop Color="#CCE2EC" Offset="0"/>
+        <GradientStop Color="#90B9DE" Offset="0.22"/>
+        <GradientStop Color="#5ACDE8" Offset="0.38"/>
+        <GradientStop Color="#61DEB9" Offset="0.64"/>
+        <GradientStop Color="#E6B061" Offset="0.86"/>
+        <GradientStop Color="#C08963" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AppCardBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E4FFFFFF" Offset="0"/>
+        <GradientStop Color="#BFEAF5FF" Offset="0.42"/>
+        <GradientStop Color="#B4EADABF" Offset="0.78"/>
+        <GradientStop Color="#C7DEECF8" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AppInputBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#EFFFFFFF" Offset="0"/>
+        <GradientStop Color="#D3F0FAFF" Offset="0.52"/>
+        <GradientStop Color="#C7E7F2FF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppParameterSurfaceBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#D8FFFFFF" Offset="0"/>
+        <GradientStop Color="#BEE4F1FD" Offset="0.45"/>
+        <GradientStop Color="#BFE4DCCB" Offset="1"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="AppBorderBrush" Color="#ECFFFFFF"/>
+    <SolidColorBrush x:Key="AppInputBorderBrush" Color="#C0E8F6FF"/>
+    <SolidColorBrush x:Key="AppMutedTextBrush" Color="#5D718A"/>
+    <SolidColorBrush x:Key="AppPrimaryTextBrush" Color="#142238"/>
+    <SolidColorBrush x:Key="AppInputTextBrush" Color="#142238"/>
+    <SolidColorBrush x:Key="AppListHeaderBrush" Color="#B7FFFFFF"/>
+    <SolidColorBrush x:Key="AppListRowHoverBrush" Color="#B7D5ECFF"/>
+    <SolidColorBrush x:Key="AppListRowSelectedBrush" Color="#D494BCE8"/>
+    <SolidColorBrush x:Key="AppListRowAlternateBrush" Color="#5CFFFFFF"/>
+    <SolidColorBrush x:Key="AppChipBackgroundBrush" Color="#E6F2FDFF"/>
+    <SolidColorBrush x:Key="AppChipForegroundBrush" Color="#146AA6"/>
+    <SolidColorBrush x:Key="AppGlassHighlightBrush" Color="#FEFFFFFF"/>
+
+    <Color x:Key="DialogSurfaceColor">#CCEAF5FF</Color>
+    <Color x:Key="DialogFooterColor">#BFD6E6F8</Color>
+    <SolidColorBrush x:Key="DialogInputBackgroundBrush" Color="#D4E3F0FB"/>
+    <SolidColorBrush x:Key="DialogInputBorderBrush" Color="#F2FFFFFF"/>
+    <SolidColorBrush x:Key="DialogInputForegroundBrush" Color="#0F2238"/>
+    <SolidColorBrush x:Key="DialogInputHintBrush" Color="#516983"/>
+    <DropShadowEffect x:Key="DialogSurfaceShadow"
+                      Color="#2A16314A"
+                      BlurRadius="46"
+                      ShadowDepth="14"
+                      Opacity="0.42"
+                      Direction="270"/>
+
+    <LinearGradientBrush x:Key="AppButtonPrimaryBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E65AC0FF" Offset="0"/>
+        <GradientStop Color="#DD83D5FF" Offset="0.56"/>
+        <GradientStop Color="#D3ACE6FF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonPrimaryHoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F074D1FF" Offset="0"/>
+        <GradientStop Color="#EAA0E3FF" Offset="0.56"/>
+        <GradientStop Color="#E2C1EEFF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonPrimaryPressedBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#D14BACEF" Offset="0"/>
+        <GradientStop Color="#C86CC0F2" Offset="0.56"/>
+        <GradientStop Color="#BF8BD0F0" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="AppButtonPrimaryBorderBrush" Color="#E2F2FCFF"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryHoverBorderBrush" Color="#F4FAFFFF"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryPressedBorderBrush" Color="#CCE4F3FF"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryForegroundBrush" Color="#103A60"/>
+
+    <LinearGradientBrush x:Key="AppButtonNeutralBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#ECF7FFFF" Offset="0"/>
+        <GradientStop Color="#E6F2FFFF" Offset="0.58"/>
+        <GradientStop Color="#DCEBFBFF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonNeutralHoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F8FCFFFF" Offset="0"/>
+        <GradientStop Color="#F0F8FFFF" Offset="0.58"/>
+        <GradientStop Color="#E7F2FFFF" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonNeutralPressedBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#DCEAF8FF" Offset="0"/>
+        <GradientStop Color="#D3E3F4FF" Offset="0.58"/>
+        <GradientStop Color="#C9DAEEFF" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="AppButtonNeutralBorderBrush" Color="#C6E5F8FF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralHoverBorderBrush" Color="#E1F2FCFF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralPressedBorderBrush" Color="#ACCEE6FF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralForegroundBrush" Color="#1C5A86"/>
+
+    <LinearGradientBrush x:Key="AppButtonDangerBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#D679C0F4" Offset="0"/>
+        <GradientStop Color="#C995CDF4" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonDangerHoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E18DD1FA" Offset="0"/>
+        <GradientStop Color="#D5A8DAFC" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="AppButtonDangerPressedBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#C965ACDF" Offset="0"/>
+        <GradientStop Color="#BC81BCE4" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="AppButtonDangerBorderBrush" Color="#BBDFF8FF"/>
+    <SolidColorBrush x:Key="AppButtonDangerHoverBorderBrush" Color="#D7ECFCFF"/>
+    <SolidColorBrush x:Key="AppButtonDangerPressedBorderBrush" Color="#9ACBE7FF"/>
+    <SolidColorBrush x:Key="AppButtonDangerForegroundBrush" Color="#F8FCFFFF"/>
+
+    <LinearGradientBrush x:Key="RunExperimentStopButtonBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E6E85668" Offset="0"/>
+        <GradientStop Color="#DDF06A79" Offset="0.6"/>
+        <GradientStop Color="#D8F68A96" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="RunExperimentStopButtonHoverBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F0F46876" Offset="0"/>
+        <GradientStop Color="#E8F87E87" Offset="0.6"/>
+        <GradientStop Color="#E3FC9BA4" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="RunExperimentStopButtonPressedBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#D6CE4D5C" Offset="0"/>
+        <GradientStop Color="#CCC45F67" Offset="0.6"/>
+        <GradientStop Color="#C8CE7B82" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="RunExperimentStopButtonBorderBrush" Color="#F5D6DBFF"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonHoverBorderBrush" Color="#FFE9ECFF"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonPressedBorderBrush" Color="#E5C0C7FF"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonForegroundBrush" Color="#F9FCFFFF"/>
+
+    <SolidColorBrush x:Key="LoginTitleForegroundBrush" Color="#11293F"/>
+    <SolidColorBrush x:Key="LoginSubtitleForegroundBrush" Color="#44627B"/>
+    <SolidColorBrush x:Key="LoginFooterForegroundBrush" Color="#35536B"/>
+    <SolidColorBrush x:Key="LoginThemeToggleForegroundBrush" Color="#1B3550"/>
+    <SolidColorBrush x:Key="LoginThemeToggleBorderBrush" Color="#D6FFFFFF"/>
+    <SolidColorBrush x:Key="LoginThemeToggleBackgroundBrush" Color="#7AFFFFFF"/>
+    <SolidColorBrush x:Key="LoginAvatarBackgroundBrush" Color="#CBFFFFFF"/>
+    <SolidColorBrush x:Key="LoginAvatarIconBrush" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="LoginCardBackgroundBrush" Color="#7DF8FFFF"/>
+    <SolidColorBrush x:Key="LoginCardBorderBrush" Color="#D6FFFFFF"/>
+    <SolidColorBrush x:Key="LoginErrorForegroundBrush" Color="#B31F44"/>
+    <SolidColorBrush x:Key="LoginDecorationBrush" Color="#32FFFFFF"/>
+
+    <LinearGradientBrush x:Key="LoginBackgroundBrush" StartPoint="0,0" EndPoint="0.98,1">
+        <GradientStop Color="#CCE2EC" Offset="0"/>
+        <GradientStop Color="#90B9DE" Offset="0.22"/>
+        <GradientStop Color="#5ACDE8" Offset="0.38"/>
+        <GradientStop Color="#61DEB9" Offset="0.64"/>
+        <GradientStop Color="#E6B061" Offset="0.86"/>
+        <GradientStop Color="#C08963" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LoginPrimaryButtonBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#2EA8E6" Offset="0"/>
+        <GradientStop Color="#5ED9B4" Offset="0.55"/>
+        <GradientStop Color="#E7B763" Offset="1"/>
+    </LinearGradientBrush>
+    <DropShadowEffect x:Key="LoginCardShadowEffect" Color="#1A4764" BlurRadius="54" ShadowDepth="0" Opacity="0.36"/>
+
+    <CornerRadius x:Key="AppCardCornerRadius">16</CornerRadius>
+    <CornerRadius x:Key="AppInnerCornerRadius">12</CornerRadius>
+    <CornerRadius x:Key="LoginRootCornerRadius">20</CornerRadius>
+
+    <Color x:Key="PrimaryColor">#1F8FD6</Color>
+    <Color x:Key="PrimaryLightColor">#66D9E8</Color>
+    <Color x:Key="PrimaryDarkColor">#0B5B9A</Color>
+    <Color x:Key="AccentColor">#E8B74A</Color>
+    <Color x:Key="AccentLightColor">#98E8D6</Color>
+    <Color x:Key="AccentDarkColor">#C67A19</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#1F8FD6"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="#66D9E8"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#E8B74A"/>
+    <SolidColorBrush x:Key="AccentLightBrush" Color="#98E8D6"/>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#C67A19"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#0E9F6E"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#D99512"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#D6455D"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="#1F8FD6"/>
+
+    <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#35BCE2" Offset="0"/>
+        <GradientStop Color="#78DCCA" Offset="0.52"/>
+        <GradientStop Color="#F0C66A" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#1F8FD6" Offset="0"/>
+        <GradientStop Color="#66D9E8" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#35BCE2" Offset="0"/>
+        <GradientStop Color="#98E8D6" Offset="0.58"/>
+        <GradientStop Color="#F0C66A" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="UserGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#F0C66A" Offset="0"/>
+        <GradientStop Color="#D99512" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RoleGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0E9F6E" Offset="0"/>
+        <GradientStop Color="#78DCCA" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="PermissionGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#8E7BFF" Offset="0"/>
+        <GradientStop Color="#35BCE2" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ExperimentGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#1F8FD6" Offset="0"/>
+        <GradientStop Color="#66D9E8" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ExperimentGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#1F8FD6" Offset="0"/>
+        <GradientStop Color="#66D9E8" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MaterialGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#F0C66A" Offset="0"/>
+        <GradientStop Color="#D99512" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MaterialGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#F0C66A" Offset="0"/>
+        <GradientStop Color="#D99512" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DeviceGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#D6455D" Offset="0"/>
+        <GradientStop Color="#F0C66A" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DeviceGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#D6455D" Offset="0"/>
+        <GradientStop Color="#F0C66A" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DataGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#78DCCA" Offset="0"/>
+        <GradientStop Color="#35BCE2" Offset="1"/>
+    </LinearGradientBrush>
+
+    <DropShadowEffect x:Key="CardShadow" Color="#F8FFFFFF" BlurRadius="56" ShadowDepth="0" Opacity="0.62"/>
+    <DropShadowEffect x:Key="GlowEffect" Color="#FFFFFFFF" BlurRadius="30" ShadowDepth="0" Opacity="0.72"/>
+    <DropShadowEffect x:Key="HeaderShadow" Color="#1E3A5F" BlurRadius="10" ShadowDepth="2" Opacity="0.16"/>
+    <DropShadowEffect x:Key="AppButtonPrimaryShadow" Color="#F0F6FFFF" BlurRadius="30" ShadowDepth="0" Opacity="0.86"/>
+    <DropShadowEffect x:Key="AppButtonNeutralShadow" Color="#E3F2FFFF" BlurRadius="24" ShadowDepth="0" Opacity="0.76"/>
+    <DropShadowEffect x:Key="AppButtonDangerShadow" Color="#DDE9F9FF" BlurRadius="24" ShadowDepth="0" Opacity="0.7"/>
+    <DropShadowEffect x:Key="RunExperimentStopButtonShadow" Color="#F0FFC9D2" BlurRadius="28" ShadowDepth="0" Opacity="0.82"/>
+
+    <LinearGradientBrush x:Key="ShellTitleBarBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#D6ECF9FF" Offset="0"/>
+        <GradientStop Color="#BADAF0FF" Offset="0.48"/>
+        <GradientStop Color="#D8CAB7" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ShellAccentBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#35BCE2" Offset="0"/>
+        <GradientStop Color="#98E8D6" Offset="0.72"/>
+        <GradientStop Color="#F0C66A" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ShellAccentLineBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="Transparent" Offset="0"/>
+        <GradientStop Color="#98E8D6" Offset="0.22"/>
+        <GradientStop Color="#35BCE2" Offset="0.58"/>
+        <GradientStop Color="#F0C66A" Offset="0.82"/>
+        <GradientStop Color="Transparent" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ShellTitleForegroundBrush" Color="#142238"/>
+    <SolidColorBrush x:Key="ShellButtonForegroundBrush" Color="#33506A"/>
+    <SolidColorBrush x:Key="ShellMutedForegroundBrush" Color="#667A92"/>
+    <SolidColorBrush x:Key="ShellNavigationIconBrush" Color="#1F678D"/>
+    <SolidColorBrush x:Key="ShellNavigationForegroundBrush" Color="#20364D"/>
+    <SolidColorBrush x:Key="ShellNavigationMutedForegroundBrush" Color="#60758B"/>
+    <SolidColorBrush x:Key="ShellChromeSurfaceBrush" Color="#A6EEF7FF"/>
+    <SolidColorBrush x:Key="ShellLogoInnerBrush" Color="#DFFFFFFF"/>
+    <LinearGradientBrush x:Key="ShellContentBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#32FFFFFF" Offset="0"/>
+        <GradientStop Color="#1EE6F2FF" Offset="0.55"/>
+        <GradientStop Color="#26E4D0B3" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ShellContentBorderBrush" Color="#B3FFFFFF"/>
+    <CornerRadius x:Key="ShellContentCornerRadius">20</CornerRadius>
+    <DropShadowEffect x:Key="ShellContentShadow" Color="#10263B" BlurRadius="36" ShadowDepth="8" Opacity="0.22"/>
+    <sys:Double x:Key="ShellNavigationPaneWidth">224</sys:Double>
+    <Thickness x:Key="ShellNavigationPaneMargin">0,44,8,4</Thickness>
+    <Thickness x:Key="ShellMainRegionMargin">0</Thickness>
+    <CornerRadius x:Key="ShellNavigationPaneCornerRadius">0 28 28 0</CornerRadius>
+    <LinearGradientBrush x:Key="ShellNavigationPaneBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#A8FFFFFF" Offset="0"/>
+        <GradientStop Color="#7DE8F6FF" Offset="0.52"/>
+        <GradientStop Color="#7AE1D9C8" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ShellNavigationPaneBorderBrush" Color="#D8FFFFFF"/>
+    <Thickness x:Key="ShellNavigationPaneBorderThickness">1</Thickness>
+    <DropShadowEffect x:Key="ShellNavigationPaneShadow" Color="#1A3550" BlurRadius="42" ShadowDepth="10" Opacity="0.28"/>
+
+    <SolidColorBrush x:Key="SystemControlPageBackgroundAltHighBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="SystemControlForegroundBaseMediumBrush" Color="#5D718A"/>
+    <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="#142238"/>
+    <SolidColorBrush x:Key="SystemControlForegroundAccentBrush" Color="#1F8FD6"/>
+    <SolidColorBrush x:Key="SystemControlAltMediumLowBrush" Color="#8EEAFAFF"/>
+    <SolidColorBrush x:Key="SystemControlBackgroundListLowBrush" Color="#66FFFFFF"/>
+    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#96E7F6FF"/>
+    <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackgroundPointerOver" Color="#64FFFFFF"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackgroundPressed" Color="#7EE2F2FF"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackgroundSelected" Color="#96D4EDFF"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackgroundSelectedPointerOver" Color="#A8DDF2FF"/>
+    <SolidColorBrush x:Key="NavigationViewItemBackgroundSelectedPressed" Color="#B4CFEAFF"/>
+    <SolidColorBrush x:Key="NavigationViewItemForeground" Color="#1A314A"/>
+    <SolidColorBrush x:Key="NavigationViewItemForegroundPointerOver" Color="#142238"/>
+    <SolidColorBrush x:Key="NavigationViewItemForegroundPressed" Color="#142238"/>
+    <SolidColorBrush x:Key="NavigationViewItemForegroundSelected" Color="#0A4F87"/>
+    <SolidColorBrush x:Key="NavigationViewItemIconForeground" Color="#1F678D"/>
+    <SolidColorBrush x:Key="NavigationViewItemIconForegroundPointerOver" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="NavigationViewItemIconForegroundPressed" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="NavigationViewItemIconForegroundSelected" Color="#0A4F87"/>
+    <SolidColorBrush x:Key="NavigationViewItemSeparatorForeground" Color="#CC6E8FA7"/>
+    <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#1F8FD6"/>
+    <SolidColorBrush x:Key="NavigationViewPaneToggleButtonForeground" Color="#22425D"/>
+    <SolidColorBrush x:Key="NavigationViewPaneToggleButtonForegroundPointerOver" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="NavigationViewPaneToggleButtonBackgroundPointerOver" Color="#64FFFFFF"/>
+    <SolidColorBrush x:Key="NavigationViewPaneToggleButtonBackgroundPressed" Color="#7EE2F2FF"/>
+    <SolidColorBrush x:Key="MaterialDesignPaper" Color="#F6FFFFFF"/>
+    <SolidColorBrush x:Key="MaterialDesignBody" Color="#142238"/>
+    <SolidColorBrush x:Key="MaterialDesignBodyLight" Color="#5D718A"/>
+    <SolidColorBrush x:Key="MaterialDesignColumnHeader" Color="#5D718A"/>
+    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#1F8FD6"/>
+    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#66D9E8"/>
+    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#0B5B9A"/>
+    <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#E8B74A"/>
+
+    <Style x:Key="PageRootGrid" TargetType="Grid">
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+</ResourceDictionary>

@@ -1,5 +1,4 @@
 using System;
-using System;
 using System.Collections.Generic;
 
 namespace IndustrySystem.Presentation.Wpf.Services;
@@ -19,5 +18,5 @@ public interface IAuthState
     void SetAuthenticated(string userName, Guid[] roleIds, string[] permissions);
     void SignOut();
 
-    bool HasPermission(string permission);
+    bool HasPermission(string? permission);
 }

@@ -1,7 +1,11 @@
 namespace IndustrySystem.Domain.Entities.Inventory;
 
+/// <summary>
+/// 库存记录实体。
+/// </summary>
 public class InventoryRecord
 {
+    /// <summary>库存记录主键</summary>
     [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -50,9 +54,11 @@ public class InventoryRecord
     /// <summary>备注</summary>
     public string Remark { get; set; } = string.Empty;
 
+    /// <summary>创建时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>更新时间（UTC）</summary>
     [SqlSugar.SugarColumn(IsNullable = true)]
     public DateTime? UpdatedAt { get; set; }
 }

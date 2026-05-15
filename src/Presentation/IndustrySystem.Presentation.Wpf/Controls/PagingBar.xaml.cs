@@ -6,7 +6,6 @@ using System.Windows.Input;
 namespace IndustrySystem.Presentation.Wpf.Controls;
 
 /// <summary>
-/// 通用分页条控件。透传 ViewModel 分页属性与命令，避免在每个页面重复 XAML。
 /// </summary>
 public partial class PagingBar : UserControl
 {

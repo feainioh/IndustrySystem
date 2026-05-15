@@ -6,12 +6,17 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 角色应用服务。
+/// </summary>
 public class RoleAppService : IRoleAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<Role> _repo;
     private readonly IRolePermissionRepository _rolePermRepo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public RoleAppService(IRepository<Role> repo, IRolePermissionRepository rolePermRepo, IMapper mapper)
     {
         _repo = repo;
@@ -19,6 +24,7 @@ public class RoleAppService : IRoleAppService
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     /// <summary>
     /// 根据Id查询单个角色。
     /// </summary>
@@ -37,6 +43,7 @@ public class RoleAppService : IRoleAppService
         return list.Select(_mapper.Map<RoleDto>).ToList();
     }
 
+    // ===== Commands =====
     /// <summary>
     /// 创建角色，若输入Id为空则自动生成新Id。
     /// </summary>

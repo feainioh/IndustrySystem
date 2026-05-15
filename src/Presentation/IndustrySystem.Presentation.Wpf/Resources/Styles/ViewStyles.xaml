@@ -1,8 +1,125 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:ui="http://schemas.modernwpf.com/2019">
 
     <!-- Color Definitions -->
+    <SolidColorBrush x:Key="AppPageBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppCardBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppBorderBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="AppMutedTextBrush" Color="#667085"/>
+    <SolidColorBrush x:Key="AppListHeaderBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="AppListRowHoverBrush" Color="#EEF5FF"/>
+    <SolidColorBrush x:Key="AppListRowSelectedBrush" Color="#DDEBFF"/>
+    <SolidColorBrush x:Key="AppListRowAlternateBrush" Color="#FBFCFE"/>
+    <SolidColorBrush x:Key="AppPrimaryTextBrush" Color="#1D2939"/>
+    <SolidColorBrush x:Key="AppInputBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppInputBorderBrush" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="AppInputTextBrush" Color="#1D2939"/>
+    <SolidColorBrush x:Key="AppParameterSurfaceBrush" Color="#FBFCFE"/>
+    <SolidColorBrush x:Key="AppChipBackgroundBrush" Color="#E8F0FE"/>
+    <SolidColorBrush x:Key="AppChipForegroundBrush" Color="#0078D4"/>
+    <SolidColorBrush x:Key="AppGlassHighlightBrush" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="AppButtonPrimaryBackgroundBrush" Color="#0078D4"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryHoverBackgroundBrush" Color="#1387DF"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryPressedBackgroundBrush" Color="#0067B8"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryBorderBrush" Color="#0078D4"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryHoverBorderBrush" Color="#2B97E6"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryPressedBorderBrush" Color="#005EA6"/>
+    <SolidColorBrush x:Key="AppButtonPrimaryForegroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralBackgroundBrush" Color="#EEF5FF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralHoverBackgroundBrush" Color="#E3EEFF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralPressedBackgroundBrush" Color="#D6E6FF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralBorderBrush" Color="#0078D4"/>
+    <SolidColorBrush x:Key="AppButtonNeutralHoverBorderBrush" Color="#1D88DE"/>
+    <SolidColorBrush x:Key="AppButtonNeutralPressedBorderBrush" Color="#006ABF"/>
+    <SolidColorBrush x:Key="AppButtonNeutralForegroundBrush" Color="#005EA6"/>
+    <SolidColorBrush x:Key="AppButtonDangerBackgroundBrush" Color="#DC3545"/>
+    <SolidColorBrush x:Key="AppButtonDangerHoverBackgroundBrush" Color="#CC3342"/>
+    <SolidColorBrush x:Key="AppButtonDangerPressedBackgroundBrush" Color="#B62D3A"/>
+    <SolidColorBrush x:Key="AppButtonDangerBorderBrush" Color="#DC3545"/>
+    <SolidColorBrush x:Key="AppButtonDangerHoverBorderBrush" Color="#D43A49"/>
+    <SolidColorBrush x:Key="AppButtonDangerPressedBorderBrush" Color="#B52E3A"/>
+    <SolidColorBrush x:Key="AppButtonDangerForegroundBrush" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="RunExperimentStopButtonBackgroundBrush" Color="#D93647"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonHoverBackgroundBrush" Color="#CC3142"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonPressedBackgroundBrush" Color="#B52B39"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonBorderBrush" Color="#E24C5C"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonHoverBorderBrush" Color="#E9606E"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonPressedBorderBrush" Color="#C73A49"/>
+    <SolidColorBrush x:Key="RunExperimentStopButtonForegroundBrush" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="LoginTitleForegroundBrush" Color="#F4FAFF"/>
+    <SolidColorBrush x:Key="LoginSubtitleForegroundBrush" Color="#D1E8FF"/>
+    <SolidColorBrush x:Key="LoginFooterForegroundBrush" Color="#D6EAFF"/>
+    <SolidColorBrush x:Key="LoginThemeToggleForegroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="LoginThemeToggleBorderBrush" Color="#78FFFFFF"/>
+    <SolidColorBrush x:Key="LoginThemeToggleBackgroundBrush" Color="#2CFFFFFF"/>
+    <SolidColorBrush x:Key="LoginAvatarBackgroundBrush" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="LoginAvatarIconBrush" Color="#0078D4"/>
+    <SolidColorBrush x:Key="LoginCardBackgroundBrush" Color="#FDFEFF"/>
+    <SolidColorBrush x:Key="LoginCardBorderBrush" Color="#D9E6F2"/>
+    <SolidColorBrush x:Key="LoginErrorForegroundBrush" Color="#D6455D"/>
+    <SolidColorBrush x:Key="LoginDecorationBrush" Color="#38FFFFFF"/>
+
+    <LinearGradientBrush x:Key="LoginBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#0B3860" Offset="0"/>
+        <GradientStop Color="#0F5B88" Offset="0.52"/>
+        <GradientStop Color="#1A7FA0" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LoginPrimaryButtonBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0A67A8" Offset="0"/>
+        <GradientStop Color="#0F88C2" Offset="0.54"/>
+        <GradientStop Color="#15A4CF" Offset="1"/>
+    </LinearGradientBrush>
+    <DropShadowEffect x:Key="LoginCardShadowEffect" Color="#243C58" BlurRadius="28" ShadowDepth="8" Opacity="0.22"/>
+    <DropShadowEffect x:Key="AppButtonPrimaryShadow" Color="#660078D4" BlurRadius="16" ShadowDepth="2" Opacity="0.45"/>
+    <DropShadowEffect x:Key="AppButtonNeutralShadow" Color="#330078D4" BlurRadius="12" ShadowDepth="1" Opacity="0.28"/>
+    <DropShadowEffect x:Key="AppButtonDangerShadow" Color="#66DC3545" BlurRadius="14" ShadowDepth="2" Opacity="0.42"/>
+    <DropShadowEffect x:Key="RunExperimentStopButtonShadow" Color="#80DC3545" BlurRadius="20" ShadowDepth="2" Opacity="0.52"/>
+
+    <CornerRadius x:Key="AppCardCornerRadius">6</CornerRadius>
+    <CornerRadius x:Key="AppInnerCornerRadius">6</CornerRadius>
+    <CornerRadius x:Key="LoginRootCornerRadius">8</CornerRadius>
+
+    <LinearGradientBrush x:Key="ShellTitleBarBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0D1117" Offset="0"/>
+        <GradientStop Color="#161B22" Offset="0.5"/>
+        <GradientStop Color="#0D1117" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ShellAccentBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0078D4" Offset="0"/>
+        <GradientStop Color="#00BCF2" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ShellAccentLineBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="Transparent" Offset="0"/>
+        <GradientStop Color="#0078D4" Offset="0.3"/>
+        <GradientStop Color="#00BCF2" Offset="0.7"/>
+        <GradientStop Color="Transparent" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ShellTitleForegroundBrush" Color="#E6F3FF"/>
+    <SolidColorBrush x:Key="ShellButtonForegroundBrush" Color="#B3D9FF"/>
+    <SolidColorBrush x:Key="ShellMutedForegroundBrush" Color="#6B8CAE"/>
+    <SolidColorBrush x:Key="ShellNavigationIconBrush" Color="#5C7FA0"/>
+    <SolidColorBrush x:Key="ShellNavigationForegroundBrush" Color="#1D2939"/>
+    <SolidColorBrush x:Key="ShellNavigationMutedForegroundBrush" Color="#667085"/>
+    <SolidColorBrush x:Key="ShellChromeSurfaceBrush" Color="#152030"/>
+    <SolidColorBrush x:Key="ShellLogoInnerBrush" Color="#1A1F2E"/>
+    <SolidColorBrush x:Key="ShellContentBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ShellContentBorderBrush" Color="#00000000"/>
+    <CornerRadius x:Key="ShellContentCornerRadius">6</CornerRadius>
+    <DropShadowEffect x:Key="ShellContentShadow" BlurRadius="8" ShadowDepth="1" Opacity="0.08" Color="Black"/>
+    <sys:Double x:Key="ShellNavigationPaneWidth">240</sys:Double>
+    <Thickness x:Key="ShellNavigationPaneMargin">0,40,0,0</Thickness>
+    <Thickness x:Key="ShellMainRegionMargin">8</Thickness>
+    <CornerRadius x:Key="ShellNavigationPaneCornerRadius">0</CornerRadius>
+    <SolidColorBrush x:Key="ShellNavigationPaneBackgroundBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="ShellNavigationPaneBorderBrush" Color="Transparent"/>
+    <Thickness x:Key="ShellNavigationPaneBorderThickness">0</Thickness>
+    <DropShadowEffect x:Key="ShellNavigationPaneShadow" Color="Black" BlurRadius="0" ShadowDepth="0" Opacity="0"/>
     
     <!-- Module Colors -->
     <SolidColorBrush x:Key="UserModuleColor" Color="#FFB900"/>
@@ -14,6 +131,11 @@
     <SolidColorBrush x:Key="DataModuleColor" Color="#00BCF2"/>
     
     <!-- Gradient Brushes -->
+    <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#1D4ED8" Offset="0"/>
+        <GradientStop Color="#0EA5E9" Offset="1"/>
+    </LinearGradientBrush>
+
     <LinearGradientBrush x:Key="UserGradient" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="#FFB900" Offset="0"/>
         <GradientStop Color="#FFC83D" Offset="1"/>
@@ -60,9 +182,9 @@
     <!-- Card Shadow -->
     <DropShadowEffect x:Key="CardShadow" 
                       Color="Black"
-                      BlurRadius="8" 
-                      ShadowDepth="2" 
-                      Opacity="0.1"/>
+                      BlurRadius="18" 
+                      ShadowDepth="1" 
+                      Opacity="0.05"/>
     
     <!-- Header Shadow -->
     <DropShadowEffect x:Key="HeaderShadow" 
@@ -75,12 +197,18 @@
     
     <!-- Page Root Grid -->
     <Style x:Key="PageRootGrid" TargetType="Grid">
-        <Setter Property="Margin" Value="24"/>
+        <Setter Property="Margin" Value="12"/>
+        <!-- <Setter Property="Background" Value="{DynamicResource AppPageBackgroundBrush}"/> -->
     </Style>
     
     <!-- Page Header Grid -->
     <Style x:Key="PageHeaderGrid" TargetType="Grid">
         <Setter Property="Margin" Value="0,0,0,0"/>
+    </Style>
+
+    <Style x:Key="PageHeaderActionsPanel" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
     
     <!-- Page Header Icon Border -->
@@ -92,35 +220,205 @@
         <Setter Property="Margin" Value="0,0,16,0"/>
         <Setter Property="Effect" Value="{StaticResource GlowEffect}"/>
     </Style>
+
+    <Style x:Key="PageHeaderMdl2Icon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="PageHeaderPackIcon" TargetType="materialDesign:PackIcon">
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
     
     <!-- Page Header Title -->
     <Style x:Key="PageHeaderTitle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="24"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
     </Style>
     
     <!-- Page Header Subtitle -->
     <Style x:Key="PageHeaderSubtitle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Opacity" Value="0.7"/>
-        <Setter Property="Margin" Value="0,2,0,0"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
+        <Setter Property="Margin" Value="0,3,0,0"/>
+        <Setter Property="Opacity" Value="0.72"/>
     </Style>
+
+    <Style x:Key="AppInteractiveButtonNeutral" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="BorderThickness" Value="1.2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Background" Value="{DynamicResource AppButtonNeutralBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppButtonNeutralBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppButtonNeutralForegroundBrush}"/>
+        <Setter Property="Effect" Value="{DynamicResource AppButtonNeutralShadow}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonNeutralHoverBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonNeutralHoverBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonNeutralPressedBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonNeutralPressedBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource AppButtonNeutralBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonNeutralBorderBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource AppButtonNeutralForegroundBrush}"/>
+                <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="AppInteractiveButtonPrimary" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Background" Value="{DynamicResource AppButtonPrimaryBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppButtonPrimaryBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppButtonPrimaryForegroundBrush}"/>
+        <Setter Property="Effect" Value="{DynamicResource AppButtonPrimaryShadow}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonPrimaryHoverBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonPrimaryHoverBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonPrimaryPressedBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonPrimaryPressedBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource AppButtonPrimaryBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonPrimaryBorderBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource AppButtonPrimaryForegroundBrush}"/>
+                <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="AppInteractiveButtonDanger" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Background" Value="{DynamicResource AppButtonDangerBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppButtonDangerBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppButtonDangerForegroundBrush}"/>
+        <Setter Property="Effect" Value="{DynamicResource AppButtonDangerShadow}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonDangerHoverBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonDangerHoverBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppButtonDangerPressedBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonDangerPressedBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource AppButtonDangerBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AppButtonDangerBorderBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource AppButtonDangerForegroundBrush}"/>
+                <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="RunExperimentStopButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="MinWidth" Value="88"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Background" Value="{DynamicResource RunExperimentStopButtonBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource RunExperimentStopButtonBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource RunExperimentStopButtonForegroundBrush}"/>
+        <Setter Property="Effect" Value="{DynamicResource RunExperimentStopButtonShadow}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource RunExperimentStopButtonHoverBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource RunExperimentStopButtonHoverBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource RunExperimentStopButtonPressedBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource RunExperimentStopButtonPressedBorderBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource RunExperimentStopButtonBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource RunExperimentStopButtonBorderBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource RunExperimentStopButtonForegroundBrush}"/>
+                <Setter Property="Opacity" Value="0.45"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="HeaderActionOutlinedButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}"/>
+
+    <Style x:Key="HeaderActionAccentButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
+
+    <Style x:Key="HeaderActionRaisedButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
+
+    <Style x:Key="AppInteractiveComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{DynamicResource AppInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppInputTextBrush}"/>
+    </Style>
+
+    <Style x:Key="AppInteractiveComboBoxCompact" TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBox}">
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="MinHeight" Value="34"/>
+        <Setter Property="MinWidth" Value="120"/>
+        <Setter Property="Padding" Value="10,3"/>
+    </Style>
+
+    <Style TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBox}"/>
 
     <!-- Card Styles -->
     
     <!-- Common Card Style -->
     <Style x:Key="CardBorder" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource AppCardBackgroundBrush}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource AppCardCornerRadius}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+        <Setter Property="Effect" Value="{DynamicResource CardShadow}"/>
     </Style>
     
     <!-- Form Card (with padding) -->
     <Style x:Key="FormCard" TargetType="Border" BasedOn="{StaticResource CardBorder}">
-        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Padding" Value="16"/>
     </Style>
     
     <!-- List Card (no padding) -->
@@ -130,7 +428,27 @@
     
     <!-- Pagination Card -->
     <Style x:Key="PaginationCard" TargetType="Border" BasedOn="{StaticResource CardBorder}">
-        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Padding" Value="12,10"/>
+    </Style>
+
+    <Style x:Key="ManagementSearchTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="MinHeight" Value="36"/>
+        <Setter Property="Padding" Value="10,3"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource AppPrimaryTextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource AppInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorderBrush}"/>
+        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>
+    </Style>
+
+    <Style x:Key="ManagementSectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <!-- Button Styles -->
@@ -148,6 +466,17 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="ToolbarIconButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="PrimaryCommandButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
+
+    <Style x:Key="SecondaryCommandButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}"/>
     
     <!-- Toolbar Button Panel -->
     <Style x:Key="ToolbarButtonPanel" TargetType="StackPanel">
@@ -162,12 +491,24 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Margin" Value="0,0,12,0"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
     </Style>
     
     <!-- Form Row -->
     <Style x:Key="FormRow" TargetType="Grid">
         <Setter Property="Margin" Value="0,0,0,12"/>
     </Style>
+
+    <Style x:Key="InlineFormTextBox" TargetType="TextBox">
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="InlineFormComboBox" TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBoxCompact}"/>
 
     <!-- Data Grid Styles -->
     
@@ -177,57 +518,191 @@
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="RowHeight" Value="48"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="RowHeight" Value="42"/>
+        <Setter Property="ColumnHeaderHeight" Value="38"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
-        <Setter Property="AlternatingRowBackground" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource AppBorderBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource AppListRowAlternateBrush}"/>
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="14,6"/>
+        <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="14,4"/>
         <Setter Property="ui:ScrollViewerHelper.AutoHideScrollBars" Value="True"/>
     </Style>
+
+    <!-- DataGrid style variant synced with ModernListView visual rhythm -->
+    <Style x:Key="ListViewLikeDataGrid" TargetType="DataGrid" BasedOn="{StaticResource ModernDataGrid}">
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource AppBorderBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource AppListRowAlternateBrush}"/>
+    </Style>
+
+    <!-- Apply operation-log-like DataGrid appearance globally without changing controls -->
+    <Style TargetType="DataGrid" BasedOn="{StaticResource ModernDataGrid}"/>
+
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource AppListHeaderBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="DataGridRow">
+        <Setter Property="MinHeight" Value="42"/>
+        <Setter Property="Margin" Value="0,3"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppListRowHoverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AppListRowSelectedBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                <Setter Property="BorderThickness" Value="3,0,0,0"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border x:Name="CellBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DataGridLeadingIconBadge" TargetType="Border">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="DataGridLeadingPackIcon" TargetType="materialDesign:PackIcon">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="DataGridActionIconButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0,0,6,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="DataGridActionPackIcon" TargetType="materialDesign:PackIcon" BasedOn="{StaticResource DataGridLeadingPackIcon}"/>
     
     <!-- ListView Style -->
     <Style x:Key="ModernListView" TargetType="ListView">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="AlternationCount" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
         <Setter Property="ui:ScrollViewerHelper.AutoHideScrollBars" Value="True"/>
     </Style>
 
+    <!-- Apply operation-log-like list appearance globally without changing controls -->
+    <Style TargetType="ListView" BasedOn="{StaticResource ModernListView}"/>
+
     <!-- Shared GridViewColumnHeader style for all management list views -->
     <Style x:Key="ManageListColumnHeader" TargetType="GridViewColumnHeader">
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="Padding" Value="14,0"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="#99000000"/>
-        <Setter Property="Background" Value="#F8F9FA"/>
-        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource AppListHeaderBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,0,1"/>
     </Style>
 
+    <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
+
     <!-- Shared ListViewItem style for all management list views -->
     <Style x:Key="ManageListItem" TargetType="ListViewItem">
-        <Setter Property="MinHeight" Value="52"/>
+        <Setter Property="MinHeight" Value="42"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="Padding" Value="12,6"/>
+        <Setter Property="Padding" Value="14,4"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="#F0F0F0"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{DynamicResource AppListRowAlternateBrush}"/>
+            </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#F5F8FF"/>
+                <Setter Property="Background" Value="{DynamicResource AppListRowHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#EBF3FF"/>
+                <Setter Property="Background" Value="{DynamicResource AppListRowSelectedBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                <Setter Property="BorderThickness" Value="3,0,0,0"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}"/>
 
     <!-- Pagination Control Styles -->
     
@@ -244,17 +719,48 @@
     </Style>
     
     <!-- Pagination Button -->
-    <Style x:Key="PaginationButton" TargetType="Button">
+    <Style x:Key="PaginationButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}">
         <Setter Property="Width" Value="36"/>
         <Setter Property="Height" Value="36"/>
+        <Setter Property="MinWidth" Value="36"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Margin" Value="0,0,8,0"/>
+    </Style>
+
+    <!-- Pagination Text Button -->
+    <Style x:Key="PaginationTextButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="MinWidth" Value="56"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="Margin" Value="0,0,8,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Pagination TextBox -->
+    <Style x:Key="PaginationInputTextBox" TargetType="TextBox">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinWidth" Value="50"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,8,0"/>
+    </Style>
+
+    <!-- Pagination ComboBox -->
+    <Style x:Key="PaginationComboBox" TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBoxCompact}">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="MinWidth" Value="72"/>
+        <Setter Property="Padding" Value="8,3"/>
         <Setter Property="Margin" Value="0,0,8,0"/>
     </Style>
     
     <!-- Current Page Border -->
     <Style x:Key="CurrentPageBorder" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
-        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="{DynamicResource AppListRowSelectedBrush}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource AppInnerCornerRadius}"/>
         <Setter Property="Padding" Value="12,6"/>
     </Style>
 

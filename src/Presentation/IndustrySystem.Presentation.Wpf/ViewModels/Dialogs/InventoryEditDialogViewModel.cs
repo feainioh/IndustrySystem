@@ -5,12 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class InventoryEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IInventoryAppService _svc;
     private readonly IMaterialAppService _materialSvc;
 
@@ -80,7 +83,7 @@ public class InventoryEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         _materialSvc = materialSvc;
-        Title = "库存记录";
+        Title = T("Dialog_InventoryEdit_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)

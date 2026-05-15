@@ -8,8 +8,7 @@ namespace IndustrySystem.Presentation.Wpf.Views
     {
         public DeviceParamsView()
         {
-            InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<DeviceParamsViewModel>();
+            InitializeComponent(); 
         }
     }
 }

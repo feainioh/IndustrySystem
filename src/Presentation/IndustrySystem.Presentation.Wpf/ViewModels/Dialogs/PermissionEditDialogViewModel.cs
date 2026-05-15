@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Dialogs;
 
@@ -14,6 +15,8 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorInfo
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IPermissionAppService _svc;
     private Guid _id;
     private string _name = string.Empty;
@@ -21,12 +24,12 @@ public class PermissionEditDialogViewModel : DialogViewModel, INotifyDataErrorIn
     private string _groupName = string.Empty;
 
     public Guid Id { get => _id; set => SetProperty(ref _id, value); }
-    public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, "名称不能为空"); RaiseSaveCanExecuteChanged(); } } }
-    public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, "显示名不能为空"); RaiseSaveCanExecuteChanged(); } } }
+    public string Name { get => _name; set { if (SetProperty(ref _name, value)) { ValidateRequired(nameof(Name), _name, T("Validation_NameRequired")); RaiseSaveCanExecuteChanged(); } } }
+    public string DisplayName { get => _displayName; set { if (SetProperty(ref _displayName, value)) { ValidateRequired(nameof(DisplayName), _displayName, T("Validation_DisplayNameRequired")); RaiseSaveCanExecuteChanged(); } } }
     public string GroupName { get => _groupName; set { if (SetProperty(ref _groupName, value)) { RaiseSaveCanExecuteChanged(); } } }
 
     public PermissionEditDialogViewModel(IPermissionAppService svc)
-    { _svc = svc; Title = "编辑权限"; }
+    { _svc = svc; Title = T("Dialog_PermissionEdit_Title"); }
 
     public override void OnDialogOpened(IDialogParameters parameters)
     {

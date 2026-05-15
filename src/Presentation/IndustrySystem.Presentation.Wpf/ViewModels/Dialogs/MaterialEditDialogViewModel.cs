@@ -3,12 +3,15 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.MaterialEnums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class MaterialEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IMaterialAppService _svc;
 
     public Guid Id { get; set; }
@@ -66,7 +69,7 @@ public class MaterialEditDialogViewModel : DialogViewModel
     public MaterialEditDialogViewModel(IMaterialAppService svc)
     {
         _svc = svc;
-        Title = "编辑物料";
+        Title = T("Dialog_MaterialEdit_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)

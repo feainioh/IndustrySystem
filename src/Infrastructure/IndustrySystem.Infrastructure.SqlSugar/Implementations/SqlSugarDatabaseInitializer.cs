@@ -13,6 +13,10 @@ using SqlSugar;
 
 namespace IndustrySystem.Infrastructure.SqlSugar.Implementations;
 
+/// <summary>
+/// SqlSugar 数据库初始化器。
+/// 负责按配置执行建表与种子数据写入。
+/// </summary>
 public class SqlSugarDatabaseInitializer : IDatabaseInitializer
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();

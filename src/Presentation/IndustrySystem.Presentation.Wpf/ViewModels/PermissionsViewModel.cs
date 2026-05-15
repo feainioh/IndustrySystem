@@ -25,51 +25,20 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
     private readonly IPermissionAppService _svc;
     private readonly IDialogService _dialogService;
 
-    /// <summary>
-    /// 新增权限名称输入。
-    /// </summary>
     private string _newName = string.Empty;
     public string NewName { get => _newName; set => SetProperty(ref _newName, value); }
 
-    /// <summary>
-    /// 新增权限显示名输入。
-    /// </summary>
     private string _newDisplayName = string.Empty;
     public string NewDisplayName { get => _newDisplayName; set => SetProperty(ref _newDisplayName, value); }
 
-    /// <summary>
-    /// 新增权限分组输入。
-    /// </summary>
     private string _newGroupName = string.Empty;
     public string NewGroupName { get => _newGroupName; set => SetProperty(ref _newGroupName, value); }
 
-    /// <summary>
-    /// 列表搜索关键字。
-    /// </summary>
-    private string _searchText = string.Empty;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (SetProperty(ref _searchText, value))
-            {
-                PermissionsView.Refresh();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 原始权限集合。
-    /// </summary>
     public ObservableCollection<PermissionDto> Permissions { get; } = new();
-
-    /// <summary>
-    /// 过滤后的权限视图（用于搜索）。
-    /// </summary>
+    public ObservableCollection<PermissionDto> PagedPermissions { get; } = new();
     public ICollectionView PermissionsView { get; }
 
-    public ICommand RefreshCommand { get; }
+    public new ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -81,7 +50,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         PermissionsView = CollectionViewSource.GetDefaultView(Permissions);
         PermissionsView.Filter = FilterPermissions;
 
-        // 页面命令：刷新、新增、编辑、删除
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
         EditCommand = new DelegateCommand<Guid?>(id =>
@@ -95,7 +63,7 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
 
         _logger.Info("PermissionsViewModel initialized");
 
-        // 视图初始化后延迟加载，避免首屏阻塞。
+        // Delay initial load to ensure the view is fully initialized.
         System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
         {
             await Task.Delay(100);
@@ -103,9 +71,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         });
     }
 
-    /// <summary>
-    /// 列表过滤逻辑：按名称、显示名、分组模糊匹配。
-    /// </summary>
     private bool FilterPermissions(object item)
     {
         if (item is not PermissionDto permission) return false;
@@ -117,9 +82,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
                || (permission.GroupName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false);
     }
 
-    /// <summary>
-    /// 执行新增并清空输入框。
-    /// </summary>
     private async Task AddCurrentAsync()
     {
         await AddAsync(NewName, NewDisplayName, NewGroupName);
@@ -128,9 +90,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         NewGroupName = string.Empty;
     }
 
-    /// <summary>
-    /// 打开权限编辑弹窗，保存成功后刷新列表。
-    /// </summary>
     private void OpenPermissionDialogAsync(Guid id)
     {
         var parameters = new DialogParameters { { "id", (Guid?)id } };
@@ -143,9 +102,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         });
     }
 
-    /// <summary>
-    /// 加载权限列表并更新UI集合。
-    /// </summary>
     public async Task LoadAsync()
     {
         try
@@ -165,6 +121,8 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
                         Permissions.Add(p);
                     }
                 }
+
+                ApplyPermissionPaging(resetToFirstPage: true);
             });
 
             _logger.Info($"UI updated with {Permissions.Count} permissions");
@@ -177,9 +135,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         }
     }
 
-    /// <summary>
-    /// 新增权限。
-    /// </summary>
     public async Task AddAsync(string name, string displayName, string groupName)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -197,6 +152,7 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Permissions.Add(dto);
+                ApplyPermissionPaging();
             });
 
             _logger.Info($"Permission '{name}' added successfully");
@@ -209,9 +165,6 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
         }
     }
 
-    /// <summary>
-    /// 删除权限（带确认）。
-    /// </summary>
     public async Task DeleteAsync(Guid id)
     {
         var permission = Permissions.FirstOrDefault(p => p.Id == id);
@@ -229,6 +182,7 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 if (permission != null) Permissions.Remove(permission);
+                ApplyPermissionPaging();
             });
 
             _logger.Info($"Permission '{name}' deleted successfully");
@@ -243,5 +197,56 @@ public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
 
     protected override async Task<IReadOnlyList<PermissionDto>> LoadItemsAsync()
         => await _svc.GetListAsync();
+
+    protected override void OnSearchTextChanged()
+    {
+        ApplyPermissionPaging(resetToFirstPage: true);
+    }
+
+    protected override void OnPagingParametersChanged(bool resetToFirstPage)
+    {
+        ApplyPermissionPaging(resetToFirstPage);
+    }
+
+    private IEnumerable<PermissionDto> BuildFilteredPermissions()
+    {
+        var query = Permissions.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var key = SearchText.Trim();
+            query = query.Where(permission =>
+                (permission.Name?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (permission.DisplayName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (permission.GroupName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+
+        return query;
+    }
+
+    private void ApplyPermissionPaging(bool resetToFirstPage = false)
+    {
+        var filtered = BuildFilteredPermissions().ToList();
+        TotalCount = filtered.Count;
+
+        if (resetToFirstPage)
+        {
+            PageIndex = 0;
+        }
+
+        var maxPageIndex = Math.Max(0, TotalPages - 1);
+        if (PageIndex > maxPageIndex)
+        {
+            PageIndex = maxPageIndex;
+        }
+
+        PagedPermissions.Clear();
+        foreach (var permission in filtered.Skip(PageIndex * PageSize).Take(PageSize))
+        {
+            PagedPermissions.Add(permission);
+        }
+
+        RaisePagingCommandStates();
+    }
 }
 

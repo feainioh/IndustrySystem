@@ -1,7 +1,336 @@
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.ExperimentHistoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid>
-    <TextBlock Text="实验历史记录 (占位)" />
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+       xmlns:dto="clr-namespace:IndustrySystem.Application.Contracts.Dtos;assembly=IndustrySystem.Application.Contracts"
+       xmlns:prism="http://prismlibrary.com/"
+       prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+  <UserControl.Resources>
+    <loc:LocalizationProvider x:Key="Loc" />
+  </UserControl.Resources>
+
+  <Grid Style="{StaticResource PageRootGrid}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="12" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="12" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="12" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="12" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+      <Border Style="{StaticResource PageHeaderIconBorder}" Background="{DynamicResource DataGradient}">
+        <TextBlock Text="&#xE81C;" Style="{StaticResource PageHeaderMdl2Icon}" />
+      </Border>
+      <StackPanel>
+        <TextBlock Text="{Binding [Page_ExperimentHistory_Title], Source={StaticResource Loc}}" Style="{StaticResource PageHeaderTitle}" />
+        <TextBlock Text="{Binding [Page_ExperimentHistory_Subtitle], Source={StaticResource Loc}}" Style="{StaticResource PageHeaderSubtitle}" />
+      </StackPanel>
+    </StackPanel>
+
+    <Border Grid.Row="2" Style="{StaticResource FormCard}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="10" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+               Text="{Binding [Section_HistoryFilters], Source={StaticResource Loc}}"
+               Style="{StaticResource ManagementSectionTitle}" />
+
+        <WrapPanel Grid.Row="2" VerticalAlignment="Center">
+          <TextBlock Text="{Binding [Lbl_TimeRange], Source={StaticResource Loc}}"
+                 Style="{StaticResource FormLabel}" />
+          <DatePicker SelectedDate="{Binding StartDate}" Width="140" Margin="0,0,8,0" />
+          <TextBlock Text="{Binding [Lbl_To], Source={StaticResource Loc}}"
+                 Style="{StaticResource FormLabel}" Margin="0,0,8,0" />
+          <DatePicker SelectedDate="{Binding EndDate}" Width="140" Margin="0,0,12,0" />
+
+          <TextBox Width="320"
+               Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+               Style="{StaticResource ManagementSearchTextBox}"
+               materialDesign:HintAssist.Hint="{Binding [Hint_Search_ExperimentHistory], Source={StaticResource Loc}}"
+               Margin="0,0,12,0" />
+
+          <ComboBox Width="130"
+                ItemsSource="{Binding StatusOptions}"
+                SelectedItem="{Binding SelectedStatus}"
+                Margin="0,0,8,0" />
+
+          <ComboBox Width="130"
+                ItemsSource="{Binding RunModeOptions}"
+                SelectedItem="{Binding SelectedRunMode}"
+                DisplayMemberPath="DisplayName"
+                Margin="0,0,12,0" />
+
+          <Button Content="{Binding [Btn_Search], Source={StaticResource Loc}}"
+              Command="{Binding SearchCommand}"
+              Style="{StaticResource PrimaryCommandButton}" Margin="0,0,8,0" />
+
+          <Button Content="{Binding [Btn_Refresh], Source={StaticResource Loc}}"
+              Command="{Binding RefreshCommand}"
+              Style="{StaticResource SecondaryCommandButton}" Margin="0,0,8,0" />
+
+          <Button Content="{Binding [Btn_Clear], Source={StaticResource Loc}}"
+              Command="{Binding ClearFilterCommand}"
+              Style="{StaticResource SecondaryCommandButton}" Margin="0,0,8,0" />
+
+          <Button Content="{Binding [Btn_Export], Source={StaticResource Loc}}"
+              Command="{Binding ExportCommand}"
+              Style="{StaticResource SecondaryCommandButton}" />
+        </WrapPanel>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="4" Style="{StaticResource FormCard}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+          <TextBlock Text="{Binding [History_Stat_Total], Source={StaticResource Loc}}" Opacity="0.7" FontSize="12" />
+          <TextBlock Text="{Binding TotalCount}" FontSize="20" FontWeight="SemiBold" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+          <TextBlock Text="{Binding [History_Stat_Completed], Source={StaticResource Loc}}" Opacity="0.7" FontSize="12" />
+          <TextBlock Text="{Binding CompletedCount}" FontSize="20" FontWeight="SemiBold" Foreground="#10893E" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2">
+          <TextBlock Text="{Binding [History_Stat_Failed], Source={StaticResource Loc}}" Opacity="0.7" FontSize="12" />
+          <TextBlock Text="{Binding FailedCount}" FontSize="20" FontWeight="SemiBold" Foreground="#D92D20" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="3">
+          <TextBlock Text="{Binding [History_Stat_SuccessRate], Source={StaticResource Loc}}" Opacity="0.7" FontSize="12" />
+          <TextBlock Text="{Binding SuccessRateText}" FontSize="20" FontWeight="SemiBold" Foreground="#0078D4" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="6" Style="{StaticResource ListCard}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="12,10,12,8">
+          <TextBlock Text="&#xE81C;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                 Margin="0,0,8,0" />
+          <TextBlock Text="{Binding [Section_HistoryRecords], Source={StaticResource Loc}}"
+                 Style="{StaticResource ManagementSectionTitle}" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+          <DataGrid ItemsSource="{Binding Items}"
+                AutoGenerateColumns="False"
+                Style="{StaticResource ListViewLikeDataGrid}">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="{Binding [Field_ExperimentName], Source={StaticResource Loc}}"
+                        Binding="{Binding Name}" Width="180" />
+              <DataGridTextColumn Header="{Binding [Field_ExperimentId], Source={StaticResource Loc}}"
+                        Binding="{Binding ExperimentId}" Width="120" />
+
+              <DataGridTemplateColumn Header="{Binding [Col_Status], Source={StaticResource Loc}}" Width="95">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <materialDesign:Chip Padding="8,2" HorizontalAlignment="Left" FontSize="11">
+                      <materialDesign:Chip.Style>
+                        <Style TargetType="materialDesign:Chip">
+                          <Setter Property="Content" Value="{Binding Source={StaticResource Loc}, Path=[Run_State_Idle]}" />
+                          <Setter Property="Background" Value="#EEF2FF" />
+                          <Setter Property="Foreground" Value="#475467" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding Status}" Value="{x:Static dto:RunState.Running}">
+                              <Setter Property="Content" Value="{Binding Source={StaticResource Loc}, Path=[Run_State_Running]}" />
+                              <Setter Property="Background" Value="#EAF4FF" />
+                              <Setter Property="Foreground" Value="#0078D4" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Status}" Value="{x:Static dto:RunState.Paused}">
+                              <Setter Property="Content" Value="{Binding Source={StaticResource Loc}, Path=[Run_State_Paused]}" />
+                              <Setter Property="Background" Value="#FFF7E8" />
+                              <Setter Property="Foreground" Value="#B54708" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Status}" Value="{x:Static dto:RunState.Stopped}">
+                              <Setter Property="Content" Value="{Binding Source={StaticResource Loc}, Path=[Run_State_Stopped]}" />
+                              <Setter Property="Background" Value="#FEF3F2" />
+                              <Setter Property="Foreground" Value="#B42318" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Status}" Value="{x:Static dto:RunState.Completed}">
+                              <Setter Property="Content" Value="{Binding Source={StaticResource Loc}, Path=[Run_State_Completed]}" />
+                              <Setter Property="Background" Value="#ECFDF3" />
+                              <Setter Property="Foreground" Value="#027A48" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </materialDesign:Chip.Style>
+                    </materialDesign:Chip>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <DataGridTemplateColumn Header="{Binding [Col_Result], Source={StaticResource Loc}}" Width="90">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Result}" VerticalAlignment="Center">
+                      <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Foreground" Value="#475467" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding Result}" Value="成功">
+                              <Setter Property="Foreground" Value="#027A48" />
+                              <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Result}" Value="失败">
+                              <Setter Property="Foreground" Value="#B42318" />
+                              <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </TextBlock.Style>
+                    </TextBlock>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <DataGridTemplateColumn Header="{Binding [Col_RunMode], Source={StaticResource Loc}}" Width="95">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <TextBlock VerticalAlignment="Center">
+                      <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                          <Setter Property="Text" Value="{Binding Source={StaticResource Loc}, Path=[History_RunMode_Offline]}" />
+                          <Setter Property="Foreground" Value="#667085" />
+                          <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                              <Setter Property="Text" Value="{Binding Source={StaticResource Loc}, Path=[History_RunMode_Online]}" />
+                              <Setter Property="Foreground" Value="#0078D4" />
+                            </DataTrigger>
+                          </Style.Triggers>
+                        </Style>
+                      </TextBlock.Style>
+                    </TextBlock>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+
+              <DataGridTextColumn Header="{Binding [Col_StartTime], Source={StaticResource Loc}}"
+                        Binding="{Binding StartTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="145" />
+              <DataGridTextColumn Header="{Binding [Col_EndTime], Source={StaticResource Loc}}"
+                        Binding="{Binding EndTime, StringFormat=yyyy-MM-dd HH:mm:ss, TargetNullValue=-}" Width="145" />
+              <DataGridTextColumn Header="{Binding [Col_Duration], Source={StaticResource Loc}}"
+                        Binding="{Binding Duration, StringFormat=hh\\:mm\\:ss, TargetNullValue=-}" Width="90" />
+              <DataGridTextColumn Header="{Binding [Lbl_Operator], Source={StaticResource Loc}}"
+                        Binding="{Binding Operator}" Width="95" />
+
+              <DataGridTemplateColumn Header="{Binding [Col_Actions], Source={StaticResource Loc}}" Width="96">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <Button Style="{StaticResource DataGridActionIconButton}"
+                          ToolTip="{Binding Source={StaticResource Loc}, Path=[Btn_Details]}"
+                          Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                          CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="InformationOutline" Style="{StaticResource DataGridActionPackIcon}" />
+                      </Button>
+                      <Button Style="{StaticResource DataGridActionIconButton}"
+                          ToolTip="{Binding Source={StaticResource Loc}, Path=[Btn_Delete]}"
+                          Foreground="#D92D20"
+                          Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                          CommandParameter="{Binding}">
+                        <materialDesign:PackIcon Kind="Delete" Style="{StaticResource DataGridActionPackIcon}" />
+                      </Button>
+                    </StackPanel>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+            </DataGrid.Columns>
+          </DataGrid>
+
+          <TextBlock Text="{Binding [Msg_NoHistoryRecords], Source={StaticResource Loc}}"
+                 FontSize="14"
+                 Foreground="{StaticResource AppMutedTextBrush}"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center">
+            <TextBlock.Style>
+              <Style TargetType="TextBlock">
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding HasNoRecords}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </TextBlock.Style>
+          </TextBlock>
+        </Grid>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="8" Style="{StaticResource PaginationCard}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
+          <TextBlock Text="{Binding [Lbl_Total], Source={StaticResource Loc}}" Opacity="0.7" />
+          <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" Foreground="{StaticResource HeaderGradient}" />
+          <TextBlock Text="{Binding [Lbl_Records], Source={StaticResource Loc}}" Opacity="0.7" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Style="{StaticResource PaginationButtonPanel}">
+          <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
+              Command="{Binding FirstPageCommand}"
+              ToolTip="{Binding [Tooltip_FirstPage], Source={StaticResource Loc}}"
+              Style="{StaticResource PaginationButton}" />
+          <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
+              Command="{Binding PreviousPageCommand}"
+              ToolTip="{Binding [Btn_Prev], Source={StaticResource Loc}}"
+              Style="{StaticResource PaginationButton}" />
+
+          <Border Style="{StaticResource CurrentPageBorder}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{Binding CurrentPage}" FontWeight="SemiBold" />
+              <TextBlock Text=" / " Opacity="0.7" Margin="4,0" />
+              <TextBlock Text="{Binding TotalPages}" Opacity="0.7" />
+            </StackPanel>
+          </Border>
+
+          <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+              Command="{Binding NextPageCommand}"
+              ToolTip="{Binding [Btn_Next], Source={StaticResource Loc}}"
+              Style="{StaticResource PaginationButton}" />
+          <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
+              Command="{Binding LastPageCommand}"
+              ToolTip="{Binding [Tooltip_LastPage], Source={StaticResource Loc}}"
+              Style="{StaticResource PaginationButton}" />
+
+          <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
+                ItemsSource="{Binding PageSizes}"
+                Width="80" Margin="12,0,0,0"
+                Style="{StaticResource PaginationComboBox}" />
+          <TextBlock Text="{Binding [Lbl_PerPage], Source={StaticResource Loc}}"
+                 VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0" />
+        </StackPanel>
+      </Grid>
+    </Border>
   </Grid>
 </UserControl>

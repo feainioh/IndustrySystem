@@ -5,29 +5,26 @@ using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Contracts.Dtos;
 using Prism.Commands;
-using Prism.Mvvm;
 using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentsViewModel : BindableBase
+public class ExperimentsViewModel : NagetiveViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IExperimentAppService _svc;
     public ObservableCollection<ExperimentItem> Experiments { get; } = new();
-    public ICommand RefreshCommand { get; }
     public ICommand DeleteCommand { get; }
 
     public ExperimentsViewModel(IExperimentAppService svc)
     {
         _svc = svc;
-        RefreshCommand = new AsyncDelegateCommand(LoadAsync);
         DeleteCommand = new AsyncDelegateCommand<Guid>(DeleteAsync);
-        _ = LoadAsync();
+        _ = OnRefreshAsync();
         _logger.Info(Resources.Strings.Log_ExperimentsViewModel_Initialized);
     }
 
-    public async Task LoadAsync()
+    protected override async Task OnRefreshAsync()
     {
         _logger.Debug(Resources.Strings.Log_Experiments_LoadStart);
         Experiments.Clear();

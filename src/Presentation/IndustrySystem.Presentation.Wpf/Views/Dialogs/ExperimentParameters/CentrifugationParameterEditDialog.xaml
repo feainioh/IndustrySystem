@@ -10,8 +10,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding RefreshCommand}" Margin="0,0,8,0">刷新</Button>
-            <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding NewCommand}">新建参数</Button>
+            <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding RefreshCommand}" Margin="0,0,8,0" Content="{Binding [Btn_Refresh], Source={StaticResource Loc}}"/>
+            <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding NewCommand}" Content="{Binding [Btn_NewParameter], Source={StaticResource Loc}}"/>
         </StackPanel>
 
         <Grid Grid.Row="2">
@@ -27,11 +27,12 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <StackPanel Grid.Column="2">
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
                 <TextBlock Text="{Binding TypeName}" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,12"/>
 
-                <TextBox Style="{StaticResource MaterialTextField}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="参数名称" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                <TextBox Style="{StaticResource DialogTextField}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="{Binding [Field_ParameterName], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -44,20 +45,23 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource MaterialTextField}" Text="{Binding SpeedRpm}"
-                             materialDesign:HintAssist.Hint="离心速度(rpm)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
-                    <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource MaterialTextField}" Text="{Binding TemperatureC}"
-                             materialDesign:HintAssist.Hint="温度(℃)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                    <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource DialogTextField}" Text="{Binding SpeedRpm}"
+                             materialDesign:HintAssist.Hint="{Binding [Hint_CentrifugeSpeedRpm], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Style="{StaticResource DialogTextField}" Text="{Binding TemperatureC}"
+                             materialDesign:HintAssist.Hint="{Binding [Hint_TemperatureC], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
 
-                    <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource MaterialTextField}" Text="{Binding DurationMinutes}"
-                             materialDesign:HintAssist.Hint="离心时间(min)" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" Style="{StaticResource DialogTextField}" Text="{Binding DurationMinutes}"
+                             materialDesign:HintAssist.Hint="{Binding [Hint_CentrifugeDurationMinutes], Source={StaticResource Loc}}" materialDesign:HintAssist.IsFloating="True" Margin="0,0,0,10"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                    <Button Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding DeleteCommand}" Margin="0,0,8,0">删除</Button>
-                    <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding SaveCommand}">保存参数</Button>
+                    <Button Style="{StaticResource AppInteractiveButtonNeutral}" Command="{Binding DeleteCommand}" Margin="0,0,8,0" Content="{Binding [Btn_Delete], Source={StaticResource Loc}}"/>
+                    <Button Style="{StaticResource AppInteractiveButtonPrimary}" Command="{Binding SaveCommand}" Content="{Binding [Btn_SaveParameters], Source={StaticResource Loc}}"/>
                 </StackPanel>
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>
+
+

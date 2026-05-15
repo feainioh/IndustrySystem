@@ -8,13 +8,18 @@ using System.Text;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 用户应用服务。
+/// </summary>
 public class UserAppService : IUserAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<User> _repo;
     private readonly IUserRoleRepository _userRoleRepo;
     private readonly IRepository<Domain.Entities.Roles.Role> _roleRepo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public UserAppService(
         IRepository<User> repo,
         IUserRoleRepository userRoleRepo,
@@ -27,6 +32,7 @@ public class UserAppService : IUserAppService
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     /// <summary>
     /// 根据Id查询单个用户。
     /// </summary>
@@ -45,6 +51,7 @@ public class UserAppService : IUserAppService
         return list.Select(_mapper.Map<UserDto>).ToList();
     }
 
+    // ===== Commands =====
     /// <summary>
     /// 创建用户，若输入Id为空则自动生成新Id。
     /// 默认密码为 123。
@@ -133,6 +140,7 @@ public class UserAppService : IUserAppService
         await _repo.UpdateAsync(user);
     }
 
+    // ===== Helpers =====
     private static string HashPassword(string plain)
     {
         using var sha = SHA256.Create();

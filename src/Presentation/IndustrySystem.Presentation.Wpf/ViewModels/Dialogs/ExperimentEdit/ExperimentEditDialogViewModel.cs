@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Dialogs;
 
@@ -19,7 +20,7 @@ public class ExperimentEditDialogViewModel : DialogViewModel
  public Guid GroupId { get => _groupId; set => SetProperty(ref _groupId, value); }
  public string Name { get => _name; set => SetProperty(ref _name, value); }
 
- public ExperimentEditDialogViewModel() { Title = "编辑实验"; }
+ public ExperimentEditDialogViewModel() { Title = LocalizationProvider.Instance["Dialog_ExperimentEdit_Title"]; }
 
  public override void OnDialogOpened(IDialogParameters parameters)
  {

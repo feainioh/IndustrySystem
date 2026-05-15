@@ -5,36 +5,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
-             prism:ViewModelLocator.AutoWireViewModel="False"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
-        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="MinHeight" Value="44"/>
-            <Setter Property="Padding" Value="10,2,10,2"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="AlternationCount" Value="2"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
-        </Style>
-        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
-            <Style.Triggers>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource ManagementSearchTextBox}"/>
     </UserControl.Resources>
 
-    <Grid Margin="24">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -48,37 +26,27 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Width="40" Height="40" CornerRadius="8"
-                        Background="{StaticResource ExperimentGradientBrush}"
-                        VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#8764B8" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
-                    </Border.Effect>
-                    <materialDesign:PackIcon Kind="FormatListChecks" Width="20" Height="20"
-                                             Foreground="White"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"/>
+                <Border Style="{StaticResource PageHeaderIconBorder}" Background="{StaticResource ExperimentGradientBrush}">
+                    <materialDesign:PackIcon Kind="FormatListChecks" Style="{StaticResource PageHeaderPackIcon}"/>
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Title]}" FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Subtitle]}" FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Title]}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentGroups_Subtitle]}" Style="{StaticResource PageHeaderSubtitle}"/>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
                         Command="{Binding RefreshCommand}"
-                        Height="36" Padding="12,0"
                         Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{x:Static loc:Strings.Btn_Refresh}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
-                        Command="{Binding AddCommand}"
-                        Height="36" Padding="12,0">
+                <Button Style="{StaticResource HeaderActionAccentButton}"
+                        Command="{Binding AddCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
                         <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_AddExperimentGroup]}" VerticalAlignment="Center"/>
@@ -87,14 +55,7 @@
             </StackPanel>
         </Grid>
 
-        <Border Grid.Row="2"
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="16"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="2" Style="{StaticResource FormCard}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -116,20 +77,15 @@
                              materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
 
-                <ListView Grid.Row="2"
+                <DataGrid Grid.Row="2"
                           ItemsSource="{Binding GroupsView}"
-                          Style="{StaticResource OperationLikeListView}">
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False"> 
-                            <GridViewColumn Width="160" Header="{Binding Source={StaticResource Loc}, Path=[Col_GroupName]}" DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_Description]}" DisplayMemberBinding="{Binding Description}"/>
-                            <GridViewColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_StepSummary]}" DisplayMemberBinding="{Binding StepDisplay}"/>
-                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_EnabledStatus]}">
-                                <GridViewColumn.CellTemplate>
+                          Style="{StaticResource ListViewLikeDataGrid}">
+                    <DataGrid.Columns>
+                            <DataGridTextColumn Width="160" Header="{Binding Source={StaticResource Loc}, Path=[Col_GroupName]}" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_Description]}" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Width="220" Header="{Binding Source={StaticResource Loc}, Path=[Col_StepSummary]}" Binding="{Binding StepDisplay}"/>
+                            <DataGridTemplateColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_EnabledStatus]}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <materialDesign:Chip Content="{Binding IsEnabled, Converter={StaticResource BoolToStatusConverter}}"
                                                             Margin="6,0"
@@ -151,38 +107,34 @@
                                             </materialDesign:Chip.Style>
                                         </materialDesign:Chip>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_CreatedBy]}" DisplayMemberBinding="{Binding CreatedBy}"/>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="120" Header="{Binding Source={StaticResource Loc}, Path=[Col_CreatedBy]}" Binding="{Binding CreatedBy}"/>
                             <!--<GridViewColumn Width="160" Header="创建时间" DisplayMemberBinding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
                             <GridViewColumn Width="160" Header="更新时间" DisplayMemberBinding="{Binding UpdatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>-->
-                            <GridViewColumn Width="120" Header="{x:Static loc:Strings.Col_Actions}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="120" Header="{x:Static loc:Strings.Col_Actions}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="6,0">
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,0">
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                     Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
-                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}"
-                                                    Width="32" Height="32"
-                                                    Margin="0,0,4,0">
-                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                                    ToolTip="{x:Static loc:Strings.Btn_Edit}">
+                                                <materialDesign:PackIcon Kind="Pencil" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                     CommandParameter="{Binding Id}"
                                                     ToolTip="{x:Static loc:Strings.Btn_Delete}"
-                                                    Width="32" Height="32"
                                                     Foreground="{StaticResource ErrorBrush}">
-                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                                <materialDesign:PackIcon Kind="Delete" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </Border>
     </Grid>

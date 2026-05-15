@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 using Prism.Mvvm;
 
@@ -22,6 +23,8 @@ public class ContainerTypeOption : BindableBase
 
 public class SlotConfigDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IShelfAppService _shelfSvc;
     private readonly IInventoryAppService _invSvc;
 
@@ -48,7 +51,7 @@ public class SlotConfigDialogViewModel : DialogViewModel
     {
         _shelfSvc = shelfSvc;
         _invSvc = invSvc;
-        Title = "槽位配置";
+        Title = T("Dialog_SlotConfig_Title");
 
         foreach (ContainerType ct in Enum.GetValues(typeof(ContainerType)))
             AllowedContainerTypeOptions.Add(new ContainerTypeOption(ct));

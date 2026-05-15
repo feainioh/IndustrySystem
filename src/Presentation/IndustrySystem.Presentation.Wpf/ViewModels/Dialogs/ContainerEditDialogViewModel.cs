@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums.ShelfEnums;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
 public class ContainerEditDialogViewModel : DialogViewModel
 {
+    private static string T(string key) => LocalizationProvider.Instance[key];
+
     private readonly IShelfAppService _svc;
 
     public Guid Id { get; set; }
@@ -35,7 +38,7 @@ public class ContainerEditDialogViewModel : DialogViewModel
     public ContainerEditDialogViewModel(IShelfAppService svc)
     {
         _svc = svc;
-        Title = "容器信息";
+        Title = T("Dialog_ContainerEdit_Title");
     }
 
     public override void OnDialogOpened(IDialogParameters parameters)

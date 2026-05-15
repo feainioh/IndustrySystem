@@ -5,6 +5,10 @@ using Volo.Abp.Modularity;
 
 namespace IndustrySystem.Infrastructure.Communication.AbpModules;
 
+/// <summary>
+/// 通信基础设施模块。
+/// 统一注册 TCP/HTTP/Modbus/CAN/EtherCAT 客户端实现。
+/// </summary>
 public class IndustrySystemInfrastructureCommunicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

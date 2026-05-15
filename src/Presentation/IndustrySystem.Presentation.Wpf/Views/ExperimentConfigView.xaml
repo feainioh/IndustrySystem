@@ -1,12 +1,255 @@
 
 <UserControl x:Class="IndustrySystem.Presentation.Wpf.Views.ExperimentConfigView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prism="http://prismlibrary.com/"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources">
+             xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:vm="clr-namespace:IndustrySystem.Presentation.Wpf.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
+
+        <Style x:Key="ExperimentListBoxItem" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="RootBorder"
+                                Background="Transparent"
+                                CornerRadius="{DynamicResource AppInnerCornerRadius}"
+                                Padding="12,9"
+                                BorderThickness="1"
+                                BorderBrush="Transparent"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource AppListRowHoverBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource AppBorderBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="RootBorder" Property="Background" Value="{DynamicResource AppListRowSelectedBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                                <Setter TargetName="RootBorder" Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
-    <Grid Margin="16">
-        <TextBlock Text="{Binding [Page_ExperimentConfig_Title], Source={StaticResource Loc}}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+    <Grid Style="{StaticResource PageRootGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Style="{StaticResource PageHeaderIconBorder}" Background="{DynamicResource ExperimentGradientBrush}">
+                    <materialDesign:PackIcon Kind="TuneVariant" Style="{StaticResource PageHeaderPackIcon}"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Nav_ExperimentConfig]}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_ExperimentConfig_Subtitle]}" Style="{StaticResource PageHeaderSubtitle}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                        Command="{Binding RefreshCommand}" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_Refresh]}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
+                    Command="{Binding NewCommand}" Margin="0,0,8,0"
+                    AutomationProperties.AutomationId="ExperimentConfigNewButton">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_NewExperiment]}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource HeaderActionAccentButton}"
+                        Command="{Binding SaveCommand}"
+                        AutomationProperties.AutomationId="ExperimentConfigSaveButton">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSaveOutline" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Btn_Save]}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource FormCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentList]}" Style="{StaticResource ManagementSectionTitle}" Margin="2,0,0,0"/>
+
+                    <ListBox Grid.Row="2"
+                             ItemsSource="{Binding Experiments}"
+                             SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}"
+                             ItemContainerStyle="{StaticResource ExperimentListBoxItem}"
+                             AutomationProperties.AutomationId="ExperimentConfigExperimentList"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             VirtualizingPanel.IsVirtualizing="True">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" Width="4" CornerRadius="2"
+                                            Background="{DynamicResource ExperimentGradientBrush}"
+                                            VerticalAlignment="Stretch" Margin="0,2"/>
+
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"
+                                                   TextTrimming="CharacterEllipsis" MaxWidth="220"/>
+                                        <Border Background="{DynamicResource AppListRowSelectedBrush}" CornerRadius="4" Padding="6,2" Margin="0,4,0,0" HorizontalAlignment="Left">
+                                            <TextBlock Text="{Binding Status}" FontSize="11" Foreground="{DynamicResource PrimaryBrush}"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource FormCard}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentInfo]}" Style="{StaticResource ManagementSectionTitle}"/>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Grid.Row="0" Grid.Column="0"
+                                     Text="{Binding ExperimentName, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource MaterialTextField}"
+                                     MinHeight="52"
+                                     AutomationProperties.AutomationId="ExperimentConfigNameTextBox"
+                                     materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentName]}"
+                                     materialDesign:HintAssist.IsFloating="True"/>
+
+                            <ComboBox Grid.Row="0" Grid.Column="2"
+                                      ItemsSource="{Binding ExperimentTypes}"
+                                      SelectedItem="{Binding SelectedType}"
+                                      Style="{StaticResource AppInteractiveComboBox}"
+                                      materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_ExperimentType]}"
+                                      materialDesign:HintAssist.IsFloating="True">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <ComboBox Grid.Row="2" Grid.ColumnSpan="3"
+                                      ItemsSource="{Binding Templates}"
+                                      SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
+                                      DisplayMemberPath="Name"
+                                      Style="{StaticResource AppInteractiveComboBox}"
+                                      AutomationProperties.AutomationId="ExperimentConfigTemplateComboBox"
+                                      materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Hint_ApplyTemplateOptional]}"
+                                      materialDesign:HintAssist.IsFloating="True"/>
+
+                            <ComboBox Grid.Row="4" Grid.ColumnSpan="3"
+                                      ItemsSource="{Binding ParameterOptions}"
+                                      SelectedItem="{Binding SelectedParameter, Mode=TwoWay}"
+                                      DisplayMemberPath="Name"
+                                      Style="{StaticResource AppInteractiveComboBox}"
+                                      materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_LinkedParameter]}"
+                                      materialDesign:HintAssist.IsFloating="True"/>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                     IsReadOnly="True"
+                                     Style="{StaticResource MaterialTextField}"
+                                     Opacity="0.7"
+                                     materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_CreatedAt]}"
+                                     materialDesign:HintAssist.IsFloating="True"/>
+
+                            <TextBox Grid.Column="2"
+                                     Text="{Binding UpdatedAt, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                     IsReadOnly="True"
+                                     Style="{StaticResource MaterialTextField}"
+                                     Opacity="0.7"
+                                     materialDesign:HintAssist.Hint="{Binding Source={StaticResource Loc}, Path=[Field_UpdatedAt]}"
+                                     materialDesign:HintAssist.IsFloating="True"/>
+                        </Grid>
+
+                        <TextBlock Grid.Row="4" Text="{Binding Source={StaticResource Loc}, Path=[Section_ExperimentParameters]}" Style="{StaticResource ManagementSectionTitle}" Margin="0,4,0,8"/>
+
+                        <Border Grid.Row="5"
+                                BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1"
+                                CornerRadius="{DynamicResource AppInnerCornerRadius}" Padding="6" MinHeight="320" Background="{DynamicResource AppCardBackgroundBrush}">
+                            <ContentControl prism:RegionManager.RegionName="{x:Static vm:ExperimentConfigViewModel.ParameterEditorRegionName}"/>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
+

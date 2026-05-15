@@ -23,6 +23,20 @@
     <SolidColorBrush x:Key="ErrorBrush" Color="#E74856"/>
     <SolidColorBrush x:Key="WarningBrush" Color="#FFB900"/>
     <SolidColorBrush x:Key="InfoBrush" Color="#0078D4"/>
+
+    <!-- Dialog glass resources -->
+    <Color x:Key="DialogSurfaceColor">#FFFDFDFE</Color>
+    <Color x:Key="DialogFooterColor">#FFF8F9FC</Color>
+    <SolidColorBrush x:Key="DialogInputBackgroundBrush" Color="#FFF5F8FC"/>
+    <SolidColorBrush x:Key="DialogInputBorderBrush" Color="#FFD2DFEE"/>
+    <SolidColorBrush x:Key="DialogInputForegroundBrush" Color="#1C2F45"/>
+    <SolidColorBrush x:Key="DialogInputHintBrush" Color="#637B96"/>
+    <DropShadowEffect x:Key="DialogSurfaceShadow"
+                      Color="#2B000000"
+                      BlurRadius="38"
+                      ShadowDepth="10"
+                      Opacity="0.34"
+                      Direction="270"/>
     
     <!-- Additional Styles for Management Views -->
     
@@ -44,6 +58,7 @@
     <Style x:Key="PageTitle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
     </Style>
     
     <!-- Page Subtitle -->
@@ -51,12 +66,14 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Opacity" Value="0.6"/>
         <Setter Property="Margin" Value="0,4,0,0"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
     </Style>
     
     <!-- Section Title -->
     <Style x:Key="SectionTitle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppPrimaryTextBrush}"/>
     </Style>
     
     <!-- Material Card -->
@@ -64,6 +81,7 @@
         <Setter Property="Padding" Value="10"/>
         <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
         <Setter Property="UniformCornerRadius" Value="8"/>
+        <Setter Property="Background" Value="{DynamicResource AppCardBackgroundBrush}"/>
     </Style>
     
     <!-- Material Text Field -->
@@ -73,13 +91,42 @@
         <Setter Property="Padding" Value="12,4,12,4"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="CaretBrush" Value="Black"/>
+        <Setter Property="Background" Value="{DynamicResource AppInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppInputTextBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource AppInputTextBrush}"/>
+        <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
+    </Style>
+
+    <Style x:Key="DialogTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialTextField}">
+        <Setter Property="Background" Value="{DynamicResource DialogInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource DialogInputBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DialogInputForegroundBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource DialogInputForegroundBrush}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DialogInputHintBrush}"/>
+    </Style>
+
+    <Style x:Key="DialogComboBox" TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBox}">
+        <Setter Property="Background" Value="{DynamicResource DialogInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource DialogInputBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DialogInputForegroundBrush}"/>
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource DialogInputHintBrush}"/>
+    </Style>
+
+    <Style x:Key="MaterialComboBox" TargetType="ComboBox" BasedOn="{StaticResource AppInteractiveComboBox}">
+        <Setter Property="Height" Value="52"/>
+        <Setter Property="MinHeight" Value="52"/>
+        <Setter Property="Padding" Value="12,4,12,4"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{DynamicResource AppInputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AppInputBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AppInputTextBrush}"/>
         <Setter Property="materialDesign:HintAssist.IsFloating" Value="True"/>
     </Style>
     
     <!-- Material Accent Button -->
-    <Style x:Key="MaterialAccentButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}">
+    <Style x:Key="MaterialAccentButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}">
         <Setter Property="Height" Value="48"/>
     </Style>
     

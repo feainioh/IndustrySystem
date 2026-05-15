@@ -27,45 +27,17 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
     private readonly IUserAppService _svc;
     private readonly IDialogService _dialogService;
 
-    /// <summary>
-    /// 新增用户名输入。
-    /// </summary>
     private string _newUserName = string.Empty;
     public string NewUserName { get => _newUserName; set => SetProperty(ref _newUserName, value); }
 
-    /// <summary>
-    /// 新增显示名输入。
-    /// </summary>
     private string _newDisplayName = string.Empty;
     public string NewDisplayName { get => _newDisplayName; set => SetProperty(ref _newDisplayName, value); }
 
-    /// <summary>
-    /// 用户列表搜索关键字。
-    /// </summary>
-    private string _searchText = string.Empty;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (SetProperty(ref _searchText, value))
-            {
-                UsersView.Refresh();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 原始用户集合。
-    /// </summary>
     public ObservableCollection<UserDto> Users { get; } = new();
-
-    /// <summary>
-    /// 过滤后的用户视图（用于搜索）。
-    /// </summary>
+    public ObservableCollection<UserDto> PagedUsers { get; } = new();
     public ICollectionView UsersView { get; }
 
-    public ICommand RefreshCommand { get; }
+    public new ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -78,7 +50,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         UsersView = CollectionViewSource.GetDefaultView(Users);
         UsersView.Filter = FilterUsers;
 
-        // 页面命令：刷新、新增、编辑、删除、重置密码
         RefreshCommand = new DelegateCommand(async () => await LoadAsync());
         AddCommand = new DelegateCommand(async () => await AddCurrentAsync());
         EditCommand = new DelegateCommand<Guid?>(id =>
@@ -96,7 +67,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
 
         _logger.Info("UsersViewModel initialized");
 
-        // 延迟加载，避免首屏阻塞。
+        // Delay initial load to ensure the view is fully initialized.
         System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
         {
             await Task.Delay(100);
@@ -104,9 +75,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         });
     }
 
-    /// <summary>
-    /// 用户过滤逻辑：按用户名、显示名模糊匹配。
-    /// </summary>
     private bool FilterUsers(object item)
     {
         if (item is not UserDto user) return false;
@@ -117,9 +85,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
                || (user.DisplayName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false);
     }
 
-    /// <summary>
-    /// 执行新增并清空输入框。
-    /// </summary>
     private async Task AddCurrentAsync()
     {
         await AddAsync(NewUserName, NewDisplayName);
@@ -127,9 +92,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         NewDisplayName = string.Empty;
     }
 
-    /// <summary>
-    /// 打开用户编辑弹窗，保存后刷新列表。
-    /// </summary>
     private void OpenUserDialogAsync(Guid id)
     {
         var parameters = new DialogParameters { { "id", (Guid?)id } };
@@ -142,9 +104,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         });
     }
 
-    /// <summary>
-    /// 加载用户列表并刷新UI。
-    /// </summary>
     public async Task LoadAsync()
     {
         try
@@ -164,6 +123,8 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
                         Users.Add(u);
                     }
                 }
+
+                ApplyUserPaging(resetToFirstPage: true);
             });
 
             _logger.Info($"UI updated with {Users.Count} users");
@@ -176,9 +137,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         }
     }
 
-    /// <summary>
-    /// 新增用户。
-    /// </summary>
     public async Task AddAsync(string userName, string displayName)
     {
         if (string.IsNullOrWhiteSpace(userName))
@@ -196,6 +154,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Add(dto);
+                ApplyUserPaging();
             });
 
             _logger.Info($"User '{userName}' added successfully");
@@ -208,9 +167,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         }
     }
 
-    /// <summary>
-    /// 修改密码（需输入旧密码）。
-    /// </summary>
     public async Task ResetPasswordAsync(Guid id)
     {
         var user = Users.FirstOrDefault(u => u.Id == id);
@@ -225,7 +181,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         try
         {
             await _svc.ChangePasswordAsync(id, input.Value.OldPassword, input.Value.NewPassword);
-            MessageBox.Show("密码修改成功", Strings.Msg_SuccessTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("瀵嗙爜淇敼鎴愬姛", Strings.Msg_SuccessTitle, MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
@@ -239,7 +195,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
     {
         var window = new Window
         {
-            Title = $"修改密码 - {userName}",
+            Title = $"淇敼瀵嗙爜 - {userName}",
             Width = 380,
             Height = 230,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -248,11 +204,11 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         };
 
         var panel = new StackPanel { Margin = new Thickness(16) };
-        panel.Children.Add(new TextBlock { Text = "请输入旧密码：", Margin = new Thickness(0, 0, 0, 6) });
+        panel.Children.Add(new TextBlock { Text = "鍘熷瘑鐮侊細", Margin = new Thickness(0, 0, 0, 6) });
         var oldPasswordBox = new PasswordBox { Height = 32, Margin = new Thickness(0, 0, 0, 10) };
         panel.Children.Add(oldPasswordBox);
 
-        panel.Children.Add(new TextBlock { Text = "请输入新密码：", Margin = new Thickness(0, 0, 0, 6) });
+        panel.Children.Add(new TextBlock { Text = "鏂板瘑鐮侊細", Margin = new Thickness(0, 0, 0, 6) });
         var newPasswordBox = new PasswordBox { Height = 32, Margin = new Thickness(0, 0, 0, 12) };
         panel.Children.Add(newPasswordBox);
 
@@ -263,8 +219,8 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         };
 
         (string OldPassword, string NewPassword)? result = null;
-        var ok = new Button { Content = "确定", Width = 80, Margin = new Thickness(0, 0, 8, 0) };
-        var cancel = new Button { Content = "取消", Width = 80 };
+        var ok = new Button { Content = "纭畾", Width = 80, Margin = new Thickness(0, 0, 8, 0) };
+        var cancel = new Button { Content = "鍙栨秷", Width = 80 };
 
         ok.Click += (_, _) =>
         {
@@ -286,9 +242,6 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         return window.ShowDialog() == true ? result : null;
     }
 
-    /// <summary>
-    /// 删除用户（带确认）。
-    /// </summary>
     public async Task DeleteAsync(Guid id)
     {
         var user = Users.FirstOrDefault(u => u.Id == id);
@@ -306,6 +259,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 if (user != null) Users.Remove(user);
+                ApplyUserPaging();
             });
 
             _logger.Info($"User '{name}' deleted successfully");
@@ -320,5 +274,55 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
 
     protected override async Task<IReadOnlyList<UserDto>> LoadItemsAsync()
         => await _svc.GetListAsync();
+
+    protected override void OnSearchTextChanged()
+    {
+        ApplyUserPaging(resetToFirstPage: true);
+    }
+
+    protected override void OnPagingParametersChanged(bool resetToFirstPage)
+    {
+        ApplyUserPaging(resetToFirstPage);
+    }
+
+    private IEnumerable<UserDto> BuildFilteredUsers()
+    {
+        var query = Users.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var key = SearchText.Trim();
+            query = query.Where(user =>
+                (user.UserName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false)
+                || (user.DisplayName?.Contains(key, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+
+        return query;
+    }
+
+    private void ApplyUserPaging(bool resetToFirstPage = false)
+    {
+        var filtered = BuildFilteredUsers().ToList();
+        TotalCount = filtered.Count;
+
+        if (resetToFirstPage)
+        {
+            PageIndex = 0;
+        }
+
+        var maxPageIndex = Math.Max(0, TotalPages - 1);
+        if (PageIndex > maxPageIndex)
+        {
+            PageIndex = maxPageIndex;
+        }
+
+        PagedUsers.Clear();
+        foreach (var user in filtered.Skip(PageIndex * PageSize).Take(PageSize))
+        {
+            PagedUsers.Add(user);
+        }
+
+        RaisePagingCommandStates();
+    }
 }
 

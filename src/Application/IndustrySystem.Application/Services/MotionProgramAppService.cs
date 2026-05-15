@@ -2,34 +2,41 @@ using System.Text.Json;
 using AutoMapper;
 using IndustrySystem.Application.Contracts.Dtos.MotionProgram;
 using IndustrySystem.Application.Contracts.Services;
-using IndustrySystem.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace IndustrySystem.Application.Services;
 
 /// <summary>
-/// ¶¯×÷³ÌĞò·şÎñÊµÏÖ
+/// Motion Program åº”ç”¨æœåŠ¡ã€‚
 /// </summary>
+/// <remarks>
+/// å½“å‰ä½¿ç”¨å†…å­˜å­˜å‚¨ï¼Œåç»­å¯æ›¿æ¢ä¸ºä»“å‚¨æŒä¹…åŒ–å®ç°ã€‚
+/// </remarks>
 public class MotionProgramAppService : IMotionProgramAppService
 {
+    // ===== Dependencies =====
     private readonly ILogger<MotionProgramAppService> _logger;
     private readonly IMapper _mapper;
-    
-    // Ê¹ÓÃÄÚ´æ´æ´¢£¨Éú²ú»·¾³Ó¦¸ÄÎªÊı¾İ¿â£©
+
+    // ===== State =====
+    // å½“å‰ç¤ºä¾‹ä½¿ç”¨é™æ€å†…å­˜å­—å…¸ä¿å­˜ç¨‹åºæ•°æ®ã€‚
     private static readonly Dictionary<Guid, MotionProgramData> _programs = new();
-    
+
+    // ===== Serialization =====
     private static readonly JsonSerializerOptions _jsonOptions = new()
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
+    // ===== Construction =====
     public MotionProgramAppService(ILogger<MotionProgramAppService> logger, IMapper mapper)
     {
         _logger = logger;
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     public Task<List<MotionProgramListItemDto>> GetListAsync(string? category = null)
     {
         _logger.LogDebug("Getting motion program list, category: {Category}", category);
@@ -77,6 +84,7 @@ public class MotionProgramAppService : IMotionProgramAppService
         return Task.FromResult<MotionProgramDto?>(DataToDto(data));
     }
 
+            // ===== Commands =====
     public Task<MotionProgramDto> SaveAsync(SaveMotionProgramRequest request)
     {
         _logger.LogInformation("Saving motion program: {Name}", request.Name);
@@ -125,6 +133,7 @@ public class MotionProgramAppService : IMotionProgramAppService
         return Task.CompletedTask;
     }
 
+    // ===== Import / Export =====
     public Task<string> ExportToJsonAsync(Guid id)
     {
         _logger.LogDebug("Exporting motion program to JSON: {Id}", id);
@@ -178,6 +187,7 @@ public class MotionProgramAppService : IMotionProgramAppService
         return await SaveAsync(request);
     }
 
+            // ===== Query Variants =====
     public Task<List<MotionProgramListItemDto>> GetSubProgramsAsync()
     {
         _logger.LogDebug("Getting sub-programs");
@@ -200,7 +210,7 @@ public class MotionProgramAppService : IMotionProgramAppService
         return Task.FromResult(result);
     }
 
-    #region Private Helpers
+    // ===== Helpers =====
 
     private static MotionProgramDto DataToDto(MotionProgramData data)
     {
@@ -248,6 +258,4 @@ public class MotionProgramAppService : IMotionProgramAppService
         public List<NodeConnectionDto> Connections { get; set; } = new();
         public Dictionary<string, object> Variables { get; set; } = new();
     }
-
-    #endregion
 }

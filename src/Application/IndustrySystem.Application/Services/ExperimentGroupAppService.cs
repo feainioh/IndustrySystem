@@ -6,12 +6,17 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 实验组应用服务。
+/// </summary>
 public class ExperimentGroupAppService : IExperimentGroupAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<ExperimentGroup> _groupRepo;
     private readonly IRepository<Experiment> _experimentRepo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public ExperimentGroupAppService(
         IRepository<ExperimentGroup> groupRepo,
         IRepository<Experiment> experimentRepo,
@@ -22,6 +27,7 @@ public class ExperimentGroupAppService : IExperimentGroupAppService
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     public async Task<IReadOnlyList<ExperimentGroupDto>> GetListAsync()
     {
         var groups = await _groupRepo.GetListAsync();
@@ -45,6 +51,7 @@ public class ExperimentGroupAppService : IExperimentGroupAppService
         return MapToDto(entity, nameMap);
     }
 
+    // ===== Commands =====
     public async Task<ExperimentGroupDto> CreateAsync(ExperimentGroupDto input)
     {
         var entity = _mapper.Map<ExperimentGroup>(input);
@@ -103,6 +110,7 @@ public class ExperimentGroupAppService : IExperimentGroupAppService
             .ToList();
     }
 
+            // ===== Helpers =====
     private async Task<string> GenerateNextGroupCodeAsync(DateTime now)
     {
         var prefix = $"EG{now:yyyyMM}";

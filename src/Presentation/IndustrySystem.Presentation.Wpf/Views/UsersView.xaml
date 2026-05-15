@@ -4,39 +4,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="False"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     
     <UserControl.Resources>
         <loc:LocalizationProvider x:Key="Loc" />
-        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="MinHeight" Value="44"/>
-            <Setter Property="Padding" Value="10,2,10,2"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="CaretBrush" Value="Black"/>
-        </Style>
-        <Style x:Key="OperationLikeListView" TargetType="ListView" BasedOn="{StaticResource ModernListView}">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="AlternationCount" Value="2"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ManageListItem}"/>
-        </Style>
-        <Style x:Key="OperationLikeListViewItem" TargetType="ListViewItem" BasedOn="{StaticResource ManageListItem}">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
-            <Style.Triggers>
-                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                    <Setter Property="Background" Value="{DynamicResource SystemControlAltMediumLowBrush}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <Style x:Key="SearchTextField" TargetType="TextBox" BasedOn="{StaticResource ManagementSearchTextBox}"/>
     </UserControl.Resources>
     
-    <Grid Margin="24">
+    <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="16"/>
@@ -53,30 +29,19 @@
             </Grid.ColumnDefinitions>
             
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                <Border Width="40" Height="40" CornerRadius="8"
-                        Background="{StaticResource UserGradientBrush}"
-                        VerticalAlignment="Center" Margin="0,0,16,0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#FFB900" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
-                    </Border.Effect>
-                    <materialDesign:PackIcon Kind="AccountMultiple" Width="20" Height="20"
-                                            Foreground="White"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
+                <Border Style="{StaticResource PageHeaderIconBorder}" Background="{StaticResource UserGradientBrush}">
+                    <materialDesign:PackIcon Kind="AccountMultiple" Style="{StaticResource PageHeaderPackIcon}"/>
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{x:Static loc:Strings.Nav_Users}" 
-                              FontSize="24" FontWeight="SemiBold"/>
-                    <TextBlock Text="{x:Static loc:Strings.View_Users_Subtitle}" 
-                              FontSize="12" Opacity="0.7" Margin="0,2,0,0"/>
+                    <TextBlock Text="{x:Static loc:Strings.Nav_Users}" Style="{StaticResource PageHeaderTitle}"/>
+                    <TextBlock Text="{x:Static loc:Strings.View_Users_Subtitle}" Style="{StaticResource PageHeaderSubtitle}"/>
                 </StackPanel>
             </StackPanel>
             
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+            <StackPanel Grid.Column="1" Style="{StaticResource PageHeaderActionsPanel}">
+                <Button Style="{StaticResource HeaderActionOutlinedButton}"
                        Command="{Binding RefreshCommand}"
-                       Height="36" Padding="12,0"
                        Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Refresh" 
@@ -87,10 +52,9 @@
                     </StackPanel>
                 </Button>
                 
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                  <Button Style="{StaticResource HeaderActionRaisedButton}"
                        Command="{Binding ExportCommand}"
-                       IsEnabled="False"
-                       Height="36" Padding="12,0">
+                      IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Export" 
                                                 VerticalAlignment="Center"
@@ -103,14 +67,7 @@
         </Grid>
 
         <!-- Add User Card -->
-        <Border Grid.Row="2"
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="10"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="2" Style="{StaticResource FormCard}">
             <StackPanel>
                 <TextBlock Text="{x:Static loc:Strings.Section_AddNewUser}" 
                           FontSize="15" FontWeight="SemiBold"/>
@@ -141,7 +98,7 @@
                     <!-- Add Button -->
                     <Button Grid.Column="4"
                            Command="{Binding AddCommand}"
-                           Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                           Style="{StaticResource AppInteractiveButtonPrimary}"
                            Width="120" Height="40">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="AccountPlus" 
@@ -156,19 +113,14 @@
         </Border>
 
         <!-- Users List Card -->
-        <Border Grid.Row="4"
-                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                CornerRadius="8" Padding="16"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="1">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.1" Color="Black"/>
-            </Border.Effect>
+        <Border Grid.Row="4" Style="{StaticResource FormCard}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="12"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
                 <!-- Section Header with Search -->
@@ -191,29 +143,17 @@
                             materialDesign:TextFieldAssist.LeadingIcon="Magnify"/>
                 </Grid>
                 
-                <!-- ListView -->
-                <ListView Grid.Row="2"
-                         ItemsSource="{Binding UsersView}"
-                         Style="{StaticResource OperationLikeListView}">
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource ManageListColumnHeader}"/>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource OperationLikeListViewItem}"/>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Width="250" Header="{x:Static loc:Strings.Col_User_UserName}">
-                                <GridViewColumn.CellTemplate>
+                <!-- DataGrid -->
+                <DataGrid Grid.Row="2"
+                          ItemsSource="{Binding PagedUsers}"
+                          Style="{StaticResource ListViewLikeDataGrid}">
+                    <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="250" Header="{x:Static loc:Strings.Col_User_UserName}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="6,0">
-                                            <Border Width="32" Height="32"
-                                                   CornerRadius="16"
-                                                   Background="{StaticResource UserGradientBrush}"
-                                                   Margin="0,0,10,0">
-                                                <materialDesign:PackIcon Kind="Account"
-                                                                        Width="18" Height="18"
-                                                                        Foreground="White"
-                                                                        HorizontalAlignment="Center"
-                                                                        VerticalAlignment="Center"/>
+                                            <Border Style="{StaticResource DataGridLeadingIconBadge}" Background="{StaticResource UserGradientBrush}">
+                                                <materialDesign:PackIcon Kind="Account" Style="{StaticResource DataGridLeadingPackIcon}" Foreground="White"/>
                                             </Border>
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding UserName}" FontWeight="Medium" FontSize="13"/>
@@ -221,11 +161,11 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                            <GridViewColumn Width="100" Header="{x:Static loc:Strings.Col_Status}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="100" Header="{x:Static loc:Strings.Col_Status}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <materialDesign:Chip Content="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}"
                                                             Margin="6,0"
@@ -247,49 +187,90 @@
                                             </materialDesign:Chip.Style>
                                         </materialDesign:Chip>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                            <GridViewColumn Width="220" Header="{x:Static loc:Strings.Col_Created}" DisplayMemberBinding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
+                            <DataGridTextColumn Width="220" Header="{x:Static loc:Strings.Col_Created}" Binding="{Binding CreatedAt, StringFormat=yyyy-MM-dd HH:mm}"/>
 
-                            <GridViewColumn Width="140" Header="{x:Static loc:Strings.Col_Actions}">
-                                <GridViewColumn.CellTemplate>
+                            <DataGridTemplateColumn Width="140" Header="{x:Static loc:Strings.Col_Actions}">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="6,0">
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,0">
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                    Command="{Binding DataContext.ResetPasswordCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                    CommandParameter="{Binding Id}"
-                                                   ToolTip="{x:Static loc:Strings.Tooltip_ResetPassword}"
-                                                   Width="32" Height="32"
-                                                   Margin="0,0,4,0">
-                                                <materialDesign:PackIcon Kind="LockReset" Width="18" Height="18"/>
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_ResetPassword}">
+                                                <materialDesign:PackIcon Kind="LockReset" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
 
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                    CommandParameter="{Binding Id}"
-                                                   ToolTip="{x:Static loc:Strings.Tooltip_EditUser}"
-                                                   Width="32" Height="32"
-                                                   Margin="0,0,4,0">
-                                                <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"/>
+                                                   ToolTip="{x:Static loc:Strings.Tooltip_EditUser}">
+                                                <materialDesign:PackIcon Kind="Pencil" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
 
-                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            <Button Style="{StaticResource DataGridActionIconButton}"
                                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                    CommandParameter="{Binding Id}"
                                                    ToolTip="{x:Static loc:Strings.Tooltip_DeleteUser}"
-                                                   Width="32" Height="32"
                                                    Foreground="{StaticResource ErrorBrush}">
-                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"/>
+                                                <materialDesign:PackIcon Kind="Delete" Style="{StaticResource DataGridActionPackIcon}"/>
                                             </Button>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Pagination -->
+                <Border Grid.Row="4" Style="{StaticResource PaginationCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
+                            <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" Foreground="{StaticResource HeaderGradient}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_Records}" Opacity="0.7"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Style="{StaticResource PaginationButtonPanel}">
+                            <Button Content="&#xE892;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding FirstPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_FirstPage}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE76B;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding PreviousPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Prev}" Style="{StaticResource PaginationButton}"/>
+
+                            <Border Style="{StaticResource CurrentPageBorder}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CurrentPage}" FontWeight="SemiBold"/>
+                                    <TextBlock Text=" / " Opacity="0.7" Margin="4,0"/>
+                                    <TextBlock Text="{Binding TotalPages}" Opacity="0.7"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Content="&#xE76C;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding NextPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Btn_Next}" Style="{StaticResource PaginationButton}"/>
+                            <Button Content="&#xE893;" FontFamily="Segoe MDL2 Assets"
+                                    Command="{Binding LastPageCommand}"
+                                    ToolTip="{x:Static loc:Strings.Tooltip_LastPage}" Style="{StaticResource PaginationButton}"/>
+
+                            <ComboBox SelectedItem="{Binding PageSize, Mode=TwoWay}"
+                                      ItemsSource="{Binding PageSizes}"
+                                      Width="80" Margin="12,0,0,0" Style="{StaticResource PaginationComboBox}"/>
+                            <TextBlock Text="{x:Static loc:Strings.Lbl_PerPage}" VerticalAlignment="Center" Opacity="0.7" Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
         </Border>
     </Grid>
 </UserControl>
+

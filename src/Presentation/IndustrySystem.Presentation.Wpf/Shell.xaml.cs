@@ -1,35 +1,27 @@
 using System.Windows;
-using Prism.Ioc;
-using IndustrySystem.Presentation.Wpf.ViewModels;
-using IndustrySystem.Presentation.Wpf.Services;
-using ModernWpf;
-using ModernWpf.Controls;
+using System.Windows.Media;
 using System;
 
 namespace IndustrySystem.Presentation.Wpf
 {
     public partial class Shell : Window
     {
-        private readonly IContainerProvider _container;
-        private readonly ShellViewModel _viewModel;
         private bool _isLoggingOut = false;
 
-        public Shell(IContainerProvider container)
+        public Shell()
         {
-            _container = container;
             InitializeComponent();
-            
-            // Create and set ViewModel
-            _viewModel = new ShellViewModel(container);
-            DataContext = _viewModel;
-            
-            // Subscribe to auth state changes
-            var authState = container.Resolve<IAuthState>();
-            UpdateUserInfo(authState);
-            authState.AuthChanged += (s, e) => UpdateUserInfo(authState);
-            
+
             // Handle window closing
             Closed += OnWindowClosed;
+            StateChanged += OnWindowStateChanged;
+            UpdateWindowStateButtonGlyph();
+            UpdateShellContentClip();
+        }
+
+        public void PrepareForLogout()
+        {
+            _isLoggingOut = true;
         }
 
         private void OnWindowClosed(object? sender, EventArgs e)
@@ -41,80 +33,41 @@ namespace IndustrySystem.Presentation.Wpf
             }
         }
 
-        private void UpdateUserInfo(IAuthState authState)
+        private void OnWindowStateChanged(object? sender, EventArgs e)
         {
-            // Update user display in the Shell UI if needed
-            if (FindName("UserNameText") is System.Windows.Controls.TextBlock userText)
+            UpdateWindowStateButtonGlyph();
+        }
+
+        private void UpdateWindowStateButtonGlyph()
+        {
+            if (FindName("WindowStateIcon") is ModernWpf.Controls.FontIcon icon)
             {
-                userText.Text = authState.IsAuthenticated ? authState.UserName! : "未登录";
+                icon.Glyph = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
             }
         }
 
-        private void ThemeToggle_Toggled(object sender, RoutedEventArgs e)
+        private void ShellContentClipHost_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var ts = sender as ToggleSwitch ?? FindName("ThemeToggle") as ToggleSwitch;
-            var isOn = ts?.IsOn == true;
-            ThemeManager.Current.ApplicationTheme = isOn ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            UpdateShellContentClip();
         }
 
-        private void OnLogoutClick(object sender, RoutedEventArgs e)
+        private void UpdateShellContentClip()
         {
-            var authState = _container.Resolve<IAuthState>();
-            authState.SignOut();
-            
-            // Mark as logging out to prevent application shutdown
-            _isLoggingOut = true;
-            
-            // Close shell and show login dialog again
-            Close();
-            
-            // Show login dialog
-            ((App)System.Windows.Application.Current).ShowLoginDialog();
-        }
-
-        // Window control button handlers
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
+            if (ShellContentClipHost.ActualWidth <= 0 || ShellContentClipHost.ActualHeight <= 0)
             {
-                MaximizeRestoreWindow_Click(sender, e);
+                return;
             }
-            else if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
-        }
 
-        private void MinimizeWindow_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
+            var corner = ShellContentBorder.CornerRadius;
+            var radius = Math.Max(0,
+                Math.Min(
+                    Math.Min(corner.TopLeft, corner.TopRight),
+                    Math.Min(corner.BottomLeft, corner.BottomRight)));
 
-        private void MaximizeRestoreWindow_Click(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-                if (FindName("MaximizeRestoreButton") is System.Windows.Controls.Button btn)
-                {
-                    btn.Content = "\uE922"; // Maximize icon
-                    btn.ToolTip = "最大化";
-                }
-            }
-            else
-            {
-                WindowState = WindowState.Maximized;
-                if (FindName("MaximizeRestoreButton") is System.Windows.Controls.Button btn)
-                {
-                    btn.Content = "\uE923"; // Restore icon
-                    btn.ToolTip = "还原";
-                }
-            }
-        }
-
-        private void CloseWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
+            ShellContentClipHost.Clip = new RectangleGeometry(
+                new Rect(0, 0, ShellContentClipHost.ActualWidth, ShellContentClipHost.ActualHeight),
+                radius,
+                radius);
         }
     }
 }

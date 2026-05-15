@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左侧工具箱 -->
-        <materialDesign:Card Grid.Column="0" Margin="8" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
+        <materialDesign:Card Grid.Column="0" Margin="12,12,6,12" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -31,15 +31,14 @@
                 </Border>
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="8">
+                    <StackPanel Margin="12,10">
                         <TextBlock Text="电机控制" FontWeight="SemiBold" Margin="0,8,0,4"/>
                         <ItemsControl ItemsSource="{Binding MotorActions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    <Button Style="{StaticResource MotionDesignerToolboxButton}"
                                            Command="{Binding DataContext.AddNodeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}"
-                                           HorizontalContentAlignment="Left" Margin="0,2" Padding="8,6">
+                                         CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="{Binding IconKind}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
@@ -53,10 +52,9 @@
                         <ItemsControl ItemsSource="{Binding IoActions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    <Button Style="{StaticResource MotionDesignerToolboxButton}"
                                            Command="{Binding DataContext.AddNodeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}"
-                                           HorizontalContentAlignment="Left" Margin="0,2" Padding="8,6">
+                                         CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="{Binding IconKind}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
@@ -70,10 +68,9 @@
                         <ItemsControl ItemsSource="{Binding RobotActions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    <Button Style="{StaticResource MotionDesignerToolboxButton}"
                                            Command="{Binding DataContext.AddNodeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}"
-                                           HorizontalContentAlignment="Left" Margin="0,2" Padding="8,6">
+                                         CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="{Binding IconKind}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
@@ -87,10 +84,9 @@
                         <ItemsControl ItemsSource="{Binding FlowActions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    <Button Style="{StaticResource MotionDesignerToolboxButton}"
                                            Command="{Binding DataContext.AddNodeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}"
-                                           HorizontalContentAlignment="Left" Margin="0,2" Padding="8,6">
+                                         CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="{Binding IconKind}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
@@ -104,10 +100,9 @@
                         <ItemsControl ItemsSource="{Binding LogicActions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    <Button Style="{StaticResource MotionDesignerToolboxButton}"
                                            Command="{Binding DataContext.AddNodeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}"
-                                           HorizontalContentAlignment="Left" Margin="0,2" Padding="8,6">
+                                         CommandParameter="{Binding}">
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="{Binding IconKind}" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                             <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
@@ -122,7 +117,7 @@
         </materialDesign:Card>
 
         <!-- 中间画布区域 -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="6,12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -229,7 +224,7 @@
         </Grid>
 
         <!-- 右侧属性面板 -->
-        <materialDesign:Card Grid.Column="2" Margin="8" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
+        <materialDesign:Card Grid.Column="2" Margin="6,12,12,12" materialDesign:ElevationAssist.Elevation="Dp2" UniformCornerRadius="8">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -241,7 +236,7 @@
                 </Border>
 
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="12" Visibility="{Binding HasSelectedNode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Margin="16" Visibility="{Binding HasSelectedNode, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBlock Text="基本信息" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
                         <TextBox materialDesign:HintAssist.Hint="名称" materialDesign:HintAssist.IsFloating="True"

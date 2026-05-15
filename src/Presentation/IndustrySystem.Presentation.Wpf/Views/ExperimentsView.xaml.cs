@@ -8,8 +8,7 @@ namespace IndustrySystem.Presentation.Wpf.Views
     {
         public ExperimentsView()
         {
-            InitializeComponent();
-            DataContext = ContainerLocator.Current.Resolve<ExperimentsViewModel>();
+            InitializeComponent(); 
         }
     }
 }

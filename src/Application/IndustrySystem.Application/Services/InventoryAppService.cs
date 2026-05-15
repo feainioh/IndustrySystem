@@ -6,17 +6,23 @@ using IndustrySystem.Domain.Repositories;
 
 namespace IndustrySystem.Application.Services;
 
+/// <summary>
+/// 库存应用服务。
+/// </summary>
 public class InventoryAppService : IInventoryAppService
 {
+    // ===== Dependencies =====
     private readonly IRepository<InventoryRecord> _repo;
     private readonly IMapper _mapper;
 
+    // ===== Construction =====
     public InventoryAppService(IRepository<InventoryRecord> repo, IMapper mapper)
     {
         _repo = repo;
         _mapper = mapper;
     }
 
+    // ===== Queries =====
     public async Task<IReadOnlyList<InventoryRecordDto>> GetListAsync()
     {
         var list = await _repo.GetListAsync();
@@ -54,6 +60,7 @@ public class InventoryAppService : IInventoryAppService
         return entity is null ? null : _mapper.Map<InventoryRecordDto>(entity);
     }
 
+    // ===== Commands =====
     public async Task<InventoryRecordDto> CreateAsync(InventoryRecordDto input)
     {
         var entity = _mapper.Map<InventoryRecord>(input);
@@ -77,6 +84,7 @@ public class InventoryAppService : IInventoryAppService
         await _repo.DeleteAsync(id);
     }
 
+    // ===== Quantity Operations =====
     public async Task InboundAsync(Guid id, decimal qty)
     {
         var entity = await _repo.GetAsync(id);

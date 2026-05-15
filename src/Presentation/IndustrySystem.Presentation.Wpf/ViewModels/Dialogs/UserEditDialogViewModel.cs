@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Contracts.Dtos;
+using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
@@ -16,7 +17,7 @@ public class UserEditDialogViewModel : DialogViewModel
     {
         _svc = svc;
         _roleSvc = roleSvc;
-        Title = "编辑用户";
+        Title = LocalizationProvider.Instance["Dialog_UserEdit_Title"];
     }
 
     private Guid _id;
