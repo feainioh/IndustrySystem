@@ -5,6 +5,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="5.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Volo.Abp.Ddd.Domain" Version="8.*" />
     <PackageReference Include="SqlSugarCore" Version="5.1.4.172" />
   </ItemGroup>

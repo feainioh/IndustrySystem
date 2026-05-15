@@ -18,5 +18,6 @@ namespace IndustrySystem.Presentation.Wpf.Views
         {
             ViewModel?.NavigateToCurrentParameterEditor();
         }
+         
     }
 }

@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="5.2.1" />
     <PackageReference Include="MaterialDesignThemes" Version="5.*" />
     <PackageReference Include="ModernWpfUI" Version="0.9.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.*" />
