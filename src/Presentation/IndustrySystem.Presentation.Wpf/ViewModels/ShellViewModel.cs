@@ -91,8 +91,8 @@ public class ShellViewModel : BindableBase
 
     private void OnLoaded(object? _)
     {
-        // Default -> Users page
-        Navigate("UsersView");
+        // Default -> RunExperiment page
+        Navigate("RunExperimentView");
     }
 
     private void OnSelectionChanged(object? args)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.DynamicProxy;
 using IndustrySystem.Application.AbpModules;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Application.Profiles;
@@ -10,6 +11,7 @@ using IndustrySystem.Infrastructure.SqlSugar;
 using IndustrySystem.Infrastructure.SqlSugar.Abstractions;
 using IndustrySystem.Infrastructure.SqlSugar.Implementations;
 using IndustrySystem.Infrastructure.SqlSugar.Repositories;
+using IndustrySystem.Presentation.Wpf.Interceptors;
 using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.Services;
 using IndustrySystem.Presentation.Wpf.ViewModels;
@@ -104,19 +106,21 @@ public partial class App : PrismApplication
         containerRegistry.Register<IUserRoleRepository, UserRoleRepository>();
         containerRegistry.Register<IRolePermissionRepository, RolePermissionRepository>();
 
-        containerRegistry.Register<IRoleAppService, RoleAppService>();
-        containerRegistry.Register<IExperimentTemplateAppService, ExperimentTemplateAppService>();
-        containerRegistry.Register<IExperimentParameterAppService, ExperimentParameterAppService>();
-        containerRegistry.Register<IPermissionAppService, PermissionAppService>();
-        containerRegistry.Register<IUserAppService, UserAppService>();
-        containerRegistry.Register<IExperimentAppService, ExperimentAppService>();
-        containerRegistry.Register<IExperimentGroupAppService, ExperimentGroupAppService>();
+        containerRegistry.RegisterWithAudit<IRoleAppService, RoleAppService>();
+        containerRegistry.RegisterWithAudit<IExperimentTemplateAppService, ExperimentTemplateAppService>();
+        containerRegistry.RegisterWithAudit<IExperimentParameterAppService, ExperimentParameterAppService>();
+        containerRegistry.RegisterWithAudit<IPermissionAppService, PermissionAppService>();
+        containerRegistry.RegisterWithAudit<IUserAppService, UserAppService>();
+        containerRegistry.RegisterWithAudit<IExperimentAppService, ExperimentAppService>();
+        containerRegistry.RegisterWithAudit<IExperimentGroupAppService, ExperimentGroupAppService>();
         containerRegistry.Register<IExperimentHistoryAppService, ExperimentHistoryAppService>();
         containerRegistry.Register<IAlarmAppService, AlarmAppService>();
-        containerRegistry.Register<IInventoryAppService, InventoryAppService>();
-        containerRegistry.Register<IMaterialAppService, MaterialAppService>();
-        containerRegistry.Register<IShelfAppService, ShelfAppService>();
+        containerRegistry.RegisterWithAudit<IInventoryAppService, InventoryAppService>();
+        containerRegistry.RegisterWithAudit<IMaterialAppService, MaterialAppService>();
+        containerRegistry.RegisterWithAudit<IShelfAppService, ShelfAppService>();
         containerRegistry.Register<IRunExperimentAppService, RunExperimentAppService>();
+        containerRegistry.Register<IOperationLogService, OperationLogService>();
+        containerRegistry.RegisterSingleton<IHardwareController, SimulatedHardwareController>();
         // 注册实验组执行模拟服务
         containerRegistry.Register<IExperimentExecutionService, MockExperimentExecutionService>();
         containerRegistry.Register<ICommunicationAppService, CommunicationAppService>();

@@ -1,4 +1,5 @@
-﻿using IndustrySystem.Domain.Entities.Experiments;
+﻿using IndustrySystem.Domain.Entities;
+using IndustrySystem.Domain.Entities.Experiments;
 using IndustrySystem.Domain.Entities.Inventory;
 using IndustrySystem.Domain.Entities.Materials;
 using IndustrySystem.Domain.Entities.Permissions;
@@ -69,7 +70,8 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
                             typeof(ReactionParameter), typeof(RotaryEvaporationParameter), typeof(DetectionParameter), typeof(FiltrationParameter), typeof(DryingParameter),
                             typeof(QuenchingParameter), typeof(ExtractionParameter), typeof(SamplingParameter), typeof(CentrifugationParameter), typeof(CustomDetectionParameter),
                             typeof(User), typeof(Material), typeof(InventoryRecord),
-                            typeof(ContainerInfo), typeof(ShelfConfig), typeof(ShelfSlot)
+                            typeof(ContainerInfo), typeof(ShelfConfig), typeof(ShelfSlot),
+                            typeof(OperationLog)
                         );
 
                         // Fix: ensure nullable columns in Experiment table (CodeFirst may not alter existing NOT NULL → NULL)

@@ -1,3 +1,4 @@
+using IndustrySystem.Application.Contracts.Services;
 using Microsoft.Win32;
 using NLog;
 using Prism.Commands;
@@ -8,7 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -18,13 +18,11 @@ namespace IndustrySystem.Presentation.Wpf.ViewModels;
 public class OperationLogsViewModel : NagetiveViewModel
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-    private static readonly Regex IpAddressRegex = new(@"(?<!\d)(?:\d{1,3}\.){3}\d{1,3}(?!\d)", RegexOptions.Compiled);
-    private static readonly Regex OperatorRegex = new(@"\b(?:user|operator|account|username)\s*[:=]\s*(?<name>[a-zA-Z0-9._@-]+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private const int MaxArchiveFilesToRead = 20;
 
     private static readonly string AllTypesOption = Resources.Strings.Hint_AllTypes;
     private static readonly string AllLevelsOption = Resources.Strings.Hint_AllLevels;
 
+    private readonly IOperationLogService _operationLogService;
     private readonly List<OperationLog> _allLogs = new();
     private readonly List<OperationLog> _filteredLogs = new();
 
@@ -122,8 +120,9 @@ public class OperationLogsViewModel : NagetiveViewModel
     public ICommand NextPageCommand => _nextPageCommand;
     public ICommand LastPageCommand => _lastPageCommand;
 
-    public OperationLogsViewModel()
+    public OperationLogsViewModel(IOperationLogService operationLogService)
     {
+        _operationLogService = operationLogService;
         InitializeFilterOptions();
 
         SearchCommand = new DelegateCommand(OnSearch);
@@ -153,11 +152,28 @@ public class OperationLogsViewModel : NagetiveViewModel
 
     private async Task ReloadLogsAsync()
     {
-        var logs = await Task.Run(ReadLogsFromDisk);
-        _allLogs.Clear();
-        _allLogs.AddRange(logs.OrderByDescending(x => x.Timestamp));
-        UpdateFilterOptionsFromData(_allLogs);
-        Logger.Info("Operation logs reloaded. Count={0}", _allLogs.Count);
+        try
+        {
+            var dtos = await _operationLogService.GetListAsync(StartDate, EndDate);
+            _allLogs.Clear();
+            _allLogs.AddRange(dtos.Select(d => new OperationLog
+            {
+                Id = d.Id,
+                Timestamp = d.Timestamp,
+                Level = d.Level,
+                OperationType = d.OperationType,
+                Operator = d.Operator,
+                Description = d.Description,
+                IPAddress = d.IPAddress,
+                Logger = d.Logger
+            }).OrderByDescending(x => x.Timestamp));
+
+            UpdateFilterOptionsFromData();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Failed to load operation logs from database.");
+        }
     }
 
     private void OnSearch()
@@ -168,16 +184,10 @@ public class OperationLogsViewModel : NagetiveViewModel
 
     private void ChangePage(int page)
     {
-        if (TotalPages <= 0)
-        {
-            return;
-        }
+        if (TotalPages <= 0) return;
 
         var bounded = Math.Max(1, Math.Min(page, TotalPages));
-        if (bounded == CurrentPage)
-        {
-            return;
-        }
+        if (bounded == CurrentPage) return;
 
         CurrentPage = bounded;
         UpdatePagedLogs();
@@ -189,14 +199,8 @@ public class OperationLogsViewModel : NagetiveViewModel
 
         TotalCount = _filteredLogs.Count;
         TotalPages = Math.Max(1, (int)Math.Ceiling(TotalCount / (double)PageSize));
-        if (CurrentPage > TotalPages)
-        {
-            CurrentPage = TotalPages;
-        }
-        if (CurrentPage < 1)
-        {
-            CurrentPage = 1;
-        }
+        if (CurrentPage > TotalPages) CurrentPage = TotalPages;
+        if (CurrentPage < 1) CurrentPage = 1;
 
         Logs.Clear();
         var skip = (CurrentPage - 1) * PageSize;
@@ -211,18 +215,6 @@ public class OperationLogsViewModel : NagetiveViewModel
     private void ApplyFilters()
     {
         IEnumerable<OperationLog> query = _allLogs;
-
-        if (StartDate.HasValue)
-        {
-            var start = StartDate.Value.Date;
-            query = query.Where(x => x.Timestamp >= start);
-        }
-
-        if (EndDate.HasValue)
-        {
-            var endExclusive = EndDate.Value.Date.AddDays(1);
-            query = query.Where(x => x.Timestamp < endExclusive);
-        }
 
         if (!string.IsNullOrWhiteSpace(SelectedOperationType) && !string.Equals(SelectedOperationType, AllTypesOption, StringComparison.Ordinal))
         {
@@ -262,10 +254,7 @@ public class OperationLogsViewModel : NagetiveViewModel
             InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
         };
 
-        if (dialog.ShowDialog() != true)
-        {
-            return;
-        }
+        if (dialog.ShowDialog() != true) return;
 
         try
         {
@@ -282,10 +271,7 @@ public class OperationLogsViewModel : NagetiveViewModel
 
     private void ViewDetails(OperationLog? log)
     {
-        if (log == null)
-        {
-            return;
-        }
+        if (log == null) return;
 
         var detail = new StringBuilder();
         detail.AppendLine($"{Resources.Strings.Col_Timestamp}: {log.Timestamp:yyyy-MM-dd HH:mm:ss.fff}");
@@ -336,195 +322,6 @@ public class OperationLogsViewModel : NagetiveViewModel
         return $"\"{safe}\"";
     }
 
-    private static List<OperationLog> ReadLogsFromDisk()
-    {
-        var logs = new List<OperationLog>();
-
-        foreach (var file in EnumerateLogFiles())
-        {
-            ReadSingleLogFile(file, logs);
-        }
-
-        return logs;
-    }
-
-    private static IEnumerable<string> EnumerateLogFiles()
-    {
-        var result = new List<string>();
-        var logsDirectory = Path.Combine(AppContext.BaseDirectory, "logs");
-        if (!Directory.Exists(logsDirectory))
-        {
-            return result;
-        }
-
-        var currentLog = Path.Combine(logsDirectory, "app.log");
-        if (File.Exists(currentLog))
-        {
-            result.Add(currentLog);
-        }
-
-        var archiveDirectory = Path.Combine(logsDirectory, "archives");
-        if (Directory.Exists(archiveDirectory))
-        {
-            var archiveLogs = Directory
-                .EnumerateFiles(archiveDirectory, "app.*.log")
-                .OrderByDescending(File.GetLastWriteTimeUtc)
-                .Take(MaxArchiveFilesToRead);
-            result.AddRange(archiveLogs);
-        }
-
-        return result.Distinct(StringComparer.OrdinalIgnoreCase);
-    }
-
-    private static void ReadSingleLogFile(string filePath, List<OperationLog> sink)
-    {
-        try
-        {
-            OperationLog? current = null;
-            foreach (var line in File.ReadLines(filePath, Encoding.UTF8))
-            {
-                if (TryParseLogLine(line, out var parsed))
-                {
-                    if (current != null)
-                    {
-                        sink.Add(current);
-                    }
-                    current = parsed;
-                    continue;
-                }
-
-                if (current != null && !string.IsNullOrWhiteSpace(line))
-                {
-                    current.Description = string.Concat(current.Description, Environment.NewLine, line.Trim());
-                }
-            }
-
-            if (current != null)
-            {
-                sink.Add(current);
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Warn(ex, "Failed to read log file: {0}", filePath);
-        }
-    }
-
-    private static bool TryParseLogLine(string line, out OperationLog parsed)
-    {
-        parsed = default!;
-        if (string.IsNullOrWhiteSpace(line))
-        {
-            return false;
-        }
-
-        var p1 = line.IndexOf('|');
-        if (p1 <= 0)
-        {
-            return false;
-        }
-
-        var p2 = line.IndexOf('|', p1 + 1);
-        if (p2 <= p1 + 1)
-        {
-            return false;
-        }
-
-        var p3 = line.IndexOf('|', p2 + 1);
-        if (p3 <= p2 + 1)
-        {
-            return false;
-        }
-
-        var timestampText = line.Substring(0, p1).Trim();
-        if (!TryParseTimestamp(timestampText, out var timestamp))
-        {
-            return false;
-        }
-
-        var level = NormalizeLevel(line.Substring(p1 + 1, p2 - p1 - 1).Trim());
-        var logger = line.Substring(p2 + 1, p3 - p2 - 1).Trim();
-        var message = line[(p3 + 1)..].Trim();
-
-        parsed = new OperationLog
-        {
-            Id = Guid.NewGuid(),
-            Timestamp = timestamp,
-            Level = level,
-            OperationType = InferOperationType(message, logger),
-            Operator = InferOperator(message),
-            Description = string.IsNullOrWhiteSpace(message) ? logger : message,
-            IPAddress = InferIpAddress(message),
-            Logger = logger
-        };
-
-        return true;
-    }
-
-    private static bool TryParseTimestamp(string value, out DateTime timestamp)
-    {
-        if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out timestamp))
-        {
-            return true;
-        }
-
-        return DateTime.TryParse(value, CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out timestamp);
-    }
-
-    private static string NormalizeLevel(string level)
-    {
-        return level.ToUpperInvariant() switch
-        {
-            "TRACE" => "Trace",
-            "DEBUG" => "Debug",
-            "INFO" => "Info",
-            "WARN" => "Warning",
-            "WARNING" => "Warning",
-            "ERROR" => "Error",
-            "FATAL" => "Fatal",
-            _ => "Info"
-        };
-    }
-
-    private static string InferOperationType(string message, string logger)
-    {
-        var text = string.Concat(logger, " ", message).ToLowerInvariant();
-        if (text.Contains("login") || text.Contains("signin")) return "Login";
-        if (text.Contains("logout") || text.Contains("signout")) return "Logout";
-        if (text.Contains("create") || text.Contains("add") || text.Contains("insert")) return "Create";
-        if (text.Contains("update") || text.Contains("edit") || text.Contains("modify")) return "Update";
-        if (text.Contains("delete") || text.Contains("remove")) return "Delete";
-        if (text.Contains("query") || text.Contains("search") || text.Contains("load") || text.Contains("get")) return "Query";
-        if (text.Contains("export")) return "Export";
-        if (text.Contains("import")) return "Import";
-        if (text.Contains("run") || text.Contains("execute") || text.Contains("start")) return "Execute";
-        if (text.Contains("alarm") || text.Contains("warn")) return "Alarm";
-        return "System";
-    }
-
-    private static string InferOperator(string message)
-    {
-        var match = OperatorRegex.Match(message);
-        if (match.Success)
-        {
-            return match.Groups["name"].Value;
-        }
-
-        var quickMatch = Regex.Match(message, @"\b(admin|root|system|user\d+|operator\d+)\b", RegexOptions.IgnoreCase);
-        if (quickMatch.Success)
-        {
-            return quickMatch.Value;
-        }
-
-        return "system";
-    }
-
-    private static string InferIpAddress(string message)
-    {
-        var match = IpAddressRegex.Match(message);
-        return match.Success ? match.Value : "-";
-    }
-
     private void InitializeFilterOptions()
     {
         OperationTypes.Clear();
@@ -542,12 +339,12 @@ public class OperationLogsViewModel : NagetiveViewModel
         SelectedLogLevel = AllLevelsOption;
     }
 
-    private void UpdateFilterOptionsFromData(IEnumerable<OperationLog> logs)
+    private void UpdateFilterOptionsFromData()
     {
         var currentType = SelectedOperationType;
         var currentLevel = SelectedLogLevel;
 
-        var opTypes = logs
+        var opTypes = _allLogs
             .Select(x => x.OperationType)
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -561,7 +358,7 @@ public class OperationLogsViewModel : NagetiveViewModel
             OperationTypes.Add(type);
         }
 
-        var levels = logs
+        var levels = _allLogs
             .Select(x => x.Level)
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .Distinct(StringComparer.OrdinalIgnoreCase)
