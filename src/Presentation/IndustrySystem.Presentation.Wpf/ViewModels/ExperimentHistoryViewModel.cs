@@ -17,7 +17,7 @@ using Prism.Commands;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentHistoryViewModel : NagetiveCurdVeiwModel<ExperimentHistoryDto>
+public class ExperimentHistoryViewModel : CrudViewModel<ExperimentHistoryDto>
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private readonly IExperimentHistoryAppService _svc;

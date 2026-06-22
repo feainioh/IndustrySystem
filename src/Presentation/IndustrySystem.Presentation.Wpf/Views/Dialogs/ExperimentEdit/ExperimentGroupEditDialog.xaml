@@ -34,7 +34,7 @@
                 <Border CornerRadius="18 18 0 0" Grid.Row="0" Background="{StaticResource ExperimentGradientBrush}" Padding="20,14">
                     <StackPanel Orientation="Horizontal">
                         <Border Width="36" Height="36" CornerRadius="18" Background="#33FFFFFF" Margin="0,0,12,0">
-                            <materialDesign:PackIcon Kind="FormatListChecks" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="&#xE7C5;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding [Dialog_ExperimentGroupEdit_Title], Source={StaticResource Loc}}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>

@@ -2,11 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <SolidColorBrush x:Key="MotionDesignerBorderBrush" Color="#E2E8F0"/>
-    <SolidColorBrush x:Key="MotionDesignerHeaderBrush" Color="#F8FAFC"/>
-    <SolidColorBrush x:Key="MotionDesignerRowHoverBrush" Color="#EEF5FF"/>
-    <SolidColorBrush x:Key="MotionDesignerRowSelectedBrush" Color="#DDEBFF"/>
-    <SolidColorBrush x:Key="MotionDesignerRowAlternateBrush" Color="#FBFCFE"/>
+    <SolidColorBrush x:Key="AppBorderBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="AppListHeaderBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="AppListRowHoverBrush" Color="#EEF5FF"/>
+    <SolidColorBrush x:Key="AppListRowSelectedBrush" Color="#DDEBFF"/>
+    <SolidColorBrush x:Key="AppListRowAlternateBrush" Color="#FBFCFE"/>
 
     <Style x:Key="MotionDesignerDataGrid" TargetType="DataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
         <Setter Property="Background" Value="Transparent"/>
@@ -20,7 +20,7 @@
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
-        <Setter Property="AlternatingRowBackground" Value="{StaticResource MotionDesignerRowAlternateBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource AppListRowAlternateBrush}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="14,6"/>
         <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="14,4"/>
@@ -37,8 +37,8 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="#475467"/>
-        <Setter Property="Background" Value="{StaticResource MotionDesignerHeaderBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource MotionDesignerBorderBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AppListHeaderBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AppBorderBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,0,1"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -51,10 +51,10 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource MotionDesignerRowHoverBrush}"/>
+                <Setter Property="Background" Value="{StaticResource AppListRowHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource MotionDesignerRowSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource AppListRowSelectedBrush}"/>
                 <Setter Property="BorderBrush" Value="#4A7EFF"/>
                 <Setter Property="BorderThickness" Value="3,0,0,0"/>
             </Trigger>

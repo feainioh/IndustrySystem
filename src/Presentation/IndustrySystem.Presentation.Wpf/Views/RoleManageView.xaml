@@ -15,9 +15,9 @@
     <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="12"/>
+            <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -30,7 +30,7 @@
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Style="{StaticResource PageHeaderIconBorder}" Background="{StaticResource RoleGradientBrush}">
-                    <materialDesign:PackIcon Kind="ShieldAccount" Style="{StaticResource PageHeaderPackIcon}"/>
+                    <TextBlock Text="&#xE734;" Style="{StaticResource PageHeaderMdl2Icon}"/>
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
@@ -101,9 +101,9 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 

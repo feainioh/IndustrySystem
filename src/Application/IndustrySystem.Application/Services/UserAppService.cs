@@ -3,6 +3,7 @@ using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Entities.Users;
 using IndustrySystem.Domain.Repositories;
+using SqlSugar;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,6 +18,7 @@ public class UserAppService : IUserAppService
     private readonly IRepository<User> _repo;
     private readonly IUserRoleRepository _userRoleRepo;
     private readonly IRepository<Domain.Entities.Roles.Role> _roleRepo;
+    private readonly ISqlSugarClient _db;
     private readonly IMapper _mapper;
 
     // ===== Construction =====
@@ -24,11 +26,13 @@ public class UserAppService : IUserAppService
         IRepository<User> repo,
         IUserRoleRepository userRoleRepo,
         IRepository<Domain.Entities.Roles.Role> roleRepo,
+        ISqlSugarClient db,
         IMapper mapper)
     {
         _repo = repo;
         _userRoleRepo = userRoleRepo;
         _roleRepo = roleRepo;
+        _db = db;
         _mapper = mapper;
     }
 
@@ -39,6 +43,16 @@ public class UserAppService : IUserAppService
     public async Task<UserDto?> GetAsync(Guid id)
     {
         var entity = await _repo.GetAsync(id);
+        return entity is null ? null : _mapper.Map<UserDto>(entity);
+    }
+
+    /// <summary>
+    /// 根据用户名定向查询单个用户（不走全表扫描）。
+    /// </summary>
+    public async Task<UserDto?> GetByUserNameAsync(string userName)
+    {
+        var entity = await _db.Queryable<User>()
+            .FirstAsync(u => u.UserName == userName);
         return entity is null ? null : _mapper.Map<UserDto>(entity);
     }
 
@@ -60,13 +74,13 @@ public class UserAppService : IUserAppService
     {
         var entity = _mapper.Map<User>(input);
         entity.Id = entity.Id == Guid.Empty ? Guid.NewGuid() : entity.Id;
-        entity.PasswordHash = HashPassword("123");
+        entity.PasswordHash = HashPassword(input.Password ?? "123");
         var saved = await _repo.InsertAsync(entity);
         return _mapper.Map<UserDto>(saved);
     }
 
     /// <summary>
-    /// 更新用户。
+    /// 更新用户。若传入了新密码则修改，留空则保持原密码不变。
     /// </summary>
     public async Task<UserDto> UpdateAsync(UserDto input)
     {
@@ -74,7 +88,9 @@ public class UserAppService : IUserAppService
         var old = await _repo.GetAsync(entity.Id);
         if (old != null)
         {
-            entity.PasswordHash = old.PasswordHash;
+            entity.PasswordHash = !string.IsNullOrWhiteSpace(input.Password)
+                ? HashPassword(input.Password)
+                : old.PasswordHash;
         }
         var saved = await _repo.UpdateAsync(entity);
         return _mapper.Map<UserDto>(saved);
@@ -103,13 +119,15 @@ public class UserAppService : IUserAppService
     }
 
     /// <summary>
-    /// 校验用户名密码。
+    /// 校验用户名密码（定向查询，不走全表扫描）。
     /// </summary>
     public async Task<bool> ValidateCredentialsAsync(string userName, string password)
     {
         if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password)) return false;
-        var users = await _repo.GetListAsync();
-        var user = users.FirstOrDefault(u => u.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+        var user = await _db.Queryable<User>()
+            .Where(u => u.UserName == userName)
+            .Select(u => new { u.Id, u.PasswordHash, u.IsActive })
+            .FirstAsync();
         if (user == null || !user.IsActive) return false;
         return string.Equals(user.PasswordHash, HashPassword(password), StringComparison.OrdinalIgnoreCase);
     }

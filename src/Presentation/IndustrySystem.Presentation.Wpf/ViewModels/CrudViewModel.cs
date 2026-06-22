@@ -8,7 +8,7 @@ using System;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public abstract class NagetiveCurdVeiwModel<TItem> : NagetiveViewModel
+public abstract class CrudViewModel<TItem> : NavigationViewModel
 {
     private string _searchText = string.Empty;
     public string SearchText
@@ -97,7 +97,7 @@ public abstract class NagetiveCurdVeiwModel<TItem> : NagetiveViewModel
 
     public ICommand PrevPageCommand => PreviousPageCommand;
 
-    protected NagetiveCurdVeiwModel()
+    protected CrudViewModel()
     {
         SearchCommand = new DelegateCommand(() => OnSearchTextChanged());
         FirstPageCommand = new DelegateCommand(() => ChangePage(1), () => CurrentPage > 1);

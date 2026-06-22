@@ -15,7 +15,7 @@
     <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -27,7 +27,7 @@
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Style="{StaticResource PageHeaderIconBorder}" Background="{StaticResource ExperimentGradientBrush}">
-                    <materialDesign:PackIcon Kind="FormatListChecks" Style="{StaticResource PageHeaderPackIcon}"/>
+                    <TextBlock Text="&#xE7C5;" Style="{StaticResource PageHeaderMdl2Icon}"/>
                 </Border>
 
                 <StackPanel VerticalAlignment="Center">
@@ -59,7 +59,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 

@@ -14,7 +14,7 @@ using Prism.Navigation;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentConfigViewModel : NagetiveViewModel, IParameterEditorHost
+public class ExperimentConfigViewModel : NavigationViewModel, IParameterEditorHost
 {
 	private static string T(string key) => LocalizationProvider.Instance[key];
 

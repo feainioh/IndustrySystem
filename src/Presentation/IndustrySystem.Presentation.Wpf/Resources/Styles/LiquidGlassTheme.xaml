@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
     <LinearGradientBrush x:Key="AppPageBackgroundBrush" StartPoint="0,0" EndPoint="0.98,1">
         <GradientStop Color="#CCE2EC" Offset="0"/>

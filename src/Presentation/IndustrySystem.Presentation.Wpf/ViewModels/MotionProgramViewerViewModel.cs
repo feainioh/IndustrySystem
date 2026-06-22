@@ -73,7 +73,7 @@ public class ProgramNodeDisplayModel : BindableBase
 
 /// <summary>
 /// </summary>
-public class MotionProgramViewerViewModel : BindableBase
+public class MotionProgramViewerViewModel : BaseViewModel
 {
     private static readonly NLog.ILogger _logger = LogManager.GetCurrentClassLogger();
     
@@ -142,6 +142,7 @@ public class MotionProgramViewerViewModel : BindableBase
     /// </summary>
     public async Task LoadProgramFromFileAsync(string filePath)
     {
+        IsBusy = true;
         try
         {
             var json = await File.ReadAllTextAsync(filePath);
@@ -160,6 +161,10 @@ public class MotionProgramViewerViewModel : BindableBase
         {
             _logger.Error(ex, "Failed to load program from file");
             AddLog($"Error: {ex.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

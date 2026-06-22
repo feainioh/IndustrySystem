@@ -20,7 +20,7 @@ public class SensorMetricViewModel : BindableBase
 	public string ValueText => $"{Value:F2}";
 }
 
-public class RealtimeDataViewModel : NagetiveViewModel
+public class RealtimeDataViewModel : NavigationViewModel
 {
 	private string _currentMonitor = Strings.Mock_Experiment_FilterValidation;
 

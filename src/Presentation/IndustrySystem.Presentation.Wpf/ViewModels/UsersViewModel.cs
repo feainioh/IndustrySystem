@@ -21,7 +21,7 @@ using IndustrySystem.Presentation.Wpf.Views.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
+public class UsersViewModel : CrudViewModel<UserDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IUserAppService _svc;
@@ -149,7 +149,7 @@ public class UsersViewModel : NagetiveCurdVeiwModel<UserDto>
         try
         {
             _logger.Info($"Adding user: {userName}");
-            var dto = await _svc.CreateAsync(new UserDto(Guid.Empty, userName, displayName ?? userName, true));
+            var dto = await _svc.CreateAsync(new UserDto { Id = Guid.Empty, UserName = userName, DisplayName = displayName ?? userName, IsActive = true });
 
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {

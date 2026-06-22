@@ -19,7 +19,7 @@ using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class InventoryViewModel : NagetiveCurdVeiwModel<InventoryRecordDto>
+public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IInventoryAppService _svc;

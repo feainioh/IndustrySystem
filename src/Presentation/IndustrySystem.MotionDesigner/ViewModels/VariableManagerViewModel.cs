@@ -8,7 +8,7 @@ namespace IndustrySystem.MotionDesigner.ViewModels;
 /// <summary>
 /// 变量定义
 /// </summary>
-public class VariableDefinition : BindableBase
+public class VariableDefinition : MotionDesignerBaseViewModel
 {
     private string _name = string.Empty;
     private string _dataType = "String";
@@ -88,7 +88,7 @@ public enum VariableScope
 /// <summary>
 /// 变量管理器 ViewModel
 /// </summary>
-public class VariableManagerViewModel : BindableBase
+public class VariableManagerViewModel : MotionDesignerBaseViewModel
 {
     private VariableDefinition? _selectedVariable;
     private string _filterText = string.Empty;

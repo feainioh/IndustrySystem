@@ -46,7 +46,7 @@
     <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -59,7 +59,7 @@
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Border Style="{StaticResource PageHeaderIconBorder}" Background="{DynamicResource ExperimentGradientBrush}">
-                    <materialDesign:PackIcon Kind="FlaskOutline" Style="{StaticResource PageHeaderPackIcon}"/>
+                    <TextBlock Text="&#xE9D6;" Style="{StaticResource PageHeaderMdl2Icon}"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="{Binding Source={StaticResource Loc}, Path=[Page_Templates_Title]}" Style="{StaticResource PageHeaderTitle}"/>
@@ -172,9 +172,9 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="{StaticResource SmallGridSpacing}"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="{StaticResource SmallGridSpacing}"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -191,9 +191,9 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="12"/>
+                                <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 

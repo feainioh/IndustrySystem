@@ -23,7 +23,7 @@ public class ActionToolItem
 }
 
 
-public class DesignerViewModel : BindableBase
+public class DesignerViewModel : MotionDesignerBaseViewModel
 {
     private static readonly NLog.ILogger _logger = LogManager.GetCurrentClassLogger();
 

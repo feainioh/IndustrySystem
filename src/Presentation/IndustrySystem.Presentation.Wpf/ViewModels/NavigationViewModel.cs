@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Prism.Navigation; 
+using Prism.Navigation;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public abstract class NagetiveViewModel : BaseViewModel, INavigationAware
+public abstract class NavigationViewModel : BaseViewModel, INavigationAware
 {
     private string _title = string.Empty;
     public string Title

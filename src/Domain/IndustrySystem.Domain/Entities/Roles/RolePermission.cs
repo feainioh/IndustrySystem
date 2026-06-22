@@ -10,6 +10,7 @@ public class RolePermission
     public Guid RoleId { get; set; }
 
     /// <summary>权限ID（联合主键）</summary>
+    [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid PermissionId { get; set; }
 
     /// <summary>创建时间（UTC）</summary>

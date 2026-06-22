@@ -38,9 +38,9 @@
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="20"
                                 Background="#33FFFFFF" Margin="0,0,14,0">
-                            <materialDesign:PackIcon Kind="AccountEditOutline" Width="22" Height="22"
-                                                     Foreground="White"
-                                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- MDL2 glyph &#xE77B; (approximate for AccountEditOutline) -->
+                            <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="White"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding [Dialog_UserEdit_Title], Source={StaticResource Loc}}"
@@ -93,6 +93,12 @@
                                               IsChecked="{Binding IsActive}"
                                               Content="{Binding [Field_Common_Active], Source={StaticResource Loc}}"
                                               FontSize="13" Margin="0,0,0,6"/>
+                                    <PasswordBox Grid.Row="1" Grid.Column="2"
+                                                 x:Name="PwdBox"
+                                                 materialDesign:HintAssist.IsFloating="True"
+                                                 materialDesign:HintAssist.Hint="{Binding [Field_User_Password], Source={StaticResource Loc}}"
+                                                 Style="{StaticResource MaterialDesignFilledPasswordBox}"
+                                                 FontSize="13" Margin="0,0,0,6"/>
                                 </Grid>
                             </StackPanel>
                         </materialDesign:Card>

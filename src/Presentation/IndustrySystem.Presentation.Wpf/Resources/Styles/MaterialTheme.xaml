@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
 
     <!-- ==================== Color Palette ==================== -->
     
@@ -328,13 +329,13 @@
     
     <!-- ==================== Spacing ==================== -->
     
-    <Thickness x:Key="SmallSpacing">8</Thickness>
-    <Thickness x:Key="MediumSpacing">16</Thickness>
-    <Thickness x:Key="LargeSpacing">24</Thickness>
-    <Thickness x:Key="ExtraLargeSpacing">32</Thickness>
-    
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="SmallSize">8</System:Double>
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="MediumSize">16</System:Double>
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="LargeSize">24</System:Double>
+    <Thickness x:Key="SmallMargin">8</Thickness>
+    <Thickness x:Key="MediumMargin">16</Thickness>
+    <Thickness x:Key="LargeMargin">24</Thickness>
+    <Thickness x:Key="ExtraLargeMargin">32</Thickness>
+
+    <System:Double x:Key="SmallSize">8</System:Double>
+    <System:Double x:Key="MediumSize">16</System:Double>
+    <System:Double x:Key="LargeSize">24</System:Double>
 
 </ResourceDictionary>

@@ -10,6 +10,7 @@ public class UserRole
     public Guid UserId { get; set; }
 
     /// <summary>角色ID（联合主键）</summary>
+    [SqlSugar.SugarColumn(IsPrimaryKey = true)]
     public Guid RoleId { get; set; }
 
     /// <summary>创建时间（UTC）</summary>

@@ -17,7 +17,7 @@ using PositionPointViewModel = IndustrySystem.MotionDesigner.Services.PositionPo
 
 namespace IndustrySystem.MotionDesigner.ViewModels;
 
-public class DeviceDebugViewModel : BindableBase
+public class DeviceDebugViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     
@@ -3098,7 +3098,7 @@ public class DeviceDebugViewModel : BindableBase
         }
     }
 }
-public class IoChannelControlItem : BindableBase
+public class IoChannelControlItem : MotionDesignerBaseViewModel
 {
     public IoChannelControlItem(IoChannelDto channel)
     {

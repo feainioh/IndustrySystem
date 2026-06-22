@@ -9,7 +9,7 @@ using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentsViewModel : NagetiveViewModel
+public class ExperimentsViewModel : NavigationViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IExperimentAppService _svc;

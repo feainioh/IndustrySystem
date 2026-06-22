@@ -14,7 +14,7 @@ using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class ExperimentGroupsViewModel : NagetiveCurdVeiwModel<ExperimentGroupDto>
+public class ExperimentGroupsViewModel : CrudViewModel<ExperimentGroupDto>
 {
     private readonly IExperimentGroupAppService _svc;
     private readonly IDialogService _dialogService;

@@ -19,7 +19,7 @@ using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class RoleManageViewModel : NagetiveCurdVeiwModel<RoleDto>
+public class RoleManageViewModel : CrudViewModel<RoleDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IRoleAppService _svc;

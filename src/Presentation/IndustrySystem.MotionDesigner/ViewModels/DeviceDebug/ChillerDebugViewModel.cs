@@ -11,7 +11,7 @@ using Prism.Mvvm;
 
 namespace IndustrySystem.MotionDesigner.ViewModels.DeviceDebug;
 
-public class ChillerDebugViewModel : BindableBase
+public class ChillerDebugViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IHardwareController _hardwareController;

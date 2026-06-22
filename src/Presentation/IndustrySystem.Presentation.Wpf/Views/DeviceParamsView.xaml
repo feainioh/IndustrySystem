@@ -4,11 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
     <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -20,13 +21,16 @@
         </StackPanel>
 
         <Border Grid.Row="2" Style="{StaticResource FormCard}">
-            <Grid>
-                <TextBlock Text="设备参数功能正在建设中。"
-                           FontSize="16"
-                           Foreground="{DynamicResource AppMutedTextBrush}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-            </Grid>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="48"
+                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" Opacity="0.3"
+                           HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                <TextBlock Text="设备参数功能正在开发中" FontSize="16" FontWeight="SemiBold"
+                           Foreground="{DynamicResource AppMutedTextBrush}" HorizontalAlignment="Center"/>
+                <TextBlock Text="此页面将提供设备参数配置与管理工具" FontSize="13"
+                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                           HorizontalAlignment="Center" Margin="0,8,0,0"/>
+            </StackPanel>
         </Border>
     </Grid>
 </UserControl>

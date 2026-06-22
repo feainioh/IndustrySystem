@@ -24,6 +24,7 @@ public class UserEditDialogViewModel : DialogViewModel
     private string _userName = string.Empty;
     private string _displayName = string.Empty;
     private bool _isActive = true;
+    private string? _password;
     public Guid Id
     {
         get => _id; set => SetProperty(ref _id, value);
@@ -40,6 +41,11 @@ public class UserEditDialogViewModel : DialogViewModel
     {
         get => _isActive; set => SetProperty(ref _isActive, value);
     }
+    /// <summary>新密码。留空时不修改现有密码。</summary>
+    public string? Password
+    {
+        get => _password; set => SetProperty(ref _password, value);
+    }
 
     public ObservableCollection<RoleItem> AllRoles { get; } = new();
 
@@ -51,6 +57,7 @@ public class UserEditDialogViewModel : DialogViewModel
 
     public async Task LoadAsync(Guid? id)
     {
+        Password = null;
         AllRoles.Clear();
         var roles = await _roleSvc.GetListAsync();
         foreach (var r in roles) AllRoles.Add(new RoleItem(r.Id, r.Name));
@@ -78,7 +85,7 @@ public class UserEditDialogViewModel : DialogViewModel
     protected override bool CanSave() => !string.IsNullOrWhiteSpace(UserName);
     protected override async Task OnSaveAsync()
     {
-        var input = new UserDto(Id, UserName, DisplayName, IsActive);
+        var input = new UserDto { Id = Id, UserName = UserName, DisplayName = DisplayName, IsActive = IsActive, Password = Password };
         UserDto saved = Id == Guid.Empty ? await _svc.CreateAsync(input) : await _svc.UpdateAsync(input);
         var roleIds = AllRoles.Where(x => x.IsChecked).Select(x => x.Id).ToArray();
         await _svc.SetRolesAsync(saved.Id, roleIds);

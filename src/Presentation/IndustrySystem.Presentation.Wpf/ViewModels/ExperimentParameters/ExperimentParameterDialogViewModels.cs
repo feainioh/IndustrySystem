@@ -1,7 +1,7 @@
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
 
-namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
+namespace IndustrySystem.Presentation.Wpf.ViewModels.ExperimentParameters;
 
 /// <summary>
 /// 各参数编辑页的专属 ViewModel，避免多个 View 共用同一个类型。

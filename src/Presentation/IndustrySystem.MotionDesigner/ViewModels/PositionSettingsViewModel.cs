@@ -15,7 +15,7 @@ namespace IndustrySystem.MotionDesigner.ViewModels;
 
 /// <summary>
 /// </summary>
-public class PositionSettingsViewModel : BindableBase
+public class PositionSettingsViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 

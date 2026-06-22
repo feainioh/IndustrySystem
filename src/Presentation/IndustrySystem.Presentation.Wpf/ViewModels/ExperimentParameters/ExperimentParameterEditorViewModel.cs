@@ -12,12 +12,12 @@ using IndustrySystem.Presentation.Wpf.Resources;
 using Prism.Commands;
 using Prism.Navigation;
 
-namespace IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
+namespace IndustrySystem.Presentation.Wpf.ViewModels.ExperimentParameters;
 
 /// <summary>
 /// 参数编辑公共基类：封装参数加载、编辑与保存逻辑，供各类型参数页复用。
 /// </summary>
-public abstract class ExperimentParameterEditorViewModelBase : NagetiveViewModel
+public abstract class ExperimentParameterEditorViewModelBase : NavigationViewModel
 {
     private static string T(string key) => LocalizationProvider.Instance[key];
 

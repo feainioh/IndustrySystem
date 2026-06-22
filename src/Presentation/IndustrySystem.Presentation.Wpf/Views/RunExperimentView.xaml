@@ -16,7 +16,7 @@
       <Style.Triggers>
         <Trigger Property="IsSelected" Value="True">
           <Setter Property="Background" Value="{StaticResource AppListRowSelectedBrush}"/>
-          <Setter Property="BorderBrush" Value="#4A7EFF"/>
+          <Setter Property="BorderBrush" Value="{DynamicResource AppSelectionAccentBrush}"/>
           <Setter Property="BorderThickness" Value="3,0,0,0"/>
         </Trigger>
       </Style.Triggers>
@@ -25,7 +25,7 @@
 
   <materialDesign:DrawerHost x:Name="StatusDrawer" IsBottomDrawerOpen="{Binding IsStatusBarExpanded}">
     <materialDesign:DrawerHost.BottomDrawerContent>
-      <Border Background="#FDFDFD" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0"
+      <Border Background="{DynamicResource AppCardBackgroundBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="0,1,0,0"
               Padding="16,12" MinHeight="120" MaxHeight="280">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -35,32 +35,31 @@
           </Grid.ColumnDefinitions>
           <!-- Column 1: Modbus + Devices -->
           <StackPanel Grid.Column="0">
-            <TextBlock Text="设备连接" FontSize="13" FontWeight="SemiBold" Foreground="#1D2939" Margin="0,0,0,8"/>
+            <TextBlock Text="设备连接" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AppPrimaryTextBrush}" Margin="0,0,0,8"/>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-              <Ellipse Width="8" Height="8" Margin="0,0,6,0">
+              <Ellipse Margin="0,0,6,0">
                 <Ellipse.Style>
-                  <Style TargetType="Ellipse">
-                    <Setter Property="Fill" Value="#DC3545"/>
-                    <Style.Triggers><DataTrigger Binding="{Binding ModbusConnected}" Value="True"><Setter Property="Fill" Value="#10893E"/></DataTrigger></Style.Triggers>
+                  <Style TargetType="Ellipse" BasedOn="{StaticResource RunStatusDot}">
+                    <Style.Triggers><DataTrigger Binding="{Binding ModbusConnected}" Value="True"><Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/></DataTrigger></Style.Triggers>
                   </Style>
                 </Ellipse.Style>
               </Ellipse>
-              <TextBlock FontSize="12" Foreground="#667085"><Run Text="Modbus · "/><Run Text="{Binding ModbusStatusText}" Foreground="#1D2939"/></TextBlock>
+              <TextBlock FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}"><Run Text="Modbus · "/><Run Text="{Binding ModbusStatusText}" Foreground="{DynamicResource AppPrimaryTextBrush}"/></TextBlock>
             </StackPanel>
             <ItemsControl ItemsSource="{Binding DeviceItems}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type vm:DeviceStatusItem}">
                   <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                    <Ellipse Width="6" Height="6" Margin="8,0,6,0">
+                    <Ellipse Width="6" Height="6" Margin="8,0,6,0"
+                             Fill="{DynamicResource ErrorBrush}">
                       <Ellipse.Style>
                         <Style TargetType="Ellipse">
-                          <Setter Property="Fill" Value="#DC3545"/>
-                          <Style.Triggers><DataTrigger Binding="{Binding IsOnline}" Value="True"><Setter Property="Fill" Value="#10893E"/></DataTrigger></Style.Triggers>
+                          <Style.Triggers><DataTrigger Binding="{Binding IsOnline}" Value="True"><Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/></DataTrigger></Style.Triggers>
                         </Style>
                       </Ellipse.Style>
                     </Ellipse>
-                    <TextBlock FontSize="12" Foreground="#1D2939" VerticalAlignment="Center">
-                      <Run Text="{Binding DeviceName, Mode=OneWay}"/><Run Text=" · " Foreground="#94A3B8"/><Run Text="{Binding StatusText, Mode=OneWay}" Foreground="#667085"/>
+                    <TextBlock FontSize="12" Foreground="{DynamicResource AppPrimaryTextBrush}" VerticalAlignment="Center">
+                      <Run Text="{Binding DeviceName, Mode=OneWay}"/><Run Text=" · " Foreground="{DynamicResource AppTertiaryTextBrush}"/><Run Text="{Binding StatusText, Mode=OneWay}" Foreground="{DynamicResource AppMutedTextBrush}"/>
                     </TextBlock>
                   </StackPanel>
                 </DataTemplate>
@@ -70,30 +69,29 @@
           <!-- Column 2: API details -->
           <StackPanel Grid.Column="1" Margin="16,0,0,0">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-              <Ellipse Width="8" Height="8" Margin="0,0,6,0">
+              <Ellipse Margin="0,0,6,0">
                 <Ellipse.Style>
-                  <Style TargetType="Ellipse">
-                    <Setter Property="Fill" Value="#DC3545"/>
-                    <Style.Triggers><DataTrigger Binding="{Binding SyncStatus.IsRunning}" Value="True"><Setter Property="Fill" Value="#10893E"/></DataTrigger></Style.Triggers>
+                  <Style TargetType="Ellipse" BasedOn="{StaticResource RunStatusDot}">
+                    <Style.Triggers><DataTrigger Binding="{Binding SyncStatus.IsRunning}" Value="True"><Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/></DataTrigger></Style.Triggers>
                   </Style>
                 </Ellipse.Style>
               </Ellipse>
-              <TextBlock Text="外部API同步" FontSize="13" FontWeight="SemiBold" Foreground="#1D2939"/>
+              <TextBlock Text="外部API同步" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AppPrimaryTextBrush}"/>
             </StackPanel>
-            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="状态" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding SyncStatusText}" FontSize="12" Foreground="#1D2939"/></Grid>
-            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="端点" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding ApiEndpointCount, StringFormat={}{0} 个}" FontSize="12" Foreground="#1D2939"/></Grid>
-            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="已处理" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding SyncStatus.TotalProcessedCount, StringFormat={}{0} 条}" FontSize="12" Foreground="#10893E"/></Grid>
-            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="失败" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding SyncStatus.TotalFailedCount, StringFormat={}{0} 条}" FontSize="12" Foreground="#DC3545"/></Grid>
-            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="上次同步" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding ApiLastSyncTime}" FontSize="12" Foreground="#1D2939"/></Grid>
-            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="最后错误" FontSize="12" Foreground="#94A3B8"/><TextBlock Grid.Column="1" Text="{Binding ApiLastError}" FontSize="12" Foreground="#DC3545" TextTrimming="CharacterEllipsis"/></Grid>
+            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="状态" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding SyncStatusText}" FontSize="12" Foreground="{DynamicResource AppPrimaryTextBrush}"/></Grid>
+            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="端点" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding ApiEndpointCount, StringFormat={}{0} 个}" FontSize="12" Foreground="{DynamicResource AppPrimaryTextBrush}"/></Grid>
+            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="已处理" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding SyncStatus.TotalProcessedCount, StringFormat={}{0} 条}" FontSize="12" Foreground="{DynamicResource SuccessBrush}"/></Grid>
+            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="失败" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding SyncStatus.TotalFailedCount, StringFormat={}{0} 条}" FontSize="12" Foreground="{DynamicResource ErrorBrush}"/></Grid>
+            <Grid Margin="0,0,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="上次同步" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding ApiLastSyncTime}" FontSize="12" Foreground="{DynamicResource AppPrimaryTextBrush}"/></Grid>
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="最后错误" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"/><TextBlock Grid.Column="1" Text="{Binding ApiLastError}" FontSize="12" Foreground="{DynamicResource ErrorBrush}" TextTrimming="CharacterEllipsis"/></Grid>
           </StackPanel>
           <!-- Column 3: Summary -->
           <StackPanel Grid.Column="2" Margin="16,0,0,0">
-            <TextBlock Text="设备总览" FontSize="13" FontWeight="SemiBold" Foreground="#1D2939" Margin="0,0,0,8"/>
-            <Border CornerRadius="10" Background="#EEF5FF" Padding="16,12" HorizontalAlignment="Left">
+            <TextBlock Text="设备总览" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource AppPrimaryTextBrush}" Margin="0,0,0,8"/>
+            <Border CornerRadius="10" Background="{DynamicResource AppListRowHoverBrush}" Padding="16,12" HorizontalAlignment="Left">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="{Binding DeviceItems.Count}" FontSize="28" FontWeight="Bold" Foreground="#0078D4" HorizontalAlignment="Center"/>
-                <TextBlock Text="已配置设备" FontSize="12" Foreground="#667085" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding DeviceItems.Count}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource AppChipForegroundBrush}" HorizontalAlignment="Center"/>
+                <TextBlock Text="已配置设备" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}" HorizontalAlignment="Center"/>
               </StackPanel>
             </Border>
           </StackPanel>
@@ -104,9 +102,9 @@
     <Grid Style="{StaticResource PageRootGrid}">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="12"/>
+      <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
       <RowDefinition Height="330"/>
-      <RowDefinition Height="12"/>
+      <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
@@ -124,14 +122,14 @@
         </Border>
         <TextBlock Text="{x:Static loc:Strings.Nav_RunExperiment}" Style="{StaticResource PageHeaderTitle}"/>
       </StackPanel>
-      <Border Grid.Column="1" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1"
+      <Border Grid.Column="1" Background="{DynamicResource AppListHeaderBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1"
               CornerRadius="8" Padding="8,5" VerticalAlignment="Center">
         <StackPanel Orientation="Horizontal">
           <TextBlock Text="单机" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"
-                     Foreground="#0078D4" Margin="0,0,6,0"/>
+                     Foreground="{DynamicResource AppChipForegroundBrush}" Margin="0,0,6,0"/>
           <CheckBox IsChecked="{Binding IsOnlineMode}" Style="{StaticResource ModeSwitchToggle}"/>
           <TextBlock Text="联机" FontSize="13" VerticalAlignment="Center"
-                     Foreground="#667085" Margin="6,0,0,0"/>
+                     Foreground="{DynamicResource AppMutedTextBrush}" Margin="6,0,0,0"/>
         </StackPanel>
       </Border>
     </Grid>
@@ -163,8 +161,8 @@
                        Text="{Binding FilteredGroups.Count, StringFormat=（共 {0} 组）}"/>
           </StackPanel>
 
-          <Border Grid.Row="1" Margin="16,0,16,8" CornerRadius="6" Background="#F8FAFC"
-                  BorderBrush="#CBD5E1" BorderThickness="1" Padding="8,4">
+          <Border Grid.Row="1" Margin="16,0,16,8" CornerRadius="6" Background="{DynamicResource AppListHeaderBrush}"
+                  BorderBrush="{DynamicResource AppInputBorderBrush}" BorderThickness="1" Padding="8,4">
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -172,15 +170,15 @@
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
               <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
-                         Foreground="#667085" VerticalAlignment="Center" Margin="4,0,6,0"/>
+                         Foreground="{DynamicResource AppMutedTextBrush}" VerticalAlignment="Center" Margin="4,0,6,0"/>
               <TextBox Grid.Column="1" Text="{Binding GroupSearchText, UpdateSourceTrigger=PropertyChanged}"
                        BorderThickness="0" Background="Transparent" FontSize="13"
-                       VerticalAlignment="Center" VerticalContentAlignment="Center" Foreground="#1D2939" Padding="0,4"/>
+                       VerticalAlignment="Center" VerticalContentAlignment="Center" Foreground="{DynamicResource AppPrimaryTextBrush}" Padding="0,4"/>
               <Button Grid.Column="2" Width="28" Height="28" Background="Transparent" BorderThickness="0"
                       Cursor="Hand" VerticalAlignment="Center" ToolTip="刷新实验组列表"
                       Command="{Binding RefreshCommand}">
                 <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="14"
-                           Foreground="#667085" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                           Foreground="{DynamicResource AppMutedTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
               </Button>
             </Grid>
           </Border>
@@ -201,8 +199,8 @@
               </Border.Style>
               <StackPanel HorizontalAlignment="Center">
                 <TextBlock Text="&#xE9F9;" FontFamily="Segoe MDL2 Assets" FontSize="32"
-                           Foreground="#CBD5E1" HorizontalAlignment="Center" Margin="0,0,0,8"/>
-                <TextBlock HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="#667085">
+                           Foreground="{DynamicResource AppInputBorderBrush}" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource AppMutedTextBrush}">
                   <TextBlock.Style>
                     <Style TargetType="TextBlock">
                       <Setter Property="Text" Value="未找到匹配的实验组"/>
@@ -214,7 +212,7 @@
                     </Style>
                   </TextBlock.Style>
                 </TextBlock>
-                <TextBlock HorizontalAlignment="Center" FontSize="12" Foreground="#94A3B8"
+                <TextBlock HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource AppTertiaryTextBrush}"
                            Text="请在「实验组配置」页面创建实验组"/>
               </StackPanel>
             </Border>
@@ -243,21 +241,21 @@
                                 CornerRadius="4" Cursor="Hand" BorderThickness="3,0,0,0">
                           <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold"
-                                       Foreground="#1D2939" TextTrimming="CharacterEllipsis"/>
+                                       Foreground="{DynamicResource AppPrimaryTextBrush}" TextTrimming="CharacterEllipsis"/>
                             <StackPanel Orientation="Horizontal">
-                              <TextBlock Text="{Binding GroupCode}" FontSize="12" Foreground="#667085" Margin="0,0,8,0"/>
-                              <TextBlock Text="{Binding StepDisplay}" FontSize="12" Foreground="#0078D4"
+                              <TextBlock Text="{Binding GroupCode}" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0,0,8,0"/>
+                              <TextBlock Text="{Binding StepDisplay}" FontSize="12" Foreground="{DynamicResource AppChipForegroundBrush}"
                                          TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                           </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
                           <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#EEF5FF"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="#0078D4"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource AppListRowHoverBrush}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AppChipForegroundBrush}"/>
                           </Trigger>
                           <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#F8FAFC"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource AppListHeaderBrush}"/>
                           </Trigger>
                         </ControlTemplate.Triggers>
                       </ControlTemplate>
@@ -324,7 +322,7 @@
                             Cursor="Hand" ToolTip="移出列表"
                             Command="{Binding DataContext.RemoveFromListCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             CommandParameter="{Binding}">
-                      <TextBlock Text="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="#DC3545"/>
+                      <TextBlock Text="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="{DynamicResource ErrorBrush}"/>
                     </Button>
                   </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
@@ -333,7 +331,7 @@
           </DataGrid>
 
           <!-- Placeholder when empty -->
-          <Border Grid.Row="1" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0"
+          <Border Grid.Row="1" CornerRadius="6" Background="{DynamicResource AppListHeaderBrush}" BorderBrush="{DynamicResource AppBorderBrush}"
                   BorderThickness="1" Padding="12,10" Margin="8,0,8,0" Height="60">
             <Border.Style>
               <Style TargetType="Border">
@@ -345,7 +343,7 @@
                 </Style.Triggers>
               </Style>
             </Border.Style>
-            <TextBlock Text="暂未添加实验组，请先在左侧搜索并添加" FontSize="13" Foreground="#667085"
+            <TextBlock Text="暂未添加实验组，请先在左侧搜索并添加" FontSize="13" Foreground="{DynamicResource AppMutedTextBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
           </Border>
 
@@ -355,7 +353,7 @@
               <TextBlock Text="&#xECAA;" FontFamily="Segoe MDL2 Assets" FontSize="14"
                          Foreground="{DynamicResource SystemControlForegroundAccentBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
               <TextBlock Text="实验步骤列表" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
-              <Border CornerRadius="8" Background="#EEF5FF" Padding="6,2" Margin="8,0,0,0">
+              <Border CornerRadius="8" Background="{DynamicResource AppListRowHoverBrush}" Padding="6,2" Margin="8,0,0,0">
                 <Border.Style>
                   <Style TargetType="Border">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -366,7 +364,7 @@
                     </Style.Triggers>
                   </Style>
                 </Border.Style>
-                <TextBlock FontSize="11" Foreground="#0078D4"
+                <TextBlock FontSize="11" Foreground="{DynamicResource AppChipForegroundBrush}"
                            Text="{Binding GroupExperiments.Count, StringFormat=共 {0} 步}"/>
               </Border>
             </StackPanel>
@@ -409,9 +407,9 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="10"/>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="12"/>
+          <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="12"/>
+          <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -420,8 +418,8 @@
           <TextBlock Text="当前监控" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
           <TextBlock Text="{Binding CurrentGroupName}" FontSize="14" FontWeight="SemiBold"
                      Foreground="{DynamicResource SystemControlForegroundAccentBrush}" VerticalAlignment="Center" Margin="4,0"/>
-          <Border CornerRadius="4" Padding="8,3" Margin="8,0,0,0" Background="#220078D4" VerticalAlignment="Center">
-            <TextBlock Text="{Binding RunStatus}" FontSize="12" Foreground="#FF0078D4"/>
+          <Border CornerRadius="4" Padding="8,3" Margin="8,0,0,0" Background="{DynamicResource AppChipBackgroundBrush}" VerticalAlignment="Center">
+            <TextBlock Text="{Binding RunStatus}" FontSize="12" Foreground="{DynamicResource AppChipForegroundBrush}"/>
           </Border>
         </StackPanel>
 
@@ -434,16 +432,15 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type dto:ExperimentStepDto}">
               <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Border CornerRadius="14" Padding="14,6" VerticalAlignment="Center">
+                <Border>
                   <Border.Style>
-                    <Style TargetType="Border">
-                      <Setter Property="Background" Value="#22888888"/>
+                    <Style TargetType="Border" BasedOn="{StaticResource StepPipelineBadge}">
                       <Style.Triggers>
                         <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Completed}">
-                          <Setter Property="Background" Value="#2210893E"/>
+                          <Setter Property="Background" Value="{DynamicResource AppOverlaySuccessBrush}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Running}">
-                          <Setter Property="Background" Value="#FF0078D4"/>
+                          <Setter Property="Background" Value="{DynamicResource AppButtonPrimaryBackgroundBrush}"/>
                         </DataTrigger>
                       </Style.Triggers>
                     </Style>
@@ -451,10 +448,10 @@
                   <TextBlock Text="{Binding Name}" FontSize="13" VerticalAlignment="Center">
                     <TextBlock.Style>
                       <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="#FF888888"/>
+                        <Setter Property="Foreground" Value="{DynamicResource AppMutedTextBrush}"/>
                         <Style.Triggers>
                           <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Completed}">
-                            <Setter Property="Foreground" Value="#FF10893E"/>
+                            <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
                           </DataTrigger>
                           <DataTrigger Binding="{Binding State}" Value="{x:Static dto:StepState.Running}">
                             <Setter Property="Foreground" Value="White"/>
@@ -545,7 +542,7 @@
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="12"/>
+            <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
           <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -580,25 +577,25 @@
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="12"/>
+            <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
           <StackPanel Grid.Row="0" Orientation="Horizontal">
             <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="16"
-                       Foreground="#FFDC3545" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                       Foreground="{DynamicResource ErrorBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
             <TextBlock Text="{x:Static loc:Strings.Section_RecentAlarms}" FontSize="15" FontWeight="SemiBold"/>
           </StackPanel>
           <ItemsControl Grid.Row="2" ItemsSource="{Binding RecentAlarms}">
             <ItemsControl.ItemTemplate>
               <DataTemplate DataType="{x:Type dto:AlarmDto}">
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                  <Border CornerRadius="3" Padding="6,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                  <Border Margin="0,0,8,0">
                     <Border.Style>
-                      <Style TargetType="Border">
-                        <Setter Property="Background" Value="#22DC3545"/>
+                      <Style TargetType="Border" BasedOn="{StaticResource AlarmSeverityBadge}">
+                        <Setter Property="Background" Value="{DynamicResource AppOverlayErrorBrush}"/>
                         <Style.Triggers>
                           <DataTrigger Binding="{Binding Acknowledged}" Value="True">
-                            <Setter Property="Background" Value="#22FFB900"/>
+                            <Setter Property="Background" Value="{DynamicResource AppOverlayWarningBrush}"/>
                           </DataTrigger>
                         </Style.Triggers>
                       </Style>
@@ -607,11 +604,11 @@
                       <TextBlock.Style>
                         <Style TargetType="TextBlock">
                           <Setter Property="Text" Value="error"/>
-                          <Setter Property="Foreground" Value="#FFDC3545"/>
+                          <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}"/>
                           <Style.Triggers>
                             <DataTrigger Binding="{Binding Acknowledged}" Value="True">
                               <Setter Property="Text" Value="warn"/>
-                              <Setter Property="Foreground" Value="#FFCB8400"/>
+                              <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
                             </DataTrigger>
                           </Style.Triggers>
                         </Style>
@@ -646,7 +643,7 @@
     </Grid>
 
     <!-- Row 6: Status summary bar (click to open drawer) -->
-    <Border Grid.Row="6" Margin="0,8,0,0" Background="#F8FAFC" BorderBrush="#E2E8F0"
+    <Border Grid.Row="6" Margin="0,8,0,0" Background="{DynamicResource AppListHeaderBrush}" BorderBrush="{DynamicResource AppBorderBrush}"
             BorderThickness="0,1,0,0" Padding="16,6" Cursor="Hand"
             MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
       <Grid>
@@ -655,28 +652,26 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-          <Ellipse Width="8" Height="8" Margin="0,0,4,0">
+          <Ellipse Margin="0,0,4,0">
             <Ellipse.Style>
-              <Style TargetType="Ellipse">
-                <Setter Property="Fill" Value="#DC3545"/>
-                <Style.Triggers><DataTrigger Binding="{Binding ModbusConnected}" Value="True"><Setter Property="Fill" Value="#10893E"/></DataTrigger></Style.Triggers>
+              <Style TargetType="Ellipse" BasedOn="{StaticResource RunStatusDot}">
+                <Style.Triggers><DataTrigger Binding="{Binding ModbusConnected}" Value="True"><Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/></DataTrigger></Style.Triggers>
               </Style>
             </Ellipse.Style>
           </Ellipse>
-          <TextBlock Text="{Binding ModbusStatusText}" FontSize="12" Foreground="#667085" Margin="0,0,12,0"/>
-          <Ellipse Width="8" Height="8" Margin="0,0,4,0">
+          <TextBlock Text="{Binding ModbusStatusText}" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0,0,12,0"/>
+          <Ellipse Margin="0,0,4,0">
             <Ellipse.Style>
-              <Style TargetType="Ellipse">
-                <Setter Property="Fill" Value="#DC3545"/>
-                <Style.Triggers><DataTrigger Binding="{Binding SyncStatus.IsRunning}" Value="True"><Setter Property="Fill" Value="#10893E"/></DataTrigger></Style.Triggers>
+              <Style TargetType="Ellipse" BasedOn="{StaticResource RunStatusDot}">
+                <Style.Triggers><DataTrigger Binding="{Binding SyncStatus.IsRunning}" Value="True"><Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/></DataTrigger></Style.Triggers>
               </Style>
             </Ellipse.Style>
           </Ellipse>
-          <TextBlock Text="{Binding SyncStatusText}" FontSize="12" Foreground="#667085" Margin="0,0,12,0"/>
-          <Ellipse Width="8" Height="8" Margin="0,0,4,0" Fill="#10893E"/>
-          <TextBlock Text="{Binding DeviceSummary}" FontSize="12" Foreground="#667085"/>
+          <TextBlock Text="{Binding SyncStatusText}" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}" Margin="0,0,12,0"/>
+          <Ellipse Width="8" Height="8" Margin="0,0,4,0" Fill="{DynamicResource SuccessBrush}"/>
+          <TextBlock Text="{Binding DeviceSummary}" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}"/>
         </StackPanel>
-        <TextBlock Grid.Column="1" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#667085"
+        <TextBlock Grid.Column="1" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="{DynamicResource AppMutedTextBrush}"
                    VerticalAlignment="Center" Text="&#xE70D;"/>
       </Grid>
     </Border>

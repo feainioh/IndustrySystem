@@ -37,14 +37,14 @@ xmlns:prism="http://prismlibrary.com/"
                 <Border  CornerRadius="18 18 0 0"  Grid.Row="0" Background="{StaticResource DeviceGradientBrush}" Padding="24,16">
                     <Grid>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewGrid" Width="24" Height="24" Foreground="White" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <TextBlock Text="&#xE8F1;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="White" VerticalAlignment="Center" Margin="0,0,12,0"/>
                             <TextBlock Text="{x:Static loc:Strings.Dialog_ShelfEdit_Title}" FontSize="17" FontWeight="SemiBold" Foreground="White"/>
                         </StackPanel>
                         <Button HorizontalAlignment="Right" VerticalAlignment="Center"
 							Style="{StaticResource MaterialDesignFlatButton}"
 							Command="{Binding AddShelfCommand}" Foreground="White" Padding="8,4">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                 <TextBlock Text="{x:Static loc:Strings.Btn_Add}" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -137,7 +137,7 @@ xmlns:prism="http://prismlibrary.com/"
                     <Button HorizontalAlignment="Right"
 						Style="{StaticResource AppInteractiveButtonNeutral}"
                         Content="{x:Static loc:Strings.Btn_Close}" Width="90" Height="34"
-						Click="CloseButton_Click"/>
+                        Command="{Binding CancelCommand}"/>
                 </Border>
             </Grid>
         </Border>

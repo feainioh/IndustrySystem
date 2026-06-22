@@ -11,7 +11,7 @@ using Prism.Mvvm;
 
 namespace IndustrySystem.MotionDesigner.ViewModels.DeviceDebug;
 
-public class WeightSensorDebugViewModel : BindableBase
+public class WeightSensorDebugViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IHardwareController _hardwareController;

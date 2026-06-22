@@ -1,13 +1,17 @@
-using System.Diagnostics;
 using System.Windows.Controls;
+using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 
-namespace IndustrySystem.Presentation.Wpf.Views.Dialogs
+namespace IndustrySystem.Presentation.Wpf.Views.Dialogs;
+
+public partial class UserEditDialog : UserControl
 {
-    public partial class UserEditDialog : UserControl
+    public UserEditDialog()
     {
-        public UserEditDialog()
+        InitializeComponent();
+        PwdBox.PasswordChanged += (_, _) =>
         {
-            InitializeComponent();
-        }
+            if (DataContext is UserEditDialogViewModel vm)
+                vm.Password = PwdBox.Password;
+        };
     }
 }

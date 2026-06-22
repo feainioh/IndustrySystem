@@ -5,12 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:loc="clr-namespace:IndustrySystem.Presentation.Wpf.Resources"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
              mc:Ignorable="d">
   <Grid Style="{StaticResource PageRootGrid}">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="16"/>
+      <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
@@ -28,9 +30,9 @@
     <Grid Grid.Row="2">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="12"/>
+        <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="12"/>
+        <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 

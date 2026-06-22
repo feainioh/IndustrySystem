@@ -10,7 +10,7 @@ using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class AlarmViewModel : NagetiveCurdVeiwModel<AlarmViewModel.AlarmItem>
+public class AlarmViewModel : CrudViewModel<AlarmViewModel.AlarmItem>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IAlarmAppService _svc;

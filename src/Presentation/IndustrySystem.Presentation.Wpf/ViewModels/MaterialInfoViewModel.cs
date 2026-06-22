@@ -18,7 +18,7 @@ using Prism.Ioc;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class MaterialInfoViewModel : NagetiveCurdVeiwModel<MaterialDto>
+public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
 {
     private readonly IMaterialAppService _svc;
     private readonly IDialogService _dialogService;

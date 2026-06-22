@@ -9,7 +9,7 @@ using System;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class HardwareDebugViewModel : NagetiveViewModel
+public class HardwareDebugViewModel : NavigationViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly ICommunicationAppService _comm;

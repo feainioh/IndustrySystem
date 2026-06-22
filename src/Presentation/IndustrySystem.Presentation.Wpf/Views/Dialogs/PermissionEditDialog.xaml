@@ -37,9 +37,9 @@
             <StackPanel Orientation="Horizontal">
                 <Border Width="40" Height="40" CornerRadius="20"
                         Background="#33FFFFFF" Margin="0,0,14,0">
-                    <materialDesign:PackIcon Kind="KeyOutline" Width="22" Height="22"
-                                             Foreground="White"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <!-- MDL2 glyph &#xE75E; (KeyOutline equivalent) -->
+                    <TextBlock Text="&#xE75E;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="White"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="{Binding [Dialog_PermissionEdit_Title], Source={StaticResource Loc}}"

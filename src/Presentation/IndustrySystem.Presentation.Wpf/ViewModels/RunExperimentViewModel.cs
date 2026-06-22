@@ -12,7 +12,7 @@ using Prism.Dialogs;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class RunExperimentViewModel : NagetiveViewModel
+public class RunExperimentViewModel : NavigationViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 

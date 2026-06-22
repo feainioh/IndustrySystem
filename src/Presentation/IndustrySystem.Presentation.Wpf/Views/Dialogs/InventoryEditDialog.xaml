@@ -41,9 +41,9 @@
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="20"
                         Background="#33FFFFFF" Margin="0,0,14,0">
-                            <materialDesign:PackIcon Kind="ArrowDownBoldCircleOutline" Width="22" Height="22"
-                                             Foreground="White"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- MDL2 glyph &#xE896; (approximate for ArrowDownBoldCircleOutline) -->
+                            <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="White"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" Foreground="White"/>

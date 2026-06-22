@@ -66,7 +66,8 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
                     if (_options.InitBuildSchema)
                     {
                         _db.CodeFirst.InitTables(
-                            typeof(Role), typeof(Permission), typeof(ExperimentTemplate), typeof(ExperimentGroup), typeof(Experiment),
+                            typeof(Role), typeof(Permission), typeof(UserRole), typeof(RolePermission),
+                            typeof(ExperimentTemplate), typeof(ExperimentGroup), typeof(Experiment),
                             typeof(ReactionParameter), typeof(RotaryEvaporationParameter), typeof(DetectionParameter), typeof(FiltrationParameter), typeof(DryingParameter),
                             typeof(QuenchingParameter), typeof(ExtractionParameter), typeof(SamplingParameter), typeof(CentrifugationParameter), typeof(CustomDetectionParameter),
                             typeof(User), typeof(Material), typeof(InventoryRecord),
@@ -113,19 +114,31 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
     {
         // Roles (Upsert by Name)
         var roleRepo = _db.GetSimpleClient<Role>();
-        UpsertRole(roleRepo, new Role { Name = "Admin", Description = "Administrator", IsDefault = true });
+        var adminRole = UpsertRole(roleRepo, new Role { Name = "Admin", Description = "Administrator", IsDefault = true });
 
         // Permissions (Upsert by Name)
         var permRepo = _db.GetSimpleClient<Permission>();
-        UpsertPermission(permRepo, new Permission{ Name = "Users.View", DisplayName = "查看用户", GroupName = "用户" });
-        UpsertPermission(permRepo, new Permission{ Name = "Users.Edit", DisplayName = "编辑用户", GroupName = "用户" });
-        UpsertPermission(permRepo, new Permission{ Name = "Roles.View", DisplayName = "查看角色", GroupName = "角色" });
-        UpsertPermission(permRepo, new Permission{ Name = "Roles.Edit", DisplayName = "编辑角色", GroupName = "角色" });
-        UpsertPermission(permRepo, new Permission{ Name = "Templates.Edit", DisplayName = "编辑模板", GroupName = "模板" });
+        UpsertPermission(permRepo, new Permission { Name = "Users.View", DisplayName = "查看用户", GroupName = "用户" });
+        UpsertPermission(permRepo, new Permission { Name = "Users.Edit", DisplayName = "编辑用户", GroupName = "用户" });
+        UpsertPermission(permRepo, new Permission { Name = "Roles.View", DisplayName = "查看角色", GroupName = "角色" });
+        UpsertPermission(permRepo, new Permission { Name = "Roles.Edit", DisplayName = "编辑角色", GroupName = "角色" });
+        UpsertPermission(permRepo, new Permission { Name = "Templates.Edit", DisplayName = "编辑模板", GroupName = "模板" });
 
         // Admin user (Upsert by UserName)
         var userRepo = _db.GetSimpleClient<User>();
-        UpsertAdminUser(userRepo);
+        var adminUser = UpsertAdminUser(userRepo);
+
+        // Role-Permission associations: assign all permissions to the Admin role.
+        var rpRepo = _db.GetSimpleClient<RolePermission>();
+        var allPerms = permRepo.GetList();
+        foreach (var perm in allPerms)
+        {
+            UpsertRolePermission(rpRepo, adminRole.Id, perm.Id);
+        }
+
+        // User-Role association: assign Admin role to the admin user.
+        var urRepo = _db.GetSimpleClient<UserRole>();
+        UpsertUserRole(urRepo, adminUser.Id, adminRole.Id);
 
         // Materials (Upsert by MaterialCode)
         var materialRepo = _db.GetSimpleClient<Material>();
@@ -169,18 +182,20 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         UpsertShelf(shelfRepo, _db.GetSimpleClient<ShelfSlot>(), new ShelfConfig { ShelfCode = "SHELF-B", Name = "B号货架", Rows = 3, Columns = 4, Description = "试剂区" });
     }
 
-    private static void UpsertRole(SimpleClient<Role> repo, Role input)
+    private static Role UpsertRole(SimpleClient<Role> repo, Role input)
     {
         var existing = repo.GetSingle(r => r.Name == input.Name);
         if (existing == null)
         {
             repo.Insert(input);
+            return input;
         }
         else
         {
             existing.Description = input.Description;
             existing.IsDefault = input.IsDefault;
             repo.Update(existing);
+            return existing;
         }
     }
 
@@ -199,7 +214,7 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         }
     }
 
-    private void UpsertAdminUser(SimpleClient<User> repo)
+    private User UpsertAdminUser(SimpleClient<User> repo)
     {
         var userName = string.IsNullOrWhiteSpace(_options.AdminUserName) ? "admin" : _options.AdminUserName;
         var displayName = string.IsNullOrWhiteSpace(_options.AdminDisplayName) ? "管理员" : _options.AdminDisplayName;
@@ -208,13 +223,15 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         if (existing == null)
         {
             var pwd = ResolveAdminPassword();
-            repo.Insert(new User
+            var user = new User
             {
                 UserName = userName,
                 DisplayName = displayName,
                 PasswordHash = HashPassword(pwd),
                 IsActive = true
-            });
+            };
+            repo.Insert(user);
+            return user;
         }
         else
         {
@@ -225,6 +242,7 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
                 existing.PasswordHash = HashPassword(pwd);
             }
             repo.Update(existing);
+            return existing;
         }
     }
 
@@ -328,8 +346,8 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
             repo.Insert(input);
             // 生成槽位
             for (int r = 1; r <= input.Rows; r++)
-            for (int c = 1; c <= input.Columns; c++)
-                slotRepo.Insert(new ShelfSlot { ShelfId = input.Id, Row = r, Column = c });
+                for (int c = 1; c <= input.Columns; c++)
+                    slotRepo.Insert(new ShelfSlot { ShelfId = input.Id, Row = r, Column = c });
         }
         else
         {
@@ -339,6 +357,24 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
             existing.Description = input.Description;
             existing.UpdatedAt = DateTime.UtcNow;
             repo.Update(existing);
+        }
+    }
+
+    private static void UpsertRolePermission(SimpleClient<RolePermission> repo, Guid roleId, Guid permissionId)
+    {
+        var existing = repo.GetSingle(rp => rp.RoleId == roleId && rp.PermissionId == permissionId);
+        if (existing == null)
+        {
+            repo.Insert(new RolePermission { RoleId = roleId, PermissionId = permissionId });
+        }
+    }
+
+    private static void UpsertUserRole(SimpleClient<UserRole> repo, Guid userId, Guid roleId)
+    {
+        var existing = repo.GetSingle(ur => ur.UserId == userId && ur.RoleId == roleId);
+        if (existing == null)
+        {
+            repo.Insert(new UserRole { UserId = userId, RoleId = roleId });
         }
     }
 }

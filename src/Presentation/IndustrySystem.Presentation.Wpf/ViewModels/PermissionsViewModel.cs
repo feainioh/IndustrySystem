@@ -19,7 +19,7 @@ using NLog;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class PermissionsViewModel : NagetiveCurdVeiwModel<PermissionDto>
+public class PermissionsViewModel : CrudViewModel<PermissionDto>
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IPermissionAppService _svc;

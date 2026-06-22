@@ -13,28 +13,16 @@
         <!-- Converters -->
         <conv:InitialConverter x:Key="InitialConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        
-        <!-- Tech Gradient -->
-        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="#8764B8" Offset="0"/>
-            <GradientStop Color="#9B7FCC" Offset="1"/>
-        </LinearGradientBrush>
-        
-        <!-- Log Level Colors -->
-        <SolidColorBrush x:Key="InfoBrush" Color="#0078D4"/>
-        <SolidColorBrush x:Key="WarnBrush" Color="#FFB900"/>
-        <SolidColorBrush x:Key="ErrorBrush" Color="#E74856"/>
-        <SolidColorBrush x:Key="SuccessBrush" Color="#10893E"/>
     </UserControl.Resources>
     
     <Grid Style="{StaticResource PageRootGrid}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="16"/>
+            <RowDefinition Height="{StaticResource StandardGridSpacing}"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -48,7 +36,7 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <!-- 渐变图标背景 -->
                 <Border Style="{StaticResource PageHeaderIconBorder}"
-                        Background="{StaticResource HeaderGradient}">
+                        Background="{StaticResource PermissionGradient}">
                     <ui:FontIcon Glyph="&#xE8BC;" FontSize="20" 
                                 Foreground="White"
                                 HorizontalAlignment="Center" 
@@ -88,7 +76,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
@@ -211,7 +199,7 @@
                                                             <Setter Property="Foreground" Value="{StaticResource InfoBrush}"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding Level}" Value="Warning">
-                                                            <Setter Property="Foreground" Value="{StaticResource WarnBrush}"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding Level}" Value="Error">
                                                             <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
@@ -237,7 +225,7 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Border Width="24" Height="24" CornerRadius="12"
-                                               Background="{StaticResource HeaderGradient}"
+                                               Background="{StaticResource PermissionGradient}"
                                                Margin="0,0,8,0">
                                             <TextBlock Text="{Binding Operator, Converter={StaticResource InitialConverter}}" 
                                                       Foreground="White" FontSize="10"
@@ -296,7 +284,7 @@
                   <StackPanel Grid.Column="0" Style="{StaticResource PaginationStatsPanel}">
                     <TextBlock Text="{x:Static loc:Strings.Lbl_Total}" Opacity="0.7"/>
                     <TextBlock Text="{Binding TotalCount}" FontWeight="SemiBold" 
-                              Foreground="{StaticResource HeaderGradient}"/>
+                              Foreground="{StaticResource PermissionGradient}"/>
                     <TextBlock Text="{x:Static loc:Strings.Lbl_Records}" Opacity="0.7"/>
                 </StackPanel>
                 

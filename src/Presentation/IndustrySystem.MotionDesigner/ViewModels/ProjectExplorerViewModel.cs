@@ -14,7 +14,7 @@ namespace IndustrySystem.MotionDesigner.ViewModels;
 /// 项目管理 ViewModel
 /// 管理项目-子项目-子程序的层级结构
 /// </summary>
-public class ProjectExplorerViewModel : BindableBase
+public class ProjectExplorerViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 

@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:ui="http://schemas.modernwpf.com/2019">
 
@@ -21,6 +22,12 @@
     <SolidColorBrush x:Key="AppChipBackgroundBrush" Color="#E8F0FE"/>
     <SolidColorBrush x:Key="AppChipForegroundBrush" Color="#0078D4"/>
     <SolidColorBrush x:Key="AppGlassHighlightBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="AppTertiaryTextBrush" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="AppOverlayMutedBrush" Color="#22888888"/>
+    <SolidColorBrush x:Key="AppOverlaySuccessBrush" Color="#2210893E"/>
+    <SolidColorBrush x:Key="AppOverlayErrorBrush" Color="#22DC3545"/>
+    <SolidColorBrush x:Key="AppOverlayWarningBrush" Color="#22FFB900"/>
+    <SolidColorBrush x:Key="AppSelectionAccentBrush" Color="#4A7EFF"/>
 
     <SolidColorBrush x:Key="AppButtonPrimaryBackgroundBrush" Color="#0078D4"/>
     <SolidColorBrush x:Key="AppButtonPrimaryHoverBackgroundBrush" Color="#1387DF"/>
@@ -52,30 +59,6 @@
     <SolidColorBrush x:Key="RunExperimentStopButtonPressedBorderBrush" Color="#C73A49"/>
     <SolidColorBrush x:Key="RunExperimentStopButtonForegroundBrush" Color="#FFFFFF"/>
 
-    <SolidColorBrush x:Key="LoginTitleForegroundBrush" Color="#F4FAFF"/>
-    <SolidColorBrush x:Key="LoginSubtitleForegroundBrush" Color="#D1E8FF"/>
-    <SolidColorBrush x:Key="LoginFooterForegroundBrush" Color="#D6EAFF"/>
-    <SolidColorBrush x:Key="LoginThemeToggleForegroundBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="LoginThemeToggleBorderBrush" Color="#78FFFFFF"/>
-    <SolidColorBrush x:Key="LoginThemeToggleBackgroundBrush" Color="#2CFFFFFF"/>
-    <SolidColorBrush x:Key="LoginAvatarBackgroundBrush" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="LoginAvatarIconBrush" Color="#0078D4"/>
-    <SolidColorBrush x:Key="LoginCardBackgroundBrush" Color="#FDFEFF"/>
-    <SolidColorBrush x:Key="LoginCardBorderBrush" Color="#D9E6F2"/>
-    <SolidColorBrush x:Key="LoginErrorForegroundBrush" Color="#D6455D"/>
-    <SolidColorBrush x:Key="LoginDecorationBrush" Color="#38FFFFFF"/>
-
-    <LinearGradientBrush x:Key="LoginBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#0B3860" Offset="0"/>
-        <GradientStop Color="#0F5B88" Offset="0.52"/>
-        <GradientStop Color="#1A7FA0" Offset="1"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="LoginPrimaryButtonBrush" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Color="#0A67A8" Offset="0"/>
-        <GradientStop Color="#0F88C2" Offset="0.54"/>
-        <GradientStop Color="#15A4CF" Offset="1"/>
-    </LinearGradientBrush>
-    <DropShadowEffect x:Key="LoginCardShadowEffect" Color="#243C58" BlurRadius="28" ShadowDepth="8" Opacity="0.22"/>
     <DropShadowEffect x:Key="AppButtonPrimaryShadow" Color="#660078D4" BlurRadius="16" ShadowDepth="2" Opacity="0.45"/>
     <DropShadowEffect x:Key="AppButtonNeutralShadow" Color="#330078D4" BlurRadius="12" ShadowDepth="1" Opacity="0.28"/>
     <DropShadowEffect x:Key="AppButtonDangerShadow" Color="#66DC3545" BlurRadius="14" ShadowDepth="2" Opacity="0.42"/>
@@ -83,8 +66,6 @@
 
     <CornerRadius x:Key="AppCardCornerRadius">6</CornerRadius>
     <CornerRadius x:Key="AppInnerCornerRadius">6</CornerRadius>
-    <CornerRadius x:Key="LoginRootCornerRadius">8</CornerRadius>
-
     <LinearGradientBrush x:Key="ShellTitleBarBrush" StartPoint="0,0" EndPoint="1,0">
         <GradientStop Color="#0D1117" Offset="0"/>
         <GradientStop Color="#161B22" Offset="0.5"/>
@@ -197,7 +178,7 @@
     
     <!-- Page Root Grid -->
     <Style x:Key="PageRootGrid" TargetType="Grid">
-        <Setter Property="Margin" Value="12"/>
+        <Setter Property="Margin" Value="{DynamicResource  MediumlMarginSpacing}"/>
         <!-- <Setter Property="Background" Value="{DynamicResource AppPageBackgroundBrush}"/> -->
     </Style>
     
@@ -229,6 +210,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <!-- Deprecated: prefer PageHeaderMdl2Icon (TextBlock + Segoe MDL2) for new code -->
     <Style x:Key="PageHeaderPackIcon" TargetType="materialDesign:PackIcon">
         <Setter Property="Width" Value="20"/>
         <Setter Property="Height" Value="20"/>
@@ -379,10 +361,13 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Alias: prefer AppInteractiveButtonNeutral for new code -->
     <Style x:Key="HeaderActionOutlinedButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}"/>
 
+    <!-- Alias: prefer AppInteractiveButtonPrimary for new code -->
     <Style x:Key="HeaderActionAccentButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
 
+    <!-- Alias: prefer AppInteractiveButtonPrimary for new code -->
     <Style x:Key="HeaderActionRaisedButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
 
     <Style x:Key="AppInteractiveComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
@@ -474,8 +459,10 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <!-- Alias: prefer AppInteractiveButtonPrimary for new code -->
     <Style x:Key="PrimaryCommandButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonPrimary}"/>
 
+    <!-- Alias: prefer AppInteractiveButtonNeutral for new code -->
     <Style x:Key="SecondaryCommandButton" TargetType="Button" BasedOn="{StaticResource AppInteractiveButtonNeutral}"/>
     
     <!-- Toolbar Button Panel -->
@@ -624,11 +611,21 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
+    <!-- Deprecated: prefer DataGridLeadingFontIcon (TextBlock + Segoe MDL2) for new code -->
     <Style x:Key="DataGridLeadingPackIcon" TargetType="materialDesign:PackIcon">
         <Setter Property="Width" Value="16"/>
         <Setter Property="Height" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Recommended: use for DataGrid leading column icons -->
+    <Style x:Key="DataGridLeadingFontIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="DataGridActionIconButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
@@ -640,7 +637,16 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
+    <!-- Deprecated: prefer DataGridActionFontIcon (TextBlock + Segoe MDL2) for new code -->
     <Style x:Key="DataGridActionPackIcon" TargetType="materialDesign:PackIcon" BasedOn="{StaticResource DataGridLeadingPackIcon}"/>
+
+    <!-- Recommended: use for DataGrid action column icons -->
+    <Style x:Key="DataGridActionFontIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
     
     <!-- ListView Style -->
     <Style x:Key="ModernListView" TargetType="ListView">
@@ -788,18 +794,22 @@
     </Style>
 
     <!-- Spacing Definitions -->
-    
-    <!-- Small Spacing (8px) -->
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="SmallSpacing">8</System:Double>
-    
-    <!-- Medium Spacing (12px) -->
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="MediumSpacing">12</System:Double>
-    
-    <!-- Standard Spacing (16px) -->
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="StandardSpacing">16</System:Double>
-    
-    <!-- Large Spacing (24px) -->
-    <System:Double xmlns:System="clr-namespace:System;assembly=mscorlib" x:Key="LargeSpacing">24</System:Double>
+    <!-- System.Double — 通用：Width, Height, uniform Margin/Thickness 自动转换 -->
+    <System:Double x:Key="SmallSpacing">8</System:Double>
+    <System:Double x:Key="MediumSpacing">12</System:Double>
+    <System:Double x:Key="StandardSpacing">16</System:Double>
+    <System:Double x:Key="LargeSpacing">24</System:Double>
+
+    <!-- GridLength — 专用于 RowDefinition.Height / ColumnDefinition.Width -->
+    <GridLength x:Key="SmallGridSpacing">8</GridLength>
+    <GridLength x:Key="MediumGridSpacing">12</GridLength>
+    <GridLength x:Key="StandardGridSpacing">16</GridLength>
+    <GridLength x:Key="LargeGridSpacing">24</GridLength>
+    <!-- Thickness - use for margin in styles-->
+    <Thickness x:Key="SmallMarginSpacing">8</Thickness>
+    <Thickness x:Key="MediumlMarginSpacing">12</Thickness>
+    <Thickness x:Key="StandardlMarginSpacing">16</Thickness>
+    <Thickness x:Key="LargelMarginSpacing">24</Thickness>
 
     <!-- Search/Filter Styles -->
     
@@ -812,6 +822,7 @@
     <Style x:Key="FilterRow" TargetType="Grid">
         <Setter Property="Margin" Value="0,0,0,12"/>
     </Style>
+
 
     <!-- Badge Styles -->
     
@@ -840,6 +851,30 @@
     <!-- Info Badge -->
     <Style x:Key="InfoBadge" TargetType="Border" BasedOn="{StaticResource StatusBadge}">
         <Setter Property="Background" Value="#200078D4"/>
+    </Style>
+
+    <!-- ==================== RunExperiment View Styles ==================== -->
+
+    <!-- Status indicator dot (small colored ellipse, defaults to error-red) -->
+    <Style x:Key="RunStatusDot" TargetType="Ellipse">
+        <Setter Property="Width" Value="8"/>
+        <Setter Property="Height" Value="8"/>
+        <Setter Property="Fill" Value="{DynamicResource ErrorBrush}"/>
+    </Style>
+
+    <!-- Experiment step pipeline badge -->
+    <Style x:Key="StepPipelineBadge" TargetType="Border">
+        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="Padding" Value="14,6"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{DynamicResource AppOverlayMutedBrush}"/>
+    </Style>
+
+    <!-- Alarm severity badge (tiny rounded chip) -->
+    <Style x:Key="AlarmSeverityBadge" TargetType="Border">
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="Padding" Value="6,2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <!-- ==================== Status Bar Styles ==================== -->

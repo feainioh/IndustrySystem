@@ -202,16 +202,16 @@ public partial class App : PrismApplication
 
         // Register type-specific parameter edit views for region navigation.
         // Keep one dedicated ViewModel per View to avoid shared editor state across types.
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog, ViewModels.Dialogs.ReactionParameterEditDialogViewModel>(nameof(Views.Dialogs.ReactionParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog, ViewModels.Dialogs.RotaryEvaporationParameterEditDialogViewModel>(nameof(Views.Dialogs.RotaryEvaporationParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog, ViewModels.Dialogs.DetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.DetectionParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog, ViewModels.Dialogs.FiltrationParameterEditDialogViewModel>(nameof(Views.Dialogs.FiltrationParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog, ViewModels.Dialogs.DryingParameterEditDialogViewModel>(nameof(Views.Dialogs.DryingParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog, ViewModels.Dialogs.QuenchingParameterEditDialogViewModel>(nameof(Views.Dialogs.QuenchingParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog, ViewModels.Dialogs.ExtractionParameterEditDialogViewModel>(nameof(Views.Dialogs.ExtractionParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog, ViewModels.Dialogs.SamplingParameterEditDialogViewModel>(nameof(Views.Dialogs.SamplingParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog, ViewModels.Dialogs.CentrifugationParameterEditDialogViewModel>(nameof(Views.Dialogs.CentrifugationParameterEditDialog));
-        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog, ViewModels.Dialogs.CustomDetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.CustomDetectionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ReactionParameterEditDialog, ViewModels.ExperimentParameters.ReactionParameterEditDialogViewModel>(nameof(Views.Dialogs.ReactionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.RotaryEvaporationParameterEditDialog, ViewModels.ExperimentParameters.RotaryEvaporationParameterEditDialogViewModel>(nameof(Views.Dialogs.RotaryEvaporationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DetectionParameterEditDialog, ViewModels.ExperimentParameters.DetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.DetectionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.FiltrationParameterEditDialog, ViewModels.ExperimentParameters.FiltrationParameterEditDialogViewModel>(nameof(Views.Dialogs.FiltrationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.DryingParameterEditDialog, ViewModels.ExperimentParameters.DryingParameterEditDialogViewModel>(nameof(Views.Dialogs.DryingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.QuenchingParameterEditDialog, ViewModels.ExperimentParameters.QuenchingParameterEditDialogViewModel>(nameof(Views.Dialogs.QuenchingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.ExtractionParameterEditDialog, ViewModels.ExperimentParameters.ExtractionParameterEditDialogViewModel>(nameof(Views.Dialogs.ExtractionParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.SamplingParameterEditDialog, ViewModels.ExperimentParameters.SamplingParameterEditDialogViewModel>(nameof(Views.Dialogs.SamplingParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CentrifugationParameterEditDialog, ViewModels.ExperimentParameters.CentrifugationParameterEditDialogViewModel>(nameof(Views.Dialogs.CentrifugationParameterEditDialog));
+        containerRegistry.RegisterForNavigation<Views.Dialogs.CustomDetectionParameterEditDialog, ViewModels.ExperimentParameters.CustomDetectionParameterEditDialogViewModel>(nameof(Views.Dialogs.CustomDetectionParameterEditDialog));
     }
 
     protected override void OnStartup(StartupEventArgs e)

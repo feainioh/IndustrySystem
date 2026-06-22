@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace IndustrySystem.Presentation.Wpf.ViewModels;
 
-public class OperationLogsViewModel : NagetiveViewModel
+public class OperationLogsViewModel : NavigationViewModel
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 

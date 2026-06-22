@@ -5,6 +5,7 @@ namespace IndustrySystem.Application.Contracts.Services;
 public interface IUserAppService
 {
     Task<UserDto?> GetAsync(Guid id);
+    Task<UserDto?> GetByUserNameAsync(string userName);
     Task<List<UserDto>> GetListAsync();
     Task<UserDto> CreateAsync(UserDto input);
     Task<UserDto> UpdateAsync(UserDto input);

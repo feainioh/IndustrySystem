@@ -30,7 +30,12 @@ public class MappingProfile : Profile
             .AfterMap((src, dest) => dest.StepExperimentIdList = src.StepExperimentIds.ToList());
 
         CreateMap<Permission, PermissionDto>().ReverseMap();
-        CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore());
+        CreateMap<UserDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
         CreateMap<Material, MaterialDto>().ReverseMap();
         CreateMap<InventoryRecord, InventoryRecordDto>().ReverseMap();
         CreateMap<ContainerInfo, ContainerInfoDto>().ReverseMap();

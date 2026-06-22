@@ -11,7 +11,7 @@ using Prism.Mvvm;
 
 namespace IndustrySystem.MotionDesigner.ViewModels.DeviceDebug;
 
-public class IODeviceDebugViewModel : BindableBase
+public class IODeviceDebugViewModel : MotionDesignerBaseViewModel
 {
     private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
     private readonly IHardwareController _hardwareController;
@@ -114,7 +114,7 @@ public class IODeviceDebugViewModel : BindableBase
     }
 }
 
-public class IoChannelControlItem : BindableBase
+public class IoChannelControlItem : MotionDesignerBaseViewModel
 {
     public IoChannelControlItem(IoChannelDto channel)
     {

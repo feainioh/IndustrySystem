@@ -23,9 +23,9 @@
 <Grid Style="{StaticResource PageRootGrid}">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="12"/>
+      <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="12"/>
+      <RowDefinition Height="{StaticResource MediumGridSpacing}"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 

@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
+
     Title="添加新设备" 
     Height="500" 
     Width="600"
