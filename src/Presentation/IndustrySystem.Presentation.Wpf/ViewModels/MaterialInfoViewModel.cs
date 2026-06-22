@@ -23,11 +23,10 @@ public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
     private readonly IMaterialAppService _svc;
     private readonly IDialogService _dialogService;
 
-    public ObservableCollection<MaterialDto> Materials { get; } = new();
     public ObservableCollection<MaterialDto> PagedMaterials { get; } = new();
     public ICollectionView MaterialsView { get; }
 
-    public new ICommand RefreshCommand { get; }
+    public ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -36,10 +35,10 @@ public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
     {
         _svc = svc;
         _dialogService = dialogService;
-        MaterialsView = CollectionViewSource.GetDefaultView(Materials);
+        MaterialsView = CollectionViewSource.GetDefaultView(Items);
         MaterialsView.Filter = FilterMaterials;
 
-        RefreshCommand = new DelegateCommand(async () => await LoadAsync());
+        RefreshCommand = new DelegateCommand(async () => await RefreshAsync());
         AddCommand = new DelegateCommand(() => OpenMaterialDialogAsync(null));
         EditCommand = new DelegateCommand<Guid?>(id =>
         {
@@ -75,13 +74,24 @@ public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
     public async Task LoadAsync()
     {
         var list = await _svc.GetListAsync();
-        Materials.Clear();
+        _all.Clear();
         foreach (var item in list)
-        {
-            Materials.Add(item);
-        }
+            _all.Add(item);
 
         ApplyMaterialPaging(resetToFirstPage: true);
+    }
+
+    protected override async Task OnRefreshAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            await LoadAsync();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private void OpenMaterialDialogAsync(Guid? id)
@@ -126,7 +136,7 @@ public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
 
     private IEnumerable<MaterialDto> BuildFilteredMaterials()
     {
-        var query = Materials.AsEnumerable();
+        var query = _all.AsEnumerable();
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {

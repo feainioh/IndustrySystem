@@ -7,6 +7,7 @@ namespace IndustrySystem.Presentation.Wpf.Views
     {
         public RunExperimentView()
         {
+            InitializeComponent();
         }
 
         private void StatusBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

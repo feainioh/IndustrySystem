@@ -26,7 +26,6 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
     private readonly IDialogService _dialogService;
 
     // ── Detail records ──
-    public new ObservableCollection<InventoryRecordDto> Items { get; } = new();
     public ObservableCollection<InventoryRecordDto> PagedItems { get; } = new();
     public ICollectionView InventoryView { get; }
 
@@ -48,7 +47,7 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
         }
     }
 
-    public new ICommand RefreshCommand { get; }
+    public ICommand RefreshCommand { get; }
     public ICommand InboundCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand OutboundCommand { get; }
@@ -65,7 +64,7 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
         SummaryView = CollectionViewSource.GetDefaultView(SummaryItems);
         SummaryView.Filter = FilterSummary;
 
-        RefreshCommand = new DelegateCommand(async () => await LoadAsync());
+        RefreshCommand = new DelegateCommand(async () => await RefreshAsync());
         InboundCommand = new DelegateCommand(() => OpenInboundDialogAsync());
         EditCommand = new DelegateCommand<Guid?>(id =>
         {
@@ -108,9 +107,9 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
     public async Task LoadAsync()
     {
         var list = await _svc.GetListAsync();
-        Items.Clear();
+        _all.Clear();
         foreach (var item in list)
-            Items.Add(item);
+            _all.Add(item);
 
         var summaries = await _svc.GetSummaryListAsync();
         SummaryItems.Clear();
@@ -118,6 +117,19 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
             SummaryItems.Add(s);
 
         ApplyInventoryPaging(resetToFirstPage: true);
+    }
+
+    protected override async Task OnRefreshAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            await LoadAsync();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     /// <summary>入库：弹出完整入库弹窗（新建库存记录）</summary>
@@ -179,7 +191,7 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
 
     private IEnumerable<InventoryRecordDto> BuildFilteredItems()
     {
-        var query = Items.AsEnumerable();
+        var query = _all.AsEnumerable();
 
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
