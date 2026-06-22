@@ -116,13 +116,18 @@ public class SqlSugarDatabaseInitializer : IDatabaseInitializer
         var roleRepo = _db.GetSimpleClient<Role>();
         var adminRole = UpsertRole(roleRepo, new Role { Name = "Admin", Description = "Administrator", IsDefault = true });
 
-        // Permissions (Upsert by Name)
+        // Permissions (Upsert by Name) — keep in sync with Shell.xaml visibility bindings.
         var permRepo = _db.GetSimpleClient<Permission>();
         UpsertPermission(permRepo, new Permission { Name = "Users.View", DisplayName = "查看用户", GroupName = "用户" });
         UpsertPermission(permRepo, new Permission { Name = "Users.Edit", DisplayName = "编辑用户", GroupName = "用户" });
         UpsertPermission(permRepo, new Permission { Name = "Roles.View", DisplayName = "查看角色", GroupName = "角色" });
         UpsertPermission(permRepo, new Permission { Name = "Roles.Edit", DisplayName = "编辑角色", GroupName = "角色" });
+        UpsertPermission(permRepo, new Permission { Name = "Templates.View", DisplayName = "查看模板", GroupName = "模板" });
         UpsertPermission(permRepo, new Permission { Name = "Templates.Edit", DisplayName = "编辑模板", GroupName = "模板" });
+        UpsertPermission(permRepo, new Permission { Name = "Experiments.View", DisplayName = "查看实验", GroupName = "实验" });
+        UpsertPermission(permRepo, new Permission { Name = "Material.View", DisplayName = "查看物料", GroupName = "物料" });
+        UpsertPermission(permRepo, new Permission { Name = "Inventory.View", DisplayName = "查看库存", GroupName = "库存" });
+        UpsertPermission(permRepo, new Permission { Name = "Device.Maintain", DisplayName = "设备维护", GroupName = "设备" });
 
         // Admin user (Upsert by UserName)
         var userRepo = _db.GetSimpleClient<User>();
