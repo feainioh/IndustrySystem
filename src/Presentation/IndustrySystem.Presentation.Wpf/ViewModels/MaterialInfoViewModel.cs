@@ -12,6 +12,7 @@ using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Presentation.Wpf.Resources;
 using IndustrySystem.Presentation.Wpf.ViewModels.Dialogs;
 using MaterialDesignThemes.Wpf;
+using NLog;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
@@ -49,7 +50,11 @@ public class MaterialInfoViewModel : CrudViewModel<MaterialDto>
             if (id.HasValue) await DeleteAsync(id.Value);
         });
 
-        _ = LoadAsync();
+        _ = Task.Run(async () =>
+        {
+            try { await LoadAsync(); }
+            catch (Exception ex) { LogManager.GetCurrentClassLogger().Error(ex, "Initial material load failed"); }
+        });
     }
 
     private bool FilterMaterials(object item)

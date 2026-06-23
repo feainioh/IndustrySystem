@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog;
 using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
@@ -206,7 +207,11 @@ public abstract class ExperimentParameterEditorViewModelBase : NavigationViewMod
             _parentVm.PropertyChanged -= OnParentPropertyChanged;
 
         NewItem();
-        _ = LoadAsync();
+        _ = Task.Run(async () =>
+        {
+            try { await LoadAsync(); }
+            catch (Exception ex) { LogManager.GetCurrentClassLogger().Error(ex, "Initial parameters load failed"); }
+        });
 
         if (navigationContext.Parameters.TryGetValue<IParameterEditorHost>("ParentVm", out var parentVm))
         {

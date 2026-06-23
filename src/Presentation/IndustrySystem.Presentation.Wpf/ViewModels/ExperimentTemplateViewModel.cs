@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog;
 using System.Windows;
 using System.Windows.Input;
 using IndustrySystem.Application.Contracts.Dtos;
@@ -129,7 +130,11 @@ public class ExperimentTemplateViewModel : CrudViewModel<ExperimentTemplateDto>,
         });
 
         NewTemplate();
-        _ = LoadAsync();
+        _ = Task.Run(async () =>
+        {
+            try { await LoadAsync(); }
+            catch (Exception ex) { LogManager.GetCurrentClassLogger().Error(ex, "Initial experiment templates load failed"); }
+        });
     }
 
     public async Task LoadAsync()

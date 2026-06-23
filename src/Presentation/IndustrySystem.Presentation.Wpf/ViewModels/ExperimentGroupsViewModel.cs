@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using NLog;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -44,7 +45,11 @@ public class ExperimentGroupsViewModel : CrudViewModel<ExperimentGroupDto>
             if (id.HasValue) await DeleteAsync(id.Value);
         });
 
-        _ = LoadAsync();
+        _ = Task.Run(async () =>
+        {
+            try { await LoadAsync(); }
+            catch (Exception ex) { LogManager.GetCurrentClassLogger().Error(ex, "Initial experiment groups load failed"); }
+        });
     }
 
     private bool FilterGroups(object item)

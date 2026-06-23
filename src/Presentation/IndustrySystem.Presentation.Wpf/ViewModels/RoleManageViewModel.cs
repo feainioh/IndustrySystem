@@ -35,7 +35,7 @@ public class RoleManageViewModel : CrudViewModel<RoleDto>
     public ObservableCollection<RoleDto> PagedRoles { get; } = new();
     public ICollectionView RolesView { get; }
 
-    public new ICommand RefreshCommand { get; }
+    public ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }

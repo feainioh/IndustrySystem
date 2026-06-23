@@ -8,6 +8,7 @@ using IndustrySystem.Application.Contracts.Dtos;
 using IndustrySystem.Application.Contracts.Services;
 using IndustrySystem.Domain.Shared.Enums;
 using IndustrySystem.Presentation.Wpf.Resources;
+using NLog;
 using Prism;
 using Prism.Commands;
 using Prism.Navigation;
@@ -144,7 +145,11 @@ public class ExperimentConfigViewModel : NavigationViewModel, IParameterEditorHo
 		NewCommand = new AsyncDelegateCommand(NewExperimentAsync);
 		SaveCommand = new AsyncDelegateCommand(SaveAsync);
 
-		_ = LoadAsync();
+		_ = Task.Run(async () =>
+		{
+			try { await LoadAsync(); }
+			catch (Exception ex) { LogManager.GetCurrentClassLogger().Error(ex, "Initial experiment config load failed"); }
+		});
 	}
 
 	protected override async Task OnRefreshAsync()

@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace IndustrySystem.Domain.Repositories;
 
 /// <summary>
@@ -15,6 +17,16 @@ public interface IRepository<TEntity> where TEntity : class
     /// 查询全部实体。
     /// </summary>
     Task<List<TEntity>> GetListAsync();
+
+    /// <summary>
+    /// 按条件查询第一个匹配实体。
+    /// </summary>
+    Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate);
+
+    /// <summary>
+    /// 按条件查询实体列表。
+    /// </summary>
+    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>
     /// 插入实体。

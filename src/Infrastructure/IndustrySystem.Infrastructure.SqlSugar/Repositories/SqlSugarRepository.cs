@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using IndustrySystem.Domain.Repositories;
 using SqlSugar;
 
@@ -18,6 +19,12 @@ public class SqlSugarRepository<TEntity> : IRepository<TEntity> where TEntity : 
 
     public async Task<List<TEntity>> GetListAsync()
         => await _db.Queryable<TEntity>().ToListAsync();
+
+    public async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate)
+        => await _db.Queryable<TEntity>().FirstAsync(predicate);
+
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
+        => await _db.Queryable<TEntity>().Where(predicate).ToListAsync();
 
     public async Task<TEntity> InsertAsync(TEntity entity)
     {

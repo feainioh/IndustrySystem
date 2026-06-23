@@ -158,8 +158,8 @@ public partial class App : PrismApplication
         containerRegistry.RegisterForNavigation<Views.ShelfInfoView, ShelfInfoViewModel>(nameof(Views.ShelfInfoView));
         containerRegistry.RegisterForNavigation<Views.OperationLogsView, OperationLogsViewModel>(nameof(Views.OperationLogsView));
         containerRegistry.RegisterForNavigation<Views.RealtimeDataView, RealtimeDataViewModel>(nameof(Views.RealtimeDataView));
-        containerRegistry.RegisterForNavigation<Views.PeripheralDebugView, PeripheralDebugViewModel>(nameof(Views.PeripheralDebugView));
-        containerRegistry.RegisterForNavigation<Views.DeviceParamsView, DeviceParamsViewModel>(nameof(Views.DeviceParamsView));
+        containerRegistry.RegisterForNavigation<Views.PeripheralDebugView, NavigationViewModel>(nameof(Views.PeripheralDebugView));
+        containerRegistry.RegisterForNavigation<Views.DeviceParamsView, NavigationViewModel>(nameof(Views.DeviceParamsView));
         containerRegistry.RegisterForNavigation<Views.MotionProgramRunView, MotionProgramRunViewModel>(nameof(Views.MotionProgramRunView));
         //ViewModelLocationProvider.Register<Views.RoleManageView, RoleManageViewModel>();
         //ViewModelLocationProvider.Register<Views.ExperimentTemplateView, ExperimentTemplateViewModel>();
@@ -177,8 +177,8 @@ public partial class App : PrismApplication
         //ViewModelLocationProvider.Register<Views.ShelfInfoView, ShelfInfoViewModel>();
         //ViewModelLocationProvider.Register<Views.OperationLogsView, OperationLogsViewModel>();
         //ViewModelLocationProvider.Register<Views.RealtimeDataView, RealtimeDataViewModel>();
-        //ViewModelLocationProvider.Register<Views.PeripheralDebugView, PeripheralDebugViewModel>();
-        //ViewModelLocationProvider.Register<Views.DeviceParamsView, DeviceParamsViewModel>();
+        //ViewModelLocationProvider.Register<Views.PeripheralDebugView, NavigationViewModel>();
+        //ViewModelLocationProvider.Register<Views.DeviceParamsView, NavigationViewModel>();
 
         // Register LoginView as dialog
         containerRegistry.RegisterDialog<LoginView, LoginViewModel>();

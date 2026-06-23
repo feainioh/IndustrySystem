@@ -37,7 +37,7 @@ public class UsersViewModel : CrudViewModel<UserDto>
     public ObservableCollection<UserDto> PagedUsers { get; } = new();
     public ICollectionView UsersView { get; }
 
-    public new ICommand RefreshCommand { get; }
+    public ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }

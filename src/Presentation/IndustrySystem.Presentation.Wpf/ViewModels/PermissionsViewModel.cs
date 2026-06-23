@@ -38,7 +38,7 @@ public class PermissionsViewModel : CrudViewModel<PermissionDto>
     public ObservableCollection<PermissionDto> PagedPermissions { get; } = new();
     public ICollectionView PermissionsView { get; }
 
-    public new ICommand RefreshCommand { get; }
+    public ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }

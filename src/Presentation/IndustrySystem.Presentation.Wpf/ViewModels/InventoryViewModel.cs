@@ -80,7 +80,11 @@ public class InventoryViewModel : CrudViewModel<InventoryRecordDto>
         });
         ToggleSummaryCommand = new DelegateCommand(() => ShowSummary = !ShowSummary);
 
-        _ = LoadAsync();
+        _ = Task.Run(async () =>
+        {
+            try { await LoadAsync(); }
+            catch (Exception ex) { _logger.Error(ex, "Initial inventory load failed"); }
+        });
     }
 
     private bool FilterItems(object item)
